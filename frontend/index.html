@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADHDAgent - Parent Coaching Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>ADHDAgent</h1>
+            <p class="subtitle">Your ADHD Parenting Coach</p>
+        </header>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="message assistant">
+                <div class="message-content">
+                    <p>Hi there! I'm here to help you build practical strategies for
+                    your family. I'm not a doctor or therapist, but I can share
+                    evidence-based parenting approaches that many families find helpful.</p>
+                    <p>Tell me a bit about your child and what you're working on together.</p>
+                </div>
+                <div class="message-meta">Coach</div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <textarea
+                id="messageInput"
+                placeholder="Share what's on your mind..."
+                rows="2"
+            ></textarea>
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+
+        <div class="debug-panel" id="debugPanel">
+            <h3>Pipeline Debug</h3>
+            <div class="debug-section">
+                <strong>Extracted Predicates:</strong>
+                <pre id="debugPredicates">-</pre>
+            </div>
+            <div class="debug-section">
+                <strong>ASP Directives:</strong>
+                <pre id="debugASP">-</pre>
+            </div>
+            <div class="debug-section">
+                <strong>Agent Used:</strong>
+                <span id="debugAgent">-</span>
+            </div>
+        </div>
+
+        <button class="debug-toggle" onclick="toggleDebug()">Toggle Debug Panel</button>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

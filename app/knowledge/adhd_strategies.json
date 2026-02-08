@@ -1,0 +1,130 @@
+[
+  {
+    "id": "visual_schedule",
+    "name": "Visual Schedule",
+    "description": "Create a visual chart showing the sequence of daily activities using pictures or icons. Children with ADHD often process visual information more effectively than verbal instructions. A visual schedule reduces the need for repeated verbal reminders and gives the child a sense of predictability and control.",
+    "tags": ["daily_routines", "morning", "bedtime", "routine", "transitions"],
+    "steps": [
+      "Choose 3-5 key daily activities to start (morning routine, after school, bedtime)",
+      "Use pictures, drawings, or printed icons the child can relate to",
+      "Place the schedule where the child can easily see it",
+      "Walk through the schedule together the first few times",
+      "Let the child check off or move items as they complete them",
+      "Celebrate when the routine is followed, even partially"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP Clinical Practice Guidelines for ADHD"
+  },
+  {
+    "id": "first_then_board",
+    "name": "First-Then Board",
+    "description": "A simple visual tool that shows what the child needs to do FIRST, followed by a preferred activity THEN. This leverages the Premack Principle - using a preferred activity as natural reinforcement for a less preferred one. Especially effective for transitions and task initiation.",
+    "tags": ["transitions", "homework", "avoidance", "task", "daily_routines"],
+    "steps": [
+      "Get a simple board or paper divided into two sections: FIRST and THEN",
+      "Place a picture or word for the required task in the FIRST section",
+      "Place a picture or word for the preferred activity in the THEN section",
+      "Show the board to the child before starting the transition",
+      "Keep the language simple: 'First homework, then iPad'",
+      "Follow through consistently - the THEN activity must happen after FIRST is done"
+    ],
+    "evidence_level": "strong",
+    "source": "Applied Behavior Analysis best practices"
+  },
+  {
+    "id": "timer_technique",
+    "name": "Timer Technique (Time Boxing)",
+    "description": "Break tasks into short, timed intervals with breaks in between. Children with ADHD often struggle with time perception and sustained attention. Using a visible timer makes time concrete and the end of the work period predictable.",
+    "tags": ["homework", "attention", "distraction", "focus"],
+    "steps": [
+      "Start with short intervals (5-10 minutes for younger children, 15-20 for older)",
+      "Use a visual timer the child can see counting down",
+      "Set a clear, specific goal for each interval",
+      "Take a 2-5 minute break between intervals",
+      "Gradually increase work intervals as the child builds stamina",
+      "Pair with positive reinforcement after completed intervals"
+    ],
+    "evidence_level": "strong",
+    "source": "Evidence-based interventions for ADHD in school settings"
+  },
+  {
+    "id": "calm_down_corner",
+    "name": "Calm-Down Corner",
+    "description": "A designated space where the child can go to regulate their emotions. This is NOT a punishment - it's a proactive tool that teaches self-regulation. The space should feel safe, comfortable, and stocked with sensory tools.",
+    "tags": ["emotional_dysregulation", "emotion", "meltdown", "anger", "frustration"],
+    "steps": [
+      "Choose a quiet corner or small space in the home together with your child",
+      "Stock it with calming items: soft pillows, stress balls, noise-canceling headphones, fidgets",
+      "Add visual coping strategy cards (breathe, count, squeeze)",
+      "Practice using it when the child is calm - not during a meltdown",
+      "Model using it yourself: 'I'm feeling frustrated, I'm going to take a moment in the calm corner'",
+      "Never force the child to go there - it should feel like a safe choice"
+    ],
+    "evidence_level": "moderate",
+    "source": "Collaborative & Proactive Solutions (Dr. Ross Greene)"
+  },
+  {
+    "id": "specific_praise",
+    "name": "Specific Labeled Praise",
+    "description": "Instead of general praise ('good job'), describe exactly what the child did well. Children with ADHD receive disproportionate negative feedback. Specific praise reinforces desired behaviors and builds the child's understanding of what 'good' looks like.",
+    "tags": ["positive_reinforcement", "behavioral_strategies", "daily_routines"],
+    "steps": [
+      "Notice the behavior you want to see more of",
+      "Describe it specifically: 'I noticed you started your homework without being asked'",
+      "Praise the effort, not the outcome: 'You worked really hard on that'",
+      "Be immediate - praise right when you see the behavior",
+      "Aim for a 5:1 ratio of positive to corrective comments",
+      "Be genuine - children can tell when praise is forced"
+    ],
+    "evidence_level": "strong",
+    "source": "Parent-Child Interaction Therapy (PCIT)"
+  },
+  {
+    "id": "countdown_warnings",
+    "name": "Countdown Transition Warnings",
+    "description": "Give advance warnings before transitions happen. Children with ADHD often hyperfocus and struggle to shift attention. Countdown warnings give the brain time to prepare for the shift, reducing meltdowns and resistance during transitions.",
+    "tags": ["transitions", "screen_time", "activity_switching"],
+    "steps": [
+      "Give a 10-minute warning: 'In 10 minutes, we'll be turning off the TV'",
+      "Give a 5-minute warning with a visual cue",
+      "Give a 2-minute warning: 'Two more minutes, then it's time for dinner'",
+      "Give a final 30-second heads up",
+      "Use a consistent phrase: 'Time to switch!'",
+      "Acknowledge that transitions are hard: 'I know it's tough to stop when you're having fun'"
+    ],
+    "evidence_level": "strong",
+    "source": "CHADD (Children and Adults with ADHD) recommended practices"
+  },
+  {
+    "id": "chunking",
+    "name": "Task Chunking",
+    "description": "Break large tasks into smaller, manageable pieces. Large tasks can feel overwhelming for children with ADHD, leading to avoidance. Chunking makes each piece feel achievable and provides natural stopping points for reinforcement.",
+    "tags": ["homework", "avoidance", "task", "organization"],
+    "steps": [
+      "Look at the full task together and identify natural breaking points",
+      "Write each chunk on a separate sticky note or checklist item",
+      "Focus on one chunk at a time - cover or hide the rest",
+      "Celebrate each completed chunk before moving to the next",
+      "Take short breaks between chunks if needed",
+      "Let the child choose the order of chunks when possible"
+    ],
+    "evidence_level": "strong",
+    "source": "Executive function intervention research"
+  },
+  {
+    "id": "emotion_naming",
+    "name": "Emotion Naming and Validation",
+    "description": "Help the child identify and name their emotions without judgment. Children with ADHD often experience emotions more intensely and struggle to identify what they're feeling. Naming emotions activates the prefrontal cortex and begins the regulation process.",
+    "tags": ["emotional_dysregulation", "emotion", "anger", "frustration", "anxiety"],
+    "steps": [
+      "Notice emotional cues: 'I can see your fists are clenched and your face is red'",
+      "Offer a label: 'It looks like you might be feeling really frustrated'",
+      "Validate the feeling: 'It makes sense to feel frustrated when something is hard'",
+      "Separate the feeling from the behavior: 'It's okay to be angry. It's not okay to throw things'",
+      "Help identify the trigger: 'What happened right before you started feeling this way?'",
+      "Practice when calm - use emotion charts, books, or games to build vocabulary"
+    ],
+    "evidence_level": "strong",
+    "source": "Emotion-Focused Therapy and Social-Emotional Learning research"
+  }
+]
