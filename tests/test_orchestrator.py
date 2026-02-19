@@ -215,3 +215,53 @@ async def test_strategy_prompt_includes_conversation_history():
     last_prompt = mock.generate_calls[-1]
     assert "Parent:" in last_prompt
     assert "Coach:" in last_prompt
+
+
+@pytest.mark.asyncio
+async def test_strategy_prompt_includes_child_name():
+    """Strategy response prompt should include the child's name from profile."""
+    mock = MockGeminiClient()
+    store = KnowledgeStore()
+    bm25 = BM25Index()
+    bm25.build(store.chunks)
+    orchestrator = AgentOrchestrator(
+        extractor=PredicateExtractor(gemini_client=None),
+        safety=SafetyMonitor(gemini_client=None),
+        rules_engine=PythonRulesEngine(),
+        retriever=HybridRetriever(knowledge_store=store, bm25_index=bm25, gemini_client=None),
+        intake=IntakeAgent(gemini_client=None),
+        strategy=StrategyAgent(gemini_client=mock),
+        progress=ProgressAgent(gemini_client=None),
+    )
+    orchestrator.seed_session(SeedSessionRequest(
+        session_id="name_test", child_name="Jamie", child_age="7",
+        challenges=["homework"], goals=["finish homework"]
+    ))
+    await orchestrator.process("What strategies work for homework?", "name_test")
+    prompt = mock.generate_calls[-1]
+    assert "Jamie" in prompt
+
+
+@pytest.mark.asyncio
+async def test_strategy_prompt_fallback_when_no_child_name():
+    """Without child_name, prompt should use 'your child' fallback."""
+    mock = MockGeminiClient()
+    store = KnowledgeStore()
+    bm25 = BM25Index()
+    bm25.build(store.chunks)
+    orchestrator = AgentOrchestrator(
+        extractor=PredicateExtractor(gemini_client=None),
+        safety=SafetyMonitor(gemini_client=None),
+        rules_engine=PythonRulesEngine(),
+        retriever=HybridRetriever(knowledge_store=store, bm25_index=bm25, gemini_client=None),
+        intake=IntakeAgent(gemini_client=None),
+        strategy=StrategyAgent(gemini_client=mock),
+        progress=ProgressAgent(gemini_client=None),
+    )
+    orchestrator.seed_session(SeedSessionRequest(
+        session_id="noname_test", child_age="7",
+        challenges=["homework"], goals=["finish homework"]
+    ))
+    await orchestrator.process("What strategies work for homework?", "noname_test")
+    prompt = mock.generate_calls[-1]
+    assert "your child" in prompt

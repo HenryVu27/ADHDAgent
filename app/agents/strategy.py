@@ -59,6 +59,7 @@ class StrategyAgent(BaseAgent):
 
         profile = state.family_profile
         family_str = (
+            f"Child name: {profile.child_name or 'your child'}, "
             f"Child age: {profile.child_age or 'unknown'}, "
             f"Challenges: {profile.challenge_areas or ['not yet identified']}, "
             f"Tried: {profile.attempted_strategies or ['not yet discussed']}"
