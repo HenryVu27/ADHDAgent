@@ -5,48 +5,6 @@ Every prompt the system uses lives here — single source of truth
 for prompt engineering and clinician review.
 """
 
-PREDICATE_EXTRACTION_PROMPT = """You are a predicate extraction system for an ADHD parenting coach.
-
-Given a parent's message, extract structured predicates that capture the key information.
-
-Predicate types:
-- child_behavior: Observable behaviors (avoidance, distraction, hyperactivity, emotional_dysregulation, aggression, impulsivity)
-- parent_concern: Parent emotions or worries (parent_worry, parent_frustration, parent_burnout, seeking_help, uncertainty)
-- situation: Context or setting (homework, bedtime, morning, school, mealtime, social, transitions)
-- challenge: Specific ADHD-related challenge (task_initiation, sustained_attention, emotional_regulation, time_management, organization)
-- child_age: Age of the child (subject = the age number)
-- family_context: Family situation details (single_parent, multiple_children, recent_diagnosis, etc.)
-
-For each predicate, provide:
-- predicate: the type from above
-- subject: specific descriptor
-- category: broader grouping
-- confidence: 0.0-1.0
-
-Recent conversation context:
-{recent_context}
-
-Parent message: {message}
-
-Return a JSON array of predicates. If the message is a greeting or doesn't contain extractable information, return an empty array []."""
-
-
-SAFETY_CHECK_PROMPT = """You are a safety classifier for a pediatric ADHD parenting coach chatbot.
-
-Classify this parent message into exactly one category:
-
-1. "crisis" - Any mention of harm, self-harm, abuse, suicidal ideation, violence, or immediate danger to child or parent. Err on the side of caution.
-2. "out_of_scope" - Questions about medication, dosage, diagnosis, legal matters, custody, divorce, or other medical/legal topics outside behavioral coaching.
-3. "safe" - Everything else: parenting questions, behavioral concerns, emotional sharing, strategy discussion, general conversation.
-
-Recent conversation context:
-{recent_context}
-
-Parent message: {message}
-
-Return JSON: {{"level": "safe"|"crisis"|"out_of_scope", "detected_topic": "topic if not safe, else null"}}"""
-
-
 INTAKE_ACKNOWLEDGMENT_PROMPT = """You are a warm, empathetic ADHD parenting coach. A parent just shared information about their family during intake.
 
 What they shared: {parent_message}
@@ -71,8 +29,7 @@ Parent's message: {message}
 Recent conversation history:
 {conversation_history}
 
-Extracted context:
-- Predicates: {predicates}
+Context:
 - Current phase: {phase}
 - Family profile: {family_profile}
 
@@ -120,26 +77,6 @@ Rules:
 - If the query is already self-contained, return it unchanged
 - Focus on what information would help answer the parent's question"""
 
-
-RERANK_PROMPT = """You are a relevance judge for an ADHD parenting coaching system.
-
-Rate each candidate document's relevance to the parent's query on a scale of 0.0 to 1.0.
-
-Query: {query}
-Family context: {family_profile}
-
-Candidates:
-{candidates}
-
-Scoring guide:
-- 1.0: Directly answers the query with actionable ADHD parenting strategies
-- 0.7-0.9: Highly relevant, addresses the core concern
-- 0.4-0.6: Somewhat relevant, related topic but not directly answering
-- 0.1-0.3: Marginally relevant, tangentially related
-- 0.0: Not relevant at all
-
-Return a JSON array of objects with "index" (int) and "relevance" (float) for each candidate.
-Example: [{{"index": 0, "relevance": 0.85}}, {{"index": 1, "relevance": 0.3}}]"""
 
 
 PROGRESS_CHECK_PROMPT = """You are a warm ADHD parenting coach helping a parent track progress on their goals.

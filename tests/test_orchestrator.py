@@ -6,52 +6,50 @@ from unittest.mock import AsyncMock
 from app.agents.intake import IntakeAgent
 from app.agents.orchestrator import AgentOrchestrator
 from app.agents.progress import ProgressAgent
-from app.agents.safety import SafetyMonitor
 from app.agents.strategy import StrategyAgent
-from app.predicates.extractor import PredicateExtractor
-from app.rag.bm25_index import BM25Index
+from app.guardrails.validator import GuardrailsValidator
+from app.models.schemas import GuardrailsError, InputCheckResult, OutputCheckResult
+from app.phase_manager import PhaseManager
 from app.rag.knowledge_store import KnowledgeStore
 from app.rag.retriever import HybridRetriever
-from app.rules.python_engine import PythonRulesEngine
 
 
-def _make_safety_gemini():
-    """Mock Gemini that classifies safety based on the user message in the prompt."""
-    client = AsyncMock()
-
-    async def _classify(prompt: str):
-        # Extract just the user message from the prompt template
-        # Format: "...Parent message: {message}\n\nReturn JSON..."
-        msg = prompt.split("Parent message: ", 1)[-1].split("\n\nReturn JSON")[0].lower()
-        if any(w in msg for w in ["harm", "suicide", "kill", "hurt"]):
-            return {"level": "crisis", "detected_topic": "harm"}
-        if any(w in msg for w in ["medication", "dosage", "ritalin", "adderall"]):
-            return {"level": "out_of_scope", "detected_topic": "medication"}
-        return {"level": "safe", "detected_topic": None}
-
-    client.extract_json = _classify
-    return client
+def _make_mock_guardrails(
+    input_allowed=True,
+    input_reason=None,
+    input_response=None,
+    output_valid=True,
+    output_violation=None,
+):
+    """Create a mock GuardrailsValidator."""
+    guardrails = AsyncMock(spec=GuardrailsValidator)
+    guardrails.check_input = AsyncMock(return_value=InputCheckResult(
+        is_allowed=input_allowed,
+        blocked_reason=input_reason,
+        override_response=input_response,
+    ))
+    guardrails.check_output = AsyncMock(return_value=OutputCheckResult(
+        is_valid=output_valid,
+        violation_type=output_violation,
+    ))
+    return guardrails
 
 
 @pytest.fixture
 def orchestrator():
-    """Full pipeline orchestrator with mock safety Gemini, other agents use fallbacks."""
+    """Full pipeline orchestrator with mock guardrails, agents use fallbacks."""
     store = KnowledgeStore()
-    bm25 = BM25Index()
-    bm25.build(store.chunks)
+
     return AgentOrchestrator(
-        extractor=PredicateExtractor(gemini_client=None),
-        safety=SafetyMonitor(gemini_client=_make_safety_gemini()),
-        rules_engine=PythonRulesEngine(),
+        guardrails=_make_mock_guardrails(),
+        phase_manager=PhaseManager(),
         retriever=HybridRetriever(
             knowledge_store=store,
-            bm25_index=bm25,
             gemini_client=None,
         ),
         intake=IntakeAgent(gemini_client=None),
         strategy=StrategyAgent(gemini_client=None),
         progress=ProgressAgent(gemini_client=None),
-        guardrails_validator=None,
     )
 
 
@@ -68,28 +66,93 @@ async def test_first_message_triggers_intake(orchestrator):
 async def test_pipeline_trace_has_all_steps(orchestrator):
     result = await orchestrator.process("My 7 year old won't do homework", "test_trace")
     step_names = [s.name for s in result.pipeline_trace.steps]
-    assert "predicate_extraction" in step_names
-    assert "safety_check" in step_names
-    assert "rules_engine" in step_names
+    assert "input_rails" in step_names
+    assert "phase_manager" in step_names
     assert "response_generation" in step_names
-    assert "response_validation" in step_names
+    assert "output_rails" in step_names
 
 
 @pytest.mark.asyncio
-async def test_safety_override_mid_conversation(orchestrator):
-    # Normal message first
-    await orchestrator.process("Hi there", "safety_test")
-    # Crisis message
-    result = await orchestrator.process("I'm worried about harm to my child", "safety_test")
-    assert result.agent_used == "safety"
-    assert "988" in result.response
+async def test_input_rails_block_crisis():
+    """Crisis messages should be blocked by input rails with override response."""
+    store = KnowledgeStore()
+
+    orch = AgentOrchestrator(
+        guardrails=_make_mock_guardrails(
+            input_allowed=False,
+            input_reason="crisis",
+            input_response="Call 988 for help.",
+        ),
+        phase_manager=PhaseManager(),
+        retriever=HybridRetriever(knowledge_store=store, gemini_client=None),
+        intake=IntakeAgent(gemini_client=None),
+        strategy=StrategyAgent(gemini_client=None),
+        progress=ProgressAgent(gemini_client=None),
+    )
+    result = await orch.process("I'm worried about harm", "crisis_test")
+    assert result.agent_used == "guardrails"
+    assert result.response == "Call 988 for help."
 
 
 @pytest.mark.asyncio
-async def test_out_of_scope_deflection(orchestrator):
-    result = await orchestrator.process("Should I try medication for ADHD?", "scope_test")
-    assert result.agent_used == "safety"
-    assert "healthcare provider" in result.response.lower() or "outside" in result.response.lower()
+async def test_input_rails_block_out_of_scope():
+    """Out-of-scope messages should be deflected."""
+    store = KnowledgeStore()
+
+    orch = AgentOrchestrator(
+        guardrails=_make_mock_guardrails(
+            input_allowed=False,
+            input_reason="out_of_scope",
+            input_response="Ask your healthcare provider.",
+        ),
+        phase_manager=PhaseManager(),
+        retriever=HybridRetriever(knowledge_store=store, gemini_client=None),
+        intake=IntakeAgent(gemini_client=None),
+        strategy=StrategyAgent(gemini_client=None),
+        progress=ProgressAgent(gemini_client=None),
+    )
+    result = await orch.process("Should I try medication?", "scope_test")
+    assert result.agent_used == "guardrails"
+
+
+@pytest.mark.asyncio
+async def test_output_rails_block_violation():
+    """Output rails should replace response when violation detected."""
+    store = KnowledgeStore()
+
+    orch = AgentOrchestrator(
+        guardrails=_make_mock_guardrails(output_valid=False, output_violation="medication"),
+        phase_manager=PhaseManager(),
+        retriever=HybridRetriever(knowledge_store=store, gemini_client=None),
+        intake=IntakeAgent(gemini_client=None),
+        strategy=StrategyAgent(gemini_client=None),
+        progress=ProgressAgent(gemini_client=None),
+    )
+    result = await orch.process("Hi", "output_test")
+    assert "helpful, appropriate guidance" in result.response
+
+
+@pytest.mark.asyncio
+async def test_guardrails_error_doesnt_crash_pipeline():
+    """GuardrailsError in input rails should not crash — pipeline continues."""
+    store = KnowledgeStore()
+
+
+    guardrails = AsyncMock(spec=GuardrailsValidator)
+    guardrails.check_input = AsyncMock(side_effect=GuardrailsError("NeMo down"))
+    guardrails.check_output = AsyncMock(return_value=OutputCheckResult(is_valid=True))
+
+    orch = AgentOrchestrator(
+        guardrails=guardrails,
+        phase_manager=PhaseManager(),
+        retriever=HybridRetriever(knowledge_store=store, gemini_client=None),
+        intake=IntakeAgent(gemini_client=None),
+        strategy=StrategyAgent(gemini_client=None),
+        progress=ProgressAgent(gemini_client=None),
+    )
+    result = await orch.process("Hi there", "error_test")
+    assert result.agent_used == "intake"
+    assert result.response != ""
 
 
 @pytest.mark.asyncio
@@ -194,13 +257,11 @@ async def test_strategy_prompt_includes_conversation_history():
     """Response generation should include formatted conversation history."""
     mock = MockGeminiClient()
     store = KnowledgeStore()
-    bm25 = BM25Index()
-    bm25.build(store.chunks)
+
     orchestrator = AgentOrchestrator(
-        extractor=PredicateExtractor(gemini_client=None),
-        safety=SafetyMonitor(gemini_client=None),
-        rules_engine=PythonRulesEngine(),
-        retriever=HybridRetriever(knowledge_store=store, bm25_index=bm25, gemini_client=None),
+        guardrails=_make_mock_guardrails(),
+        phase_manager=PhaseManager(),
+        retriever=HybridRetriever(knowledge_store=store, gemini_client=None),
         intake=IntakeAgent(gemini_client=None),
         strategy=StrategyAgent(gemini_client=mock),
         progress=ProgressAgent(gemini_client=None),
@@ -222,13 +283,11 @@ async def test_strategy_prompt_includes_child_name():
     """Strategy response prompt should include the child's name from profile."""
     mock = MockGeminiClient()
     store = KnowledgeStore()
-    bm25 = BM25Index()
-    bm25.build(store.chunks)
+
     orchestrator = AgentOrchestrator(
-        extractor=PredicateExtractor(gemini_client=None),
-        safety=SafetyMonitor(gemini_client=None),
-        rules_engine=PythonRulesEngine(),
-        retriever=HybridRetriever(knowledge_store=store, bm25_index=bm25, gemini_client=None),
+        guardrails=_make_mock_guardrails(),
+        phase_manager=PhaseManager(),
+        retriever=HybridRetriever(knowledge_store=store, gemini_client=None),
         intake=IntakeAgent(gemini_client=None),
         strategy=StrategyAgent(gemini_client=mock),
         progress=ProgressAgent(gemini_client=None),
@@ -247,13 +306,11 @@ async def test_strategy_prompt_fallback_when_no_child_name():
     """Without child_name, prompt should use 'your child' fallback."""
     mock = MockGeminiClient()
     store = KnowledgeStore()
-    bm25 = BM25Index()
-    bm25.build(store.chunks)
+
     orchestrator = AgentOrchestrator(
-        extractor=PredicateExtractor(gemini_client=None),
-        safety=SafetyMonitor(gemini_client=None),
-        rules_engine=PythonRulesEngine(),
-        retriever=HybridRetriever(knowledge_store=store, bm25_index=bm25, gemini_client=None),
+        guardrails=_make_mock_guardrails(),
+        phase_manager=PhaseManager(),
+        retriever=HybridRetriever(knowledge_store=store, gemini_client=None),
         intake=IntakeAgent(gemini_client=None),
         strategy=StrategyAgent(gemini_client=mock),
         progress=ProgressAgent(gemini_client=None),
@@ -271,15 +328,13 @@ async def test_strategy_prompt_fallback_when_no_child_name():
 
 
 def _make_profiling_orchestrator():
-    """Helper to build orchestrator with keyword extraction (no Gemini)."""
+    """Helper to build orchestrator for profiling tests."""
     store = KnowledgeStore()
-    bm25 = BM25Index()
-    bm25.build(store.chunks)
+
     return AgentOrchestrator(
-        extractor=PredicateExtractor(gemini_client=None),
-        safety=SafetyMonitor(gemini_client=None),
-        rules_engine=PythonRulesEngine(),
-        retriever=HybridRetriever(knowledge_store=store, bm25_index=bm25, gemini_client=None),
+        guardrails=_make_mock_guardrails(),
+        phase_manager=PhaseManager(),
+        retriever=HybridRetriever(knowledge_store=store, gemini_client=None),
         intake=IntakeAgent(gemini_client=None),
         strategy=StrategyAgent(gemini_client=None),
         progress=ProgressAgent(gemini_client=None),
@@ -288,7 +343,7 @@ def _make_profiling_orchestrator():
 
 @pytest.mark.asyncio
 async def test_progressive_profiling_updates_child_age():
-    """Profile should learn child_age from conversation predicates."""
+    """Profile should learn child_age from conversation message."""
     orch = _make_profiling_orchestrator()
     orch.seed_session(SeedSessionRequest(
         session_id="profile_test", challenges=["homework"], goals=["finish homework"]
@@ -301,7 +356,7 @@ async def test_progressive_profiling_updates_child_age():
 
 @pytest.mark.asyncio
 async def test_progressive_profiling_adds_new_challenges():
-    """Profile should accumulate new challenge areas from predicates."""
+    """Profile should accumulate new challenge areas from message keywords."""
     orch = _make_profiling_orchestrator()
     orch.seed_session(SeedSessionRequest(
         session_id="challenge_test", challenges=["homework"], goals=["finish homework"]

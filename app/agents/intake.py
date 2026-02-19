@@ -3,7 +3,6 @@ Intake agent with Gemini-powered empathetic acknowledgments.
 
 Gathers family context through 5 structured questions, using Gemini
 to generate warm acknowledgments of what the parent shared.
-Extracts family profile data from predicates as they come in.
 """
 
 import logging
@@ -11,7 +10,7 @@ import logging
 from app.agents.base import BaseAgent
 from app.config import settings
 from app.llm.prompts import INTAKE_ACKNOWLEDGMENT_PROMPT
-from app.models.schemas import ExtractionResult, RulesDecision, SessionState
+from app.models.schemas import PhaseDecision, SessionState
 
 logger = logging.getLogger(__name__)
 
@@ -45,15 +44,11 @@ class IntakeAgent(BaseAgent):
     async def process(
         self,
         message: str,
-        extraction: ExtractionResult,
-        decision: RulesDecision,
+        decision: PhaseDecision,
         state: SessionState,
         rag_context: str,
     ) -> str:
         progress = state.intake_question_index
-
-        # Update family profile from predicates
-        self._update_profile(extraction, state)
 
         # First turn: welcome + first question
         if progress == 0:
@@ -97,17 +92,3 @@ class IntakeAgent(BaseAgent):
                 logger.warning(f"Gemini ack generation failed: {e}")
 
         return FALLBACK_ACKS[min(progress, len(FALLBACK_ACKS) - 1)]
-
-    def _update_profile(self, extraction: ExtractionResult, state: SessionState):
-        """Extract family profile data from predicates."""
-        for pred in extraction.predicates:
-            if pred.predicate == "child_age" and pred.subject:
-                state.family_profile.child_age = pred.subject
-
-            if pred.predicate == "child_behavior" and pred.category:
-                if pred.category not in state.family_profile.challenge_areas:
-                    state.family_profile.challenge_areas.append(pred.category)
-
-            if pred.predicate == "situation" and pred.subject:
-                if pred.subject not in state.family_profile.hardest_situations:
-                    state.family_profile.hardest_situations.append(pred.subject)

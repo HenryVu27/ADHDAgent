@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from app.models.schemas import PhaseDecision, SessionState
+
 
 class BaseAgent(ABC):
     """Base class for all coaching agents."""
@@ -8,10 +10,12 @@ class BaseAgent(ABC):
     description: str = "Base agent"
 
     @abstractmethod
-    def process(self, message: str, context: dict) -> str:
+    async def process(
+        self,
+        message: str,
+        decision: PhaseDecision,
+        state: SessionState,
+        rag_context: str,
+    ) -> str:
         """Process a parent message and return a response."""
-        pass
-
-    def can_handle(self, asp_directives: list[str]) -> bool:
-        """Check if this agent should handle the current turn based on ASP directives."""
-        return any(self.name in d for d in asp_directives)
+        ...

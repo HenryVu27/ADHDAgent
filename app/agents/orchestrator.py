@@ -1,15 +1,14 @@
 """
 Pipeline Orchestrator.
 
-Coordinates the full 3-layer pipeline:
-1. Extract predicates (Layer 1)
-2. Safety check
-3. Rules engine decision (Layer 2)
-4. RAG retrieval
-5. Agent processing + Gemini response (Layer 3)
-6. Post-generation validation
-7. Build PipelineTrace
-8. Update session state + conversation history
+Coordinates the full pipeline:
+1. NeMo INPUT RAILS (jailbreak, crisis, out-of-scope, content, topic)
+2. Phase manager decision (agent routing) + profile update
+3. RAG retrieval
+4. Agent processing + Gemini response
+5. NeMo OUTPUT RAILS (medication, diagnosis, scope)
+6. Build PipelineTrace
+7. Update session state + conversation history
 """
 
 import logging
@@ -18,47 +17,41 @@ import time
 from app.agents.context import format_conversation_window
 from app.agents.intake import IntakeAgent
 from app.agents.progress import ProgressAgent
-from app.agents.safety import SafetyMonitor
 from app.agents.strategy import StrategyAgent
+from app.guardrails.validator import GuardrailsValidator
 from app.models.schemas import (
     ChatResponse,
     ConversationPhase,
-    ExtractionResult,
     Goal,
+    GuardrailsError,
     PipelineStep,
     PipelineTrace,
     RetrievalResponse,
     RetrievalResult,
-    SafetyLevel,
     SeedSessionRequest,
     SessionState,
 )
-from app.predicates.extractor import PredicateExtractor
+from app.phase_manager import PhaseManager
 from app.rag.retriever import HybridRetriever
-from app.rules.interface import RulesEngine
 
 logger = logging.getLogger(__name__)
 
 
 class AgentOrchestrator:
-    """Coordinates the full 3-layer pipeline."""
+    """Coordinates the full pipeline."""
 
     def __init__(
         self,
-        extractor: PredicateExtractor,
-        safety: SafetyMonitor,
-        rules_engine: RulesEngine,
+        guardrails: GuardrailsValidator,
+        phase_manager: PhaseManager,
         retriever: HybridRetriever,
         intake: IntakeAgent,
         strategy: StrategyAgent,
         progress: ProgressAgent,
-        guardrails_validator=None,
     ):
-        self._extractor = extractor
-        self._safety = safety
-        self._rules = rules_engine
+        self._guardrails = guardrails
+        self._phase_manager = phase_manager
         self._retriever = retriever
-        self._guardrails = guardrails_validator
         self._agents = {
             "intake": intake,
             "strategy": strategy,
@@ -92,110 +85,95 @@ class AgentOrchestrator:
         )
 
     async def process(self, message: str, session_id: str) -> ChatResponse:
-        """Run the full 3-layer pipeline."""
+        """Run the full pipeline."""
         pipeline_start = time.time()
         trace = PipelineTrace()
         state = self.get_session(session_id)
         state.turn_count += 1
 
-        # Format recent context for extraction and safety (short window)
-        recent_context = format_conversation_window(state.conversation_history, max_turns=2)
-
-        # --- Step 1: Predicate Extraction (Layer 1) ---
+        # --- Step 1: NeMo INPUT RAILS ---
         step_start = time.time()
-        extraction = await self._extractor.extract(message, conversation_context=recent_context)
-        extraction_ms = (time.time() - step_start) * 1000
-        trace.extraction = extraction
-        trace.steps.append(PipelineStep(
-            name="predicate_extraction",
-            duration_ms=extraction_ms,
-            detail={
-                "method": extraction.method.value,
-                "count": len(extraction.predicates),
-                "predicates": [p.model_dump() for p in extraction.predicates],
-            },
-        ))
-
-        # --- Step 2: Safety Check ---
-        step_start = time.time()
-        safety_result = await self._safety.check(message, conversation_context=recent_context)
-        safety_ms = (time.time() - step_start) * 1000
-        trace.safety = safety_result
-        trace.steps.append(PipelineStep(
-            name="safety_check",
-            duration_ms=safety_ms,
-            detail={
-                "level": safety_result.level.value,
-                "detected_topic": safety_result.detected_topic,
-            },
-        ))
-
-        # If safety triggered, short-circuit the pipeline
-        if safety_result.level != SafetyLevel.safe:
-            response_text = safety_result.response_override or ""
-            trace.agent_used = "safety"
-            trace.total_duration_ms = (time.time() - pipeline_start) * 1000
-            self._record_turn(state, message, response_text, "safety")
-            return ChatResponse(
-                response=response_text,
-                agent_used="safety",
-                phase=state.phase,
-                pipeline_trace=trace,
-                session_id=session_id,
+        try:
+            input_check = await self._guardrails.check_input(
+                message, context={"phase": state.phase.value}
             )
+            input_ms = (time.time() - step_start) * 1000
+            trace.input_check = input_check
+            trace.steps.append(PipelineStep(
+                name="input_rails",
+                duration_ms=input_ms,
+                detail={
+                    "is_allowed": input_check.is_allowed,
+                    "blocked_reason": input_check.blocked_reason,
+                },
+            ))
 
-        # Progressive profiling: fill in missing profile fields from predicates
+            if not input_check.is_allowed:
+                response_text = input_check.override_response or ""
+                trace.agent_used = "guardrails"
+                trace.total_duration_ms = (time.time() - pipeline_start) * 1000
+                self._record_turn(state, message, response_text, "guardrails")
+                return ChatResponse(
+                    response=response_text,
+                    agent_used="guardrails",
+                    phase=state.phase,
+                    pipeline_trace=trace,
+                    session_id=session_id,
+                )
+        except GuardrailsError as e:
+            logger.error("Input rails failed: %s", e)
+            input_ms = (time.time() - step_start) * 1000
+            trace.steps.append(PipelineStep(
+                name="input_rails",
+                duration_ms=input_ms,
+                detail={"error": str(e)},
+            ))
+            # Continue without input rails on error
+
+        # --- Step 2: Progressive profiling + Phase Manager Decision ---
         if state.phase != ConversationPhase.intake:
-            self._update_profile_from_predicates(extraction, state)
+            self._phase_manager.update_profile(message, state)
 
-        # --- Step 3: Rules Engine Decision (Layer 2) ---
         step_start = time.time()
-        decision = self._rules.decide(extraction, state)
-        rules_ms = (time.time() - step_start) * 1000
-        trace.rules_decision = decision
+        decision = self._phase_manager.decide(message, state)
+        phase_ms = (time.time() - step_start) * 1000
+        trace.phase_decision = decision
         trace.steps.append(PipelineStep(
-            name="rules_engine",
-            duration_ms=rules_ms,
+            name="phase_manager",
+            duration_ms=phase_ms,
             detail={
                 "agent": decision.agent,
                 "phase": decision.phase.value,
                 "directives": decision.directives,
                 "constraints": decision.constraints,
                 "phase_changed": decision.phase_changed,
-                "reasoning": decision.reasoning,
             },
         ))
 
-        # --- Step 4: RAG Retrieval ---
+        # --- Step 3: RAG Retrieval ---
         retrieval_results: list[RetrievalResult] = []
-        relevance_confident = True
         if decision.agent in ("strategy", "progress"):
             step_start = time.time()
             response: RetrievalResponse = await self._retriever.retrieve(
                 query=message,
-                predicates=extraction.predicates,
                 state=state,
             )
             retrieval_results = response.results
-            relevance_confident = response.relevance_confident
             rag_ms = (time.time() - step_start) * 1000
             trace.retrieval_results = retrieval_results
             trace.rewritten_query = response.rewritten_query
-            trace.relevance_confident = response.relevance_confident
             trace.steps.append(PipelineStep(
                 name="rag_retrieval",
                 duration_ms=rag_ms,
                 detail={
                     "results_count": len(retrieval_results),
                     "rewritten_query": response.rewritten_query,
-                    "relevance_confident": response.relevance_confident,
                     "facets": response.facets.model_dump(),
                     "documents": [
                         {
                             "name": r.document_name,
                             "score": round(r.score, 3),
                             "type": r.match_type,
-                            "rerank_score": round(r.rerank_score, 3) if r.rerank_score is not None else None,
                         }
                         for r in retrieval_results
                     ],
@@ -203,22 +181,18 @@ class AgentOrchestrator:
             ))
 
         # Format RAG context for the agent
-        if relevance_confident:
-            rag_context = self._format_rag_context(retrieval_results)
-        else:
-            rag_context = self._format_uncertain_context(retrieval_results)
+        rag_context = self._format_rag_context(retrieval_results)
 
         # Track recommended strategies
         for r in retrieval_results:
             if r.document_id and r.document_id not in state.recommended_strategies:
                 state.recommended_strategies.append(r.document_id)
 
-        # --- Step 5: Agent Processing + Response Generation (Layer 3) ---
+        # --- Step 4: Agent Processing + Response Generation ---
         agent = self._agents.get(decision.agent, self._agents["strategy"])
         step_start = time.time()
         response_text = await agent.process(
             message=message,
-            extraction=extraction,
             decision=decision,
             state=state,
             rag_context=rag_context,
@@ -231,37 +205,37 @@ class AgentOrchestrator:
             detail={"agent": agent.name},
         ))
 
-        # --- Step 6: Post-generation Validation ---
+        # --- Step 5: NeMo OUTPUT RAILS ---
         step_start = time.time()
-        if self._guardrails:
-            validation = await self._guardrails.validate(
+        validation_ms = 0.0
+        validation_detail: dict = {}
+        try:
+            output_check = await self._guardrails.check_output(
                 response_text,
                 context={"phase": state.phase.value, "agent": agent.name},
             )
-            is_valid = validation.is_valid
-            validation_ms = validation.duration_ms
+            validation_ms = output_check.duration_ms
             validation_detail = {
-                "valid": is_valid,
-                "method": validation.method,
-                "violation_type": validation.violation_type,
-                "detail": validation.detail,
+                "valid": output_check.is_valid,
+                "violation_type": output_check.violation_type,
             }
-        else:
-            is_valid = self._rules.validate_response(response_text, decision)
+
+            if not output_check.is_valid:
+                logger.warning("Output rails blocked response: %s", output_check.violation_type)
+                response_text = (
+                    "I want to make sure I give you helpful, appropriate guidance. "
+                    "Could you tell me more about what you're looking for help with today?"
+                )
+        except GuardrailsError as e:
+            logger.error("Output rails failed: %s", e)
             validation_ms = (time.time() - step_start) * 1000
-            validation_detail = {"valid": is_valid, "method": "keyword_rules_engine"}
+            validation_detail = {"error": str(e)}
+
         trace.steps.append(PipelineStep(
-            name="response_validation",
+            name="output_rails",
             duration_ms=validation_ms,
             detail=validation_detail,
         ))
-
-        if not is_valid:
-            logger.warning("Response failed validation — using safety fallback")
-            response_text = (
-                "I want to make sure I give you helpful, appropriate guidance. "
-                "Could you tell me more about what you're looking for help with today?"
-            )
 
         # --- Finalize ---
         trace.total_duration_ms = (time.time() - pipeline_start) * 1000
@@ -275,24 +249,8 @@ class AgentOrchestrator:
             session_id=session_id,
         )
 
-    def _update_profile_from_predicates(self, extraction: ExtractionResult, state: SessionState):
-        """Progressive profiling: fill in missing profile fields from every turn's predicates."""
-        for pred in extraction.predicates:
-            if pred.predicate == "child_age" and pred.subject and not state.family_profile.child_age:
-                state.family_profile.child_age = pred.subject
-            if pred.predicate == "child_behavior" and pred.category:
-                if pred.category not in state.family_profile.challenge_areas:
-                    state.family_profile.challenge_areas.append(pred.category)
-            if pred.predicate == "situation" and pred.subject:
-                if pred.subject not in state.family_profile.hardest_situations:
-                    state.family_profile.hardest_situations.append(pred.subject)
-
     def _format_rag_context(self, results: list[RetrievalResult]) -> str:
-        """Format retrieval results as structured XML for the LLM.
-
-        Applies context engineering: metadata teaches the LLM how to use
-        the results (evidence level, match quality, source attribution).
-        """
+        """Format retrieval results as structured XML for the LLM."""
         if not results:
             return ""
 
@@ -325,34 +283,6 @@ class AgentOrchestrator:
         parts.append('  </system_instruction>')
         parts.append('</retrieval_results>')
 
-        return "\n".join(parts)
-
-    def _format_uncertain_context(self, results: list[RetrievalResult]) -> str:
-        """Format context when retrieval confidence is low (CRAG-lite).
-
-        Instructs the LLM to acknowledge uncertainty and ask clarifying
-        questions rather than presenting low-confidence information as fact.
-        """
-        parts = ['<retrieval_results confidence="low">']
-        parts.append('  <system_instruction>')
-        parts.append('    IMPORTANT: The retrieval system has LOW CONFIDENCE in these results.')
-        parts.append('    Do NOT present this information as directly answering the parent\'s question.')
-        parts.append('    Instead:')
-        parts.append('    1. Acknowledge what the parent asked about')
-        parts.append('    2. Share that you want to make sure you give the most relevant guidance')
-        parts.append('    3. Ask a clarifying question to better understand their specific situation')
-        parts.append('    4. You may briefly mention a general related strategy, but frame it tentatively')
-        parts.append('  </system_instruction>')
-
-        if results:
-            parts.append('  <low_confidence_context>')
-            for r in results[:2]:
-                parts.append(f'    <result name="{r.document_name}" score="{r.score:.2f}">')
-                parts.append(f'      {r.content[:200]}...')
-                parts.append('    </result>')
-            parts.append('  </low_confidence_context>')
-
-        parts.append('</retrieval_results>')
         return "\n".join(parts)
 
     def _record_turn(self, state: SessionState, message: str, response: str, agent: str):

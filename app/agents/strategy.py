@@ -12,7 +12,7 @@ from app.agents.base import BaseAgent
 from app.agents.context import format_conversation_window
 from app.config import settings
 from app.llm.prompts import RESPONSE_GENERATION_PROMPT
-from app.models.schemas import ExtractionResult, RulesDecision, SessionState
+from app.models.schemas import PhaseDecision, SessionState
 
 logger = logging.getLogger(__name__)
 
@@ -29,15 +29,14 @@ class StrategyAgent(BaseAgent):
     async def process(
         self,
         message: str,
-        extraction: ExtractionResult,
-        decision: RulesDecision,
+        decision: PhaseDecision,
         state: SessionState,
         rag_context: str,
     ) -> str:
         if self._gemini and settings.USE_LLM_RESPONSES:
             try:
                 return await self._generate_with_gemini(
-                    message, extraction, decision, state, rag_context
+                    message, decision, state, rag_context
                 )
             except Exception as e:
                 logger.warning(f"Gemini strategy generation failed: {e}")
@@ -47,16 +46,11 @@ class StrategyAgent(BaseAgent):
     async def _generate_with_gemini(
         self,
         message: str,
-        extraction: ExtractionResult,
-        decision: RulesDecision,
+        decision: PhaseDecision,
         state: SessionState,
         rag_context: str,
     ) -> str:
         """Generate strategy response using Gemini with RAG context."""
-        predicates_str = ", ".join(
-            f"{p.predicate}({p.subject}, {p.category})" for p in extraction.predicates
-        ) or "none extracted"
-
         profile = state.family_profile
         family_str = (
             f"Child name: {profile.child_name or 'your child'}, "
@@ -74,7 +68,6 @@ class StrategyAgent(BaseAgent):
         prompt = RESPONSE_GENERATION_PROMPT.format(
             message=message,
             conversation_history=conversation_history or "No prior conversation.",
-            predicates=predicates_str,
             phase=decision.phase.value,
             family_profile=family_str,
             agent="strategy",

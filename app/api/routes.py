@@ -1,72 +1,130 @@
-from fastapi import APIRouter
-from pydantic import BaseModel
+"""
+API routes for ADHDAgent.
 
-from app.agents.orchestrator import AgentOrchestrator
-from app.predicates.extractor import PredicateExtractor
-from app.asp.engine import ASPEngine
+Endpoints:
+- POST /api/chat       — main pipeline
+- GET  /api/session/{id}  — session state
+- GET  /api/session/{id}/outcomes — outcome tracking
+- GET  /api/health      — health check
+- GET  /api/knowledge/topics — approved topic boundaries
+"""
+
+from fastapi import APIRouter, HTTPException
+
+from app.models.schemas import (
+    ChatRequest,
+    ChatResponse,
+    OutcomesResponse,
+    SeedSessionRequest,
+    SessionResponse,
+)
 
 router = APIRouter()
 
-orchestrator = AgentOrchestrator()
-extractor = PredicateExtractor()
-asp_engine = ASPEngine()
+# These get set during app startup (see main.py)
+_orchestrator = None
+_knowledge_base = None
 
 
-class ChatRequest(BaseModel):
-    message: str
-    session_id: str = "default"
+def set_orchestrator(orchestrator):
+    global _orchestrator
+    _orchestrator = orchestrator
 
 
-class ChatResponse(BaseModel):
-    response: str
-    agent_used: str
-    predicates: list[dict]
-    asp_directives: list[str]
+def set_knowledge_base(kb):
+    global _knowledge_base
+    _knowledge_base = kb
 
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """
-    Main chat endpoint. Processes parent input through the full pipeline:
-    1. Extract predicates from the message
-    2. Run ASP reasoning to determine valid conversation moves
-    3. Route to the appropriate agent
-    4. Generate and return response
+    Main chat endpoint. Processes parent input through the pipeline:
+    1. NeMo Guardrails (input rails)
+    2. Phase manager decision + profile update
+    3. RAG retrieval + Agent response generation
+    4. NeMo Guardrails (output rails)
+
+    Returns full PipelineTrace for frontend visualization.
     """
-    # Step 1: Extract predicates from parent utterance
-    predicates = extractor.extract(request.message)
+    if not _orchestrator:
+        raise HTTPException(status_code=503, detail="Service not initialized")
 
-    # Step 2: ASP reasoning - determine what conversation moves are valid
-    asp_directives = asp_engine.reason(
-        predicates=predicates,
-        session_id=request.session_id,
-    )
-
-    # Step 3: Orchestrator routes to the right agent based on ASP output
-    result = orchestrator.process(
+    return await _orchestrator.process(
         message=request.message,
-        predicates=predicates,
-        asp_directives=asp_directives,
         session_id=request.session_id,
     )
 
-    return ChatResponse(
-        response=result["response"],
-        agent_used=result["agent"],
-        predicates=predicates,
-        asp_directives=asp_directives,
+
+@router.post("/session/seed")
+async def seed_session(request: SeedSessionRequest):
+    """
+    Pre-populate a session with onboarding data so the user
+    skips intake and goes straight to the strategy phase.
+    """
+    if not _orchestrator:
+        raise HTTPException(status_code=503, detail="Service not initialized")
+
+    _orchestrator.seed_session(request)
+    return {"status": "ok", "session_id": request.session_id}
+
+
+@router.get("/session/{session_id}", response_model=SessionResponse)
+async def get_session(session_id: str):
+    """Returns current conversation state for a session."""
+    if not _orchestrator:
+        raise HTTPException(status_code=503, detail="Service not initialized")
+
+    state = _orchestrator.get_session(session_id)
+    return SessionResponse(
+        session_id=state.session_id,
+        phase=state.phase,
+        turn_count=state.turn_count,
+        family_profile=state.family_profile,
+        active_strategies=state.active_strategies,
+        goals=state.goals,
+    )
+
+
+@router.get("/session/{session_id}/outcomes", response_model=OutcomesResponse)
+async def get_outcomes(session_id: str):
+    """Returns outcome tracking data for a session."""
+    if not _orchestrator:
+        raise HTTPException(status_code=503, detail="Service not initialized")
+
+    state = _orchestrator.get_session(session_id)
+    return OutcomesResponse(
+        session_id=state.session_id,
+        outcomes=state.outcomes,
+        recommended_strategies=state.recommended_strategies,
+        goals=state.goals,
     )
 
 
 @router.get("/health")
 async def health():
-    return {"status": "ok"}
-
-
-@router.get("/session/{session_id}/state")
-async def get_session_state(session_id: str):
-    """Returns current conversation state for a session."""
     return {
-        "session_id": session_id,
-        "conversation_state": orchestrator.get_state(session_id),
+        "status": "ok",
+        "index_built": _knowledge_base.is_indexed if _knowledge_base else False,
     }
+
+
+@router.get("/knowledge/topics")
+async def knowledge_topics():
+    """Returns the approved topic boundaries from the knowledge base."""
+    if not _knowledge_base:
+        raise HTTPException(status_code=503, detail="Knowledge base not initialized")
+
+    return {
+        "topics": _knowledge_base.get_all_topics(),
+        "document_count": len(_knowledge_base.documents),
+    }
+
+
+@router.get("/knowledge/documents")
+async def knowledge_documents():
+    """Returns all knowledge documents for the Resource Library."""
+    if not _knowledge_base:
+        raise HTTPException(status_code=503, detail="Knowledge base not initialized")
+
+    return {"documents": [doc for doc in _knowledge_base.documents]}

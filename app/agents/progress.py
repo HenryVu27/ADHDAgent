@@ -12,16 +12,15 @@ from app.agents.context import format_conversation_window
 from app.config import settings
 from app.llm.prompts import PROGRESS_CHECK_PROMPT
 from app.models.schemas import (
-    ExtractionResult,
     Goal,
     Outcome,
-    RulesDecision,
+    PhaseDecision,
     SessionState,
 )
 
 logger = logging.getLogger(__name__)
 
-# Signals that indicate positive or negative outcomes from predicates
+# Signals that indicate positive or negative outcomes from messages
 POSITIVE_SIGNALS = {"better", "improved", "working", "helped", "easier", "success", "good"}
 NEGATIVE_SIGNALS = {"worse", "harder", "failed", "didn't work", "struggling", "setback"}
 
@@ -38,13 +37,12 @@ class ProgressAgent(BaseAgent):
     async def process(
         self,
         message: str,
-        extraction: ExtractionResult,
-        decision: RulesDecision,
+        decision: PhaseDecision,
         state: SessionState,
         rag_context: str,
     ) -> str:
         # Track outcome signals from the message
-        self._track_outcomes(message, extraction, state)
+        self._track_outcomes(message, state)
 
         if self._gemini and settings.USE_LLM_RESPONSES:
             try:
@@ -107,7 +105,7 @@ class ProgressAgent(BaseAgent):
             "happening is itself a big step."
         )
 
-    def _track_outcomes(self, message: str, extraction: ExtractionResult, state: SessionState):
+    def _track_outcomes(self, message: str, state: SessionState):
         """Track positive/negative outcome signals from the conversation."""
         message_lower = message.lower()
 
