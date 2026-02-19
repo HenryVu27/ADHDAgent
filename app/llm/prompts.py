@@ -23,6 +23,9 @@ For each predicate, provide:
 - category: broader grouping
 - confidence: 0.0-1.0
 
+Recent conversation context:
+{recent_context}
+
 Parent message: {message}
 
 Return a JSON array of predicates. If the message is a greeting or doesn't contain extractable information, return an empty array []."""
@@ -35,6 +38,9 @@ Classify this parent message into exactly one category:
 1. "crisis" - Any mention of harm, self-harm, abuse, suicidal ideation, violence, or immediate danger to child or parent. Err on the side of caution.
 2. "out_of_scope" - Questions about medication, dosage, diagnosis, legal matters, custody, divorce, or other medical/legal topics outside behavioral coaching.
 3. "safe" - Everything else: parenting questions, behavioral concerns, emotional sharing, strategy discussion, general conversation.
+
+Recent conversation context:
+{recent_context}
 
 Parent message: {message}
 

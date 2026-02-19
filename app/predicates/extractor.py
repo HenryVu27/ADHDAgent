@@ -1,28 +1,34 @@
 """
-Predicate Extraction Module.
+Predicate Extraction Module (Layer 1).
 
 Extracts structured predicates from parent natural language utterances.
-These predicates are then fed into the ASP reasoning engine to determine
-valid conversation moves.
+Primary: Gemini structured JSON extraction.
+Fallback: keyword-based extraction for offline/demo/testing.
 
 Example:
-    Input:  "My son won't do his homework and keeps getting distracted"
-    Output: [
-        {"predicate": "child_behavior", "subject": "avoidance", "category": "homework"},
-        {"predicate": "child_behavior", "subject": "distraction", "category": "homework"},
-        {"predicate": "parent_concern", "subject": "academic_performance", "category": "homework"},
-    ]
-
-In production, this uses an LLM with structured output to extract predicates.
-The fallback uses keyword matching for offline/demo use.
+    Input:  "My 7-year-old son won't do his homework and keeps getting distracted"
+    Output: ExtractionResult with predicates:
+        - Predicate(predicate="child_behavior", subject="avoidance", category="homework")
+        - Predicate(predicate="child_behavior", subject="distraction", category="attention")
+        - Predicate(predicate="child_age", subject="7", category="demographics")
 """
 
-import json
+import logging
 import re
+import time
 
+from app.config import settings
+from app.llm.prompts import PREDICATE_EXTRACTION_PROMPT
+from app.models.schemas import (
+    ExtractionMethod,
+    ExtractionResult,
+    Predicate,
+)
+
+logger = logging.getLogger(__name__)
 
 # Keyword-to-predicate mappings for fallback extraction
-BEHAVIOR_KEYWORDS = {
+BEHAVIOR_KEYWORDS: dict[str, tuple[str, str]] = {
     "won't": ("avoidance", "task"),
     "refuses": ("avoidance", "task"),
     "distracted": ("distraction", "attention"),
@@ -43,7 +49,7 @@ BEHAVIOR_KEYWORDS = {
     "screen": ("transition_difficulty", "screen_time"),
 }
 
-CONCERN_KEYWORDS = {
+CONCERN_KEYWORDS: dict[str, str] = {
     "worried": "parent_worry",
     "exhausted": "parent_burnout",
     "frustrated": "parent_frustration",
@@ -52,89 +58,93 @@ CONCERN_KEYWORDS = {
     "tried everything": "exhausted_options",
 }
 
-# Prompt template for LLM-based extraction
-EXTRACTION_PROMPT = """You are a predicate extraction system for an ADHD parenting coach.
-Given a parent's message, extract structured predicates that capture:
-1. Child behaviors being described
-2. Situations or contexts mentioned
-3. Parent emotions or concerns
-4. Specific ADHD-related challenges
-
-Return a JSON array of predicates, each with:
-- "predicate": the type (child_behavior, parent_concern, situation, challenge)
-- "subject": the specific thing described
-- "category": broader category it falls under
-
-Parent message: {message}
-
-Return ONLY valid JSON array, no other text."""
-
 
 class PredicateExtractor:
     """Extracts structured predicates from parent utterances."""
 
-    def __init__(self, use_llm: bool = False):
-        self.use_llm = use_llm
+    def __init__(self, gemini_client=None):
+        self._gemini = gemini_client
 
-    def extract(self, message: str) -> list[dict]:
+    async def extract(self, message: str, conversation_context: str = "") -> ExtractionResult:
         """
         Extract predicates from a parent's message.
-        Uses keyword matching as fallback, LLM for production.
+        Uses Gemini when available, falls back to keywords.
         """
-        if self.use_llm:
-            return self._extract_with_llm(message)
-        return self._extract_with_keywords(message)
+        start = time.time()
 
-    def _extract_with_keywords(self, message: str) -> list[dict]:
-        """Fallback extraction using keyword matching."""
+        if self._gemini and settings.USE_LLM_EXTRACTION:
+            try:
+                result = await self._extract_with_gemini(message, conversation_context)
+                result.raw_text = message
+                logger.info(
+                    f"Gemini extraction: {len(result.predicates)} predicates "
+                    f"in {(time.time() - start) * 1000:.0f}ms"
+                )
+                return result
+            except Exception as e:
+                logger.warning(f"Gemini extraction failed, using fallback: {e}")
+
+        result = self._extract_with_keywords(message)
+        result.raw_text = message
+        return result
+
+    async def _extract_with_gemini(self, message: str, conversation_context: str = "") -> ExtractionResult:
+        """Extract predicates using Gemini structured JSON output."""
+        prompt = PREDICATE_EXTRACTION_PROMPT.format(
+            message=message,
+            recent_context=conversation_context or "No prior conversation.",
+        )
+        raw = await self._gemini.extract_json(prompt)
+
         predicates = []
+        if isinstance(raw, list):
+            for item in raw:
+                if isinstance(item, dict) and "predicate" in item:
+                    predicates.append(Predicate(
+                        predicate=item.get("predicate", "unknown"),
+                        subject=item.get("subject", ""),
+                        category=item.get("category", ""),
+                        confidence=float(item.get("confidence", 0.9)),
+                    ))
+
+        return ExtractionResult(
+            predicates=predicates,
+            method=ExtractionMethod.gemini,
+        )
+
+    def _extract_with_keywords(self, message: str) -> ExtractionResult:
+        """Fallback extraction using keyword matching."""
+        predicates: list[Predicate] = []
         message_lower = message.lower()
 
-        # Extract behavior predicates
         for keyword, (subject, category) in BEHAVIOR_KEYWORDS.items():
             if keyword in message_lower:
-                predicates.append({
-                    "predicate": "child_behavior",
-                    "subject": subject,
-                    "category": category,
-                })
+                predicates.append(Predicate(
+                    predicate="child_behavior",
+                    subject=subject,
+                    category=category,
+                    confidence=0.7,
+                ))
 
-        # Extract concern predicates
         for keyword, concern_type in CONCERN_KEYWORDS.items():
             if keyword in message_lower:
-                predicates.append({
-                    "predicate": "parent_concern",
-                    "subject": concern_type,
-                    "category": "parent_state",
-                })
+                predicates.append(Predicate(
+                    predicate="parent_concern",
+                    subject=concern_type,
+                    category="parent_state",
+                    confidence=0.7,
+                ))
 
-        # Extract age if mentioned
-        age_match = re.search(r"(\d{1,2})\s*(?:year|yr)", message_lower)
+        age_match = re.search(r"(\d{1,2})\s*(?:year|yr|-year)", message_lower)
         if age_match:
-            predicates.append({
-                "predicate": "child_age",
-                "subject": age_match.group(1),
-                "category": "demographics",
-            })
+            predicates.append(Predicate(
+                predicate="child_age",
+                subject=age_match.group(1),
+                category="demographics",
+                confidence=0.95,
+            ))
 
-        return predicates
-
-    def _extract_with_llm(self, message: str) -> list[dict]:
-        """Extract predicates using LLM with structured output."""
-        try:
-            from openai import OpenAI
-            from app.config import settings
-
-            client = OpenAI(api_key=settings.OPENAI_API_KEY)
-            response = client.chat.completions.create(
-                model=settings.MODEL_NAME,
-                messages=[
-                    {"role": "user", "content": EXTRACTION_PROMPT.format(message=message)}
-                ],
-                temperature=0,
-            )
-            content = response.choices[0].message.content
-            return json.loads(content)
-        except Exception:
-            # Fall back to keyword extraction
-            return self._extract_with_keywords(message)
+        return ExtractionResult(
+            predicates=predicates,
+            method=ExtractionMethod.keyword_fallback,
+        )
