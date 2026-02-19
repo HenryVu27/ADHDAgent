@@ -265,3 +265,62 @@ async def test_strategy_prompt_fallback_when_no_child_name():
     await orchestrator.process("What strategies work for homework?", "noname_test")
     prompt = mock.generate_calls[-1]
     assert "your child" in prompt
+
+
+# --- Progressive profiling tests ---
+
+
+def _make_profiling_orchestrator():
+    """Helper to build orchestrator with keyword extraction (no Gemini)."""
+    store = KnowledgeStore()
+    bm25 = BM25Index()
+    bm25.build(store.chunks)
+    return AgentOrchestrator(
+        extractor=PredicateExtractor(gemini_client=None),
+        safety=SafetyMonitor(gemini_client=None),
+        rules_engine=PythonRulesEngine(),
+        retriever=HybridRetriever(knowledge_store=store, bm25_index=bm25, gemini_client=None),
+        intake=IntakeAgent(gemini_client=None),
+        strategy=StrategyAgent(gemini_client=None),
+        progress=ProgressAgent(gemini_client=None),
+    )
+
+
+@pytest.mark.asyncio
+async def test_progressive_profiling_updates_child_age():
+    """Profile should learn child_age from conversation predicates."""
+    orch = _make_profiling_orchestrator()
+    orch.seed_session(SeedSessionRequest(
+        session_id="profile_test", challenges=["homework"], goals=["finish homework"]
+    ))
+    state = orch.get_session("profile_test")
+    assert state.family_profile.child_age is None
+    await orch.process("My 8 year old just can't focus", "profile_test")
+    assert state.family_profile.child_age == "8"
+
+
+@pytest.mark.asyncio
+async def test_progressive_profiling_adds_new_challenges():
+    """Profile should accumulate new challenge areas from predicates."""
+    orch = _make_profiling_orchestrator()
+    orch.seed_session(SeedSessionRequest(
+        session_id="challenge_test", challenges=["homework"], goals=["finish homework"]
+    ))
+    state = orch.get_session("challenge_test")
+    assert "emotion" not in state.family_profile.challenge_areas
+    await orch.process("He also has terrible meltdowns and tantrums", "challenge_test")
+    assert "emotion" in state.family_profile.challenge_areas
+
+
+@pytest.mark.asyncio
+async def test_progressive_profiling_does_not_overwrite_existing_age():
+    """Profile should not overwrite existing child_age."""
+    orch = _make_profiling_orchestrator()
+    orch.seed_session(SeedSessionRequest(
+        session_id="no_overwrite", child_age="7",
+        challenges=["homework"], goals=["finish homework"]
+    ))
+    state = orch.get_session("no_overwrite")
+    assert state.family_profile.child_age == "7"
+    await orch.process("My 9 year old nephew also has ADHD", "no_overwrite")
+    assert state.family_profile.child_age == "7"

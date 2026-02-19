@@ -144,6 +144,10 @@ class AgentOrchestrator:
                 session_id=session_id,
             )
 
+        # Progressive profiling: fill in missing profile fields from predicates
+        if state.phase != ConversationPhase.intake:
+            self._update_profile_from_predicates(extraction, state)
+
         # --- Step 3: Rules Engine Decision (Layer 2) ---
         step_start = time.time()
         decision = self._rules.decide(extraction, state)
@@ -270,6 +274,18 @@ class AgentOrchestrator:
             pipeline_trace=trace,
             session_id=session_id,
         )
+
+    def _update_profile_from_predicates(self, extraction: ExtractionResult, state: SessionState):
+        """Progressive profiling: fill in missing profile fields from every turn's predicates."""
+        for pred in extraction.predicates:
+            if pred.predicate == "child_age" and pred.subject and not state.family_profile.child_age:
+                state.family_profile.child_age = pred.subject
+            if pred.predicate == "child_behavior" and pred.category:
+                if pred.category not in state.family_profile.challenge_areas:
+                    state.family_profile.challenge_areas.append(pred.category)
+            if pred.predicate == "situation" and pred.subject:
+                if pred.subject not in state.family_profile.hardest_situations:
+                    state.family_profile.hardest_situations.append(pred.subject)
 
     def _format_rag_context(self, results: list[RetrievalResult]) -> str:
         """Format retrieval results as structured XML for the LLM.
