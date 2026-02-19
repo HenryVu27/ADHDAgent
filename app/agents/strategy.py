@@ -1,67 +1,103 @@
-import json
-from pathlib import Path
+"""
+Strategy agent with RAG + Gemini response generation.
+
+Receives RAG retrieval results, formats as context for Gemini,
+generates personalized strategy recommendations. Tracks which
+strategies are recommended for outcome measurement.
+"""
+
+import logging
 
 from app.agents.base import BaseAgent
+from app.agents.context import format_conversation_window
+from app.config import settings
+from app.llm.prompts import RESPONSE_GENERATION_PROMPT
+from app.models.schemas import ExtractionResult, RulesDecision, SessionState
 
-KNOWLEDGE_PATH = Path(__file__).parent.parent / "knowledge" / "adhd_strategies.json"
+logger = logging.getLogger(__name__)
 
 
 class StrategyAgent(BaseAgent):
-    """
-    Recommends evidence-based parenting strategies matched to the family's
-    specific situation and challenges.
-    """
+    """Recommends evidence-based ADHD parenting strategies using RAG + Gemini."""
 
     name = "strategy"
     description = "Recommends evidence-based ADHD parenting strategies"
 
-    def __init__(self):
-        self.strategies = self._load_strategies()
+    def __init__(self, gemini_client=None):
+        self._gemini = gemini_client
 
-    def _load_strategies(self) -> list[dict]:
-        if KNOWLEDGE_PATH.exists():
-            with open(KNOWLEDGE_PATH) as f:
-                return json.load(f)
-        return []
+    async def process(
+        self,
+        message: str,
+        extraction: ExtractionResult,
+        decision: RulesDecision,
+        state: SessionState,
+        rag_context: str,
+    ) -> str:
+        if self._gemini and settings.USE_LLM_RESPONSES:
+            try:
+                return await self._generate_with_gemini(
+                    message, extraction, decision, state, rag_context
+                )
+            except Exception as e:
+                logger.warning(f"Gemini strategy generation failed: {e}")
 
-    def process(self, message: str, context: dict) -> str:
-        predicates = context.get("predicates", [])
-        matched = self._match_strategies(predicates)
+        return self._fallback_response(rag_context)
 
-        if not matched:
-            return (
-                "I hear you. Let me think about this situation carefully. "
-                "Could you tell me a bit more about when this typically happens "
-                "and what you've already tried?"
-            )
+    async def _generate_with_gemini(
+        self,
+        message: str,
+        extraction: ExtractionResult,
+        decision: RulesDecision,
+        state: SessionState,
+        rag_context: str,
+    ) -> str:
+        """Generate strategy response using Gemini with RAG context."""
+        predicates_str = ", ".join(
+            f"{p.predicate}({p.subject}, {p.category})" for p in extraction.predicates
+        ) or "none extracted"
 
-        strategy = matched[0]
-        return (
-            f"Based on what you're describing, here's a strategy that many families "
-            f"find helpful:\n\n"
-            f"**{strategy['name']}**\n\n"
-            f"{strategy['description']}\n\n"
-            f"**How to try it:**\n"
-            + "\n".join(f"- {step}" for step in strategy.get("steps", []))
-            + "\n\nWould you like to explore this further, or would you prefer "
-            "to hear about a different approach?"
+        profile = state.family_profile
+        family_str = (
+            f"Child age: {profile.child_age or 'unknown'}, "
+            f"Challenges: {profile.challenge_areas or ['not yet identified']}, "
+            f"Tried: {profile.attempted_strategies or ['not yet discussed']}"
         )
 
-    def _match_strategies(self, predicates: list[dict]) -> list[dict]:
-        """Match predicates to relevant strategies from the knowledge base."""
-        if not self.strategies or not predicates:
-            return []
+        conversation_history = format_conversation_window(state.conversation_history)
 
-        matched = []
-        for strategy in self.strategies:
-            tags = set(strategy.get("tags", []))
-            for pred in predicates:
-                pred_terms = {pred.get("subject", ""), pred.get("category", "")}
-                if tags & pred_terms:
-                    matched.append(strategy)
-                    break
+        rag_section = ""
+        if rag_context:
+            rag_section = f"Retrieved knowledge base context:\n{rag_context}"
 
-        return matched
+        prompt = RESPONSE_GENERATION_PROMPT.format(
+            message=message,
+            conversation_history=conversation_history or "No prior conversation.",
+            predicates=predicates_str,
+            phase=decision.phase.value,
+            family_profile=family_str,
+            agent="strategy",
+            directives=decision.directives,
+            constraints=decision.constraints,
+            rag_context=rag_section,
+            active_strategies=state.active_strategies or ["none yet"],
+        )
 
-    def can_handle(self, asp_directives: list[str]) -> bool:
-        return any("strategy" in d or "recommend" in d for d in asp_directives)
+        return await self._gemini.generate(prompt, temperature=0.7)
+
+    def _fallback_response(self, rag_context: str) -> str:
+        """Template response when Gemini is unavailable."""
+        if rag_context:
+            return (
+                "Based on what you're describing, here are some approaches "
+                "that many families find helpful:\n\n"
+                f"{rag_context}\n\n"
+                "Would you like to explore any of these further, or would you "
+                "prefer to hear about a different approach?"
+            )
+
+        return (
+            "I hear you. Let me think about this situation carefully. "
+            "Could you tell me a bit more about when this typically happens "
+            "and what you've already tried?"
+        )

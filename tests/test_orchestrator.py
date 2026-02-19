@@ -181,3 +181,37 @@ def test_format_conversation_window_respects_max_turns():
     assert "msg 7" in result
     assert "msg 9" in result
     assert "msg 0" not in result
+
+
+# --- Conversation history injection tests ---
+
+from tests.conftest import MockGeminiClient
+from app.models.schemas import SeedSessionRequest
+
+
+@pytest.mark.asyncio
+async def test_strategy_prompt_includes_conversation_history():
+    """Response generation should include formatted conversation history."""
+    mock = MockGeminiClient()
+    store = KnowledgeStore()
+    bm25 = BM25Index()
+    bm25.build(store.chunks)
+    orchestrator = AgentOrchestrator(
+        extractor=PredicateExtractor(gemini_client=None),
+        safety=SafetyMonitor(gemini_client=None),
+        rules_engine=PythonRulesEngine(),
+        retriever=HybridRetriever(knowledge_store=store, bm25_index=bm25, gemini_client=None),
+        intake=IntakeAgent(gemini_client=None),
+        strategy=StrategyAgent(gemini_client=mock),
+        progress=ProgressAgent(gemini_client=None),
+    )
+    orchestrator.seed_session(SeedSessionRequest(
+        session_id="hist_test", child_name="Jamie", child_age="7",
+        challenges=["homework"], goals=["finish homework"]
+    ))
+    await orchestrator.process("My son won't do homework", "hist_test")
+    await orchestrator.process("What about a timer technique?", "hist_test")
+    assert len(mock.generate_calls) >= 1
+    last_prompt = mock.generate_calls[-1]
+    assert "Parent:" in last_prompt
+    assert "Coach:" in last_prompt
