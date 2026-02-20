@@ -76,7 +76,7 @@ export function ProfilePage() {
           <Separator />
           <div className="grid gap-6 md:grid-cols-2">
             {/* Child Info */}
-            <Card className="border-t-[3px] border-t-coach">
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Heart className="h-4 w-4 text-primary" />

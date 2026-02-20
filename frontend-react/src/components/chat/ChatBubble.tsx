@@ -41,7 +41,7 @@ export function ChatBubble({ message }: Props) {
         className={`max-w-[80%] rounded-2xl px-4 py-3 ${
           isUser
             ? "bg-primary text-primary-foreground"
-            : "bg-card shadow-sm border border-border/30 border-l-[3px] border-l-coach"
+            : "bg-card shadow-sm border border-border/30"
         }`}
       >
         {!isUser && (

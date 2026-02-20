@@ -38,7 +38,7 @@ export function ActiveGoals({ goals }: Props) {
       ) : (
         <div className="space-y-2">
           {activeGoals.map((goal, i) => (
-            <Card key={i} className="border-l-[3px] border-l-primary">
+            <Card key={i}>
               <CardContent className="flex items-center justify-between p-4">
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium truncate">{goal.description}</p>
