@@ -1,4 +1,4 @@
-# ADHDAgent FastAPI application
+# ADHDAgent FastAPI application — ReAct agent architecture
 
 import logging
 from contextlib import asynccontextmanager
@@ -8,16 +8,8 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.agents.intake import IntakeAgent
-from app.agents.orchestrator import AgentOrchestrator
-from app.agents.progress import ProgressAgent
-from app.agents.strategy import StrategyAgent
 from app.api.routes import router, set_knowledge_base, set_orchestrator
 from app.config import settings
-from app.phase_manager import PhaseManager
-from app.rag.knowledge_store import KnowledgeStore
-from app.rag.query_rewriter import QueryRewriter
-from app.rag.retriever import HybridRetriever
 
 logging.basicConfig(
     level=getattr(logging, settings.LOG_LEVEL),
@@ -41,6 +33,7 @@ async def lifespan(app: FastAPI):
         logger.warning("No GEMINI_API_KEY — running in fallback mode (no LLM)")
 
     # 2. Load knowledge store + build Qdrant index
+    from app.rag.knowledge_store import KnowledgeStore
     store = KnowledgeStore()
     if gemini:
         try:
@@ -55,39 +48,68 @@ async def lifespan(app: FastAPI):
     guardrails = GuardrailsValidator(gemini_client=gemini)
     logger.info("NeMo Guardrails initialized (input + output rails)")
 
-    # 4. Create phase manager
-    phase_manager = PhaseManager()
+    # 4. Create session store, retriever, tools
+    from app.agent.session_store import InMemorySessionStore
+    from app.agent.tools import create_tools
+    from app.rag.query_rewriter import QueryRewriter
+    from app.rag.retriever import HybridRetriever
 
-    # 5. Wire all components
+    if settings.SQLITE_ENABLED:
+        from app.agent.sqlite_store import SQLiteSessionStore
+        from app.db import get_connection, init_db
+        conn = get_connection(settings.SQLITE_DB_PATH)
+        init_db(conn)
+        session_store = SQLiteSessionStore(conn)
+        logger.info("Using SQLite session store (path=%s)", settings.SQLITE_DB_PATH)
+    else:
+        session_store = InMemorySessionStore()
+        logger.info("Using in-memory session store")
     query_rewriter = QueryRewriter(gemini_client=gemini)
     retriever = HybridRetriever(
         knowledge_store=store,
         gemini_client=gemini,
         query_rewriter=query_rewriter,
     )
-    intake = IntakeAgent(gemini_client=gemini)
-    strategy = StrategyAgent(gemini_client=gemini)
-    progress = ProgressAgent(gemini_client=gemini)
+    tools = create_tools(retriever=retriever, session_store=session_store)
 
-    orchestrator = AgentOrchestrator(
+    # 5. Create hooks (guardrails + context injection)
+    from app.agent.hooks import create_hooks
+    pre_model_hook, post_model_hook = create_hooks(
         guardrails=guardrails,
-        phase_manager=phase_manager,
-        retriever=retriever,
-        intake=intake,
-        strategy=strategy,
-        progress=progress,
+        session_store=session_store,
+    )
+
+    # 6. Create memory manager (optional, requires Gemini)
+    from app.agent.memory import MemoryManager
+    memory_manager = MemoryManager(session_store=session_store, gemini_client=gemini) if gemini else None
+    if memory_manager:
+        logger.info("MemoryManager initialized (summary_interval=%d)", settings.SUMMARY_INTERVAL_TURNS)
+
+    # 7. Build ReAct agent and orchestrator
+    from app.agent.graph import build_agent
+    from app.agent.orchestrator import AgentOrchestrator
+
+    agent = build_agent(
+        tools=tools,
+        pre_model_hook=pre_model_hook,
+        post_model_hook=post_model_hook,
+    )
+    orchestrator = AgentOrchestrator(
+        agent=agent,
+        session_store=session_store,
+        memory_manager=memory_manager,
     )
     set_orchestrator(orchestrator)
 
-    logger.info("ADHDAgent ready")
+    logger.info("ADHDAgent ready (ReAct agent architecture)")
     yield
     logger.info("ADHDAgent shutting down")
 
 
 app = FastAPI(
     title="ADHDAgent",
-    description="Agentic ADHD coaching with NeMo Guardrails conversation safety",
-    version="0.3.0",
+    description="ReAct ADHD coaching agent with NeMo Guardrails",
+    version="0.4.0",
     lifespan=lifespan,
 )
 

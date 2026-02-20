@@ -22,14 +22,29 @@ class Settings:
     # App
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
-    # Feature flags
-    USE_LLM_RESPONSES: bool = os.getenv("USE_LLM_RESPONSES", "true").lower() == "true"
+    # Agent
+    AGENT_MAX_TOOL_STEPS: int = int(os.getenv("AGENT_MAX_TOOL_STEPS", "5"))
 
     # NeMo Guardrails
-    NEMO_GUARDRAILS_TIMEOUT_MS: int = int(os.getenv("NEMO_GUARDRAILS_TIMEOUT_MS", "5000"))
+    NEMO_GUARDRAILS_TIMEOUT_MS: int = int(os.getenv("NEMO_GUARDRAILS_TIMEOUT_MS", "15000"))
 
     # Context engineering
-    CONTEXT_WINDOW_TURNS: int = int(os.getenv("CONTEXT_WINDOW_TURNS", "5"))
+    CONTEXT_WINDOW_TURNS: int = int(os.getenv("CONTEXT_WINDOW_TURNS", "6"))
+
+    # Model routing
+    GEMINI_MODEL_FAST: str = os.getenv("GEMINI_MODEL_FAST", os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite"))
+    GEMINI_MODEL_STANDARD: str = os.getenv("GEMINI_MODEL_STANDARD", os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite"))
+    GEMINI_MODEL_COMPLEX: str = os.getenv("GEMINI_MODEL_COMPLEX", os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite"))
+    GEMINI_MODEL_BACKGROUND: str = os.getenv("GEMINI_MODEL_BACKGROUND", os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite"))
+    MODEL_ROUTING_ENABLED: bool = os.getenv("MODEL_ROUTING_ENABLED", "false").lower() == "true"
+
+    # Memory manager
+    SUMMARY_INTERVAL_TURNS: int = int(os.getenv("SUMMARY_INTERVAL_TURNS", "5"))
+    FACT_EXTRACTION_MIN_LENGTH: int = int(os.getenv("FACT_EXTRACTION_MIN_LENGTH", "40"))
+
+    # SQLite persistence
+    SQLITE_DB_PATH: str = os.getenv("SQLITE_DB_PATH", "adhd_agent.db")
+    SQLITE_ENABLED: bool = os.getenv("SQLITE_ENABLED", "false").lower() == "true"
 
 
 settings = Settings()

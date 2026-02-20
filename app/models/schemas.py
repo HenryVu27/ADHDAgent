@@ -113,6 +113,21 @@ class Outcome(BaseModel):
     turn: int = 0
 
 
+class SessionSummary(BaseModel):
+    summary: str
+    covers_through_turn: int
+
+
+class EpisodicMemory(BaseModel):
+    event_type: str  # "outcome_reported" | "goal_set" | "goal_completed" | "breakthrough"
+    summary: str
+    outcome: str = ""  # "positive" | "negative" | "mixed"
+    strategies_involved: list[str] = Field(default_factory=list)
+    emotional_context: str = ""
+    turn_range_start: int = 0
+    turn_range_end: int = 0
+
+
 class SessionState(BaseModel):
     session_id: str
     phase: ConversationPhase = ConversationPhase.intake
