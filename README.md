@@ -2,28 +2,30 @@
 
 Parent-facing ADHD coaching chatbot using a ReAct agent architecture with multi-layer safety guardrails.
 
-NeMo input guardrails → Gemini ReAct agent with tool calling → NeMo output guardrails.
+NeMo input guardrails → Gemini ReAct agent with tool calling → Gemini output classifiers.
 
 ## Key Features
 
 - **ReAct agent** with LangGraph tool calling and full observability
-- **Hybrid RAG** — Qdrant dense + sparse vectors with RRF and tag boosting
-- **Multi-layer guardrails** — NeMo Colang input rails + Gemini output classifiers
-- **4-tier memory** — in-memory or SQLite persistence, rolling summaries, episodic memory, fact extraction
-- **Model routing** — rule-based complexity classification selects Gemini model tier per turn
-- **Outcome tracking** — goals, progress, strategy effectiveness measurement
-- **Sectioned system prompt** — structured context assembly with family profile, goals, and session history
+- **Hybrid RAG** - Qdrant dense + sparse vectors with RRF, tag boosting, and local cross-encoder reranking
+- **Multi-layer guardrails** - NeMo Colang input rails + direct Gemini output classifiers
+- **4-tier memory** - SQLite persistence, rolling summaries, episodic memory, gated fact extraction
+- **Model routing** - rule-based complexity classification selects Gemini model tier per turn
+- **Outcome tracking** - goals, progress, strategy effectiveness measurement
+- **Observability** - structured event bus, per-turn conversation analysis, observability dashboard
+- **Sectioned system prompt** - structured context assembly with family profile, goals, and session history
 
 ## Tech Stack
 
 | Component | Technology |
 |-----------|-----------|
-| LLM | Google Gemini (2.5-flash-lite / flash / pro) via langchain-google-genai |
+| LLM | Google Gemini 3 (3-flash-preview / 3-pro-preview) via langchain-google-genai |
 | Embeddings | Gemini gemini-embedding-001 via google-genai SDK |
 | Vector Search | Qdrant (in-memory for dev, remote for prod) with dense + sparse + RRF |
+| Reranker | FastEmbed cross-encoder (Xenova/ms-marco-MiniLM-L-6-v2), local ONNX inference |
 | Agent | LangGraph create_react_agent (ReAct loop with tool calling) |
-| Guardrails | NeMo Guardrails (Colang 1.0) + direct Gemini output classifiers |
-| Persistence | SQLite (opt-in) or in-memory session store |
+| Guardrails | NeMo Guardrails (Colang 1.0) for input rails + direct Gemini output classifiers |
+| Persistence | SQLite (default) or in-memory session store |
 | API | FastAPI |
 | Frontend | React 19 + TypeScript + Vite + Tailwind CSS + shadcn/ui |
 
@@ -48,69 +50,29 @@ uvicorn app.main:app --reload
 Enable via environment variables:
 
 ```bash
-# SQLite persistence (default: in-memory)
-SQLITE_ENABLED=true
-SQLITE_DB_PATH=adhd_agent.db
+# Disable SQLite persistence (enabled by default)
+SQLITE_ENABLED=false
 
 # Model routing (default: single model)
 MODEL_ROUTING_ENABLED=true
-GEMINI_MODEL_FAST=gemini-2.5-flash-lite
-GEMINI_MODEL_STANDARD=gemini-2.5-flash
-GEMINI_MODEL_COMPLEX=gemini-2.5-pro
+GEMINI_MODEL_FAST=gemini-3-flash-preview
+GEMINI_MODEL_STANDARD=gemini-3-flash-preview
+GEMINI_MODEL_COMPLEX=gemini-3-pro-preview
 ```
 
 ## Running Tests
 
 ```bash
-# All tests (no API key needed — tests use mocks)
+# All tests (no API key needed, tests use mocks)
 pytest tests/ -v
 
 # Skip integration tests (require real API keys)
 pytest tests/ -v -m "not integration"
 ```
 
-## Project Structure
-
-```
-ADHDAgent/
-├── app/
-│   ├── main.py                        # FastAPI app + dependency wiring
-│   ├── config.py                      # All settings (Gemini, Qdrant, agent, memory, routing)
-│   ├── db.py                          # SQLite schema, migrations, connection management
-│   ├── models/
-│   │   └── schemas.py                 # Pydantic data contracts
-│   ├── agent/
-│   │   ├── graph.py                   # build_agent() — LangGraph ReAct agent
-│   │   ├── orchestrator.py            # Session management + agent invocation
-│   │   ├── hooks.py                   # pre_model_hook (guardrails + context) + post_model_hook
-│   │   ├── tools.py                   # 5 tools: search, profile, outcomes, goals
-│   │   ├── prompts.py                 # Sectioned system prompt template + context helpers
-│   │   ├── state.py                   # CoachingState (extends MessagesState)
-│   │   ├── memory.py                  # MemoryManager (summary, fact extraction, episodes)
-│   │   ├── model_router.py            # Complexity classification + model selection
-│   │   ├── store_protocol.py          # SessionStoreBase ABC
-│   │   ├── session_store.py           # InMemorySessionStore
-│   │   └── sqlite_store.py            # SQLiteSessionStore
-│   ├── llm/
-│   │   └── client.py                  # Gemini API wrapper (generate, extract_json, embed)
-│   ├── rag/
-│   │   ├── knowledge_store.py         # Qdrant document store (dense + sparse vectors)
-│   │   ├── retriever.py               # Hybrid retriever (dense + sparse + RRF + tag boost)
-│   │   └── query_rewriter.py          # LLM query rewriting with conversation context
-│   ├── guardrails/
-│   │   ├── validator.py               # Input rails (NeMo) + output rails (Gemini)
-│   │   ├── gemini_provider.py         # Gemini LLM provider for NeMo
-│   │   └── config/                    # NeMo config (config.yml + rails.co)
-│   ├── knowledge/                     # JSON knowledge base documents
-│   └── api/
-│       └── routes.py                  # API endpoints
-├── frontend-react/                    # React 19 + TypeScript frontend
-├── tests/                             # 180 tests (unit + integration)
-├── requirements.txt
-└── CLAUDE.md
-```
-
 ## API Endpoints
+
+### Core
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -118,9 +80,20 @@ ADHDAgent/
 | POST | `/api/session/seed` | Pre-populate session with onboarding data |
 | GET | `/api/session/{id}` | Session state (phase, profile, strategies) |
 | GET | `/api/session/{id}/outcomes` | Outcome tracking data |
+| GET | `/api/session/{id}/messages` | Full message history |
+| GET | `/api/sessions` | List all sessions ordered by activity |
 | GET | `/api/health` | Health check |
 | GET | `/api/knowledge/topics` | Approved topic boundaries |
 | GET | `/api/knowledge/documents` | All knowledge documents for resource library |
+
+### Observability
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/observability/sessions` | All sessions with quality and flag stats |
+| GET | `/api/observability/sessions/{id}` | Full session detail (messages, traces, analyses, events) |
+| GET | `/api/observability/sessions/{id}/events` | Filtered event log by category |
+| POST | `/api/observability/sessions/{id}/analyze` | On-demand re-analysis of all turns |
 
 ## License
 
