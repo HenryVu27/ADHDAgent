@@ -12,7 +12,8 @@
       "transition_planning"
     ],
     "age_range": [
-      "school_age"
+      "school_age",
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "CDC: ADHD in the Classroom",
@@ -282,8 +283,6 @@
       "homework_support"
     ],
     "age_range": [
-      "school_age",
-      "adolescent",
       "all"
     ],
     "evidence_level": "strong",
@@ -345,9 +344,7 @@
       "positive_reinforcement"
     ],
     "age_range": [
-      "school_age",
-      "all",
-      "adolescent"
+      "all"
     ],
     "evidence_level": "strong",
     "source": "Child Mind Institute: Behavioral Treatments for ADHD",
@@ -584,9 +581,7 @@
       "communication_skills"
     ],
     "age_range": [
-      "all",
-      "school_age",
-      "adolescent"
+      "all"
     ],
     "evidence_level": "strong",
     "source": "AAP: AAP Clinical Practice Guideline (2019)",
@@ -621,6 +616,7 @@
       "self_care_for_parents"
     ],
     "age_range": [
+      "preschool",
       "school_age"
     ],
     "evidence_level": "strong",
@@ -685,10 +681,7 @@
       "communication_skills"
     ],
     "age_range": [
-      "preschool",
-      "school_age",
-      "all",
-      "adolescent"
+      "all"
     ],
     "evidence_level": "strong",
     "source": "CDC: Behavior Therapy for ADHD",

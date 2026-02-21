@@ -190,9 +190,15 @@ def create_hooks(
         if not last_ai:
             return {"messages": messages}
 
+        # Normalize content — Gemini can return a list of parts instead of a string
+        response_text = last_ai.content
+        if not isinstance(response_text, str):
+            from app.agent.orchestrator import _extract_text
+            response_text = _extract_text(response_text)
+
         start = time.time()
         try:
-            check = await guardrails.check_output(last_ai.content)
+            check = await guardrails.check_output(response_text)
             duration_ms = (time.time() - start) * 1000
 
             trace_step = {

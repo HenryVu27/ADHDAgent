@@ -10,6 +10,7 @@ from app.models.schemas import (
     Goal,
     Outcome,
     SeedSessionRequest,
+    SessionListItem,
     SessionState,
     SessionSummary,
     TurnAnalysis,
@@ -226,9 +227,20 @@ class InMemorySessionStore(SessionStoreBase):
         """Return all turn analyses for a session."""
         return list(self._analyses.get(session_id, []))
 
-    def get_all_sessions(self) -> list[SessionState]:
-        """Return all session states (for admin views)."""
-        return list(self._sessions.values())
+    def get_all_sessions(self) -> list[SessionListItem]:
+        """Return summary info for all sessions."""
+        return [
+            SessionListItem(
+                session_id=s.session_id,
+                turn_count=s.turn_count,
+                phase=s.phase.value if hasattr(s.phase, "value") else str(s.phase),
+            )
+            for s in self._sessions.values()
+        ]
+
+    def get_session_timestamps(self, session_id: str) -> tuple[str, str]:
+        """In-memory store has no timestamps."""
+        return ("", "")
 
 
 # Backward-compatibility alias

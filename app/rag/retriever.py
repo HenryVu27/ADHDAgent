@@ -109,7 +109,7 @@ class HybridRetriever:
 
         # Qdrant hybrid: dense + sparse + RRF
         if self._store.has_sparse and self._gemini:
-            query_vector = self._gemini.embed(query)
+            query_vector = await self._gemini.embed(query)
             hybrid_results = self._store.search_hybrid(
                 query_vector=query_vector,
                 query_text=query,

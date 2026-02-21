@@ -68,22 +68,8 @@ async def list_sessions():
         tool_calls_count = sum(len(t.tool_calls) for t in traces)
         blocked_count = sum(1 for t in traces if t.input_blocked)
 
-        # Try to get timestamps
-        created_at = ""
-        updated_at = ""
-        if hasattr(state, "session_id") and isinstance(state, object):
-            # For SQLite store, get_all_sessions returns dicts with timestamps
-            if hasattr(_session_store, "_conn"):
-                try:
-                    row = _session_store._conn.execute(
-                        "SELECT created_at, updated_at FROM sessions WHERE session_id = ?",
-                        (sid,),
-                    ).fetchone()
-                    if row:
-                        created_at = row["created_at"] or ""
-                        updated_at = row["updated_at"] or ""
-                except Exception:
-                    pass
+        # Get timestamps via public protocol method
+        created_at, updated_at = _session_store.get_session_timestamps(sid)
 
         overviews.append(SessionOverview(
             session_id=sid,

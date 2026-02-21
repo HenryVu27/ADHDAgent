@@ -13,6 +13,7 @@ from app.models.schemas import (
     Goal,
     Outcome,
     SeedSessionRequest,
+    SessionListItem,
     SessionState,
     SessionSummary,
     TurnAnalysis,
@@ -125,3 +126,11 @@ class SessionStoreBase(ABC):
     @abstractmethod
     def get_analyses(self, session_id: str) -> list[TurnAnalysis]:
         """Return all turn analyses for a session."""
+
+    @abstractmethod
+    def get_all_sessions(self) -> list[SessionListItem]:
+        """Return summary info for all sessions."""
+
+    @abstractmethod
+    def get_session_timestamps(self, session_id: str) -> tuple[str, str]:
+        """Return (created_at, updated_at) for a session. Empty strings if unavailable."""

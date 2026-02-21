@@ -26,15 +26,24 @@ logger = logging.getLogger(__name__)
 class AgentOrchestrator:
     """Manages sessions and runs the compiled ReAct agent."""
 
-    def __init__(self, agent, session_store: SessionStoreBase, memory_manager=None, analyzer=None, event_bus=None):
+    def __init__(self, agent, session_store: SessionStoreBase, memory_manager=None, analyzer=None, event_bus=None, gemini_client=None):
         self._agent = agent
         self._session_store = session_store
         self._memory = memory_manager
         self._analyzer = analyzer
         self._event_bus = event_bus
+        self._gemini_client = gemini_client
 
     def get_session(self, session_id: str) -> SessionState:
         return self._session_store.get(session_id)
+
+    def get_session_store(self) -> SessionStoreBase:
+        """Public accessor for the session store."""
+        return self._session_store
+
+    def infer_phase(self, session_id: str) -> ConversationPhase:
+        """Infer a phase label from session state."""
+        return self._infer_phase(session_id)
 
     def seed_session(self, request: SeedSessionRequest) -> None:
         self._session_store.seed_session(request)
@@ -215,22 +224,28 @@ class AgentOrchestrator:
 
         # Fire background memory tasks (non-blocking)
         if self._memory:
-            asyncio.create_task(self._memory.post_turn_tasks(
-                session_id=session_id,
-                turn=turn,
-                user_message=message,
-                assistant_response=response_text,
-                tool_calls=[tc for tc in tool_calls_made],
+            asyncio.create_task(self._safe_background(
+                self._memory.post_turn_tasks(
+                    session_id=session_id,
+                    turn=turn,
+                    user_message=message,
+                    assistant_response=response_text,
+                    tool_calls=[tc for tc in tool_calls_made],
+                ),
+                "memory",
             ))
 
         # Fire background analyzer (non-blocking)
         if self._analyzer:
-            asyncio.create_task(self._analyzer.analyze_turn(
-                session_id=session_id,
-                turn=turn,
-                user_message=message,
-                assistant_response=response_text,
-                enriched_trace=enriched,
+            asyncio.create_task(self._safe_background(
+                self._analyzer.analyze_turn(
+                    session_id=session_id,
+                    turn=turn,
+                    user_message=message,
+                    assistant_response=response_text,
+                    enriched_trace=enriched,
+                ),
+                "analyzer",
             ))
 
         trace = self._build_trace(result, total_ms, tool_calls_made)
@@ -254,6 +269,14 @@ class AgentOrchestrator:
             session_id=session_id,
         )
 
+    @staticmethod
+    async def _safe_background(coro, label: str = "background") -> None:
+        """Run a coroutine with exception logging instead of silent swallowing."""
+        try:
+            await coro
+        except Exception as e:
+            logger.error("Background task '%s' failed: %s", label, e)
+
     async def _synthesize_from_tool_results(
         self, user_message: str, tool_results: list[str], session_id: str,
     ) -> str:
@@ -262,7 +285,8 @@ class AgentOrchestrator:
         This is a fallback for when Gemini flash-lite calls tools correctly
         but produces empty content in its final response.
         """
-        from app.llm.client import GeminiClient
+        if not self._gemini_client:
+            return ""
 
         state = self._session_store.get(session_id)
         child_name = state.family_profile.child_name or "your child"
@@ -283,8 +307,7 @@ class AgentOrchestrator:
         )
 
         try:
-            client = GeminiClient()
-            response = await client.generate(prompt, temperature=0.7)
+            response = await self._gemini_client.generate(prompt, temperature=0.7)
             if response and response.strip():
                 return response.strip()
         except Exception as e:
@@ -305,7 +328,8 @@ class AgentOrchestrator:
         strategy advice for messages like "My child is 7"), this generates a
         brief acknowledgment grounded in what the tools actually did.
         """
-        from app.llm.client import GeminiClient
+        if not self._gemini_client:
+            return ""
 
         tool_names = [tc.get("name", "unknown") for tc in tool_calls]
         tool_summary = ", ".join(tool_names)
@@ -329,8 +353,7 @@ class AgentOrchestrator:
         )
 
         try:
-            client = GeminiClient()
-            response = await client.generate(prompt, temperature=0.7)
+            response = await self._gemini_client.generate(prompt, temperature=0.7)
             if response and response.strip():
                 return response.strip()
         except Exception as e:

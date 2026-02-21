@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class FastEmbedReranker:
     """Cross-encoder reranker using FastEmbed's TextCrossEncoder."""
 
-    def __init__(self, model_name: str = "Xenova/ms-marco-MiniLM-L-6-v2"):
+    def __init__(self, model_name: str = "BAAI/bge-reranker-base"):
         from fastembed.rerank.cross_encoder import TextCrossEncoder
 
         self._model = TextCrossEncoder(model_name=model_name)
@@ -29,17 +29,18 @@ class FastEmbedReranker:
             return results[:top_k]
 
         documents = [r.content for r in results]
-        scores = list(self._model.rerank(query, documents))
+        raw_scores = list(self._model.rerank(query, documents))
 
+        # FastEmbed rerank() returns raw floats in input order for most models.
         scored = sorted(
-            zip(scores, results),
-            key=lambda x: x[0].score,
+            zip(raw_scores, results),
+            key=lambda x: x[0],
             reverse=True,
         )
         reranked = [result for _, result in scored[:top_k]]
 
         logger.info(
             f"Reranked {len(results)} candidates -> top {len(reranked)} "
-            f"(scores: {[f'{s.score:.4f}' for s, _ in scored[:top_k]]})"
+            f"(scores: {[f'{s:.4f}' for s, _ in scored[:top_k]]})"
         )
         return reranked

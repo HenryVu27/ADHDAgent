@@ -16,6 +16,7 @@ from app.models.schemas import (
     Goal,
     Outcome,
     SeedSessionRequest,
+    SessionListItem,
     SessionState,
     SessionSummary,
     TurnAnalysis,
@@ -468,18 +469,28 @@ class SQLiteSessionStore(SessionStoreBase):
         ).fetchall()
         return [TurnAnalysis.model_validate_json(r["analysis_json"]) for r in rows]
 
-    def get_all_sessions(self) -> list[dict]:
-        """Return basic info for all sessions (for admin views)."""
+    def get_all_sessions(self) -> list[SessionListItem]:
+        """Return summary info for all sessions."""
         rows = self._conn.execute(
             "SELECT session_id, turn_count, phase, created_at, updated_at FROM sessions ORDER BY updated_at DESC",
         ).fetchall()
         return [
-            {
-                "session_id": r["session_id"],
-                "turn_count": r["turn_count"],
-                "phase": r["phase"],
-                "created_at": r["created_at"],
-                "updated_at": r["updated_at"],
-            }
+            SessionListItem(
+                session_id=r["session_id"],
+                turn_count=r["turn_count"],
+                phase=r["phase"],
+                created_at=r["created_at"] or "",
+                updated_at=r["updated_at"] or "",
+            )
             for r in rows
         ]
+
+    def get_session_timestamps(self, session_id: str) -> tuple[str, str]:
+        """Return (created_at, updated_at) from the sessions table."""
+        row = self._conn.execute(
+            "SELECT created_at, updated_at FROM sessions WHERE session_id = ?",
+            (session_id,),
+        ).fetchone()
+        if row:
+            return (row["created_at"] or "", row["updated_at"] or "")
+        return ("", "")

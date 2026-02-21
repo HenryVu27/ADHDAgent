@@ -20,10 +20,9 @@ logger = logging.getLogger(__name__)
 class GeminiLangChainLLM(BaseLLM):
     """LangChain wrapper around our GeminiClient for NeMo Guardrails."""
 
-    client: Any = None  # The GeminiClient instance
+    model_config = {"arbitrary_types_allowed": True}
 
-    class Config:
-        arbitrary_types_allowed = True
+    client: Any = None  # The GeminiClient instance
 
     @property
     def _llm_type(self) -> str:

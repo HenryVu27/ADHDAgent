@@ -76,7 +76,7 @@ async def get_session(session_id: str):
 
     state = _orchestrator.get_session(session_id)
     # Phase is inferred from session state, not stored
-    phase = _orchestrator._infer_phase(session_id)
+    phase = _orchestrator.infer_phase(session_id)
     return SessionResponse(
         session_id=state.session_id,
         phase=phase,
@@ -108,26 +108,8 @@ async def list_sessions():
     if not _orchestrator:
         raise HTTPException(status_code=503, detail="Service not initialized")
 
-    store = _orchestrator._session_store
-    all_sessions = store.get_all_sessions()
-
-    items = []
-    for s in all_sessions:
-        if isinstance(s, dict):
-            items.append(SessionListItem(
-                session_id=s["session_id"],
-                turn_count=s.get("turn_count", 0),
-                phase=s.get("phase", "intake"),
-                created_at=s.get("created_at", ""),
-                updated_at=s.get("updated_at", ""),
-            ))
-        else:
-            # InMemorySessionStore returns SessionState objects
-            items.append(SessionListItem(
-                session_id=s.session_id,
-                turn_count=s.turn_count,
-                phase=s.phase.value if hasattr(s.phase, "value") else str(s.phase),
-            ))
+    store = _orchestrator.get_session_store()
+    items = store.get_all_sessions()
 
     # Sort by turn_count descending (most active first)
     items.sort(key=lambda x: x.turn_count, reverse=True)
@@ -140,7 +122,7 @@ async def get_session_messages(session_id: str):
     if not _orchestrator:
         raise HTTPException(status_code=503, detail="Service not initialized")
 
-    messages = _orchestrator._session_store.get_messages(session_id)
+    messages = _orchestrator.get_session_store().get_messages(session_id)
     return MessagesResponse(session_id=session_id, messages=messages)
 
 

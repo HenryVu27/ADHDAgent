@@ -5,8 +5,9 @@ All Pydantic models are defined here first — contracts before implementation.
 Every component in the pipeline consumes and produces these typed models.
 """
 
+import re
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 # --- Enums ---
@@ -176,6 +177,13 @@ class SeedSessionRequest(BaseModel):
 class ChatRequest(BaseModel):
     message: str
     session_id: str = "default"
+
+    @field_validator("session_id")
+    @classmethod
+    def validate_session_id(cls, v: str) -> str:
+        if not re.match(r'^[a-zA-Z0-9_-]{1,128}$', v):
+            raise ValueError("session_id must be 1-128 alphanumeric, underscore, or hyphen characters")
+        return v
 
 
 class ChatResponse(BaseModel):

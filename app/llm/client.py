@@ -5,6 +5,7 @@ Single interface for all LLM operations: text generation, structured JSON
 extraction, and embedding vectors for RAG.
 """
 
+import asyncio
 import json
 import logging
 from typing import Any
@@ -27,7 +28,8 @@ class GeminiClient:
     async def generate(self, prompt: str, temperature: float = 0.7, model: str | None = None) -> str:
         """Generate text from a prompt."""
         try:
-            response = self._client.models.generate_content(
+            response = await asyncio.to_thread(
+                self._client.models.generate_content,
                 model=model or self._model,
                 contents=prompt,
                 config=genai.types.GenerateContentConfig(
@@ -43,7 +45,8 @@ class GeminiClient:
     async def extract_json(self, prompt: str, temperature: float = 0.0, model: str | None = None) -> Any:
         """Generate structured JSON output. Returns parsed JSON."""
         try:
-            response = self._client.models.generate_content(
+            response = await asyncio.to_thread(
+                self._client.models.generate_content,
                 model=model or self._model,
                 contents=prompt,
                 config=genai.types.GenerateContentConfig(
@@ -71,20 +74,22 @@ class GeminiClient:
             logger.error(f"Gemini extract_json failed: {e}")
             raise
 
-    def embed(self, text: str) -> list[float]:
+    async def embed(self, text: str) -> list[float]:
         """Get embedding vector for a single text."""
-        result = self._client.models.embed_content(
+        result = await asyncio.to_thread(
+            self._client.models.embed_content,
             model=self._embedding_model,
             contents=text,
         )
         return list(result.embeddings[0].values)
 
-    def embed_batch(self, texts: list[str]) -> list[list[float]]:
+    async def embed_batch(self, texts: list[str]) -> list[list[float]]:
         """Get embedding vectors for a batch of texts."""
         if not texts:
             return []
         # Gemini embedding API supports batch via multiple contents
-        result = self._client.models.embed_content(
+        result = await asyncio.to_thread(
+            self._client.models.embed_content,
             model=self._embedding_model,
             contents=texts,
         )

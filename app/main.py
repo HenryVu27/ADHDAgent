@@ -125,6 +125,7 @@ async def lifespan(app: FastAPI):
         memory_manager=memory_manager,
         analyzer=analyzer,
         event_bus=event_bus,
+        gemini_client=gemini,
     )
     set_orchestrator(orchestrator)
 

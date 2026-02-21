@@ -254,15 +254,15 @@ class TestGuardrailsErrors:
         mock_gemini.generate = slow_generate
         validator._gemini_client = mock_gemini
 
-        # Wrap _nemo_output_check to be slow (output rails use gemini directly,
-        # but timeout wraps the whole _nemo_output_check call)
-        original_check = validator._nemo_output_check
+        # Wrap _parallel_output_check to be slow (output rails use gemini directly,
+        # but timeout wraps the whole _parallel_output_check call)
+        original_check = validator._parallel_output_check
 
         async def slow_check(*args, **kwargs):
             await asyncio.sleep(1)
             return await original_check(*args, **kwargs)
 
-        validator._nemo_output_check = slow_check
+        validator._parallel_output_check = slow_check
 
         with pytest.raises(GuardrailsError, match="timed out"):
             await validator.check_output("Some response")
@@ -291,15 +291,15 @@ class TestGuardrailsErrors:
         validator._gemini_client = mock_gemini
 
         # Output rails catch per-check exceptions and continue, but if ALL fail
-        # and we also mock _nemo_output_check to raise, it'll propagate.
+        # and we also mock _parallel_output_check to raise, it'll propagate.
         # Actually, looking at the code, individual check errors are caught and
         # logged, so all 3 checks failing silently results in is_valid=True.
         # The "Output rails failed" error only happens from the outer try/except.
-        # Let's make _nemo_output_check itself raise.
+        # Let's make _parallel_output_check itself raise.
         async def broken_check(*args, **kwargs):
             raise RuntimeError("Output check broke")
 
-        validator._nemo_output_check = broken_check
+        validator._parallel_output_check = broken_check
 
         with pytest.raises(GuardrailsError, match="Output rails failed"):
             await validator.check_output("Some response")

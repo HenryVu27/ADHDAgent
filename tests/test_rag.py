@@ -253,13 +253,11 @@ async def test_reranker_sorts_by_relevance():
     ]
 
     # Mock the cross-encoder to return known scores
-    mock_score = MagicMock()
     with patch("app.rag.reranker.FastEmbedReranker.__init__", return_value=None):
         reranker = FastEmbedReranker.__new__(FastEmbedReranker)
         mock_model = MagicMock()
-        # fastembed rerank returns RerankResult objects with .score
-        r1, r2, r3 = MagicMock(score=0.9), MagicMock(score=0.3), MagicMock(score=0.7)
-        mock_model.rerank.return_value = [r1, r2, r3]
+        # fastembed rerank returns raw floats in input order
+        mock_model.rerank.return_value = [0.9, 0.3, 0.7]
         reranker._model = mock_model
 
     reranked = await reranker.rerank("test query", results, top_k=2)

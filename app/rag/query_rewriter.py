@@ -51,10 +51,15 @@ class QueryRewriter:
 
         try:
             recent_turns = conversation_history[-3:]
-            history_text = "\n".join(
-                f"Parent: {turn.get('user_message', '')}\nCoach: {turn.get('agent_response', '')}"
-                for turn in recent_turns
-            )
+            history_lines = []
+            for turn in recent_turns:
+                role = turn.get("role")
+                content = turn.get("content", "")
+                if role == "user":
+                    history_lines.append(f"Parent: {content}")
+                elif role == "assistant":
+                    history_lines.append(f"Coach: {content}")
+            history_text = "\n".join(history_lines)
 
             profile_text = ""
             if family_profile:

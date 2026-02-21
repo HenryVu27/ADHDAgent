@@ -394,8 +394,9 @@
       "positive_reinforcement"
     ],
     "age_range": [
+      "preschool",
       "school_age",
-      "preschool"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "CHADD: School Toolkit",
