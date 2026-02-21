@@ -243,19 +243,25 @@ def test_full_doc_excluded_from_serialization():
 
 @pytest.mark.asyncio
 async def test_reranker_sorts_by_relevance():
-    from app.rag.reranker import GeminiReranker
-    from unittest.mock import AsyncMock
+    from unittest.mock import MagicMock, patch
+    from app.rag.reranker import FastEmbedReranker
 
-    mock_gemini = AsyncMock()
-    # Return descending scores so doc3 should come first
-    mock_gemini.generate = AsyncMock(side_effect=["0.9", "0.3", "0.7"])
-
-    reranker = GeminiReranker(gemini_client=mock_gemini)
     results = [
         RetrievalResult(document_id="1", document_name="A", content="aaa", score=0.5),
         RetrievalResult(document_id="2", document_name="B", content="bbb", score=0.8),
         RetrievalResult(document_id="3", document_name="C", content="ccc", score=0.6),
     ]
+
+    # Mock the cross-encoder to return known scores
+    mock_score = MagicMock()
+    with patch("app.rag.reranker.FastEmbedReranker.__init__", return_value=None):
+        reranker = FastEmbedReranker.__new__(FastEmbedReranker)
+        mock_model = MagicMock()
+        # fastembed rerank returns RerankResult objects with .score
+        r1, r2, r3 = MagicMock(score=0.9), MagicMock(score=0.3), MagicMock(score=0.7)
+        mock_model.rerank.return_value = [r1, r2, r3]
+        reranker._model = mock_model
+
     reranked = await reranker.rerank("test query", results, top_k=2)
     assert len(reranked) == 2
     assert reranked[0].document_id == "1"  # scored 0.9
@@ -263,27 +269,13 @@ async def test_reranker_sorts_by_relevance():
 
 
 @pytest.mark.asyncio
-async def test_reranker_handles_parse_failure():
-    from app.rag.reranker import GeminiReranker
-    from unittest.mock import AsyncMock
-
-    mock_gemini = AsyncMock()
-    mock_gemini.generate = AsyncMock(side_effect=["not_a_number", "0.5"])
-
-    reranker = GeminiReranker(gemini_client=mock_gemini)
-    results = [
-        RetrievalResult(document_id="1", document_name="A", content="aaa", score=0.3),
-        RetrievalResult(document_id="2", document_name="B", content="bbb", score=0.8),
-    ]
-    reranked = await reranker.rerank("test", results, top_k=2)
-    assert len(reranked) == 2
-
-
-@pytest.mark.asyncio
 async def test_reranker_empty_results():
-    from app.rag.reranker import GeminiReranker
-    from unittest.mock import AsyncMock
+    from unittest.mock import MagicMock, patch
+    from app.rag.reranker import FastEmbedReranker
 
-    reranker = GeminiReranker(gemini_client=AsyncMock())
+    with patch("app.rag.reranker.FastEmbedReranker.__init__", return_value=None):
+        reranker = FastEmbedReranker.__new__(FastEmbedReranker)
+        reranker._model = MagicMock()
+
     reranked = await reranker.rerank("test", [], top_k=3)
     assert reranked == []

@@ -69,10 +69,10 @@ async def lifespan(app: FastAPI):
     query_rewriter = QueryRewriter(gemini_client=gemini)
 
     reranker = None
-    if settings.RAG_RERANK_ENABLED and gemini:
-        from app.rag.reranker import GeminiReranker
-        reranker = GeminiReranker(gemini_client=gemini)
-        logger.info("Gemini reranker enabled (candidates=%d)", settings.RAG_RERANK_CANDIDATES)
+    if settings.RAG_RERANK_ENABLED:
+        from app.rag.reranker import FastEmbedReranker
+        reranker = FastEmbedReranker(model_name=settings.RAG_RERANK_MODEL)
+        logger.info("FastEmbed reranker enabled (model=%s, candidates=%d)", settings.RAG_RERANK_MODEL, settings.RAG_RERANK_CANDIDATES)
 
     retriever = HybridRetriever(
         knowledge_store=store,

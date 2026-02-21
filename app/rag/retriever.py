@@ -14,7 +14,7 @@ from app.models.schemas import (
 )
 from app.rag.knowledge_store import KnowledgeStore
 from app.rag.query_rewriter import QueryRewriter
-from app.rag.reranker import GeminiReranker
+from app.rag.reranker import FastEmbedReranker
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class HybridRetriever:
         knowledge_store: KnowledgeStore,
         gemini_client=None,
         query_rewriter: QueryRewriter | None = None,
-        reranker: GeminiReranker | None = None,
+        reranker: FastEmbedReranker | None = None,
     ):
         self._store = knowledge_store
         self._gemini = gemini_client

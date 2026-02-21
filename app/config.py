@@ -13,8 +13,9 @@ class Settings:
     # RAG
     RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "5"))
     RAG_USE_QUERY_REWRITE: bool = os.getenv("RAG_USE_QUERY_REWRITE", "true").lower() == "true"
-    RAG_RERANK_ENABLED: bool = os.getenv("RAG_RERANK_ENABLED", "false").lower() == "true"
+    RAG_RERANK_ENABLED: bool = os.getenv("RAG_RERANK_ENABLED", "true").lower() == "true"
     RAG_RERANK_CANDIDATES: int = int(os.getenv("RAG_RERANK_CANDIDATES", "10"))
+    RAG_RERANK_MODEL: str = os.getenv("RAG_RERANK_MODEL", "Xenova/ms-marco-MiniLM-L-6-v2")
 
     # Qdrant
     QDRANT_URL: str = os.getenv("QDRANT_URL", ":memory:")
