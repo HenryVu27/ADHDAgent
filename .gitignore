@@ -19,3 +19,4 @@ Thumbs.db
 *.faiss
 *.pkl
 frontend/static/mascots/preview.html
+docs/
