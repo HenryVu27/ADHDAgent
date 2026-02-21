@@ -29,8 +29,8 @@ class Settings(BaseSettings):
     # Agent
     AGENT_MAX_TOOL_STEPS: int = 5
 
-    # NeMo Guardrails
-    NEMO_GUARDRAILS_TIMEOUT_MS: int = 15000
+    # Guardrails
+    GUARDRAILS_TIMEOUT_S: float = 10.0
 
     # Context engineering
     CONTEXT_WINDOW_TURNS: int = 6

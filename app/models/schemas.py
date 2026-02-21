@@ -34,8 +34,23 @@ class OutputCheckResult(BaseModel):
     duration_ms: float = 0.0
 
 
+class InputClassification(BaseModel):
+    """Structured output from the input gate classifier."""
+    crisis: bool = False
+    jailbreak: bool = False
+    reasoning: str = ""
+
+
+class OutputClassification(BaseModel):
+    """Structured output from the output gate classifier."""
+    medication_recommendation: bool = False
+    diagnosis_claim: bool = False
+    scope_violation: bool = False
+    reasoning: str = ""
+
+
 class GuardrailsError(Exception):
-    """Raised when NeMo Guardrails fails — no silent fallback."""
+    """Raised when a guardrail gate check fails or times out."""
     pass
 
 
