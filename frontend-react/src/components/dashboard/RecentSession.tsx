@@ -3,6 +3,7 @@ import { Clock, ArrowRight } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { setActiveSessionId } from "@/lib/auth"
 import type { ConversationPhase } from "@/types"
 
 const phaseLabels: Record<ConversationPhase, string> = {
@@ -13,12 +14,17 @@ const phaseLabels: Record<ConversationPhase, string> = {
 }
 
 interface Props {
+  sessionId: string
   phase: ConversationPhase | null
   turnCount: number
 }
 
-export function RecentSession({ phase, turnCount }: Props) {
+export function RecentSession({ sessionId, phase, turnCount }: Props) {
   if (!phase || turnCount === 0) return null
+
+  const handleContinue = () => {
+    setActiveSessionId(sessionId)
+  }
 
   return (
     <div className="space-y-3">
@@ -39,7 +45,7 @@ export function RecentSession({ phase, turnCount }: Props) {
               </span>
             </div>
           </div>
-          <Link to="/chat">
+          <Link to="/chat" onClick={handleContinue}>
             <Button size="sm" variant="outline" className="gap-2">
               Continue
               <ArrowRight className="h-3.5 w-3.5" />

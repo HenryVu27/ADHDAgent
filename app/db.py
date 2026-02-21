@@ -101,9 +101,51 @@ CREATE TABLE IF NOT EXISTS episodes (
 CREATE INDEX IF NOT EXISTS idx_episodes_session ON episodes(session_id);
 """
 
+SCHEMA_V3 = """
+CREATE TABLE IF NOT EXISTS traces (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL REFERENCES sessions(session_id),
+    turn INTEGER NOT NULL,
+    trace_json TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_traces_session ON traces(session_id);
+
+CREATE TABLE IF NOT EXISTS turn_analyses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL REFERENCES sessions(session_id),
+    turn INTEGER NOT NULL,
+    analysis_json TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_turn_analyses_session ON turn_analyses(session_id);
+"""
+
+SCHEMA_V4 = """
+CREATE TABLE IF NOT EXISTS observability_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    category TEXT NOT NULL,
+    event_type TEXT NOT NULL,
+    turn INTEGER NOT NULL DEFAULT 0,
+    timestamp TEXT NOT NULL,
+    duration_ms REAL NOT NULL DEFAULT 0.0,
+    detail_json TEXT NOT NULL DEFAULT '{}',
+    level TEXT NOT NULL DEFAULT 'info',
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_obs_events_session ON observability_events(session_id);
+CREATE INDEX IF NOT EXISTS idx_obs_events_category ON observability_events(session_id, category);
+"""
+
 MIGRATIONS = {
     1: SCHEMA_V1,
     2: SCHEMA_V2,
+    3: SCHEMA_V3,
+    4: SCHEMA_V4,
 }
 
 

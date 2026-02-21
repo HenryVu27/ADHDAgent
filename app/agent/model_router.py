@@ -61,7 +61,9 @@ def classify_complexity(state: CoachingState) -> str:
         return "standard"
 
     text = latest_human.content.strip()
-    turn_count = state.get("turn_count", 0)
+    # Count HumanMessages in the message list — CoachingState has no turn_count field,
+    # so state.get("turn_count") would always return 0.
+    turn_count = sum(1 for msg in messages if isinstance(msg, HumanMessage))
 
     # Rule 1: Short trivial message in active conversation
     if len(text) < 20 and turn_count > 1 and TRIVIAL_PATTERNS.match(text):
@@ -108,7 +110,7 @@ def create_model_selector():
                 model=model_name,
                 google_api_key=settings.GEMINI_API_KEY,
                 temperature=0.7,
-                max_output_tokens=1024,
+                max_output_tokens=6000,
             )
             logger.info("Cached model instance for tier=%s model=%s", tier, model_name)
 

@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from app.api.observability_routes import obs_router, set_observability_deps
 from app.api.routes import router, set_knowledge_base, set_orchestrator
 from app.config import settings
 
@@ -54,38 +55,62 @@ async def lifespan(app: FastAPI):
     from app.rag.query_rewriter import QueryRewriter
     from app.rag.retriever import HybridRetriever
 
+    db_conn = None
     if settings.SQLITE_ENABLED:
         from app.agent.sqlite_store import SQLiteSessionStore
         from app.db import get_connection, init_db
-        conn = get_connection(settings.SQLITE_DB_PATH)
-        init_db(conn)
-        session_store = SQLiteSessionStore(conn)
+        db_conn = get_connection(settings.SQLITE_DB_PATH)
+        init_db(db_conn)
+        session_store = SQLiteSessionStore(db_conn)
         logger.info("Using SQLite session store (path=%s)", settings.SQLITE_DB_PATH)
     else:
         session_store = InMemorySessionStore()
         logger.info("Using in-memory session store")
     query_rewriter = QueryRewriter(gemini_client=gemini)
+
+    reranker = None
+    if settings.RAG_RERANK_ENABLED and gemini:
+        from app.rag.reranker import GeminiReranker
+        reranker = GeminiReranker(gemini_client=gemini)
+        logger.info("Gemini reranker enabled (candidates=%d)", settings.RAG_RERANK_CANDIDATES)
+
     retriever = HybridRetriever(
         knowledge_store=store,
         gemini_client=gemini,
         query_rewriter=query_rewriter,
+        reranker=reranker,
     )
     tools = create_tools(retriever=retriever, session_store=session_store)
 
-    # 5. Create hooks (guardrails + context injection)
+    # 5. Create event bus (with SQLite persistence when available)
+    from app.agent.event_bus import EventBus
+    event_bus = EventBus(buffer_size=settings.EVENT_BUFFER_SIZE, conn=db_conn)
+    logger.info("EventBus initialized (buffer_size=%d)", settings.EVENT_BUFFER_SIZE)
+
+    # 6. Create hooks (guardrails + context injection)
     from app.agent.hooks import create_hooks
     pre_model_hook, post_model_hook = create_hooks(
         guardrails=guardrails,
         session_store=session_store,
+        event_bus=event_bus,
     )
 
-    # 6. Create memory manager (optional, requires Gemini)
+    # 7. Create memory manager (optional, requires Gemini)
     from app.agent.memory import MemoryManager
-    memory_manager = MemoryManager(session_store=session_store, gemini_client=gemini) if gemini else None
+    memory_manager = MemoryManager(
+        session_store=session_store, gemini_client=gemini, event_bus=event_bus,
+    ) if gemini else None
     if memory_manager:
         logger.info("MemoryManager initialized (summary_interval=%d)", settings.SUMMARY_INTERVAL_TURNS)
 
-    # 7. Build ReAct agent and orchestrator
+    # 8. Create conversation analyzer (optional, requires Gemini)
+    analyzer = None
+    if settings.ANALYZER_ENABLED and gemini:
+        from app.agent.analyzer import ConversationAnalyzer
+        analyzer = ConversationAnalyzer(session_store=session_store, gemini_client=gemini)
+        logger.info("ConversationAnalyzer initialized")
+
+    # 9. Build ReAct agent and orchestrator
     from app.agent.graph import build_agent
     from app.agent.orchestrator import AgentOrchestrator
 
@@ -98,8 +123,13 @@ async def lifespan(app: FastAPI):
         agent=agent,
         session_store=session_store,
         memory_manager=memory_manager,
+        analyzer=analyzer,
+        event_bus=event_bus,
     )
     set_orchestrator(orchestrator)
+
+    # 10. Wire observability dependencies
+    set_observability_deps(session_store, event_bus, analyzer)
 
     logger.info("ADHDAgent ready (ReAct agent architecture)")
     yield
@@ -114,6 +144,7 @@ app = FastAPI(
 )
 
 app.include_router(router, prefix="/api")
+app.include_router(obs_router, prefix="/api")
 
 # Serve React build
 react_dist = Path(__file__).parent.parent / "frontend-react" / "dist"

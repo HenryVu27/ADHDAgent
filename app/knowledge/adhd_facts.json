@@ -1,0 +1,489 @@
+[
+  {
+    "id": "hyperactivityimpulsivity_symptoms_in_adhd",
+    "name": "Hyperactivity-Impulsivity Symptoms in ADHD",
+    "description": "This document details common symptoms of hyperactivity and impulsivity in ADHD. Understanding these behaviors can assist parents in identifying challenges and supporting their child's self-regulation.",
+    "document_type": "fact",
+    "tags": [
+      "behavioral_strategies",
+      "emotional_regulation"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "CDC: ADHD Diagnosis",
+    "citations": [
+      {
+        "source_file": "cdc_diagnosis.txt",
+        "source_name": "ADHD Diagnosis (CDC)",
+        "detail": "ADHD Diagnosis (CDC) - Hyperactivity-impulsivity Symptoms"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Symptoms have been present for at least 6 months and are inappropriate for the child's developmental level.",
+      "Fidgets with hands or feet, or squirms in seat.",
+      "Often leaves seat when remaining seated is expected.",
+      "Runs about or climbs inappropriately (may be limited to feeling restless in adolescents/adults).",
+      "Unable to play or take part in leisure activities quietly.",
+      "Acts as if \"driven by a motor.\"",
+      "Talks excessively.",
+      "Blurts out answers before questions are completed.",
+      "Has trouble waiting their turn.",
+      "Interrupts or intrudes on others."
+    ]
+  },
+  {
+    "id": "adhd_predominately_inattentive_symptoms",
+    "name": "ADHD Predominately Inattentive Symptoms",
+    "description": "This document outlines the specific symptoms associated with the Inattentive type of ADHD. Recognizing these can help parents identify if their child might fit this profile.",
+    "document_type": "fact",
+    "tags": [
+      "behavioral_strategies"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "SCCAP/APA Div 53: Evidence-Based ADHD Treatments",
+    "citations": [
+      {
+        "source_file": "sccap_adhd_treatments.txt",
+        "source_name": "Evidence-Based ADHD Treatments (SCCAP/APA Div 53)",
+        "detail": "ADHD Predominately Inattentive"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Do not pay close attention to details or make careless mistakes.",
+      "Have difficulty paying attention.",
+      "Do not appear to listen.",
+      "Struggle with following instructions or finishing tasks on time.",
+      "Have difficulty getting organized or managing time.",
+      "Avoid or dislike tasks that require a lot of thought.",
+      "Lose things.",
+      "Are easily distracted.",
+      "Are forgetful in daily activities."
+    ]
+  },
+  {
+    "id": "adhd_predominately_hyperactiveimpulsive_symptoms",
+    "name": "ADHD Predominately Hyperactive-Impulsive Symptoms",
+    "description": "This document details the symptoms characteristic of the Hyperactive-Impulsive type of ADHD. Parents can use this to identify potential signs of this presentation in their child.",
+    "document_type": "fact",
+    "tags": [
+      "behavioral_strategies"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "SCCAP/APA Div 53: Evidence-Based ADHD Treatments",
+    "citations": [
+      {
+        "source_file": "sccap_adhd_treatments.txt",
+        "source_name": "Evidence-Based ADHD Treatments (SCCAP/APA Div 53)",
+        "detail": "ADHD Predominately Hyperactive-Impulsive"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Fidget with hands or feet.",
+      "Have difficulty staying seated.",
+      "Run about or climb excessively.",
+      "Have difficulty working or playing quietly.",
+      "Act 'motorized' (i.e., are often restless and have trouble being still).",
+      "Talk a lot.",
+      "Blurt out answers to questions or finish other people\u2019s sentences.",
+      "Have difficulty waiting or taking turns.",
+      "Interrupt or intrude upon others."
+    ]
+  },
+  {
+    "id": "inattention_symptoms_in_adhd",
+    "name": "Inattention Symptoms in ADHD",
+    "description": "This document outlines common symptoms of inattention associated with ADHD. Recognizing these signs can help parents understand potential challenges their child may face in daily activities and schoolwork.",
+    "document_type": "fact",
+    "tags": [
+      "homework_support",
+      "daily_routines"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "CDC: ADHD Diagnosis",
+    "citations": [
+      {
+        "source_file": "cdc_diagnosis.txt",
+        "source_name": "ADHD Diagnosis (CDC)",
+        "detail": "ADHD Diagnosis (CDC) - Inattention Symptoms"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Symptoms have been present for at least 6 months and are inappropriate for the child's developmental level.",
+      "Difficulty giving close attention to details or making careless mistakes.",
+      "Trouble holding attention on tasks or play activities.",
+      "Appears not to listen when spoken to directly.",
+      "Difficulty following through on instructions and finishing tasks.",
+      "Loses things necessary for tasks and activities.",
+      "Easily distracted and often forgetful in daily activities."
+    ]
+  },
+  {
+    "id": "exclusionary_criteria_for_adhd_studies",
+    "name": "Exclusionary Criteria for ADHD Studies",
+    "description": "This document lists conditions that would prevent a child from participating in certain ADHD research studies. Understanding these criteria can provide insight into factors that might complicate ADHD treatment or require specialized approaches.",
+    "document_type": "fact",
+    "tags": [
+      "behavioral_strategies"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "Pelham et al.: Treatment Sequencing Study (2016)",
+    "citations": [
+      {
+        "source_file": "pelham_2016_treatment_sequencing.txt",
+        "source_name": "Treatment Sequencing Study (2016) (Pelham et al.)",
+        "detail": "Exclusionary criteria for the Treatment Sequencing Study (2016)."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Children with a Full Scale IQ below 70 are typically excluded from these studies.",
+      "History of seizures or other neurological problems can be an exclusion criterion.",
+      "Medical conditions that pose significant risk with psychostimulant treatment are exclusionary.",
+      "Diagnoses such as pervasive developmental disorder, schizophrenia, or other psychotic disorders are exclusionary.",
+      "Lack of functional impairment is an exclusion criterion.",
+      "Placement in special education classrooms may be an exclusion criterion."
+    ]
+  },
+  {
+    "id": "importance_of_parent_training_engagement",
+    "name": "Importance of Parent Training Engagement",
+    "description": "Parent training is a crucial component of multimodal treatment for ADHD. Ensuring parents attend and engage in these sessions is vital for the child to receive the full benefits of treatment.",
+    "document_type": "fact",
+    "tags": [
+      "behavioral_strategies",
+      "communication_skills"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "Pelham et al.: Treatment Sequencing Study (2016)",
+    "citations": [
+      {
+        "source_file": "pelham_2016_treatment_sequencing.txt",
+        "source_name": "Treatment Sequencing Study (2016) (Pelham et al.)",
+        "detail": "Treatment Sequencing Study (2016) (Pelham et al.) - Discussion on treatment uptake and engagement."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Engagement in parent training groups and booster sessions is critical for treatment success.",
+      "A significant reduction in engagement was observed when medication was provided before parent training.",
+      "Most parents in the 'Behavioral First' group attended the majority of sessions, receiving an adequate 'dose' of training.",
+      "Low attendance in parent training, especially when medication is given first, is associated with presumably worse functioning.",
+      "Difficulties with engagement and attendance in behavioral treatments for ADHD are commonly reported."
+    ]
+  },
+  {
+    "id": "challenges_in_adhd_diagnosis_and_management",
+    "name": "Challenges in ADHD Diagnosis and Management",
+    "description": "Diagnosing and managing ADHD can be difficult for primary care doctors due to time constraints and payment limitations. Access to mental health specialists and psychologists for further assessment can also be limited.",
+    "document_type": "fact",
+    "tags": [
+      "self_care_for_parents"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2011)",
+    "citations": [
+      {
+        "source_file": "wolraich_2011_aap_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2011) (AAP)",
+        "detail": "Integration With the Task Force on Mental Health"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "ADHD diagnosis and management are challenging for primary care clinicians.",
+      "Limited payment for ADHD care requires more time than other conditions.",
+      "Recommended procedures necessitate more time with patients and families.",
+      "Developing systems for school and other personnel contacts is time-demanding.",
+      "Access to mental health clinicians and psychologists can be limited in many areas.",
+      "Third-party payers may restrict payment for evaluations deemed educational rather than health-related."
+    ]
+  },
+  {
+    "id": "increased_risks_during_adolescence",
+    "name": "Increased Risks During Adolescence",
+    "description": "Adolescence is a period where certain risks increase, including mood and anxiety disorders, risky sexual behaviors, self-harm, suicidal behaviors, and substance use. Awareness of these risks is important for parents and clinicians.",
+    "document_type": "fact",
+    "tags": [
+      "emotional_regulation",
+      "self_care_for_parents"
+    ],
+    "age_range": [
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2019)",
+    "citations": [
+      {
+        "source_file": "aap_2019_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2019) (AAP)",
+        "detail": "AAP Clinical Practice Guideline (2019) - General evaluation of adolescents"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Risks of mood and anxiety disorders increase during adolescence.",
+      "Risks of intentional self-harm and suicidal behaviors increase.",
+      "Adolescents are at greater risk for substance use than younger children.",
+      "Risky sexual behaviors also increase during this period."
+    ]
+  },
+  {
+    "id": "effectiveness_of_psychosocial_treatments_for_adhd",
+    "name": "Effectiveness of Psychosocial Treatments for ADHD",
+    "description": "Behavioral therapy and training interventions have been shown to be effective for treating ADHD in children and adolescents. Consistent adherence to these treatments is key to achieving their beneficial effects.",
+    "document_type": "fact",
+    "tags": [
+      "behavioral_strategies",
+      "communication_skills"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2019)",
+    "citations": [
+      {
+        "source_file": "aap_2019_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2019) (AAP)",
+        "detail": "Psychosocial Treatments section"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Behavioral therapy and training interventions are effective psychosocial treatments for ADHD.",
+      "Long-term positive effects of psychosocial treatments are still being determined.",
+      "Ongoing adherence to psychosocial treatment is a key contributor to its benefits.",
+      "Implementing a chronic care model can help ensure sustained adherence."
+    ]
+  },
+  {
+    "id": "evidencebased_support_for_adhd_in_school",
+    "name": "Evidence-Based Support for ADHD in School",
+    "description": "Understand what strategies have evidence supporting their effectiveness for children with ADHD in a school setting. This information can help guide discussions with your child's school about the most beneficial supports.",
+    "document_type": "fact",
+    "tags": [
+      "behavioral_strategies",
+      "positive_reinforcement",
+      "communication_skills"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "CDC: ADHD in the Classroom",
+    "citations": [
+      {
+        "source_file": "cdc_classroom.txt",
+        "source_name": "ADHD in the Classroom (CDC)",
+        "detail": "ADHD in the Classroom (CDC) - Section on Did you know?"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "There is limited information about which specific accommodations are most effective for children with ADHD.",
+      "Evidence suggests that setting clear expectations is helpful.",
+      "Providing immediate positive feedback is beneficial.",
+      "Communicating daily with parents through a daily report card can help."
+    ]
+  },
+  {
+    "id": "behavior_therapy_for_young_children_with_adhd",
+    "name": "Behavior Therapy for Young Children with ADHD",
+    "description": "Behavior therapy is an effective treatment for ADHD in young children, focusing on improving behavior, self-control, and self-esteem. It is most effective when parents are trained to implement the strategies.",
+    "document_type": "fact",
+    "tags": [
+      "behavioral_strategies",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "preschool"
+    ],
+    "evidence_level": "strong",
+    "source": "CDC: Finding a Therapist",
+    "citations": [
+      {
+        "source_file": "cdc_finding_therapist_pdf.txt",
+        "source_name": "Finding a Therapist (CDC)",
+        "detail": "Finding a Therapist (CDC) - Introduction to behavior therapy."
+      },
+      {
+        "source_file": "cdc_mmwr_vital_signs.txt",
+        "source_name": "MMWR Vital Signs: ADHD Treatment (CDC)",
+        "detail": "MMWR Vital Signs: ADHD Treatment (CDC) - AAP updated guidance for ADHD diagnosis and treatment, recommending behavior therapy as the first line of treatment ahead of stimulant medication (methylphenidate) for treatment of children aged 4\u20135 years."
+      },
+      {
+        "source_file": "cdc_young_children.txt",
+        "source_name": "Young Children and ADHD (CDC)",
+        "detail": "Behavior Therapy First for Young Children with ADHD - At a glance & Overview"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Behavior therapy is an effective treatment for ADHD in young children.",
+      "It can improve a child's behavior, self-control, and self-esteem.",
+      "Most effective when delivered by parents who are trained in behavior therapy.",
+      "Helps children with ADHD succeed at school, home, and in relationships."
+    ]
+  },
+  {
+    "id": "understanding_section_504_rights_for_students_with",
+    "name": "Understanding Section 504 Rights for Students with ADHD",
+    "description": "This document explains that Section 504 of the Rehabilitation Act of 1973 protects students with ADHD from discrimination based on their disability. It clarifies that students with ADHD who face challenges with concentration, organization, or other tasks due to their condition may be entitled to special education or related services.",
+    "document_type": "fact",
+    "tags": [
+      "homework_support"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "CHADD: School Toolkit",
+    "citations": [
+      {
+        "source_file": "chadd_school_toolkit_pdf.txt",
+        "source_name": "School Toolkit (CHADD)",
+        "detail": "Know Your Rights: Students with ADHD"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Section 504 is a federal civil rights law that prohibits disability discrimination.",
+      "It protects students with ADHD from discrimination based on their disability.",
+      "Students with ADHD who have trouble concentrating, reading, thinking, organizing, or prioritizing may be protected under Section 504.",
+      "A student with ADHD who has a disability under Section 504 may be entitled to special education or related aids/services.",
+      "School districts must determine if a student has a disability and needs services."
+    ]
+  },
+  {
+    "id": "social_problem_solving_interventions_for_children_",
+    "name": "Social Problem Solving Interventions for Children with ADHD",
+    "description": "Social problem solving interventions aim to help children with ADHD navigate social challenges. Evidence suggests these programs are not strongly effective when used alone but can be incrementally helpful when combined with parent training or school interventions.",
+    "document_type": "fact",
+    "tags": [
+      "communication_skills",
+      "behavioral_strategies"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Social problem solving interventions"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Focus on helping children solve social problems.",
+      "Evidence is not strong when used alone.",
+      "Incrementally helpful when combined with concurrent parent training.",
+      "Incrementally helpful when combined with concurrent school interventions.",
+      "Integration with parent and school programs means target behaviors are monitored and rewarded across settings."
+    ]
+  },
+  {
+    "id": "longterm_symptom_improvement_in_adhd",
+    "name": "Long-Term Symptom Improvement in ADHD",
+    "description": "Even after formal study treatments end, children with ADHD often show substantial improvement across various outcome areas. This guidance helps parents understand what to expect regarding symptom levels and diagnoses over time.",
+    "document_type": "fact",
+    "tags": [
+      "behavioral_strategies"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "MTA Cooperative Group: MTA Study Clinical Review",
+    "citations": [
+      {
+        "source_file": "mta_clinical_review.txt",
+        "source_name": "MTA Study Clinical Review (MTA Cooperative Group)",
+        "detail": "MTA Study Clinical Review (MTA Cooperative Group) - Section discussing outcomes at 36 months."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "At 36 months, differences between original treatment assignment groups were no longer found.",
+      "All groups showed substantial improvement across all outcome areas compared to baseline.",
+      "About half of the children continued to meet full criteria for ADHD at 36 months.",
+      "Less than one-third met criteria for Oppositional Defiant Disorder (ODD) or Conduct Disorder (CD) at 36 months.",
+      "Symptom levels remained above those of a Local Normative Comparison Group (LNCG)."
+    ]
+  },
+  {
+    "id": "multimodal_treatment_study_of_adhd_mta_followup_ou",
+    "name": "Multimodal Treatment Study of ADHD (MTA) Follow-up Outcomes",
+    "description": "The MTA study investigated the long-term outcomes of different treatment strategies for ADHD. Follow-up assessments at 24 and 36 months provided insights into the sustained effects of these treatments on children with ADHD.",
+    "document_type": "fact",
+    "tags": ["behavioral_strategies", "long_term_outcomes"],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "MTA Cooperative Group: MTA Study Clinical Review",
+    "citations": [
+      {
+        "source_file": "mta_clinical_review.txt",
+        "source_name": "MTA Study Clinical Review (MTA Cooperative Group)",
+        "detail": "MTA Cooperative Group (2004), Jensen et al. (2007), Swanson et al. (2007), Molina et al. (2007)"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "The MTA study provided 24-month outcomes for treatment strategies in ADHD.",
+      "Follow-up at 36 months after randomization offered further insights into treatment effects.",
+      "Analyses included propensity score and growth mixture models to understand patterns of change.",
+      "The study examined clinical relevance based on ADHD and ODD symptom severity at the end of treatment.",
+      "Comorbidity findings were compared across different subgroups.",
+      "Family processes, including parenting practices, were studied in relation to treatment outcomes."
+    ]
+  }
+]

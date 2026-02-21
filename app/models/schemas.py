@@ -63,6 +63,8 @@ class RetrievalResult(BaseModel):
     document_type: str = ""
     age_range: list[str] = Field(default_factory=list)
     citations: list[dict] = Field(default_factory=list)
+    # Full original document for structured formatting (excluded from API serialization)
+    full_doc: dict = Field(default_factory=dict, exclude=True)
 
 
 class FacetCounts(BaseModel):
@@ -198,3 +200,103 @@ class OutcomesResponse(BaseModel):
     outcomes: list[Outcome]
     recommended_strategies: list[str]
     goals: list[Goal]
+
+
+# --- Observability ---
+
+class ToolCallRecord(BaseModel):
+    name: str
+    args: dict = Field(default_factory=dict)
+    result: str = ""
+    duration_ms: float = 0.0
+
+
+class AgentReasoningStep(BaseModel):
+    step_index: int
+    thought: str = ""
+    tool_call: ToolCallRecord | None = None
+    is_final: bool = False
+
+
+class EnrichedTrace(BaseModel):
+    session_id: str
+    turn: int
+    timestamp: str = ""
+    pipeline_steps: list[PipelineStep] = Field(default_factory=list)
+    total_duration_ms: float = 0.0
+    reasoning_steps: list[AgentReasoningStep] = Field(default_factory=list)
+    tool_calls: list[ToolCallRecord] = Field(default_factory=list)
+    model_tier: str = "standard"
+    input_blocked: bool = False
+    blocked_reason: str = ""
+    agent_used: str = ""
+
+
+class AnalysisFlag(BaseModel):
+    flag_type: str
+    severity: str = "warning"
+    description: str = ""
+    evidence: str = ""
+
+
+class TurnAnalysis(BaseModel):
+    session_id: str
+    turn: int
+    flags: list[AnalysisFlag] = Field(default_factory=list)
+    quality_score: float = 1.0
+    summary: str = ""
+    tool_call_assessment: str = ""
+    timestamp: str = ""
+
+
+class ObservabilityEvent(BaseModel):
+    category: str
+    event_type: str
+    session_id: str = ""
+    turn: int = 0
+    timestamp: str = ""
+    duration_ms: float = 0.0
+    detail: dict = Field(default_factory=dict)
+    level: str = "info"
+
+
+class SessionOverview(BaseModel):
+    session_id: str
+    turn_count: int = 0
+    created_at: str = ""
+    updated_at: str = ""
+    total_flags: int = 0
+    avg_quality_score: float = 1.0
+    tool_calls_count: int = 0
+    blocked_count: int = 0
+
+
+class SessionDetailResponse(BaseModel):
+    session_id: str
+    messages: list[dict] = Field(default_factory=list)
+    traces: list[EnrichedTrace] = Field(default_factory=list)
+    analyses: list[TurnAnalysis] = Field(default_factory=list)
+    events: list[ObservabilityEvent] = Field(default_factory=list)
+
+
+class SessionListResponse(BaseModel):
+    sessions: list[SessionOverview] = Field(default_factory=list)
+
+
+# --- Main App Session List ---
+
+class SessionListItem(BaseModel):
+    session_id: str
+    turn_count: int = 0
+    phase: str = "intake"
+    created_at: str = ""
+    updated_at: str = ""
+
+
+class SessionsResponse(BaseModel):
+    sessions: list[SessionListItem] = Field(default_factory=list)
+
+
+class MessagesResponse(BaseModel):
+    session_id: str
+    messages: list[dict] = Field(default_factory=list)

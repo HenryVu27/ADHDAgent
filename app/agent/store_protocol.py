@@ -7,6 +7,7 @@ making them interchangeable throughout the application.
 from abc import ABC, abstractmethod
 
 from app.models.schemas import (
+    EnrichedTrace,
     EpisodicMemory,
     FamilyProfile,
     Goal,
@@ -14,6 +15,7 @@ from app.models.schemas import (
     SeedSessionRequest,
     SessionState,
     SessionSummary,
+    TurnAnalysis,
 )
 
 
@@ -107,3 +109,19 @@ class SessionStoreBase(ABC):
         end_turn: int | None = None,
     ) -> list[dict]:
         """Return non-blocked messages in the given turn range (inclusive)."""
+
+    @abstractmethod
+    def save_trace(self, session_id: str, trace: EnrichedTrace) -> None:
+        """Persist an enriched trace for a turn."""
+
+    @abstractmethod
+    def get_traces(self, session_id: str) -> list[EnrichedTrace]:
+        """Return all enriched traces for a session."""
+
+    @abstractmethod
+    def save_analysis(self, session_id: str, analysis: TurnAnalysis) -> None:
+        """Persist a turn analysis."""
+
+    @abstractmethod
+    def get_analyses(self, session_id: str) -> list[TurnAnalysis]:
+        """Return all turn analyses for a session."""

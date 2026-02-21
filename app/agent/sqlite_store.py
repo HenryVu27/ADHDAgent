@@ -10,6 +10,7 @@ import sqlite3
 
 from app.agent.store_protocol import SessionStoreBase
 from app.models.schemas import (
+    EnrichedTrace,
     EpisodicMemory,
     FamilyProfile,
     Goal,
@@ -17,6 +18,7 @@ from app.models.schemas import (
     SeedSessionRequest,
     SessionState,
     SessionSummary,
+    TurnAnalysis,
 )
 
 logger = logging.getLogger(__name__)
@@ -428,6 +430,56 @@ class SQLiteSessionStore(SessionStoreBase):
                 "turn": r["turn"],
                 "blocked": bool(r["blocked"]),
                 "blocked_reason": r["blocked_reason"],
+            }
+            for r in rows
+        ]
+
+    def save_trace(self, session_id: str, trace: EnrichedTrace) -> None:
+        """Persist an enriched trace for a turn."""
+        self._ensure_session(session_id)
+        self._conn.execute(
+            "INSERT INTO traces (session_id, turn, trace_json) VALUES (?, ?, ?)",
+            (session_id, trace.turn, trace.model_dump_json()),
+        )
+        self._conn.commit()
+
+    def get_traces(self, session_id: str) -> list[EnrichedTrace]:
+        """Return all enriched traces for a session."""
+        rows = self._conn.execute(
+            "SELECT trace_json FROM traces WHERE session_id = ? ORDER BY turn",
+            (session_id,),
+        ).fetchall()
+        return [EnrichedTrace.model_validate_json(r["trace_json"]) for r in rows]
+
+    def save_analysis(self, session_id: str, analysis: TurnAnalysis) -> None:
+        """Persist a turn analysis."""
+        self._ensure_session(session_id)
+        self._conn.execute(
+            "INSERT INTO turn_analyses (session_id, turn, analysis_json) VALUES (?, ?, ?)",
+            (session_id, analysis.turn, analysis.model_dump_json()),
+        )
+        self._conn.commit()
+
+    def get_analyses(self, session_id: str) -> list[TurnAnalysis]:
+        """Return all turn analyses for a session."""
+        rows = self._conn.execute(
+            "SELECT analysis_json FROM turn_analyses WHERE session_id = ? ORDER BY turn",
+            (session_id,),
+        ).fetchall()
+        return [TurnAnalysis.model_validate_json(r["analysis_json"]) for r in rows]
+
+    def get_all_sessions(self) -> list[dict]:
+        """Return basic info for all sessions (for admin views)."""
+        rows = self._conn.execute(
+            "SELECT session_id, turn_count, phase, created_at, updated_at FROM sessions ORDER BY updated_at DESC",
+        ).fetchall()
+        return [
+            {
+                "session_id": r["session_id"],
+                "turn_count": r["turn_count"],
+                "phase": r["phase"],
+                "created_at": r["created_at"],
+                "updated_at": r["updated_at"],
             }
             for r in rows
         ]

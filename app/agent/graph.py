@@ -40,7 +40,7 @@ def build_agent(
             model=settings.GEMINI_MODEL,
             google_api_key=settings.GEMINI_API_KEY,
             temperature=0.7,
-            max_output_tokens=1024,
+            max_output_tokens=6000,
         )
 
     agent = create_react_agent(

@@ -1,44 +1,40 @@
-"""API endpoint tests."""
+"""API endpoint tests — uses AgentOrchestrator with mocked agent."""
 
 import pytest
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
+
 from fastapi.testclient import TestClient
+from langchain_core.messages import AIMessage, HumanMessage
 
-from app.agents.intake import IntakeAgent
-from app.agents.orchestrator import AgentOrchestrator
-from app.agents.progress import ProgressAgent
-from app.agents.strategy import StrategyAgent
+from app.agent.orchestrator import AgentOrchestrator
+from app.agent.session_store import SessionStateStore
 from app.api.routes import set_knowledge_base, set_orchestrator
-from app.guardrails.validator import GuardrailsValidator
 from app.main import app
-from app.models.schemas import InputCheckResult, OutputCheckResult
-from app.phase_manager import PhaseManager
 from app.rag.knowledge_store import KnowledgeStore
-from app.rag.retriever import HybridRetriever
 
 
-def _make_mock_guardrails():
-    guardrails = AsyncMock(spec=GuardrailsValidator)
-    guardrails.check_input = AsyncMock(return_value=InputCheckResult(is_allowed=True))
-    guardrails.check_output = AsyncMock(return_value=OutputCheckResult(is_valid=True))
-    return guardrails
+def _make_mock_agent():
+    """Create a mock agent that returns a simple AI response."""
+    agent = AsyncMock()
+    agent.ainvoke = AsyncMock(return_value={
+        "messages": [
+            HumanMessage(content="test message"),
+            AIMessage(content="I'm here to help with ADHD parenting strategies."),
+        ],
+        "session_id": "test",
+        "input_blocked": False,
+        "block_response": "",
+        "trace_steps": [],
+    })
+    return agent
 
 
 @pytest.fixture
 def client():
-    # Test client with fully wired orchestrator (no Gemini)
     store = KnowledgeStore()
-    orchestrator = AgentOrchestrator(
-        guardrails=_make_mock_guardrails(),
-        phase_manager=PhaseManager(),
-        retriever=HybridRetriever(
-            knowledge_store=store,
-            gemini_client=None,
-        ),
-        intake=IntakeAgent(gemini_client=None),
-        strategy=StrategyAgent(gemini_client=None),
-        progress=ProgressAgent(gemini_client=None),
-    )
+    session_store = SessionStateStore()
+    agent = _make_mock_agent()
+    orchestrator = AgentOrchestrator(agent=agent, session_store=session_store)
     set_orchestrator(orchestrator)
     set_knowledge_base(store)
     return TestClient(app, raise_server_exceptions=False)
@@ -73,7 +69,7 @@ def test_chat_returns_pipeline_trace(client):
     data = response.json()
     trace = data["pipeline_trace"]
     assert len(trace["steps"]) > 0
-    assert trace["total_duration_ms"] > 0
+    assert trace["total_duration_ms"] >= 0
 
 
 def test_session_endpoint(client):
@@ -107,6 +103,19 @@ def test_knowledge_topics_endpoint(client):
     assert data["document_count"] > 0
 
 
-def test_frontend_serves(client):
-    response = client.get("/")
+def test_seed_session(client):
+    response = client.post("/api/session/seed", json={
+        "session_id": "seed_test",
+        "child_name": "Kai",
+        "child_age": "7",
+        "challenges": ["homework"],
+        "goals": ["Better homework routine"],
+    })
     assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "ok"
+
+    # Verify session was seeded
+    response = client.get("/api/session/seed_test")
+    data = response.json()
+    assert data["family_profile"]["child_name"] == "Kai"

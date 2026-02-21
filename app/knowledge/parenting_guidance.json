@@ -1,0 +1,730 @@
+[
+  {
+    "id": "classroom_strategies_for_supporting_students_with_",
+    "name": "Classroom Strategies for Supporting Students with ADHD",
+    "description": "Discover practical strategies teachers can use to help children manage ADHD symptoms in the classroom. These tips focus on communication, assignments, and understanding the unique needs of students with ADHD.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "daily_routines",
+      "homework_support",
+      "communication_skills",
+      "transition_planning"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "CDC: ADHD in the Classroom",
+    "citations": [
+      {
+        "source_file": "cdc_classroom.txt",
+        "source_name": "ADHD in the Classroom (CDC)",
+        "detail": "ADHD in the Classroom (CDC) - Section on tips for classroom success"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Provide frequent feedback and attention to positive behavior.",
+      "Be sensitive to how ADHD affects emotions, self-esteem, and feelings regulation.",
+      "Give extra warnings before transitions and changes in routines.",
+      "Understand that children with ADHD may hyper-focus and need help shifting attention.",
+      "Make assignments clear and check for student understanding.",
+      "Communicate daily with parents, possibly through a daily report card."
+    ]
+  },
+  {
+    "id": "behavioral_parent_training_for_adhd",
+    "name": "Behavioral Parent Training for ADHD",
+    "description": "Behavioral parent training teaches parents skills and strategies to manage their child's behavior effectively. This approach is most effective when parents are trained to deliver these strategies, helping children with ADHD succeed at home, school, and in relationships.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "positive_reinforcement",
+      "communication_skills"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "CDC: Finding a Therapist",
+    "citations": [
+      {
+        "source_file": "cdc_finding_therapist_pdf.txt",
+        "source_name": "Finding a Therapist (CDC)",
+        "detail": "Finding a Therapist (CDC) - General description of behavior therapy for young children with ADHD."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Focuses on training parents to manage their child's behavior.",
+      "Utilizes positive reinforcement, structure, and consistent discipline.",
+      "Teaches parents positive ways to interact and communicate with their child.",
+      "Involves assigning activities for parents to practice with their child.",
+      "Requires regular meetings with the family to monitor progress and provide support.",
+      "Strategies should be re-evaluated and adjusted as needed."
+    ]
+  },
+  {
+    "id": "behavioral_interventions_for_children_with_adhd",
+    "name": "Behavioral Interventions for Children with ADHD",
+    "description": "A combination of approaches can help children manage ADHD symptoms. These include parent training, classroom interventions, peer support, and organizational skills training, often used together to suit the child's and family's needs.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "daily_routines",
+      "homework_support"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "CDC: ADHD Treatment Recommendations",
+    "citations": [
+      {
+        "source_file": "cdc_treatment.txt",
+        "source_name": "ADHD Treatment Recommendations (CDC)",
+        "detail": "ADHD Treatment Recommendations (CDC) - Behavioral Interventions"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Parent training in behavior management is a key approach.",
+      "Behavioral interventions in the classroom are recommended.",
+      "Peer interventions focusing on behavior can be helpful.",
+      "Organizational skills training is also beneficial.",
+      "These approaches are most effective when used together, tailored to the child and family.",
+      "Collaboration between parents, healthcare providers, and schools is important for developing a treatment plan."
+    ]
+  },
+  {
+    "id": "core_procedures_in_childbased_interventions",
+    "name": "Core Procedures in Child-Based Interventions",
+    "description": "Various child-based interventions for ADHD, regardless of their specific format or location, utilize a common set of core procedures. These procedures are designed to teach and reinforce new skills.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "communication_skills"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Child Interventions section, following point 5"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Coaching is a key procedure.",
+      "Use of examples is important.",
+      "Modeling desired behaviors is utilized.",
+      "Role-playing is a common technique.",
+      "Feedback is provided to the child.",
+      "Rewards and consequences are used.",
+      "Practice of new skills is emphasized."
+    ]
+  },
+  {
+    "id": "how_to_reach_and_teach_addadhd_children",
+    "name": "How to Reach and Teach ADD/ADHD Children",
+    "description": "This book offers practical techniques, strategies, and interventions for helping children with attention problems and hyperactivity. It provides a comprehensive approach for parents and educators.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "homework_support",
+      "daily_routines",
+      "emotional_regulation"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "moderate",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Rief, S. F. (2002). How to reach and teach ADD/ADHD children: Practical techniques, strategies, and interventions for helping children with attention problems and hyperactivity . Jossey-Bass."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Structure the child's environment to minimize distractions.",
+      "Use clear and concise instructions.",
+      "Break down tasks into smaller, manageable steps.",
+      "Provide consistent routines and schedules.",
+      "Employ positive reinforcement and reward systems.",
+      "Teach organizational skills and time management."
+    ]
+  },
+  {
+    "id": "attentiondeficit_hyperactivity_disorder_a_clinical",
+    "name": "Attention-Deficit Hyperactivity Disorder: A Clinical Workbook",
+    "description": "This workbook provides a comprehensive resource for understanding and managing ADHD. It likely includes practical tools and strategies for parents and clinicians to address the challenges associated with ADHD.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "daily_routines",
+      "homework_support",
+      "emotional_regulation"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Barkley, R. A., & Murphy, K. R. (1998). Attention-deficit hyperactivity disorder: A clinical workbook . (2nd ed.). New York: Guilford."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Understand the multifaceted nature of ADHD.",
+      "Implement structured routines and organizational strategies.",
+      "Develop effective communication and behavior management techniques.",
+      "Address emotional regulation challenges.",
+      "Seek appropriate support and resources."
+    ]
+  },
+  {
+    "id": "taking_charge_of_adhd_the_authoritative_guide_for_",
+    "name": "Taking Charge of ADHD: The Authoritative Guide for Parents",
+    "description": "This guide offers parents an authoritative and comprehensive approach to managing ADHD. It covers various aspects of ADHD, providing practical advice and strategies for parents to help their children thrive.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "daily_routines",
+      "homework_support",
+      "emotional_regulation"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Barkley, R.A. (1995). Taking charge of ADHD: The complete, authoritative guide for parents . New York: Guilford."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Understand ADHD symptoms and their impact on daily life.",
+      "Implement consistent routines and structure.",
+      "Use positive reinforcement and effective discipline.",
+      "Support the development of social and emotional skills.",
+      "Collaborate with schools and healthcare professionals."
+    ]
+  },
+  {
+    "id": "comprehensive_care_for_adhd",
+    "name": "Comprehensive Care for ADHD",
+    "description": "This guidance emphasizes that managing ADHD involves a continuous process of evaluation, diagnosis, and treatment. It acknowledges that implementing best practices requires more time and coordination with schools and other community partners.",
+    "document_type": "guidance",
+    "tags": [
+      "daily_routines",
+      "homework_support",
+      "communication_skills"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2019)",
+    "citations": [
+      {
+        "source_file": "aap_2019_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2019) (AAP)",
+        "detail": "AAP Clinical Practice Guideline (2019) - Introduction and Systems Barriers section"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Evaluation, diagnosis, and treatment of ADHD are recognized as a continuous process.",
+      "Implementing recommended procedures may require spending more time with patients and families.",
+      "Developing a care management system involving contacts with schools and other community stakeholders is necessary.",
+      "Providing continuous, coordinated care to the patient and their family is essential.",
+      "System-level barriers can hinder the adoption of best-practice recommendations."
+    ]
+  },
+  {
+    "id": "evidencebased_psychosocial_treatments_for_adhd",
+    "name": "Evidence-Based Psychosocial Treatments for ADHD",
+    "description": "Research supports several psychosocial treatments for ADHD that can help children and adolescents manage their symptoms. These treatments focus on behavioral interventions and skill-building to improve functioning in various settings.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "positive_reinforcement",
+      "emotional_regulation",
+      "communication_skills",
+      "homework_support"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent",
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2019)",
+    "citations": [
+      {
+        "source_file": "aap_2019_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2019) (AAP)",
+        "detail": "aap_2019_guideline.txt (References 24, 25, 26)"
+      },
+      {
+        "source_file": "cdc_children_mental_health.txt",
+        "source_name": "Children's Mental Health (CDC)",
+        "detail": "Evidence-based Therapies - Effective Child Therapy (Society of Clinical Child and Adolescent Psychology), Evans, S., Owens, J., & Bunford, N. (2014). Evidence-based psychosocial treatments for children and adolescents with attention-deficit/hyperactivity disorder. Journal of Clinical Child & Adolescent Psychology, 43(4):527-51."
+      },
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Pelham, W. E., Wheeler, T., & Chronis, A. (1998). Empirically supported psychosocial treatments for attention deficit hyperactivity disorder. Journal of Clinical Child Psychology, 27, 190-205."
+      },
+      {
+        "source_file": "mta_clinical_review.txt",
+        "source_name": "MTA Study Clinical Review (MTA Cooperative Group)",
+        "detail": "Pelham WE, Fabiano GA. Evidence-based psychosocial treatments for attention-deficit/hyperactivity disorder. Journal of Clinical Child & Adolescent Psychology. 2008;37:1\u201329."
+      },
+      {
+        "source_file": "page_2016_cost_analysis.txt",
+        "source_name": "Treatment Cost Analysis (2016) (Page et al.)",
+        "detail": "Evans SW, Owens JS, Bunford N. Evidence-Based Psychosocial Treatments for Children and Adolescents with Attention-Deficit/Hyperactivity Disorder. Journal of Clinical Child & Adolescent Psychology. 2013;43:256\u2013269."
+      },
+      {
+        "source_file": "pelham_2016_treatment_sequencing.txt",
+        "source_name": "Treatment Sequencing Study (2016) (Pelham et al.)",
+        "detail": "Evans SW, Owens JS, Bunford N. Evidence-based psychosocial treatments for children and adolescents with attention-deficit/hyperactivity disorder. Journal of Clinical Child and Adolescent Psychology. 2014;43:527\u2013551."
+      },
+      {
+        "source_file": "wolraich_2011_aap_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2011) (AAP)",
+        "detail": "Pelham W, Wheeler T, Chronis A. Empirically supported psychological treatments for attention deficit hyperactivity disorder. J Clin Child Psychol. 1998;27(2):190\u2013205. and Pelham W, Fabiano GA. Evidence-based psychosocial treatments for attention-deficit/hyperactivity disorder. J Clin Child Adolesc Psychol. 2008;37(1):184\u2013214."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Empirically supported psychosocial treatments are available for ADHD.",
+      "These treatments have demonstrated effectiveness in helping children and adolescents with ADHD.",
+      "Focus is on evidence-based interventions to improve outcomes."
+    ]
+  },
+  {
+    "id": "behavioral_treatments_for_adhd",
+    "name": "Behavioral Treatments for ADHD",
+    "description": "Behavioral treatments teach children with ADHD skills to manage their symptoms of hyperactivity, impulsiveness, and inattention. These therapies do not change the core symptoms but provide strategies for organization, focus, and reducing disruptive behaviors.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "daily_routines",
+      "homework_support",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "school_age",
+      "all",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "Child Mind Institute: Behavioral Treatments for ADHD",
+    "citations": [
+      {
+        "source_file": "childmind_behavioral_treatments.txt",
+        "source_name": "Behavioral Treatments for ADHD (Child Mind Institute)",
+        "detail": "Behavioral Treatments for Kids With ADHD"
+      },
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Summary"
+      },
+      {
+        "source_file": "pelham_2016_treatment_sequencing.txt",
+        "source_name": "Treatment Sequencing Study (2016) (Pelham et al.)",
+        "detail": "Fabiano GA, Pelham WE, Coles EK, Gnagy EM, Chronis AM, O\u2019Connor B. A meta-analysis of behavioral treatments for attention-deficit/hyperactivity disorder. Clinical Psychology Review. 2009;29(2):129\u2013140."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Behavioral treatments teach skills to manage ADHD symptoms, not change core symptoms.",
+      "They can be used alone or alongside medication.",
+      "Skills learned in behavioral therapy can benefit children as they grow up, unlike medication which stops working when discontinued.",
+      "Some children benefit from therapy alone, while others may need it in conjunction with medication."
+    ]
+  },
+  {
+    "id": "effective_psychosocial_treatments_for_conductdisor",
+    "name": "Effective Psychosocial Treatments for Conduct-Disordered Children and Adolescents",
+    "description": "This review synthesizes findings from numerous studies on psychosocial treatments for conduct-disordered youth. It identifies effective interventions that address behavioral and emotional challenges in this population.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "emotional_regulation",
+      "communication_skills"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Brestan, E. V. & Eyberg, S.M. (1998) Effective psychosocial treatments of conduct-disordered children and adolescents: 29 years, 82 studies, and 5272 kids. Journal of Clinical Child Psychology, 27, 180-189."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Parent training programs are highly effective.",
+      "Behavioral interventions focusing on skill-building are crucial.",
+      "Treatments that address both child behavior and family dynamics yield the best results.",
+      "Early intervention is associated with better outcomes.",
+      "A combination of strategies is often most beneficial."
+    ]
+  },
+  {
+    "id": "behavior_therapy_principles",
+    "name": "Behavior Therapy Principles",
+    "description": "Behavior therapy is a set of interventions aimed at changing behavior by modifying the child's environment. It involves using rewards and consequences to shape behavior and improve self-regulation.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2011)",
+    "citations": [
+      {
+        "source_file": "wolraich_2011_aap_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2011) (AAP)",
+        "detail": "Behavior Therapy section"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Behavior therapy modifies the physical and social environment to alter behavior.",
+      "It typically involves training parents in specific techniques.",
+      "Techniques include positive reinforcement for desired behaviors.",
+      "Planned ignoring can be used to reduce or eliminate unwanted behaviors.",
+      "Appropriate consequences or punishments are used when goals are not met.",
+      "Consistent application of rewards and consequences, with gradually increasing expectations, is crucial for shaping behavior."
+    ]
+  },
+  {
+    "id": "behavioral_therapy_for_adhd",
+    "name": "Behavioral Therapy for ADHD",
+    "description": "Behavioral therapy trains parents and school staff to adjust environmental factors to improve a child's behavior. It helps manage issues like interrupting, aggression, task completion, and compliance.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2019)",
+    "citations": [
+      {
+        "source_file": "aap_2019_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2019) (AAP)",
+        "detail": "AAP Clinical Practice Guideline (2019) - Behavioral therapy section"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Involves training adults to influence environmental contingencies to improve child behavior.",
+      "Effective for preventing and responding to common ADHD-related behaviors.",
+      "Well-established treatment for preadolescent children.",
+      "Parents often report higher satisfaction with behavioral therapy compared to medication alone.",
+      "Positive effects tend to be long-lasting."
+    ]
+  },
+  {
+    "id": "familyschool_partnerships_for_adhd_management",
+    "name": "Family-School Partnerships for ADHD Management",
+    "description": "Strong collaboration between families and schools is crucial for effective ADHD management. Coordinating efforts at home and school can amplify the positive impact of interventions.",
+    "document_type": "guidance",
+    "tags": [
+      "communication_skills",
+      "homework_support",
+      "daily_routines"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2019)",
+    "citations": [
+      {
+        "source_file": "aap_2019_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2019) (AAP)",
+        "detail": "AAP Clinical Practice Guideline (2019) - School Programming and Supports"
+      },
+      {
+        "source_file": "wolraich_2011_aap_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2011) (AAP)",
+        "detail": "The management process is also helped by encouraging strong family-school partnerships."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Encouraging strong family-school partnerships is a key component of ADHD management.",
+      "Psychosocial treatments that involve coordinating efforts at school and home can enhance treatment effects.",
+      "Clinicians should be aware of local eligibility criteria for school services to advise families.",
+      "School professionals' determinations may differ from outside clinician recommendations."
+    ]
+  },
+  {
+    "id": "managing_comorbid_conditions_with_adhd",
+    "name": "Managing Comorbid Conditions with ADHD",
+    "description": "When a child has ADHD along with other conditions like anxiety or depression, treating the ADHD might sometimes help these other issues. However, other conditions may need their own specific treatments in addition to ADHD care.",
+    "document_type": "guidance",
+    "tags": [
+      "emotional_regulation",
+      "communication_skills"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2019)",
+    "citations": [
+      {
+        "source_file": "aap_2019_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2019) (AAP)",
+        "detail": "Exclusions, Strength, Key references, IMPLEMENTATION: PREPARING THE PRACTICE"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Treating ADHD can sometimes improve coexisting aggression, oppositional defiant, depressive, or anxiety symptoms.",
+      "Some comorbid conditions may require treatment in addition to ADHD treatment.",
+      "Primary care providers can manage mild-to-moderate ADHD, anxiety, depression, and substance use.",
+      "For severe mood or anxiety disorders, referral to specialists like child psychiatrists or psychologists may be needed.",
+      "Specialists can include child and adolescent psychiatrists, clinical child psychologists, developmental-behavioral pediatricians, neurodevelopmental disability physicians, child neurologists, or child- or school-based evaluation teams."
+    ]
+  },
+  {
+    "id": "pediatricians_role_in_mental_health",
+    "name": "Pediatrician's Role in Mental Health",
+    "description": "Pediatricians play a key role in identifying conditions like ADHD early and working with families and specialists. They are encouraged to integrate mental health support into regular check-ups and be aware of factors that can affect a child's well-being.",
+    "document_type": "guidance",
+    "tags": [
+      "communication_skills",
+      "self_care_for_parents"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2019)",
+    "citations": [
+      {
+        "source_file": "aap_2019_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2019) (AAP)",
+        "detail": "IMPLEMENTATION: PREPARING THE PRACTICE"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Primary care pediatricians generally manage mild-to-moderate ADHD, anxiety, depression, and substance use.",
+      "Pediatricians should incorporate mental health content and tools into health promotion, prevention, and primary care.",
+      "They should become knowledgeable about evidence-based treatments and collaborate with specialists.",
+      "Pediatricians have opportunities to identify conditions early, intervene, and partner with families and specialists.",
+      "It's important to be aware of health disparities and social determinants impacting patient outcomes and provide culturally appropriate care."
+    ]
+  },
+  {
+    "id": "adhd_as_a_chronic_condition",
+    "name": "ADHD as a Chronic Condition",
+    "description": "ADHD is often viewed as a chronic condition that requires ongoing management. Understanding ADHD as a long-term condition has implications for how parents approach adherence to treatment and support strategies over time.",
+    "document_type": "guidance",
+    "tags": [
+      "self_care_for_parents",
+      "daily_routines",
+      "communication_skills"
+    ],
+    "age_range": [
+      "all",
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2019)",
+    "citations": [
+      {
+        "source_file": "aap_2019_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2019) (AAP)",
+        "detail": "Van Cleave J, Leslie LK. Approaching ADHD as a chronic condition: implications for long-term adherence. J Psychosoc Nurs Ment Health Serv. 2008;46(8):28\u201337"
+      },
+      {
+        "source_file": "wolraich_2011_aap_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2011) (AAP)",
+        "detail": "Action statement 4: The primary care clinician should recognize ADHD as a chronic condition..."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Recognize ADHD as a condition that persists over time.",
+      "Plan for long-term management and support.",
+      "Understand the importance of consistent adherence to strategies.",
+      "Adapt approaches as the child grows and their needs change."
+    ]
+  },
+  {
+    "id": "parent_training_for_adhd_behavior_management",
+    "name": "Parent Training for ADHD Behavior Management",
+    "description": "Parent training helps caregivers learn specific, positive ways to respond to ADHD behaviors, improving the child's ability to control their actions. This training can be done in groups or individually.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "self_care_for_parents"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Behavior Therapy Guide",
+    "citations": [
+      {
+        "source_file": "aap_behavior_therapy.txt",
+        "source_name": "AAP Behavior Therapy Guide (AAP)",
+        "detail": "Behavior Therapy for Children with ADHD - How are parents involved in behavior therapy?"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Parents play a major role in behavior therapy as primary caregivers.",
+      "Parent training teaches about ADHD and positive ways to respond to behaviors.",
+      "Parenting classes with other parents can be helpful.",
+      "Individual work with a counselor or coach may be needed for more challenging behaviors.",
+      "Seek help from your pediatrician to find local parent training and support groups."
+    ]
+  },
+  {
+    "id": "team_approach_to_adhd_management",
+    "name": "Team Approach to ADHD Management",
+    "description": "Managing ADHD effectively requires a collaborative effort involving families, doctors, teachers, and other supportive adults. This team approach ensures the child receives consistent support and tailored plans to help them manage symptoms and succeed.",
+    "document_type": "guidance",
+    "tags": [
+      "communication_skills",
+      "behavioral_strategies"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Guidelines Update (2019)",
+    "citations": [
+      {
+        "source_file": "aap_guidelines_update.txt",
+        "source_name": "AAP Guidelines Update (2019) (AAP)",
+        "detail": "AAP Guidelines Update (2019)"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "A child diagnosed with ADHD benefits most from a partnership between families, doctors, and teachers.",
+      "Teachers may need to create special instructional plans and support.",
+      "Coaches, school guidance counselors, and other significant adults can contribute information and work on solutions.",
+      "Early identification and proper treatment help children manage symptoms and be successful.",
+      "Supportive and caring adults are essential for this team effort."
+    ]
+  },
+  {
+    "id": "behavior_therapy_for_adhd",
+    "name": "Behavior Therapy for ADHD",
+    "description": "Behavior therapy is a proven treatment for ADHD that helps children improve their behavior, self-control, and self-esteem. It is particularly effective for young children when parents are actively involved in delivering the therapy.",
+    "document_type": "guidance",
+    "tags": [
+      "behavioral_strategies",
+      "positive_reinforcement",
+      "emotional_regulation",
+      "communication_skills"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age",
+      "all",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "CDC: Behavior Therapy for ADHD",
+    "citations": [
+      {
+        "source_file": "cdc_behavior_therapy.txt",
+        "source_name": "Behavior Therapy for ADHD (CDC)",
+        "detail": "Parent Training in Behavior Management for ADHD - Key points"
+      },
+      {
+        "source_file": "cdc_children_mental_health.txt",
+        "source_name": "Children's Mental Health (CDC)",
+        "detail": "Therapy for ADHD"
+      },
+      {
+        "source_file": "cdc_clinical_care.txt",
+        "source_name": "ADHD Clinical Care (CDC)",
+        "detail": "Did you know? section"
+      },
+      {
+        "source_file": "cdc_treatment.txt",
+        "source_name": "ADHD Treatment Recommendations (CDC)",
+        "detail": "Treatment of ADHD - Behavior therapy"
+      },
+      {
+        "source_file": "pelham_2016_treatment_sequencing.txt",
+        "source_name": "Treatment Sequencing Study (2016) (Pelham et al.)",
+        "detail": "Jacob R, Pelham WE. Behavior therapy. In: Sadock B, Sadock V, editors. Comprehensive Textbook of Psychiatry. 7. New York: Williams & Wilkins; 1999. pp. 2080\u20132127."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "key_points": [
+      "Improves a child's behavior, self-control, and self-esteem.",
+      "Most effective in young children when delivered by parents.",
+      "Parents learn skills and strategies to help their child succeed at school, home, and in relationships."
+    ]
+  }
+]

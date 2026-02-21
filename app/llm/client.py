@@ -32,7 +32,7 @@ class GeminiClient:
                 contents=prompt,
                 config=genai.types.GenerateContentConfig(
                     temperature=temperature,
-                    max_output_tokens=1024,
+                    max_output_tokens=6000,
                 ),
             )
             return response.text or ""
@@ -48,7 +48,7 @@ class GeminiClient:
                 contents=prompt,
                 config=genai.types.GenerateContentConfig(
                     temperature=temperature,
-                    max_output_tokens=1024,
+                    max_output_tokens=6000,
                     response_mime_type="application/json",
                 ),
             )

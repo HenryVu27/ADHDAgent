@@ -7,6 +7,7 @@ from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
 
 from app.agent.store_protocol import SessionStoreBase
+from app.models.schemas import RetrievalResult
 from app.rag.retriever import HybridRetriever
 
 logger = logging.getLogger(__name__)
@@ -19,6 +20,68 @@ _session_store: SessionStoreBase | None = None
 def _get_session_id(config: RunnableConfig) -> str:
     """Extract session_id from LangGraph config."""
     return config.get("configurable", {}).get("session_id", "default")
+
+
+def _age_to_range(age_str: str) -> str | None:
+    """Map a child's age string to an age_range filter value."""
+    try:
+        age = int(age_str)
+    except (ValueError, TypeError):
+        return None
+    if age <= 5:
+        return "preschool"
+    elif age <= 12:
+        return "school_age"
+    else:
+        return "adolescent"
+
+
+def _format_result(i: int, result: RetrievalResult) -> str:
+    """Format a single retrieval result with structured metadata."""
+    doc = result.full_doc
+    lines = []
+
+    # Header: name + metadata line
+    meta_parts = []
+    if result.evidence_level:
+        meta_parts.append(f"Evidence: {result.evidence_level}")
+    if result.age_range:
+        meta_parts.append(f"Ages: {', '.join(result.age_range)}")
+    if result.source:
+        meta_parts.append(f"Source: {result.source}")
+    meta_line = " | ".join(meta_parts) if meta_parts else ""
+
+    lines.append(f"[{i}] {result.document_name}")
+    if meta_line:
+        lines.append(f"    {meta_line}")
+
+    # Description
+    description = doc.get("description", "") if doc else ""
+    if description:
+        lines.append(f"    {description}")
+
+    # Steps (numbered list for strategy docs)
+    steps = doc.get("steps", []) if doc else []
+    if steps:
+        lines.append("    Steps:")
+        for j, step in enumerate(steps, 1):
+            lines.append(f"      {j}. {step}")
+
+    # Key points (bulleted list for guidance/fact docs)
+    key_points = doc.get("key_points", []) if doc else []
+    if key_points:
+        lines.append("    Key points:")
+        for point in key_points:
+            lines.append(f"      - {point}")
+
+    # Citations
+    citations = result.citations
+    if citations:
+        cite_names = [c.get("source_name", "") for c in citations if c.get("source_name")]
+        if cite_names:
+            lines.append(f"    Citations: {'; '.join(cite_names)}")
+
+    return "\n".join(lines)
 
 
 def create_tools(
@@ -44,36 +107,47 @@ async def search_knowledge_base(
     query: str,
     document_type: Optional[str] = None,
     tags: Optional[list[str]] = None,
+    age_range: Optional[str] = None,
     config: RunnableConfig = None,
 ) -> str:
     """Search the ADHD parenting knowledge base for evidence-based strategies, facts, and guidance.
 
-    Call this when you need to find strategies, research, or guidance to help the parent.
-    Always search before recommending strategies so your advice is evidence-based.
+    Call this when the parent asks about ADHD-related challenges, strategies, or how
+    something affects their child's ADHD symptoms. Always search before recommending
+    strategies or making claims about what does or doesn't affect ADHD.
 
     Args:
         query: What to search for (e.g., "homework strategies for 8 year old with ADHD")
         document_type: Optional filter — "strategy", "guidance", or "fact"
         tags: Optional tag filters (e.g., ["homework", "executive_function"])
+        age_range: Optional age filter — "preschool", "school_age", or "adolescent"
     """
     from app.models.schemas import RetrievalFilters
 
-    filters = None
-    if document_type or tags:
-        filters = RetrievalFilters(document_type=document_type, tags=tags)
+    session_id = _get_session_id(config)
+    state = _session_store.get(session_id)
 
-    response = await _retriever.retrieve(query=query, filters=filters)
+    # Auto-apply age filter from family profile if not explicitly provided
+    effective_age_range = age_range
+    if not effective_age_range and state.family_profile.child_age:
+        effective_age_range = _age_to_range(state.family_profile.child_age)
+
+    filters = None
+    if document_type or tags or effective_age_range:
+        filters = RetrievalFilters(
+            document_type=document_type,
+            tags=tags,
+            age_range=effective_age_range,
+        )
+
+    response = await _retriever.retrieve(query=query, filters=filters, state=state)
 
     if not response.results:
         return "No relevant documents found. Try a different search query."
 
     parts = []
     for i, result in enumerate(response.results, 1):
-        source = f" (Source: {result.source})" if result.source else ""
-        parts.append(
-            f"[{i}] {result.document_name}{source}\n"
-            f"    {result.content[:500]}"
-        )
+        parts.append(_format_result(i, result))
 
     return "\n\n".join(parts)
 

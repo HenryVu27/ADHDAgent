@@ -4,6 +4,7 @@ import logging
 
 from app.agent.store_protocol import SessionStoreBase
 from app.models.schemas import (
+    EnrichedTrace,
     EpisodicMemory,
     FamilyProfile,
     Goal,
@@ -11,6 +12,7 @@ from app.models.schemas import (
     SeedSessionRequest,
     SessionState,
     SessionSummary,
+    TurnAnalysis,
 )
 
 logger = logging.getLogger(__name__)
@@ -23,6 +25,8 @@ class InMemorySessionStore(SessionStoreBase):
         self._sessions: dict[str, SessionState] = {}
         self._summaries: dict[str, list[SessionSummary]] = {}
         self._episodes: dict[str, list[EpisodicMemory]] = {}
+        self._traces: dict[str, list[EnrichedTrace]] = {}
+        self._analyses: dict[str, list[TurnAnalysis]] = {}
 
     def get(self, session_id: str) -> SessionState:
         """Get or create session state."""
@@ -200,6 +204,31 @@ class InMemorySessionStore(SessionStoreBase):
                 continue
             result.append(msg)
         return result
+
+
+    def save_trace(self, session_id: str, trace: EnrichedTrace) -> None:
+        """Persist an enriched trace for a turn."""
+        if session_id not in self._traces:
+            self._traces[session_id] = []
+        self._traces[session_id].append(trace)
+
+    def get_traces(self, session_id: str) -> list[EnrichedTrace]:
+        """Return all enriched traces for a session."""
+        return list(self._traces.get(session_id, []))
+
+    def save_analysis(self, session_id: str, analysis: TurnAnalysis) -> None:
+        """Persist a turn analysis."""
+        if session_id not in self._analyses:
+            self._analyses[session_id] = []
+        self._analyses[session_id].append(analysis)
+
+    def get_analyses(self, session_id: str) -> list[TurnAnalysis]:
+        """Return all turn analyses for a session."""
+        return list(self._analyses.get(session_id, []))
+
+    def get_all_sessions(self) -> list[SessionState]:
+        """Return all session states (for admin views)."""
+        return list(self._sessions.values())
 
 
 # Backward-compatibility alias

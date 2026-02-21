@@ -29,6 +29,7 @@ logger = logging.getLogger(__name__)
 def create_hooks(
     guardrails: GuardrailsValidator,
     session_store: SessionStoreBase,
+    event_bus=None,
 ):
     """Create pre_model_hook and post_model_hook closures."""
 
@@ -70,22 +71,40 @@ def create_hooks(
 
                 if not check.is_allowed:
                     # NeMo's Colang checks each message in isolation (via
-                    # $user_message). Short conversational continuations like
-                    # "Yes please" get falsely flagged as off_topic because
-                    # NeMo can't see the preceding conversation. Override
-                    # off_topic blocks for short messages in active conversations.
+                    # $user_message). This causes false off_topic blocks in
+                    # two scenarios:
+                    # 1. Short continuations ("Yes please") in active conversations
+                    # 2. On-topic messages with casual phrasing or greetings that
+                    #    confuse the flash-lite classifier
+                    _ON_TOPIC_KEYWORDS = {
+                        "child", "kid", "son", "daughter", "adhd", "focus",
+                        "homework", "school", "routine", "behavior", "behaviour",
+                        "meltdown", "tantrum", "attention", "distract", "strategy",
+                        "help", "parent", "morning", "bedtime", "transition",
+                        "emotion", "frustrat", "calm", "overwhelm", "goal",
+                    }
+                    msg_lower = latest_human.content.strip().lower()
+                    has_on_topic_keyword = any(kw in msg_lower for kw in _ON_TOPIC_KEYWORDS)
+
                     is_false_positive = (
                         check.blocked_reason == "off_topic"
-                        and len(latest_human.content.strip()) < 40
-                        and len(recent_history) > 0
+                        and (
+                            # Short continuation in active conversation
+                            (len(msg_lower) < 40 and len(recent_history) > 0)
+                            # Or message contains ADHD/parenting keywords
+                            or has_on_topic_keyword
+                        )
                     )
                     if is_false_positive:
                         logger.info(
-                            "Overriding off_topic block for short continuation: %r",
-                            latest_human.content,
+                            "Overriding off_topic block (keywords=%s): %r",
+                            has_on_topic_keyword, latest_human.content,
                         )
                     else:
                         logger.info("Input blocked: %s", check.blocked_reason)
+                        if event_bus:
+                            event_bus.emit("guardrails", "input_blocked", session_id, duration_ms=duration_ms,
+                                           detail={"reason": check.blocked_reason})
                         # Return a Command that sets the block and goes to END
                         return Command(
                             goto="__end__",
@@ -96,6 +115,9 @@ def create_hooks(
                                 "messages": [AIMessage(content=check.override_response or "")],
                             },
                         )
+                else:
+                    if event_bus:
+                        event_bus.emit("guardrails", "input_check_passed", session_id, duration_ms=duration_ms)
 
             except GuardrailsError as e:
                 logger.error("Guardrails check failed: %s", e)
@@ -141,7 +163,6 @@ def create_hooks(
 
         # Build augmented message list for the LLM
         llm_messages = [SystemMessage(content=system_prompt)] + conversation_messages
-
         result = {"llm_input_messages": llm_messages}
 
         # Model routing: classify complexity and set tier in state
@@ -150,6 +171,8 @@ def create_hooks(
             tier = classify_complexity(state)
             result["model_tier"] = tier
             logger.info("Model tier classified: %s", tier)
+            if event_bus:
+                event_bus.emit("model_routing", "tier_classified", session_id, detail={"tier": tier})
 
         return result
 
@@ -183,6 +206,10 @@ def create_hooks(
 
             if not check.is_valid:
                 logger.info("Output guardrail triggered: %s", check.violation_type)
+                if event_bus:
+                    out_session_id = state.get("session_id", "")
+                    event_bus.emit("guardrails", "output_violation", out_session_id, duration_ms=duration_ms,
+                                   detail={"violation_type": check.violation_type})
                 # Replace the response with safe fallback
                 safe_msg = AIMessage(content=SAFE_OUTPUT_FALLBACK)
                 new_messages = [m for m in messages if m is not last_ai] + [safe_msg]
@@ -191,6 +218,9 @@ def create_hooks(
                     "trace_steps": [trace_step],
                 }
 
+            if event_bus:
+                out_session_id = state.get("session_id", "")
+                event_bus.emit("guardrails", "output_check_passed", out_session_id, duration_ms=duration_ms)
             return {"trace_steps": [trace_step]}
 
         except GuardrailsError as e:

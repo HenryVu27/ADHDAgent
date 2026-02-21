@@ -1,104 +1,72 @@
 # ADHDAgent
 
-An agentic framework for parent-facing ADHD coaching that combines LLM flexibility with Answer Set Programming (ASP) guardrails to deliver clinician-informed, structured conversations.
+Parent-facing ADHD coaching chatbot using a ReAct agent architecture with multi-layer safety guardrails.
 
-## Motivation
+NeMo input guardrails → Gemini ReAct agent with tool calling → NeMo output guardrails.
 
-Millions of families with children diagnosed with ADHD struggle to access and sustain psychosocial treatment. While LLMs can engage in natural conversation, they lack the logical rigor needed for clinical safety. This project explores a **hybrid architecture** where:
+## Key Features
 
-- **LLMs** handle natural language understanding, empathy, and generation
-- **ASP (Answer Set Programming)** enforces conversation structure and clinician-defined boundaries
-- **RAG** grounds responses in vetted ADHD parenting knowledge
-- **Multi-agent orchestration** breaks complex coaching into specialized, composable agents
-
-## Architecture
-
-```
-Parent Input (text)
-       |
-       v
-[Predicate Extraction] -- LLM extracts structured predicates from free text
-       |
-       v
-[ASP Reasoning Engine] -- Determines valid conversation moves given current state
-       |
-       v
-[Agent Orchestrator] -- Routes to specialized agents based on ASP output
-       |
-       +--> [Intake Agent]       -- Gathers family context and child profile
-       +--> [Strategy Agent]     -- Recommends evidence-based parenting strategies
-       +--> [Progress Agent]     -- Tracks behavioral goals and outcomes
-       +--> [Safety Monitor]     -- Enforces clinician-informed guardrails
-       |
-       v
-[Response Generator] -- LLM produces empathetic, parent-friendly response
-       |
-       v
-Parent Output (text)
-```
-
-## Key Components
-
-### Predicate Extraction (`app/predicates/`)
-Extracts structured predicates from parent utterances using LLMs. For example:
-- *"My son won't do his homework and keeps getting distracted"* becomes:
-  - `child_behavior(avoidance, homework)`
-  - `child_behavior(distraction, homework)`
-  - `parent_concern(academic_performance)`
-
-### ASP Conversation Engine (`app/asp/`)
-Logic programs defining valid conversation transitions, topic boundaries, and safety constraints. The ASP solver determines what the chatbot *should* do next based on conversation state.
-
-### Multi-Agent System (`app/agents/`)
-Specialized agents handle different aspects of coaching:
-- **Intake Agent**: Builds family profile through guided questions
-- **Strategy Agent**: Matches situations to evidence-based interventions
-- **Progress Agent**: Tracks goals, celebrates wins, adjusts plans
-- **Safety Monitor**: Validates all responses against clinical guardrails
-
-### RAG Knowledge Base (`app/rag/`)
-Retrieval-augmented generation over vetted ADHD parenting resources, behavioral strategies, and clinical guidelines.
+- **ReAct agent** with LangGraph tool calling and full observability
+- **Hybrid RAG** — Qdrant dense + sparse vectors with RRF and tag boosting
+- **Multi-layer guardrails** — NeMo Colang input rails + Gemini output classifiers
+- **4-tier memory** — in-memory or SQLite persistence, rolling summaries, episodic memory, fact extraction
+- **Model routing** — rule-based complexity classification selects Gemini model tier per turn
+- **Outcome tracking** — goals, progress, strategy effectiveness measurement
+- **Sectioned system prompt** — structured context assembly with family profile, goals, and session history
 
 ## Tech Stack
 
-- **Backend**: Python, FastAPI
-- **LLM Integration**: OpenAI API / local models
-- **ASP Solver**: Clingo (Potassco) / s(CASP)
-- **Vector Store**: FAISS
-- **Frontend**: HTML/CSS/JS (simple chat interface)
+| Component | Technology |
+|-----------|-----------|
+| LLM | Google Gemini (2.5-flash-lite / flash / pro) via langchain-google-genai |
+| Embeddings | Gemini gemini-embedding-001 via google-genai SDK |
+| Vector Search | Qdrant (in-memory for dev, remote for prod) with dense + sparse + RRF |
+| Agent | LangGraph create_react_agent (ReAct loop with tool calling) |
+| Guardrails | NeMo Guardrails (Colang 1.0) + direct Gemini output classifiers |
+| Persistence | SQLite (opt-in) or in-memory session store |
+| API | FastAPI |
+| Frontend | React 19 + TypeScript + Vite + Tailwind CSS + shadcn/ui |
 
 ## Getting Started
 
-### Prerequisites
-
-- Python 3.10+
-- pip
-
-### Installation
-
 ```bash
-git clone https://github.com/HenryVu27/ADHDAgent.git
-cd ADHDAgent
+# Install dependencies
 pip install -r requirements.txt
-```
 
-### Configuration
-
-Copy the example environment file and add your API keys:
-
-```bash
+# Configure
 cp .env.example .env
-# Edit .env with your API keys
+# Add your GEMINI_API_KEY to .env
+
+# Run
+uvicorn app.main:app --reload
+
+# Open http://localhost:8000
 ```
 
-### Running
+### Optional Features
+
+Enable via environment variables:
 
 ```bash
-# Start the backend server
-uvicorn app.main:app --reload --port 8000
+# SQLite persistence (default: in-memory)
+SQLITE_ENABLED=true
+SQLITE_DB_PATH=adhd_agent.db
 
-# Open the frontend
-# Navigate to http://localhost:8000 in your browser
+# Model routing (default: single model)
+MODEL_ROUTING_ENABLED=true
+GEMINI_MODEL_FAST=gemini-2.5-flash-lite
+GEMINI_MODEL_STANDARD=gemini-2.5-flash
+GEMINI_MODEL_COMPLEX=gemini-2.5-pro
+```
+
+## Running Tests
+
+```bash
+# All tests (no API key needed — tests use mocks)
+pytest tests/ -v
+
+# Skip integration tests (require real API keys)
+pytest tests/ -v -m "not integration"
 ```
 
 ## Project Structure
@@ -106,57 +74,53 @@ uvicorn app.main:app --reload --port 8000
 ```
 ADHDAgent/
 ├── app/
-│   ├── main.py                 # FastAPI application entry point
-│   ├── config.py               # Configuration and environment variables
-│   ├── agents/
-│   │   ├── __init__.py
-│   │   ├── base.py             # Base agent class
-│   │   ├── orchestrator.py     # Agent orchestration / supervisor
-│   │   ├── intake.py           # Family intake agent
-│   │   ├── strategy.py         # Strategy recommendation agent
-│   │   ├── progress.py         # Progress tracking agent
-│   │   └── safety.py           # Safety monitoring agent
-│   ├── asp/
-│   │   ├── __init__.py
-│   │   ├── engine.py           # ASP solver interface
-│   │   └── rules/
-│   │       ├── conversation.lp # Conversation transition rules
-│   │       ├── safety.lp       # Safety constraint rules
-│   │       └── topics.lp       # Topic boundary definitions
-│   ├── predicates/
-│   │   ├── __init__.py
-│   │   └── extractor.py        # LLM-based predicate extraction
+│   ├── main.py                        # FastAPI app + dependency wiring
+│   ├── config.py                      # All settings (Gemini, Qdrant, agent, memory, routing)
+│   ├── db.py                          # SQLite schema, migrations, connection management
+│   ├── models/
+│   │   └── schemas.py                 # Pydantic data contracts
+│   ├── agent/
+│   │   ├── graph.py                   # build_agent() — LangGraph ReAct agent
+│   │   ├── orchestrator.py            # Session management + agent invocation
+│   │   ├── hooks.py                   # pre_model_hook (guardrails + context) + post_model_hook
+│   │   ├── tools.py                   # 5 tools: search, profile, outcomes, goals
+│   │   ├── prompts.py                 # Sectioned system prompt template + context helpers
+│   │   ├── state.py                   # CoachingState (extends MessagesState)
+│   │   ├── memory.py                  # MemoryManager (summary, fact extraction, episodes)
+│   │   ├── model_router.py            # Complexity classification + model selection
+│   │   ├── store_protocol.py          # SessionStoreBase ABC
+│   │   ├── session_store.py           # InMemorySessionStore
+│   │   └── sqlite_store.py            # SQLiteSessionStore
+│   ├── llm/
+│   │   └── client.py                  # Gemini API wrapper (generate, extract_json, embed)
 │   ├── rag/
-│   │   ├── __init__.py
-│   │   ├── retriever.py        # RAG retrieval pipeline
-│   │   └── knowledge_base.py   # Knowledge base management
-│   ├── knowledge/
-│   │   └── adhd_strategies.json # Vetted ADHD parenting strategies
+│   │   ├── knowledge_store.py         # Qdrant document store (dense + sparse vectors)
+│   │   ├── retriever.py               # Hybrid retriever (dense + sparse + RRF + tag boost)
+│   │   └── query_rewriter.py          # LLM query rewriting with conversation context
+│   ├── guardrails/
+│   │   ├── validator.py               # Input rails (NeMo) + output rails (Gemini)
+│   │   ├── gemini_provider.py         # Gemini LLM provider for NeMo
+│   │   └── config/                    # NeMo config (config.yml + rails.co)
+│   ├── knowledge/                     # JSON knowledge base documents
 │   └── api/
-│       ├── __init__.py
-│       └── routes.py           # API route definitions
-├── frontend/
-│   ├── index.html              # Chat interface
-│   └── static/
-│       ├── style.css           # Styling
-│       └── app.js              # Frontend logic
-├── tests/
-│   ├── __init__.py
-│   ├── test_predicates.py      # Predicate extraction tests
-│   └── test_asp.py             # ASP engine tests
-├── .env.example                # Environment variable template
-├── .gitignore
+│       └── routes.py                  # API endpoints
+├── frontend-react/                    # React 19 + TypeScript frontend
+├── tests/                             # 180 tests (unit + integration)
 ├── requirements.txt
-└── README.md
+└── CLAUDE.md
 ```
 
-## Research Context
+## API Endpoints
 
-This project draws on the intersection of:
-- **Answer Set Programming** for knowledge representation and non-monotonic reasoning
-- **s(CASP)** goal-directed ASP for commonsense reasoning in dialog systems
-- **Digital therapeutics** for ADHD behavioral intervention
-- **Agentic AI** architectures for reliable, structured conversations
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/api/chat` | Process message through ReAct agent pipeline |
+| POST | `/api/session/seed` | Pre-populate session with onboarding data |
+| GET | `/api/session/{id}` | Session state (phase, profile, strategies) |
+| GET | `/api/session/{id}/outcomes` | Outcome tracking data |
+| GET | `/api/health` | Health check |
+| GET | `/api/knowledge/topics` | Approved topic boundaries |
+| GET | `/api/knowledge/documents` | All knowledge documents for resource library |
 
 ## License
 

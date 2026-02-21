@@ -215,3 +215,75 @@ def test_retrieval_surfaces_evidence_level(knowledge_store):
     levels = [r.evidence_level for r in response.results if r.evidence_level]
     assert len(levels) > 0
     assert levels[0] in ("strong", "moderate", "emerging")
+
+
+def test_retrieval_result_has_full_doc(knowledge_store):
+    retriever = HybridRetriever(knowledge_store=knowledge_store)
+    import asyncio
+    response = asyncio.run(retriever.retrieve("homework strategies", top_k=1))
+    assert len(response.results) > 0
+    result = response.results[0]
+    assert result.full_doc  # Should be populated
+    assert "name" in result.full_doc
+
+
+def test_full_doc_excluded_from_serialization():
+    result = RetrievalResult(
+        document_id="test",
+        document_name="Test",
+        content="...",
+        score=0.9,
+        full_doc={"name": "Test", "steps": ["a", "b"]},
+    )
+    dumped = result.model_dump()
+    assert "full_doc" not in dumped
+
+
+# --- Reranker tests ---
+
+@pytest.mark.asyncio
+async def test_reranker_sorts_by_relevance():
+    from app.rag.reranker import GeminiReranker
+    from unittest.mock import AsyncMock
+
+    mock_gemini = AsyncMock()
+    # Return descending scores so doc3 should come first
+    mock_gemini.generate = AsyncMock(side_effect=["0.9", "0.3", "0.7"])
+
+    reranker = GeminiReranker(gemini_client=mock_gemini)
+    results = [
+        RetrievalResult(document_id="1", document_name="A", content="aaa", score=0.5),
+        RetrievalResult(document_id="2", document_name="B", content="bbb", score=0.8),
+        RetrievalResult(document_id="3", document_name="C", content="ccc", score=0.6),
+    ]
+    reranked = await reranker.rerank("test query", results, top_k=2)
+    assert len(reranked) == 2
+    assert reranked[0].document_id == "1"  # scored 0.9
+    assert reranked[1].document_id == "3"  # scored 0.7
+
+
+@pytest.mark.asyncio
+async def test_reranker_handles_parse_failure():
+    from app.rag.reranker import GeminiReranker
+    from unittest.mock import AsyncMock
+
+    mock_gemini = AsyncMock()
+    mock_gemini.generate = AsyncMock(side_effect=["not_a_number", "0.5"])
+
+    reranker = GeminiReranker(gemini_client=mock_gemini)
+    results = [
+        RetrievalResult(document_id="1", document_name="A", content="aaa", score=0.3),
+        RetrievalResult(document_id="2", document_name="B", content="bbb", score=0.8),
+    ]
+    reranked = await reranker.rerank("test", results, top_k=2)
+    assert len(reranked) == 2
+
+
+@pytest.mark.asyncio
+async def test_reranker_empty_results():
+    from app.rag.reranker import GeminiReranker
+    from unittest.mock import AsyncMock
+
+    reranker = GeminiReranker(gemini_client=AsyncMock())
+    reranked = await reranker.rerank("test", [], top_k=3)
+    assert reranked == []

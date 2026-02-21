@@ -136,3 +136,112 @@ export interface OnboardingData {
   triedStrategies: string[]
   goals: string[]
 }
+
+// Observability types
+export interface ToolCallRecord {
+  name: string
+  args: Record<string, unknown>
+  result: string
+  duration_ms: number
+}
+
+export interface AgentReasoningStep {
+  step_index: number
+  thought: string
+  tool_call: ToolCallRecord | null
+  is_final: boolean
+}
+
+export interface EnrichedTrace {
+  session_id: string
+  turn: number
+  timestamp: string
+  pipeline_steps: PipelineStep[]
+  total_duration_ms: number
+  reasoning_steps: AgentReasoningStep[]
+  tool_calls: ToolCallRecord[]
+  model_tier: string
+  input_blocked: boolean
+  blocked_reason: string
+  agent_used: string
+}
+
+export interface AnalysisFlag {
+  flag_type: string
+  severity: string
+  description: string
+  evidence: string
+}
+
+export interface TurnAnalysis {
+  session_id: string
+  turn: number
+  flags: AnalysisFlag[]
+  quality_score: number
+  summary: string
+  tool_call_assessment: string
+  timestamp: string
+}
+
+export interface ObservabilityEvent {
+  category: string
+  event_type: string
+  session_id: string
+  turn: number
+  timestamp: string
+  duration_ms: number
+  detail: Record<string, unknown>
+  level: string
+}
+
+export interface SessionOverview {
+  session_id: string
+  turn_count: number
+  created_at: string
+  updated_at: string
+  total_flags: number
+  avg_quality_score: number
+  tool_calls_count: number
+  blocked_count: number
+}
+
+export interface SessionDetailResponse {
+  session_id: string
+  messages: Array<{
+    role: string
+    content: string
+    turn: number
+    blocked?: boolean
+    blocked_reason?: string
+  }>
+  traces: EnrichedTrace[]
+  analyses: TurnAnalysis[]
+  events: ObservabilityEvent[]
+}
+
+export interface SessionListResponse {
+  sessions: SessionOverview[]
+}
+
+// Main app session list
+export interface SessionListItem {
+  session_id: string
+  turn_count: number
+  phase: string
+  created_at: string
+  updated_at: string
+}
+
+export interface SessionsResponse {
+  sessions: SessionListItem[]
+}
+
+export interface MessagesResponse {
+  session_id: string
+  messages: Array<{
+    role: string
+    content: string
+    turn?: number
+    blocked?: boolean
+  }>
+}

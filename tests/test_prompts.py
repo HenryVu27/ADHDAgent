@@ -168,3 +168,14 @@ class TestBuildSystemPrompt:
             outcomes=[],
         )
         assert "{session_context}" not in result
+
+    def test_includes_search_result_guidance(self):
+        result = build_system_prompt(
+            profile=FamilyProfile(),
+            active_strategies=[],
+            goals=[],
+            outcomes=[],
+        )
+        assert "## Using Search Results" in result
+        assert "Evidence framing" in result
+        assert "Cite sources" in result

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Welcome Star - friendly star waving hello -->
+  <defs>
+    <radialGradient id="starGlow" cx="50%" cy="42%" r="52%">
+      <stop offset="0%" stop-color="#FFE8A0"/>
+      <stop offset="80%" stop-color="#FFD166"/>
+      <stop offset="100%" stop-color="#F0C050"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Ambient sparkles -->
+  <circle cx="36" cy="28" r="2.5" fill="#FFD166" opacity="0.5">
+    <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="170" cy="46" r="2" fill="#B8A9D4" opacity="0.4">
+    <animate attributeName="opacity" values="0.2;0.7;0.2" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <g opacity="0.5">
+    <line x1="152" y1="138" x2="160" y2="138" stroke="#8FC4A8" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="156" y1="134" x2="156" y2="142" stroke="#8FC4A8" stroke-width="1.5" stroke-linecap="round"/>
+    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite"/>
+  </g>
+
+  <!-- Shadow -->
+  <ellipse cx="100" cy="178" rx="40" ry="5" fill="#E0D8C0" opacity="0.25"/>
+
+  <!-- Star body - rounded joins for softness -->
+  <polygon
+    points="100,28 116,70 160,72 126,98 136,142 100,118 64,142 74,98 40,72 84,70"
+    fill="url(#starGlow)"
+    stroke="#E8B040"
+    stroke-width="1.5"
+    stroke-linejoin="round"
+  />
+
+  <!-- Inner belly glow -->
+  <circle cx="100" cy="92" r="26" fill="#FFF3D0" opacity="0.4"/>
+
+  <!-- Eyes -->
+  <circle cx="86" cy="84" r="7" fill="#4A3530"/>
+  <circle cx="114" cy="84" r="7" fill="#4A3530"/>
+  <!-- Primary highlights -->
+  <circle cx="89" cy="81" r="3" fill="white"/>
+  <circle cx="117" cy="81" r="3" fill="white"/>
+  <!-- Secondary highlights -->
+  <circle cx="84" cy="88" r="1.5" fill="white" opacity="0.5"/>
+  <circle cx="112" cy="88" r="1.5" fill="white" opacity="0.5"/>
+
+  <!-- Smile -->
+  <path d="M84,98 Q100,113 116,98" fill="none" stroke="#4A3530" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Blush -->
+  <ellipse cx="72" cy="95" rx="9" ry="5.5" fill="#FFADAD" opacity="0.45"/>
+  <ellipse cx="128" cy="95" rx="9" ry="5.5" fill="#FFADAD" opacity="0.45"/>
+
+  <!-- Waving arm -->
+  <g>
+    <path d="M150,66 Q158,54 162,42" fill="none" stroke="#F0C050" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="162" cy="40" r="6.5" fill="#FFD88A" stroke="#E8B040" stroke-width="1.2"/>
+    <animateTransform attributeName="transform" type="rotate" values="-6,150,66;10,150,66;-6,150,66" dur="0.9s" repeatCount="indefinite"/>
+  </g>
+</svg>

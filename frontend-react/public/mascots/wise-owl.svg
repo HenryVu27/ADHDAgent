@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Wise Owl - knowledge/tips mascot (redesigned) -->
+  <defs>
+    <radialGradient id="owlGrad" cx="50%" cy="38%" r="55%">
+      <stop offset="0%" stop-color="#A0D4B8"/>
+      <stop offset="100%" stop-color="#72B894"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Sparkles -->
+  <g opacity="0.5">
+    <line x1="36" y1="30" x2="44" y2="30" stroke="#FFD166" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="40" y1="26" x2="40" y2="34" stroke="#FFD166" stroke-width="1.5" stroke-linecap="round"/>
+    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2.5s" repeatCount="indefinite"/>
+  </g>
+  <circle cx="164" cy="38" r="2.5" fill="#FFD166" opacity="0.5">
+    <animate attributeName="opacity" values="0.2;0.7;0.2" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Shadow -->
+  <ellipse cx="100" cy="186" rx="46" ry="6" fill="#C8D4C8" opacity="0.3"/>
+
+  <!-- Body -->
+  <ellipse cx="100" cy="116" rx="52" ry="58" fill="url(#owlGrad)"/>
+
+  <!-- Belly patch -->
+  <ellipse cx="100" cy="128" rx="34" ry="38" fill="#C8E8D6" opacity="0.6"/>
+
+  <!-- Chest feather chevrons -->
+  <path d="M92,118 L100,124 L108,118" fill="none" stroke="#A8D4BC" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>
+  <path d="M88,128 L100,135 L112,128" fill="none" stroke="#A8D4BC" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>
+  <path d="M90,138 L100,144 L110,138" fill="none" stroke="#A8D4BC" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Ear tufts - SOFT ROUNDED curves (not triangles!) -->
+  <path d="M70,72 C66,54 60,40 68,36 C76,32 78,50 77,68" fill="#72B894"/>
+  <path d="M130,72 C134,54 140,40 132,36 C124,32 122,50 123,68" fill="#72B894"/>
+  <!-- Inner ear highlight -->
+  <path d="M71,68 C68,55 64,44 69,41 C74,38 76,52 75,65" fill="#B8DDD1"/>
+  <path d="M129,68 C132,55 136,44 131,41 C126,38 124,52 125,65" fill="#B8DDD1"/>
+
+  <!-- Facial disc (owl-specific feature) -->
+  <ellipse cx="80" cy="92" r="24" fill="#D8F0E0" opacity="0.35"/>
+  <ellipse cx="120" cy="92" r="24" fill="#D8F0E0" opacity="0.35"/>
+
+  <!-- Big owl eyes -->
+  <circle cx="80" cy="92" r="18" fill="white"/>
+  <circle cx="120" cy="92" r="18" fill="white"/>
+  <!-- Pupils -->
+  <circle cx="83" cy="94" r="10" fill="#3D3535"/>
+  <circle cx="123" cy="94" r="10" fill="#3D3535"/>
+  <!-- Primary highlights -->
+  <circle cx="87" cy="88" r="4.5" fill="white"/>
+  <circle cx="127" cy="88" r="4.5" fill="white"/>
+  <!-- Secondary highlights -->
+  <circle cx="80" cy="98" r="2.5" fill="white" opacity="0.45"/>
+  <circle cx="120" cy="98" r="2.5" fill="white" opacity="0.45"/>
+
+  <!-- Glasses -->
+  <circle cx="80" cy="92" r="21" fill="none" stroke="#5A7A9D" stroke-width="2.5"/>
+  <circle cx="120" cy="92" r="21" fill="none" stroke="#5A7A9D" stroke-width="2.5"/>
+  <!-- Bridge - proper connecting arc -->
+  <path d="M99,82 Q100,78 101,82" fill="none" stroke="#5A7A9D" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Temple arms -->
+  <path d="M59,88 L50,84" fill="none" stroke="#5A7A9D" stroke-width="2" stroke-linecap="round"/>
+  <path d="M141,88 L150,84" fill="none" stroke="#5A7A9D" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Beak -->
+  <path d="M95,108 L100,117 L105,108" fill="#FFD166" stroke="#E8B040" stroke-width="1" stroke-linejoin="round"/>
+
+  <!-- Smile -->
+  <path d="M90,120 Q100,127 110,120" fill="none" stroke="#5A806C" stroke-width="1.8" stroke-linecap="round"/>
+
+  <!-- Blush -->
+  <ellipse cx="62" cy="108" rx="8" ry="5" fill="#FFADAD" opacity="0.35"/>
+  <ellipse cx="138" cy="108" rx="8" ry="5" fill="#FFADAD" opacity="0.35"/>
+
+  <!-- Wings - curl forward to hold the book -->
+  <path d="M50,108 C32,124 36,148 50,156 C56,160 66,154 74,148" fill="#5EA87C" stroke="#4E9870" stroke-width="1"/>
+  <path d="M150,108 C168,124 164,148 150,156 C144,160 134,154 126,148" fill="#5EA87C" stroke="#4E9870" stroke-width="1"/>
+
+  <!-- Book held by wings -->
+  <rect x="74" y="145" width="52" height="24" rx="3" fill="#5A7A9D" stroke="#4A6A8D" stroke-width="1"/>
+  <!-- Spine -->
+  <line x1="100" y1="145" x2="100" y2="169" stroke="#4A6A8D" stroke-width="1.5"/>
+  <!-- Page lines -->
+  <rect x="78" y="150" width="18" height="2" rx="1" fill="#8AB4D8" opacity="0.6"/>
+  <rect x="78" y="155" width="14" height="2" rx="1" fill="#8AB4D8" opacity="0.6"/>
+  <rect x="104" y="150" width="18" height="2" rx="1" fill="#8AB4D8" opacity="0.6"/>
+  <rect x="104" y="155" width="12" height="2" rx="1" fill="#8AB4D8" opacity="0.6"/>
+
+  <!-- Feet peeking below -->
+  <ellipse cx="85" cy="175" rx="10" ry="4" fill="#FFD166" stroke="#E8B040" stroke-width="0.8"/>
+  <ellipse cx="115" cy="175" rx="10" ry="4" fill="#FFD166" stroke="#E8B040" stroke-width="0.8"/>
+</svg>

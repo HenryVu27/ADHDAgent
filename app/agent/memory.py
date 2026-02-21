@@ -17,9 +17,10 @@ logger = logging.getLogger(__name__)
 class MemoryManager:
     """Manages rolling summaries, fact extraction, and episodic memories."""
 
-    def __init__(self, session_store: SessionStoreBase, gemini_client):
+    def __init__(self, session_store: SessionStoreBase, gemini_client, event_bus=None):
         self._store = session_store
         self._gemini = gemini_client
+        self._event_bus = event_bus
 
     async def post_turn_tasks(
         self,
@@ -88,6 +89,8 @@ class MemoryManager:
 - Parent's emotional state and concerns
 - Any outcomes or progress reported
 
+Omit: greetings, small talk, generic acknowledgments, and information already captured in the previous summary.
+
 {f"Previous summary: {prior_summary}" if prior_summary else ""}
 
 New conversation to incorporate:
@@ -96,12 +99,14 @@ New conversation to incorporate:
 Write a concise summary (2-4 sentences) that captures the most important context for continuing this conversation."""
 
         try:
-            summary_text = await self._gemini.generate(prompt, temperature=0.3)
+            summary_text = await self._gemini.generate(prompt, temperature=0.0)
             self._store.save_summary(
                 session_id,
                 SessionSummary(summary=summary_text.strip(), covers_through_turn=current_turn),
             )
             logger.info("Summary updated for session %s through turn %d", session_id, current_turn)
+            if self._event_bus:
+                self._event_bus.emit("memory", "summary_updated", session_id, current_turn)
         except Exception as e:
             logger.error("Summary generation failed for session %s: %s", session_id, e)
             raise
@@ -111,17 +116,44 @@ Write a concise summary (2-4 sentences) that captures the most important context
         if not self._gemini:
             return
 
+        # Include recent conversation history so pronouns can be resolved
+        state = self._store.get(session_id)
+        recent_history = state.conversation_history[-3:]
+        history_text = ""
+        if recent_history:
+            lines = []
+            for entry in recent_history:
+                if entry.get("role") == "user":
+                    lines.append(f"Parent: {entry['content']}")
+                elif entry.get("role") == "assistant":
+                    lines.append(f"Coach: {entry['content']}")
+            history_text = "\n".join(lines)
+
+        # Include current profile so we know what's already captured
+        profile = state.family_profile
+        known_facts = []
+        if profile.child_name:
+            known_facts.append(f"child_name: {profile.child_name}")
+        if profile.child_age:
+            known_facts.append(f"child_age: {profile.child_age}")
+        profile_text = ", ".join(known_facts) if known_facts else "None yet"
+
         prompt = f"""Extract any family profile facts from this parent's message about their child with ADHD.
-Return a JSON object with only the fields that are explicitly mentioned. Valid fields:
+Return a JSON object with only the fields that are explicitly mentioned or clearly implied. Valid fields:
 - child_name (string)
-- child_age (string)
-- diagnosis_status (string: "diagnosed", "suspected", "evaluating")
+- child_age (string, e.g. "7" or "8-9" if ambiguous)
+- diagnosis_status (string: "diagnosed", "suspected", "evaluating", "not diagnosed")
 - challenge_areas (list of strings)
 - attempted_strategies (list of strings)
 - good_day_description (string)
 - hardest_situations (list of strings)
 
-If no profile facts are mentioned, return an empty object {{}}.
+If the parent corrects previously shared information, extract the CORRECTED value.
+If information is ambiguous, use the parent's phrasing (e.g., "about 8 or 9" -> "8-9").
+If no NEW profile facts are mentioned, return an empty object {{}}.
+
+Already known: {profile_text}
+{f"Recent conversation context:{chr(10)}{history_text}" if history_text else ""}
 
 Parent message: "{user_message}"
 """
@@ -142,6 +174,9 @@ Parent message: "{user_message}"
                         "Facts extracted for session %s (turn %d): %s",
                         session_id, turn, list(filtered.keys()),
                     )
+                    if self._event_bus:
+                        self._event_bus.emit("memory", "facts_extracted", session_id, turn,
+                                             detail={"fields": list(filtered.keys())})
         except Exception as e:
             logger.error("Fact extraction failed for session %s: %s", session_id, e)
             raise
@@ -179,6 +214,9 @@ Parent message: "{user_message}"
                 "Episode created for session %s: %s -> %s",
                 session_id, strategy_name, outcome,
             )
+            if self._event_bus:
+                self._event_bus.emit("memory", "episode_created", session_id, turn,
+                                     detail={"strategy": strategy_name, "outcome": outcome})
 
     @staticmethod
     def _infer_emotion(message: str) -> str:

@@ -14,6 +14,7 @@ from app.models.schemas import (
 )
 from app.rag.knowledge_store import KnowledgeStore
 from app.rag.query_rewriter import QueryRewriter
+from app.rag.reranker import GeminiReranker
 
 logger = logging.getLogger(__name__)
 
@@ -28,10 +29,12 @@ class HybridRetriever:
         knowledge_store: KnowledgeStore,
         gemini_client=None,
         query_rewriter: QueryRewriter | None = None,
+        reranker: GeminiReranker | None = None,
     ):
         self._store = knowledge_store
         self._gemini = gemini_client
         self._rewriter = query_rewriter
+        self._reranker = reranker
 
     # Full retrieval pipeline: rewrite -> hybrid search -> facets -> trim
     async def retrieve(
@@ -62,12 +65,17 @@ class HybridRetriever:
                 search_query = rewritten
 
         # Step 2: Hybrid search (RRF + tag boosting)
-        candidates = await self._hybrid_search(search_query, top_k, filters)
+        fetch_k = (settings.RAG_RERANK_CANDIDATES if self._reranker else top_k)
+        candidates = await self._hybrid_search(search_query, fetch_k, filters)
 
-        # Step 3: Compute facets
+        # Step 3: Rerank (optional, behind config flag)
+        if self._reranker and len(candidates) > top_k:
+            candidates = await self._reranker.rerank(search_query, candidates, top_k)
+
+        # Step 4: Compute facets
         facets = self._compute_facets(candidates)
 
-        # Step 4: Trim to top_k
+        # Step 5: Trim to top_k
         results = candidates[:top_k]
 
         return RetrievalResponse(
@@ -125,8 +133,10 @@ class HybridRetriever:
             chunk = self._store.chunks[chunk_idx]
 
             boost = 0.0
-            chunk_tags = {t.lower() for t in chunk["tags"]}
-            matches = query_tags & chunk_tags
+            chunk_tag_words = set()
+            for t in chunk["tags"]:
+                chunk_tag_words.update(t.lower().replace("_", " ").split())
+            matches = query_tags & chunk_tag_words
             if matches:
                 boost = TAG_BOOST * len(matches)
 
@@ -148,10 +158,12 @@ class HybridRetriever:
         results = []
         for chunk in self._store.chunks:
             chunk_text = chunk["text"].lower()
-            chunk_tags = {t.lower() for t in chunk["tags"]}
+            chunk_tag_words = set()
+            for t in chunk["tags"]:
+                chunk_tag_words.update(t.lower().replace("_", " ").split())
 
             score = sum(1.0 for term in query_terms if term in chunk_text)
-            tag_matches = query_terms & chunk_tags
+            tag_matches = query_terms & chunk_tag_words
             score += 2.0 * len(tag_matches)
 
             if score > 0:
@@ -174,6 +186,7 @@ class HybridRetriever:
             document_type=chunk.get("document_type", ""),
             age_range=chunk.get("age_range", []),
             citations=chunk.get("citations", []),
+            full_doc=chunk.get("full_doc", {}),
         )
 
     # Aggregate facet counts over retrieval results

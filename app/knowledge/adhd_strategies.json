@@ -1,130 +1,849 @@
 [
   {
-    "id": "visual_schedule",
-    "name": "Visual Schedule",
-    "description": "Create a visual chart showing the sequence of daily activities using pictures or icons. Children with ADHD often process visual information more effectively than verbal instructions. A visual schedule reduces the need for repeated verbal reminders and gives the child a sense of predictability and control.",
-    "tags": ["daily_routines", "morning", "bedtime", "routine", "transitions"],
-    "steps": [
-      "Choose 3-5 key daily activities to start (morning routine, after school, bedtime)",
-      "Use pictures, drawings, or printed icons the child can relate to",
-      "Place the schedule where the child can easily see it",
-      "Walk through the schedule together the first few times",
-      "Let the child check off or move items as they complete them",
-      "Celebrate when the routine is followed, even partially"
+    "id": "schoolbased_interventions_for_adhd",
+    "name": "School-Based Interventions for ADHD",
+    "description": "This includes a menu of options that can be implemented in the school setting to support children with ADHD. These interventions are tailored to specific needs and can include rewards, daily progress tracking, and academic support.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "homework_support",
+      "positive_reinforcement"
     ],
-    "evidence_level": "strong",
-    "source": "AAP Clinical Practice Guidelines for ADHD"
-  },
-  {
-    "id": "first_then_board",
-    "name": "First-Then Board",
-    "description": "A simple visual tool that shows what the child needs to do FIRST, followed by a preferred activity THEN. This leverages the Premack Principle - using a preferred activity as natural reinforcement for a less preferred one. Especially effective for transitions and task initiation.",
-    "tags": ["transitions", "homework", "avoidance", "task", "daily_routines"],
-    "steps": [
-      "Get a simple board or paper divided into two sections: FIRST and THEN",
-      "Place a picture or word for the required task in the FIRST section",
-      "Place a picture or word for the preferred activity in the THEN section",
-      "Show the board to the child before starting the transition",
-      "Keep the language simple: 'First homework, then iPad'",
-      "Follow through consistently - the THEN activity must happen after FIRST is done"
-    ],
-    "evidence_level": "strong",
-    "source": "Applied Behavior Analysis best practices"
-  },
-  {
-    "id": "timer_technique",
-    "name": "Timer Technique (Time Boxing)",
-    "description": "Break tasks into short, timed intervals with breaks in between. Children with ADHD often struggle with time perception and sustained attention. Using a visible timer makes time concrete and the end of the work period predictable.",
-    "tags": ["homework", "attention", "distraction", "focus"],
-    "steps": [
-      "Start with short intervals (5-10 minutes for younger children, 15-20 for older)",
-      "Use a visual timer the child can see counting down",
-      "Set a clear, specific goal for each interval",
-      "Take a 2-5 minute break between intervals",
-      "Gradually increase work intervals as the child builds stamina",
-      "Pair with positive reinforcement after completed intervals"
-    ],
-    "evidence_level": "strong",
-    "source": "Evidence-based interventions for ADHD in school settings"
-  },
-  {
-    "id": "calm_down_corner",
-    "name": "Calm-Down Corner",
-    "description": "A designated space where the child can go to regulate their emotions. This is NOT a punishment - it's a proactive tool that teaches self-regulation. The space should feel safe, comfortable, and stocked with sensory tools.",
-    "tags": ["emotional_dysregulation", "emotion", "meltdown", "anger", "frustration"],
-    "steps": [
-      "Choose a quiet corner or small space in the home together with your child",
-      "Stock it with calming items: soft pillows, stress balls, noise-canceling headphones, fidgets",
-      "Add visual coping strategy cards (breathe, count, squeeze)",
-      "Practice using it when the child is calm - not during a meltdown",
-      "Model using it yourself: 'I'm feeling frustrated, I'm going to take a moment in the calm corner'",
-      "Never force the child to go there - it should feel like a safe choice"
+    "age_range": [
+      "school_age",
+      "adolescent"
     ],
     "evidence_level": "moderate",
-    "source": "Collaborative & Proactive Solutions (Dr. Ross Greene)"
+    "source": "Page et al.: Treatment Cost Analysis (2016)",
+    "citations": [
+      {
+        "source_file": "page_2016_cost_analysis.txt",
+        "source_name": "Treatment Cost Analysis (2016) (Page et al.)",
+        "detail": "Treatment Cost Analysis (2016) (Page et al.) - Description of Behavior Modification modality components."
+      },
+      {
+        "source_file": "wolraich_2011_aap_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2011) (AAP)",
+        "detail": "AAP Clinical Practice Guideline (2011) - AREAS FOR FUTURE RESEARCH"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Establish a school-home Daily Report Card with teacher consultation.",
+      "Implement school-based reward systems.",
+      "Utilize classroom contingency management systems (group or individual).",
+      "Consider time-out procedures in school if needed.",
+      "Provide tutoring for academic support.",
+      "Offer organizational skills training.",
+      "Implement homework skills training.",
+      "Use paraprofessional-implemented school reward programs."
+    ]
   },
   {
-    "id": "specific_praise",
-    "name": "Specific Labeled Praise",
-    "description": "Instead of general praise ('good job'), describe exactly what the child did well. Children with ADHD receive disproportionate negative feedback. Specific praise reinforces desired behaviors and builds the child's understanding of what 'good' looks like.",
-    "tags": ["positive_reinforcement", "behavioral_strategies", "daily_routines"],
-    "steps": [
-      "Notice the behavior you want to see more of",
-      "Describe it specifically: 'I noticed you started your homework without being asked'",
-      "Praise the effort, not the outcome: 'You worked really hard on that'",
-      "Be immediate - praise right when you see the behavior",
-      "Aim for a 5:1 ratio of positive to corrective comments",
-      "Be genuine - children can tell when praise is forced"
+    "id": "parent_training_in_behavior_therapy",
+    "name": "Parent Training in Behavior Therapy",
+    "description": "Parent training in behavior therapy equips parents with skills to manage their child's behavior more effectively and strengthen their relationship. This is a core component of behavior therapy, especially for younger children.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "communication_skills",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age"
     ],
     "evidence_level": "strong",
-    "source": "Parent-Child Interaction Therapy (PCIT)"
+    "source": "CDC: Behavior Therapy Overview",
+    "citations": [
+      {
+        "source_file": "cdc_behavior_therapy_overview_pdf.txt",
+        "source_name": "Behavior Therapy Overview (CDC)",
+        "detail": "Behavior Therapy Overview (CDC) - Types of Behavior Therapy"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Learn specific skills to better manage your child's behavior.",
+      "Practice techniques to encourage positive behaviors.",
+      "Implement strategies to discourage unwanted or problem behaviors.",
+      "Focus on strengthening your relationship with your child.",
+      "Work with a therapist to learn and apply these skills consistently.",
+      "Monitor your child's progress and adjust strategies as needed."
+    ]
   },
   {
-    "id": "countdown_warnings",
-    "name": "Countdown Transition Warnings",
-    "description": "Give advance warnings before transitions happen. Children with ADHD often hyperfocus and struggle to shift attention. Countdown warnings give the brain time to prepare for the shift, reducing meltdowns and resistance during transitions.",
-    "tags": ["transitions", "screen_time", "activity_switching"],
-    "steps": [
-      "Give a 10-minute warning: 'In 10 minutes, we'll be turning off the TV'",
-      "Give a 5-minute warning with a visual cue",
-      "Give a 2-minute warning: 'Two more minutes, then it's time for dinner'",
-      "Give a final 30-second heads up",
-      "Use a consistent phrase: 'Time to switch!'",
-      "Acknowledge that transitions are hard: 'I know it's tough to stop when you're having fun'"
+    "id": "behavioral_classroom_management",
+    "name": "Behavioral Classroom Management",
+    "description": "This strategy encourages positive behaviors in the classroom through rewards and discourages negative behaviors. It aims to improve student behavior and increase academic engagement.",
+    "document_type": "strategy",
+    "tags": [
+      "positive_reinforcement",
+      "behavioral_strategies",
+      "daily_routines"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
     ],
     "evidence_level": "strong",
-    "source": "CHADD (Children and Adults with ADHD) recommended practices"
+    "source": "CDC: ADHD in the Classroom",
+    "citations": [
+      {
+        "source_file": "cdc_classroom.txt",
+        "source_name": "ADHD in the Classroom (CDC)",
+        "detail": "Classroom treatment strategies for students with ADHD - Behavioral classroom management"
+      },
+      {
+        "source_file": "wolraich_2011_aap_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2011) (AAP)",
+        "detail": "TABLE 1. Evidence-Based Behavioral Treatments for ADHD"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Work with the teacher to establish a reward system for positive classroom behaviors.",
+      "Implement a daily report card to track and communicate behaviors between school and home.",
+      "Identify specific negative behaviors to discourage.",
+      "Collaborate with school staff to consistently apply consequences for negative behaviors.",
+      "Focus on reinforcing desired actions to shape behavior constructively.",
+      "Ensure the plan is consistently followed by trained school staff."
+    ]
   },
   {
-    "id": "chunking",
-    "name": "Task Chunking",
-    "description": "Break large tasks into smaller, manageable pieces. Large tasks can feel overwhelming for children with ADHD, leading to avoidance. Chunking makes each piece feel achievable and provides natural stopping points for reinforcement.",
-    "tags": ["homework", "avoidance", "task", "organization"],
-    "steps": [
-      "Look at the full task together and identify natural breaking points",
-      "Write each chunk on a separate sticky note or checklist item",
-      "Focus on one chunk at a time - cover or hide the rest",
-      "Celebrate each completed chunk before moving to the next",
-      "Take short breaks between chunks if needed",
-      "Let the child choose the order of chunks when possible"
+    "id": "summer_treatment_programs_for_adhd",
+    "name": "Summer Treatment Programs for ADHD",
+    "description": "Intensive summer treatment programs offer a structured environment for children with ADHD to receive comprehensive behavioral interventions. These programs often combine daily group and individual therapy with recreational activities.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "daily_routines",
+      "homework_support"
+    ],
+    "age_range": [
+      "school_age"
     ],
     "evidence_level": "strong",
-    "source": "Executive function intervention research"
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Pelham, W. E. & Hoza, B. (1996). Intensive treatment: A summer treatment program for children with ADHD. In E. Hibbs & P. Jensen (Eds.), Psychosocial Treatments for Child and Adolescent Disorders: Empirically Based Strategies for Clinical Practice. (pp. 311 -340). New York: APA Press."
+      },
+      {
+        "source_file": "pelham_2016_treatment_sequencing.txt",
+        "source_name": "Treatment Sequencing Study (2016) (Pelham et al.)",
+        "detail": "Pelham WE, Gnagy EM, Greiner AR, Waschbusch DA, Fabiano GA, Burrows-MacLean L. Summer Treatment Programs for Attention Deficit/Hyperactivity Disorder. In: Kazdin AE, Weisz JR, editors. Evidence-Based Psychotherapies for Children and Adolescents. 2. New York: The Guilford Press; 2010. pp. 277\u2013292."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Enroll child in a specialized summer program designed for ADHD.",
+      "Ensure the program includes behavioral management strategies.",
+      "Look for programs that incorporate social skills training.",
+      "Confirm the program has components for academic support if needed.",
+      "Discuss with program staff how to generalize learned skills to home and school.",
+      "Maintain consistency with learned strategies after the program concludes."
+    ]
   },
   {
-    "id": "emotion_naming",
-    "name": "Emotion Naming and Validation",
-    "description": "Help the child identify and name their emotions without judgment. Children with ADHD often experience emotions more intensely and struggle to identify what they're feeling. Naming emotions activates the prefrontal cortex and begins the regulation process.",
-    "tags": ["emotional_dysregulation", "emotion", "anger", "frustration", "anxiety"],
-    "steps": [
-      "Notice emotional cues: 'I can see your fists are clenched and your face is red'",
-      "Offer a label: 'It looks like you might be feeling really frustrated'",
-      "Validate the feeling: 'It makes sense to feel frustrated when something is hard'",
-      "Separate the feeling from the behavior: 'It's okay to be angry. It's not okay to throw things'",
-      "Help identify the trigger: 'What happened right before you started feeling this way?'",
-      "Practice when calm - use emotion charts, books, or games to build vocabulary"
+    "id": "homebased_daily_report_card_drc",
+    "name": "Home-Based Daily Report Card (DRC)",
+    "description": "A daily report card system used at home to track a child's behavior and performance at school. Parents provide rewards based on the child's performance documented on the DRC, reinforcing positive behavior.",
+    "document_type": "strategy",
+    "tags": [
+      "positive_reinforcement",
+      "daily_routines",
+      "communication_skills"
+    ],
+    "age_range": [
+      "school_age"
     ],
     "evidence_level": "strong",
-    "source": "Emotion-Focused Therapy and Social-Emotional Learning research"
+    "source": "Pelham et al.: Treatment Sequencing Study (2016)",
+    "citations": [
+      {
+        "source_file": "pelham_2016_treatment_sequencing.txt",
+        "source_name": "Treatment Sequencing Study (2016) (Pelham et al.)",
+        "detail": "Initial Treatments - BehFirst condition"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Work with the child's teacher to establish a daily report card (DRC) that tracks specific behaviors or performance areas at school.",
+      "Send the DRC home with the child each day.",
+      "Review the DRC with the child each evening.",
+      "Provide daily rewards for good performance as indicated on the DRC.",
+      "Provide weekly rewards for overall good performance throughout the week.",
+      "Regularly communicate with the teacher about adjustments to the DRC and interventions."
+    ]
+  },
+  {
+    "id": "parent_training_and_schoolbased_behavior_plans",
+    "name": "Parent Training and School-Based Behavior Plans",
+    "description": "Implementing behavior modification strategies at school, including parent training and a daily report card (DRC) system linked to home rewards, can be a highly effective initial approach for managing ADHD symptoms in the school setting.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "daily_routines",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "Pelham et al.: Treatment Sequencing Study (2016)",
+    "citations": [
+      {
+        "source_file": "pelham_2016_treatment_sequencing.txt",
+        "source_name": "Treatment Sequencing Study (2016) (Pelham et al.)",
+        "detail": "pelham_2016_treatment_sequencing.txt - Description of BehFirst initial treatment"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Participate in eight sessions of group parent training.",
+      "Work with the school to establish a Daily Report Card (DRC) for your child.",
+      "Define specific target behaviors for the DRC that are observable and measurable at school.",
+      "Establish a system of rewards at home that are contingent upon the child meeting goals on the DRC.",
+      "Consistently monitor the DRC and provide agreed-upon rewards for positive behavior.",
+      "Collaborate with school staff to review and adjust the DRC as needed."
+    ]
+  },
+  {
+    "id": "daily_behavior_report_cards",
+    "name": "Daily Behavior Report Cards",
+    "description": "Daily Behavior Report Cards (DBRCs) are a tool used to track and manage a child's behavior at home and school. They provide a structured way to monitor target behaviors and implement interventions, offering feedback to both the child and parents.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "homework_support",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "Pelham et al.: Treatment Sequencing Study (2016)",
+    "citations": [
+      {
+        "source_file": "pelham_2016_treatment_sequencing.txt",
+        "source_name": "Treatment Sequencing Study (2016) (Pelham et al.)",
+        "detail": "Volpe R, Fabiano GA. Daily Behavior Report Cards: An Evidence-Based System of Assessment and Intervention. New York: The Guilford Press; 2013."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Identify specific target behaviors to be tracked (e.g., completing homework, following instructions).",
+      "Define clear criteria for success for each target behavior.",
+      "Develop a system for rating or scoring the child's performance on these behaviors daily.",
+      "Use the report card to provide immediate feedback to the child.",
+      "Implement a reward system linked to the child's performance on the report card.",
+      "Communicate regularly with the child's teacher to ensure consistency between home and school."
+    ]
+  },
+  {
+    "id": "homework_and_organization_interventions_for_studen",
+    "name": "Homework and Organization Interventions for Students with ADHD",
+    "description": "This involves brief interventions specifically designed to help students with ADHD manage their homework and organizational tasks. These strategies are often implemented by school mental health providers to bridge the gap between research and practice.",
+    "document_type": "strategy",
+    "tags": [
+      "homework_support",
+      "daily_routines"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Clinical Practice Guideline (2019)",
+    "citations": [
+      {
+        "source_file": "aap_2019_guideline.txt",
+        "source_name": "AAP Clinical Practice Guideline (2019) (AAP)",
+        "detail": "AAP Clinical Practice Guideline (2019) - References studies like Langberg et al., 2018."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Identify specific homework challenges the student is facing (e.g., starting tasks, completing assignments, keeping track of materials).",
+      "Implement organizational strategies such as using planners, color-coded folders, or a dedicated homework space.",
+      "Break down large assignments into smaller, more manageable steps.",
+      "Establish a consistent homework routine with designated times and locations.",
+      "Provide positive reinforcement and encouragement for effort and completion of homework tasks.",
+      "Collaborate with school staff to ensure consistency in strategies used at home and school."
+    ]
+  },
+  {
+    "id": "use_calm_discipline_strategies",
+    "name": "Use Calm Discipline Strategies",
+    "description": "Employ discipline methods that are calm and constructive, avoiding physical punishment. Using techniques like time-out or distraction can help manage behavior effectively while maintaining a positive parent-child relationship.",
+    "document_type": "strategy",
+    "tags": [
+      "emotional_regulation",
+      "behavioral_strategies"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "AAP: AAP Behavior Therapy Guide",
+    "citations": [
+      {
+        "source_file": "aap_behavior_therapy.txt",
+        "source_name": "AAP Behavior Therapy Guide (AAP)",
+        "detail": "Use calm discipline."
+      }
+    ],
+    "contraindications": [
+      "Physical punishment, such as spanking or slapping, is not helpful."
+    ],
+    "related_ids": [],
+    "steps": [
+      "When a behavior needs addressing, remain calm.",
+      "Consider using time-out as a consequence.",
+      "Remove the child from the immediate situation if necessary.",
+      "Use distraction to redirect behavior when appropriate.",
+      "Sometimes, ignoring minor misbehavior is the best approach.",
+      "Discuss behavior with the child when both are calm."
+    ]
+  },
+  {
+    "id": "using_positive_reinforcement_structure_and_discipl",
+    "name": "Using Positive Reinforcement, Structure, and Discipline",
+    "description": "A key part of behavior therapy involves teaching parents skills to manage their child's behavior using positive reinforcement, structure, and consistent discipline. This approach helps children learn and improve their conduct.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "CDC: Behavior Therapy for ADHD",
+    "citations": [
+      {
+        "source_file": "cdc_behavior_therapy.txt",
+        "source_name": "Behavior Therapy for ADHD (CDC)",
+        "detail": "Parent Training in Behavior Management for ADHD - What should parents look for in a therapist?"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Learn to use positive reinforcement to reward desired behaviors.",
+      "Establish clear structure and routines in the home environment.",
+      "Implement consistent discipline strategies for misbehavior.",
+      "Focus on teaching positive ways to interact and communicate with your child.",
+      "Practice these skills regularly with your child.",
+      "Work with a therapist to monitor progress and adjust strategies as needed."
+    ]
+  },
+  {
+    "id": "behavior_therapy_with_children",
+    "name": "Behavior Therapy with Children",
+    "description": "This involves a therapist working directly with the child to teach new, positive behaviors that replace problematic ones. It can also help children learn to manage their feelings in healthier ways.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "emotional_regulation"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "CDC: Behavior Therapy Overview",
+    "citations": [
+      {
+        "source_file": "cdc_behavior_therapy_overview_pdf.txt",
+        "source_name": "Behavior Therapy Overview (CDC)",
+        "detail": "Behavior Therapy Overview (CDC) - Types of Behavior Therapy"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Engage in sessions with a therapist trained in ADHD.",
+      "Learn new behaviors to replace those causing problems.",
+      "Practice managing feelings in ways that are constructive.",
+      "Work on handling challenging situations with new coping skills.",
+      "Participate in individual or group therapy sessions as recommended.",
+      "Collaborate with parents and teachers on implementing learned behaviors."
+    ]
+  },
+  {
+    "id": "homeschool_communication_trackers",
+    "name": "Home-School Communication Trackers",
+    "description": "Utilizing communication trackers can foster a stronger partnership between parents and teachers, ensuring consistent support for children with ADHD. These tools help monitor progress and address challenges proactively.",
+    "document_type": "strategy",
+    "tags": [
+      "communication_skills",
+      "homework_support",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "school_age",
+      "preschool"
+    ],
+    "evidence_level": "moderate",
+    "source": "CHADD: School Toolkit",
+    "citations": [
+      {
+        "source_file": "chadd_school_toolkit_pdf.txt",
+        "source_name": "School Toolkit (CHADD)",
+        "detail": "School Toolkit (CHADD) - Home-School Communication Trackers"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Select a communication tracker format that suits your child's grade level (e.g., Daily Behavior Tracker for elementary, Weekly Behavior Tracker for elementary/middle, Organization and Class Participation Tracker for middle/high).",
+      "Work with the teacher to establish a regular system for using the tracker (e.g., daily check-in, end-of-week review).",
+      "Ensure the tracker includes specific areas relevant to ADHD challenges, such as behavior, organization, task completion, and participation.",
+      "Review the tracker regularly with your child to discuss feedback and set goals.",
+      "Use the information from the tracker to inform home routines and support strategies.",
+      "Maintain open communication with the teacher regarding the tracker's content and effectiveness."
+    ]
+  },
+  {
+    "id": "parent_training_for_adhd_behavior_problems",
+    "name": "Parent Training for ADHD Behavior Problems",
+    "description": "Parent training helps families manage impulsive behaviors like tantrums and ignoring instructions by teaching parents to use praise and consistent consequences. This approach aims to reduce conflict at home and improve relationships with adults.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "communication_skills",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "Child Mind Institute: Behavioral Treatments for ADHD",
+    "citations": [
+      {
+        "source_file": "childmind_behavioral_treatments.txt",
+        "source_name": "Behavioral Treatments for ADHD (Child Mind Institute)",
+        "detail": "For behavior problems"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Learn to interact differently with your child to encourage desired behavior.",
+      "Implement consistent consequences for problematic behaviors.",
+      "Utilize praise to reinforce positive actions.",
+      "Focus on eliciting desirable behavior from the child.",
+      "Discourage behaviors that are causing trouble at home or school.",
+      "Practice these skills consistently to help your child generalize them to other settings."
+    ]
+  },
+  {
+    "id": "implementing_a_rewards_chart",
+    "name": "Implementing a Rewards Chart",
+    "description": "Rewards charts can be effective in motivating children with ADHD who are easily distracted or have difficulty acquiring new skills. They provide positive reinforcement for effort and achievement at home and school.",
+    "document_type": "strategy",
+    "tags": [
+      "positive_reinforcement",
+      "homework_support",
+      "daily_routines"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "Child Mind Institute: Behavioral Treatments for ADHD",
+    "citations": [
+      {
+        "source_file": "childmind_behavioral_treatments.txt",
+        "source_name": "Behavioral Treatments for ADHD (Child Mind Institute)",
+        "detail": "childmind_behavioral_treatments.txt: rewards chart"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Identify specific target behaviors or skills to be rewarded (e.g., completing homework, following a routine).",
+      "Determine the reward system (e.g., points, stickers, small privileges).",
+      "Create a chart where progress can be tracked visually.",
+      "Clearly communicate the expectations and rewards to the child.",
+      "Consistently award points or rewards as behaviors are demonstrated.",
+      "Periodically review progress and adjust the chart as needed."
+    ]
+  },
+  {
+    "id": "school_intervention_for_adhd",
+    "name": "School Intervention for ADHD",
+    "description": "This focuses on managing ADHD behaviors within the school environment, improving academic performance, and fostering positive peer relationships. It involves training teachers to implement effective classroom management strategies.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "homework_support",
+      "communication_skills"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "moderate",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "School Intervention section"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Consult with a professional (therapist, school psychologist, counselor) for teacher training.",
+      "Teachers learn and implement classroom management skills for the ADHD child.",
+      "Focus on classroom behavior, academic performance, and peer interactions.",
+      "Plan for potential behavioral regressions and involve all relevant school staff.",
+      "Integrate school strategies with parenting classes so parents can support school efforts at home.",
+      "Ensure integration with school-wide plans like IEPs or 504 plans."
+    ]
+  },
+  {
+    "id": "child_intervention_for_adhd",
+    "name": "Child Intervention for ADHD",
+    "description": "This involves direct work with the child to build essential life skills, manage challenging behaviors, and improve social interactions. The aim is to enhance competencies in various areas of the child's life.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "emotional_regulation",
+      "communication_skills"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "moderate",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Child Intervention section"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Focus on teaching academic, recreational, and social/behavioral skills.",
+      "Work on decreasing aggressive behaviors and developing friendships.",
+      "Build the child's self-efficacy and confidence.",
+      "Interventions are often implemented by paraprofessionals under professional supervision.",
+      "Consider settings like clinic-based weekly group sessions, after-school programs, or summer camps.",
+      "Note that less intensive treatments like weekly social skills groups may not be effective; more intensive approaches are often necessary."
+    ]
+  },
+  {
+    "id": "implementing_behavior_modification_programs_abc_mo",
+    "name": "Implementing Behavior Modification Programs (A-B-C Model)",
+    "description": "This strategy involves understanding and modifying the environmental conditions (antecedents) and consequences that influence a child's target behaviors. By learning and applying these principles, parents and teachers can help change the child's behavior effectively.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "daily_routines"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "How does a behavior modification program begin?"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "After identifying target behaviors, work with parents and teachers to identify the environmental conditions (A's) that precede the behavior.",
+      "Identify the consequences (C's) that follow the target behavior.",
+      "Learn and establish programs where environmental antecedents are modified to encourage desired behaviors.",
+      "Learn and establish programs where consequences are modified to encourage desired behaviors or discourage undesired ones.",
+      "Constantly monitor the child's response to treatment.",
+      "Modify interventions when they are not having a sufficient impact or are no longer needed."
+    ]
+  },
+  {
+    "id": "using_appropriate_commands",
+    "name": "Using Appropriate Commands",
+    "description": "Effective commands are clear, specific, and delivered with a neutral tone to ensure children understand and comply. This technique helps reduce frustration for both parent and child by setting clear expectations.",
+    "document_type": "strategy",
+    "tags": [
+      "communication_skills",
+      "behavioral_strategies"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Using appropriate commands (under Parent Training topics)"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Gain the child's attention first by saying their name.",
+      "Use command language (e.g., 'Do this') rather than question language (e.g., 'Don't you want to...').",
+      "Be specific about what you want the child to do.",
+      "Keep commands brief and age-appropriate.",
+      "State the consequences for compliance and noncompliance.",
+      "Deliver commands with a firm but neutral tone of voice, avoiding anger."
+    ]
+  },
+  {
+    "id": "classroom_rules_and_structure",
+    "name": "Classroom Rules and Structure",
+    "description": "Establishing clear and consistent classroom rules and a predictable environment can significantly improve a child's behavior and task engagement in school. This involves defining expectations, posting them, and consistently providing feedback and consequences.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "daily_routines"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "School Interventions - Classroom rules and structure"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Define clear, objective, and measurable classroom rules (e.g., 'Be respectful of others,' 'Stay on task').",
+      "Post the rules and review them regularly, especially at the beginning of each class, until they are learned.",
+      "Establish a predictable daily environment to help the child know what to expect.",
+      "Enhance the child's organization with tools like folders or charts for their work.",
+      "Consistently evaluate rule-following and provide feedback and consequences.",
+      "Tailor the frequency of feedback to the child's developmental level."
+    ]
+  },
+  {
+    "id": "daily_schoolhome_report_card",
+    "name": "Daily School-Home Report Card",
+    "description": "This is a communication tool for parents and teachers to monitor and manage classroom behavior problems. It involves setting individualized target behaviors, tracking them daily, and using home-based rewards to encourage improvement.",
+    "document_type": "strategy",
+    "tags": [
+      "communication_skills",
+      "positive_reinforcement",
+      "behavioral_strategies"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Daily School-Home Report Card"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Work with the teacher to identify, monitor, and change specific classroom problems.",
+      "Determine individualized target behaviors with the teacher.",
+      "Have the teacher evaluate the child's performance on these targets at school.",
+      "Send the report home with the child daily for parent review.",
+      "Provide home-based rewards, with more rewards for better performance and fewer for lesser performance.",
+      "Continually monitor and adjust targets and criteria as behavior improves or new problems develop, always in the context of other behavioral components (commands, praise, rules, academic programs)."
+    ]
+  },
+  {
+    "id": "systematic_teaching_of_social_skills_for_children",
+    "name": "Systematic Teaching of Social Skills for Children",
+    "description": "This intervention teaches children specific social skills that are essential for positive peer interactions. It aims to equip children with the tools to navigate social situations more effectively.",
+    "document_type": "strategy",
+    "tags": [
+      "communication_skills",
+      "behavioral_strategies"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Child Interventions section, point 1"
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Teach cooperation skills.",
+      "Teach communication skills.",
+      "Encourage being positive and friendly.",
+      "Promote participation in group activities.",
+      "Teach helping and sharing behaviors.",
+      "Practice giving compliments and coping with teasing."
+    ]
+  },
+  {
+    "id": "childrens_summer_treatment_program_manual",
+    "name": "Children's Summer Treatment Program Manual",
+    "description": "This manual outlines a comprehensive summer program for children with ADHD, focusing on improving their behavior, social skills, and academic performance. It integrates various therapeutic and educational components.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "homework_support",
+      "daily_routines"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Pelham, W. E., Greiner, A. R. & Gnagy, E. M. (1997). Children's summer treatment program manual . Buffalo, NY: Comprehensive Treatment for Attention Deficit Disorders."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Implement a structured daily schedule with clear expectations.",
+      "Use a token economy or reward system to reinforce positive behavior.",
+      "Provide opportunities for social skills training.",
+      "Offer academic support and homework assistance.",
+      "Incorporate physical activity and recreational breaks."
+    ]
+  },
+  {
+    "id": "enhanced_triple_p_positive_parenting_program",
+    "name": "Enhanced Triple P (Positive Parenting Program)",
+    "description": "Enhanced Triple P is a parenting program designed to equip parents with skills to manage child behavior and promote positive development. It offers a structured approach to addressing common parenting challenges.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "communication_skills",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Sanders, M. R., Markie-Dadds, C., and Turner, K. M. T. (1998). Facilitator's kit for Enhanced Triple P . Brisbane, Queensland, Australia: Familes International."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Learn to set realistic expectations for your child's behavior.",
+      "Practice positive attention and encouragement.",
+      "Use effective discipline strategies, including setting limits and consequences.",
+      "Encourage child independence and responsibility.",
+      "Take care of your own well-being as a parent."
+    ]
+  },
+  {
+    "id": "standard_triple_p_positive_parenting_program",
+    "name": "Standard Triple P (Positive Parenting Program)",
+    "description": "Standard Triple P is a parenting program that provides parents with practical strategies to manage child behavior and build positive relationships. It focuses on promoting desirable behaviors and reducing problematic ones.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "communication_skills",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Sanders, M. R., Markie-Dadds, C., and Turner, K. M. T. (1998). Practitioner's kit for Standard Triple P . Brisbane, Queensland, Australia: Familes International."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Learn to identify and understand your child's behavior.",
+      "Develop strategies for promoting positive behavior through praise and rewards.",
+      "Implement consistent rules and consequences for misbehavior.",
+      "Build a positive and supportive parent-child relationship.",
+      "Manage your own stress and emotions effectively."
+    ]
+  },
+  {
+    "id": "the_incredible_years",
+    "name": "The Incredible Years",
+    "description": "The Incredible Years is a program that provides parents with strategies to promote children's social, emotional, and academic competence. It focuses on building positive parent-child relationships and reducing challenging behaviors.",
+    "document_type": "strategy",
+    "tags": [
+      "behavioral_strategies",
+      "emotional_regulation",
+      "positive_reinforcement"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age"
+    ],
+    "evidence_level": "strong",
+    "source": "FIU/CCFP: Psychosocial Treatment Fact Sheet",
+    "citations": [
+      {
+        "source_file": "fiu_psychosocial.txt",
+        "source_name": "Psychosocial Treatment Fact Sheet (FIU/CCFP)",
+        "detail": "Webster-Stratton, C. The Incredible Years. www.incredibleyears.com ."
+      }
+    ],
+    "contraindications": [],
+    "related_ids": [],
+    "steps": [
+      "Engage in play with your child to build rapport.",
+      "Use praise and encouragement to reinforce positive behaviors.",
+      "Set clear limits and use effective discipline strategies.",
+      "Teach problem-solving and emotional regulation skills.",
+      "Practice self-care to manage parental stress."
+    ]
   }
 ]

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Focus Heart - love & patience mascot for parenting -->
+  <defs>
+    <radialGradient id="heartBodyGrad" cx="50%" cy="38%" r="55%">
+      <stop offset="0%" stop-color="#FFBFB0"/>
+      <stop offset="100%" stop-color="#E88A72"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Sparkles -->
+  <circle cx="38" cy="42" r="2.5" fill="#FFD166" opacity="0.5">
+    <animate attributeName="opacity" values="0.3;0.9;0.3" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="164" cy="48" r="2" fill="#B8A9D4" opacity="0.4">
+    <animate attributeName="opacity" values="0.2;0.7;0.2" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <g opacity="0.5">
+    <line x1="152" y1="34" x2="160" y2="34" stroke="#8FC4A8" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="156" y1="30" x2="156" y2="38" stroke="#8FC4A8" stroke-width="1.5" stroke-linecap="round"/>
+    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite"/>
+  </g>
+
+  <!-- Shadow -->
+  <ellipse cx="100" cy="180" rx="42" ry="5" fill="#E0D0C8" opacity="0.25"/>
+
+  <!-- Heart body - smooth, symmetric -->
+  <path d="M100,162
+    C100,162 32,120 32,76
+    C32,48 56,36 78,48
+    C88,54 94,64 100,72
+    C106,64 112,54 122,48
+    C144,36 168,48 168,76
+    C168,120 100,162 100,162Z"
+    fill="url(#heartBodyGrad)"
+    stroke="#D4705A"
+    stroke-width="1.5"
+  />
+
+  <!-- Highlight/shine -->
+  <path d="M58,66 Q52,56 62,52 Q70,48 74,58"
+    fill="white" opacity="0.2"/>
+
+  <!-- Eyes -->
+  <circle cx="78" cy="90" r="6" fill="#5D3530"/>
+  <circle cx="122" cy="90" r="6" fill="#5D3530"/>
+  <!-- Primary highlights -->
+  <circle cx="81" cy="87" r="2.8" fill="white"/>
+  <circle cx="125" cy="87" r="2.8" fill="white"/>
+  <!-- Secondary highlights -->
+  <circle cx="76" cy="93" r="1.5" fill="white" opacity="0.5"/>
+  <circle cx="120" cy="93" r="1.5" fill="white" opacity="0.5"/>
+
+  <!-- Warm smile -->
+  <path d="M84,108 Q100,122 116,108" fill="none" stroke="#5D3530" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Blush -->
+  <ellipse cx="64" cy="100" rx="9" ry="5.5" fill="#FF9E8A" opacity="0.4"/>
+  <ellipse cx="136" cy="100" rx="9" ry="5.5" fill="#FF9E8A" opacity="0.4"/>
+
+  <!-- Arms reaching for a hug -->
+  <!-- Left arm -->
+  <path d="M38,92 Q22,100 18,112 Q16,120 24,122"
+    fill="none" stroke="#E88A72" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="24" cy="124" r="6" fill="#FFBFB0" stroke="#E88A72" stroke-width="1.2"/>
+  <!-- Right arm -->
+  <path d="M162,92 Q178,100 182,112 Q184,120 176,122"
+    fill="none" stroke="#E88A72" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="176" cy="124" r="6" fill="#FFBFB0" stroke="#E88A72" stroke-width="1.2"/>
+
+  <!-- Floating mini hearts -->
+  <g opacity="0.55">
+    <path d="M52,34 C52,30 46,28 46,32 C46,36 52,40 52,40 C52,40 58,36 58,32 C58,28 52,30 52,34Z"
+      fill="#E86B55"/>
+    <animateTransform attributeName="transform" type="translate" values="0,0;0,-5;0,0" dur="2.8s" repeatCount="indefinite"/>
+  </g>
+  <g opacity="0.35">
+    <path d="M150,28 C150,25 146,23 146,26 C146,29 150,32 150,32 C150,32 154,29 154,26 C154,23 150,25 150,28Z"
+      fill="#E86B55"/>
+    <animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="3.2s" repeatCount="indefinite"/>
+  </g>
+  <g opacity="0.25">
+    <path d="M100,22 C100,20 97,18 97,20 C97,22 100,25 100,25 C100,25 103,22 103,20 C103,18 100,20 100,22Z"
+      fill="#E86B55"/>
+    <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0" dur="3.6s" repeatCount="indefinite"/>
+  </g>
+</svg>

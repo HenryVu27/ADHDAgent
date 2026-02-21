@@ -9,13 +9,21 @@ from app.agent.model_router import classify_complexity, create_model_selector
 
 
 def _make_state(message: str, turn_count: int = 1, extra_messages=None):
-    """Build a minimal CoachingState dict for classification."""
+    """Build a minimal CoachingState dict for classification.
+
+    turn_count controls how many HumanMessages are in the messages list
+    (the classifier counts HumanMessages to determine the turn).
+    """
     messages = list(extra_messages or [])
+    # Add prior turns as Human/AI pairs so HumanMessage count == turn_count
+    for i in range(turn_count - 1):
+        messages.append(HumanMessage(content=f"Prior turn {i + 1}"))
+        messages.append(AIMessage(content=f"Response {i + 1}"))
+    # The current turn's message (the one being classified)
     messages.append(HumanMessage(content=message))
     return {
         "messages": messages,
         "session_id": "test",
-        "turn_count": turn_count,
         "model_tier": "standard",
         "input_blocked": False,
         "block_response": "",

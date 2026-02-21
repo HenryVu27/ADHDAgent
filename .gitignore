@@ -6,6 +6,8 @@ __pycache__/
 .venv/
 env/
 venv/
+adhd/
+adhd312/
 .idea/
 .vscode/
 *.egg-info/
@@ -16,5 +18,4 @@ build/
 Thumbs.db
 *.faiss
 *.pkl
-.claude/
-CLAUDE.md
+frontend/static/mascots/preview.html
