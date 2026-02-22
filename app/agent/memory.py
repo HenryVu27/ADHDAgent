@@ -99,7 +99,7 @@ New conversation to incorporate:
 Write a concise summary (2-4 sentences) that captures the most important context for continuing this conversation."""
 
         try:
-            summary_text = await self._gemini.generate(prompt, temperature=0.0)
+            summary_text = await self._gemini.generate(prompt, temperature=0.0, max_output_tokens=1024)
             self._store.save_summary(
                 session_id,
                 SessionSummary(summary=summary_text.strip(), covers_through_turn=current_turn),
@@ -159,7 +159,7 @@ Parent message: "{user_message}"
 """
 
         try:
-            facts = await self._gemini.extract_json(prompt)
+            facts = await self._gemini.extract_json(prompt, max_output_tokens=512)
             if isinstance(facts, dict) and facts:
                 # Filter to valid profile fields only
                 valid_fields = {

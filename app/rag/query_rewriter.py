@@ -76,7 +76,7 @@ class QueryRewriter:
                 family_profile=profile_text or "Not yet gathered",
             )
 
-            rewritten = await self._gemini.generate(prompt, temperature=0.0)
+            rewritten = await self._gemini.generate(prompt, temperature=0.0, max_output_tokens=256)
             rewritten = rewritten.strip().strip('"').strip("'")
 
             if rewritten and len(rewritten) < 500:

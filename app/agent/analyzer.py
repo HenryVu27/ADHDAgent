@@ -115,7 +115,7 @@ class ConversationAnalyzer:
                 tool_results=tool_results,
             )
 
-            result = await self._gemini.extract_json(prompt, temperature=0.0)
+            result = await self._gemini.extract_json(prompt, temperature=0.0, max_output_tokens=1024)
 
             if not isinstance(result, dict):
                 logger.warning("Analyzer returned non-dict for session %s turn %d", session_id, turn)
