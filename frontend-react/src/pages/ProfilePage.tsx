@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { useAuth } from "@/hooks/use-auth"
 import { getSessionStats, getActiveSessionId } from "@/lib/auth"
+import { ConversationDialog } from "@/components/chat/ConversationDialog"
 import { api } from "@/lib/api"
 import type { FamilyProfile, SessionListItem } from "@/types"
 
@@ -14,6 +15,8 @@ export function ProfilePage() {
   const stats = getSessionStats()
   const [backendProfile, setBackendProfile] = useState<FamilyProfile | null>(null)
   const [sessions, setSessions] = useState<SessionListItem[]>([])
+  const [viewingSession, setViewingSession] = useState<SessionListItem | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   useEffect(() => {
     // Fetch family profile from the active session
@@ -306,9 +309,10 @@ export function ProfilePage() {
                 {sessions.length > 0 ? (
                   <div className="space-y-2">
                     {sessions.slice(0, 10).map((s) => (
-                      <div
+                      <button
                         key={s.session_id}
-                        className="flex items-center justify-between rounded-lg border border-border/50 px-3 py-2"
+                        onClick={() => { setViewingSession(s); setDialogOpen(true) }}
+                        className="flex w-full items-center justify-between rounded-lg border border-border/50 px-3 py-2 text-left transition-colors hover:bg-muted"
                       >
                         <div className="flex items-center gap-3">
                           <Badge variant="secondary" className="text-xs">
@@ -326,7 +330,7 @@ export function ProfilePage() {
                             })}
                           </span>
                         )}
-                      </div>
+                      </button>
                     ))}
                   </div>
                 ) : (
@@ -339,6 +343,11 @@ export function ProfilePage() {
           </div>
         </>
       )}
+      <ConversationDialog
+        session={viewingSession}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </div>
   )
 }

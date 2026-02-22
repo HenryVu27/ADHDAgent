@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect, useRef } from "react"
-import { Code2, Plus } from "lucide-react"
+import { PanelLeft, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ChatContainer } from "@/components/chat/ChatContainer"
 import { ChatInput } from "@/components/chat/ChatInput"
 import { QuickReplyChips } from "@/components/chat/QuickReplyChips"
 import { SessionProgress } from "@/components/chat/SessionProgress"
-import { DevPanel } from "@/components/chat/DevPanel"
+import { ChatSidebar } from "@/components/chat/ChatSidebar"
 import { useChat } from "@/hooks/use-chat"
 import { useSession } from "@/hooks/use-session"
 import { useAuth } from "@/hooks/use-auth"
@@ -25,7 +25,7 @@ export function ChatPage() {
   const { messages, isLoading, latestTrace, sendMessage, clearMessages, loadMessages } = useChat(sessionId)
   const { session, refresh } = useSession(sessionId)
   const { getOnboarding } = useAuth()
-  const [devOpen, setDevOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [showChips, setShowChips] = useState(true)
   const initialized = useRef(false)
 
@@ -71,6 +71,15 @@ export function ChatPage() {
     initialized.current = true
   }, [clearMessages, getOnboarding])
 
+  const handleSelectSession = useCallback((selectedId: string) => {
+    if (selectedId === sessionId) return
+    setSessionId(selectedId)
+    setActiveSessionId(selectedId)
+    clearMessages()
+    setShowChips(false)
+    initialized.current = false
+  }, [sessionId, clearMessages])
+
   const handleSend = useCallback(async (content: string) => {
     setShowChips(false)
     const data = await sendMessage(content)
@@ -93,31 +102,38 @@ export function ChatPage() {
   const phase = (session?.phase || latestTrace?.phase_decision?.phase || "intake") as ConversationPhase
 
   return (
-    <>
-      <Card className="flex h-[calc(100vh-10rem)] flex-col overflow-hidden">
-        {/* Header with progress bar + new chat */}
+    <div className="flex h-[calc(100vh-10rem)]">
+      <ChatSidebar
+        isOpen={sidebarOpen}
+        activeSessionId={sessionId}
+        onSelectSession={handleSelectSession}
+        onNewChat={handleNewChat}
+      />
+
+      <Card className="flex flex-1 flex-col overflow-hidden">
+        {/* Header */}
         <div className="flex items-center justify-between border-b border-border/50 px-4 py-3">
-          <SessionProgress currentPhase={phase} />
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleNewChat}
-              className="gap-2 text-xs text-muted-foreground"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              aria-label={sidebarOpen ? "Close history" : "Open history"}
+              className="text-muted-foreground"
             >
-              <Plus className="h-3.5 w-3.5" />
-              New Chat
+              <PanelLeft className="h-4 w-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setDevOpen(!devOpen)}
-              className="gap-2 text-xs text-muted-foreground"
-            >
-              <Code2 className="h-3.5 w-3.5" />
-              Pipeline
-            </Button>
+            <SessionProgress currentPhase={phase} />
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleNewChat}
+            className="gap-2 text-xs text-muted-foreground"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            New Chat
+          </Button>
         </div>
 
         {/* Chat area */}
@@ -133,8 +149,6 @@ export function ChatPage() {
         {/* Input */}
         <ChatInput onSend={handleSend} isLoading={isLoading} />
       </Card>
-
-      <DevPanel trace={latestTrace} isOpen={devOpen} onClose={() => setDevOpen(false)} />
-    </>
+    </div>
   )
 }
