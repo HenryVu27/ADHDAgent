@@ -117,6 +117,55 @@ class TestSQLiteSessionStore:
         assert self.store.get("s1").family_profile.child_name == "Kai"
         assert self.store.get("s2").family_profile.child_name == "Alex"
 
+    def test_session_exists_false_before_creation(self):
+        assert self.store.session_exists("nonexistent") is False
+
+    def test_session_exists_true_after_get(self):
+        self.store.get("new_session")
+        assert self.store.session_exists("new_session") is True
+
+    def test_get_all_sessions_paginated(self):
+        for i in range(5):
+            self.store.get(f"s{i}")
+        items, total = self.store.get_all_sessions_paginated(offset=0, limit=3)
+        assert total == 5
+        assert len(items) == 3
+
+    def test_get_all_sessions_paginated_offset(self):
+        for i in range(5):
+            self.store.get(f"s{i}")
+        items, total = self.store.get_all_sessions_paginated(offset=3, limit=10)
+        assert total == 5
+        assert len(items) == 2
+
+    def test_get_messages_paginated(self):
+        for i in range(5):
+            self.store.add_message("s1", "user", f"msg {i}", turn=i)
+        messages, total = self.store.get_messages_paginated("s1", offset=0, limit=3)
+        assert total == 5
+        assert len(messages) == 3
+
+    def test_get_messages_paginated_offset(self):
+        for i in range(5):
+            self.store.add_message("s1", "user", f"msg {i}", turn=i)
+        messages, total = self.store.get_messages_paginated("s1", offset=3, limit=10)
+        assert total == 5
+        assert len(messages) == 2
+
+    def test_delete_session(self):
+        self.store.increment_turn("del-test")
+        self.store.add_message("del-test", "user", "hello", 1)
+        self.store.update_profile("del-test", child_name="Test")
+        self.store.delete_session("del-test")
+        # get() creates a fresh empty session
+        state = self.store.get("del-test")
+        assert state.turn_count == 0
+        assert state.family_profile.child_name is None
+        assert self.store.get_messages("del-test") == []
+
+    def test_delete_nonexistent_session_is_noop(self):
+        self.store.delete_session("does-not-exist")  # Should not raise
+
 
 class TestMessagePersistence:
 

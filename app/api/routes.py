@@ -11,40 +11,33 @@ Endpoints:
 
 import asyncio
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
+from app.agent.orchestrator import AgentOrchestrator
+from app.api.deps import get_knowledge_base, get_orchestrator
+from app.api.rate_limit import limiter
 from app.config import settings
-
 from app.models.schemas import (
     ChatRequest,
     ChatResponse,
     MessagesResponse,
     OutcomesResponse,
     SeedSessionRequest,
-    SessionListItem,
     SessionResponse,
     SessionsResponse,
 )
+from app.rag.knowledge_store import KnowledgeStore
 
 router = APIRouter()
 
-# These get set during app startup (see main.py)
-_orchestrator = None
-_knowledge_base = None
-
-
-def set_orchestrator(orchestrator):
-    global _orchestrator
-    _orchestrator = orchestrator
-
-
-def set_knowledge_base(kb):
-    global _knowledge_base
-    _knowledge_base = kb
-
 
 @router.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest):
+@limiter.limit(lambda: settings.RATE_LIMIT_CHAT)
+async def chat(
+    request: Request,
+    body: ChatRequest,
+    orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+):
     """
     Main chat endpoint. Processes parent input through the agent pipeline:
     1. Input gate: crisis + jailbreak classification
@@ -54,14 +47,11 @@ async def chat(request: ChatRequest):
 
     Returns full PipelineTrace for frontend visualization.
     """
-    if not _orchestrator:
-        raise HTTPException(status_code=503, detail="Service not initialized")
-
     try:
         return await asyncio.wait_for(
-            _orchestrator.process(
-                message=request.message,
-                session_id=request.session_id,
+            orchestrator.process(
+                message=body.message,
+                session_id=body.session_id,
             ),
             timeout=settings.CHAT_TIMEOUT_S,
         )
@@ -70,24 +60,42 @@ async def chat(request: ChatRequest):
 
 
 @router.post("/session/seed")
-async def seed_session(request: SeedSessionRequest):
+@limiter.limit(lambda: settings.RATE_LIMIT_DEFAULT)
+async def seed_session(
+    request: Request,
+    body: SeedSessionRequest,
+    orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+):
     """Pre-populate a session with onboarding data so the agent has family context from the start."""
-    if not _orchestrator:
-        raise HTTPException(status_code=503, detail="Service not initialized")
+    orchestrator.seed_session(body)
+    return {"status": "ok", "session_id": body.session_id}
 
-    _orchestrator.seed_session(request)
-    return {"status": "ok", "session_id": request.session_id}
+
+@router.delete("/session/{session_id}")
+async def delete_session(
+    session_id: str,
+    orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+):
+    """Delete all data for a session (right-to-erasure)."""
+    store = orchestrator.get_session_store()
+    if not store.session_exists(session_id):
+        raise HTTPException(status_code=404, detail="Session not found")
+    store.delete_session(session_id)
+    return {"status": "deleted", "session_id": session_id}
 
 
 @router.get("/session/{session_id}", response_model=SessionResponse)
-async def get_session(session_id: str):
+async def get_session(
+    session_id: str,
+    orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+):
     """Returns current conversation state for a session."""
-    if not _orchestrator:
-        raise HTTPException(status_code=503, detail="Service not initialized")
+    store = orchestrator.get_session_store()
+    if not store.session_exists(session_id):
+        raise HTTPException(status_code=404, detail="Session not found")
 
-    state = _orchestrator.get_session(session_id)
-    # Phase is inferred from session state, not stored
-    phase = _orchestrator.infer_phase(session_id)
+    state = orchestrator.get_session(session_id)
+    phase = orchestrator.infer_phase(session_id)
     return SessionResponse(
         session_id=state.session_id,
         phase=phase,
@@ -99,12 +107,16 @@ async def get_session(session_id: str):
 
 
 @router.get("/session/{session_id}/outcomes", response_model=OutcomesResponse)
-async def get_outcomes(session_id: str):
+async def get_outcomes(
+    session_id: str,
+    orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+):
     """Returns outcome tracking data for a session."""
-    if not _orchestrator:
-        raise HTTPException(status_code=503, detail="Service not initialized")
+    store = orchestrator.get_session_store()
+    if not store.session_exists(session_id):
+        raise HTTPException(status_code=404, detail="Session not found")
 
-    state = _orchestrator.get_session(session_id)
+    state = orchestrator.get_session(session_id)
     return OutcomesResponse(
         session_id=state.session_id,
         outcomes=state.outcomes,
@@ -114,53 +126,57 @@ async def get_outcomes(session_id: str):
 
 
 @router.get("/sessions", response_model=SessionsResponse)
-async def list_sessions():
+async def list_sessions(
+    offset: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+):
     """Returns all sessions ordered by most recently updated."""
-    if not _orchestrator:
-        raise HTTPException(status_code=503, detail="Service not initialized")
-
-    store = _orchestrator.get_session_store()
-    items = store.get_all_sessions()
-
-    # Sort by turn_count descending (most active first)
-    items.sort(key=lambda x: x.turn_count, reverse=True)
-    return SessionsResponse(sessions=items)
+    store = orchestrator.get_session_store()
+    items, total = store.get_all_sessions_paginated(offset=offset, limit=limit)
+    return SessionsResponse(sessions=items, total=total, offset=offset, limit=limit)
 
 
 @router.get("/session/{session_id}/messages", response_model=MessagesResponse)
-async def get_session_messages(session_id: str):
+async def get_session_messages(
+    session_id: str,
+    offset: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+):
     """Returns all messages for a session."""
-    if not _orchestrator:
-        raise HTTPException(status_code=503, detail="Service not initialized")
+    store = orchestrator.get_session_store()
+    if not store.session_exists(session_id):
+        raise HTTPException(status_code=404, detail="Session not found")
 
-    messages = _orchestrator.get_session_store().get_messages(session_id)
-    return MessagesResponse(session_id=session_id, messages=messages)
+    messages, total = store.get_messages_paginated(session_id, offset=offset, limit=limit)
+    return MessagesResponse(session_id=session_id, messages=messages, total=total, offset=offset, limit=limit)
 
 
 @router.get("/health")
-async def health():
+async def health(
+    knowledge_base: KnowledgeStore = Depends(get_knowledge_base),
+):
     return {
         "status": "ok",
-        "index_built": _knowledge_base.is_indexed if _knowledge_base else False,
+        "index_built": knowledge_base.is_indexed if knowledge_base else False,
     }
 
 
 @router.get("/knowledge/topics")
-async def knowledge_topics():
+async def knowledge_topics(
+    knowledge_base: KnowledgeStore = Depends(get_knowledge_base),
+):
     """Returns the approved topic boundaries from the knowledge base."""
-    if not _knowledge_base:
-        raise HTTPException(status_code=503, detail="Knowledge base not initialized")
-
     return {
-        "topics": _knowledge_base.get_all_topics(),
-        "document_count": len(_knowledge_base.documents),
+        "topics": knowledge_base.get_all_topics(),
+        "document_count": len(knowledge_base.documents),
     }
 
 
 @router.get("/knowledge/documents")
-async def knowledge_documents():
+async def knowledge_documents(
+    knowledge_base: KnowledgeStore = Depends(get_knowledge_base),
+):
     """Returns all knowledge documents for the Resource Library."""
-    if not _knowledge_base:
-        raise HTTPException(status_code=503, detail="Knowledge base not initialized")
-
-    return {"documents": [doc for doc in _knowledge_base.documents]}
+    return {"documents": [doc for doc in knowledge_base.documents]}

@@ -24,6 +24,10 @@ class SessionStoreBase(ABC):
     """Protocol for session state persistence."""
 
     @abstractmethod
+    def session_exists(self, session_id: str) -> bool:
+        """Check if a session exists without creating it."""
+
+    @abstractmethod
     def get(self, session_id: str) -> SessionState:
         """Get or create session state."""
 
@@ -131,6 +135,18 @@ class SessionStoreBase(ABC):
     @abstractmethod
     def get_all_sessions(self) -> list[SessionListItem]:
         """Return summary info for all sessions."""
+
+    @abstractmethod
+    def get_all_sessions_paginated(self, offset: int = 0, limit: int = 50) -> tuple[list[SessionListItem], int]:
+        """Return paginated sessions and total count."""
+
+    @abstractmethod
+    def get_messages_paginated(self, session_id: str, offset: int = 0, limit: int = 50) -> tuple[list[dict], int]:
+        """Return paginated messages and total count."""
+
+    @abstractmethod
+    def delete_session(self, session_id: str) -> None:
+        """Delete all data for a session (right-to-erasure)."""
 
     @abstractmethod
     def get_session_timestamps(self, session_id: str) -> tuple[str, str]:

@@ -162,3 +162,17 @@ class TestSessionStateStore:
         messages, total = self.store.get_messages_paginated("s1", offset=3, limit=10)
         assert total == 5
         assert len(messages) == 2
+
+    def test_delete_session(self):
+        self.store.increment_turn("del-test")
+        self.store.add_message("del-test", "user", "hello", 1)
+        self.store.update_profile("del-test", child_name="Test")
+        self.store.delete_session("del-test")
+        # get() creates a fresh empty session
+        state = self.store.get("del-test")
+        assert state.turn_count == 0
+        assert state.family_profile.child_name is None
+        assert self.store.get_messages("del-test") == []
+
+    def test_delete_nonexistent_session_is_noop(self):
+        self.store.delete_session("does-not-exist")  # Should not raise

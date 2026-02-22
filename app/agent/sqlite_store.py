@@ -39,6 +39,18 @@ class SQLiteSessionStore(SessionStoreBase):
         self._conn = conn
         self._lock = threading.RLock()
 
+    def delete_session(self, session_id: str) -> None:
+        """Delete all data for a session (cascading)."""
+        with self._lock:
+            for table in (
+                "turn_analyses", "traces", "episodes", "session_summaries",
+                "active_strategies", "outcomes", "goals", "messages",
+                "family_profiles", "sessions",
+            ):
+                self._conn.execute(f"DELETE FROM {table} WHERE session_id = ?", (session_id,))
+            self._conn.commit()
+            logger.info("Session %s deleted", session_id)
+
     def session_exists(self, session_id: str) -> bool:
         """Check if a session exists without creating it."""
         with self._lock:

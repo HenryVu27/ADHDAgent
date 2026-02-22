@@ -43,6 +43,15 @@ class InMemorySessionStore(SessionStoreBase):
             self._sessions[session_id] = SessionState(session_id=session_id)
         return self._sessions[session_id]
 
+    def delete_session(self, session_id: str) -> None:
+        """Delete all data for a session."""
+        with self._lock:
+            self._sessions.pop(session_id, None)
+            self._summaries.pop(session_id, None)
+            self._episodes.pop(session_id, None)
+            self._traces.pop(session_id, None)
+            self._analyses.pop(session_id, None)
+
     def session_exists(self, session_id: str) -> bool:
         """Check if a session exists without creating it."""
         with self._lock:
