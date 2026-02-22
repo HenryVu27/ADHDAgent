@@ -5,13 +5,6 @@ import { Button } from "@/components/ui/button"
 import { api } from "@/lib/api"
 import type { SessionListItem } from "@/types"
 
-const phaseLabels: Record<string, string> = {
-  intake: "Getting to Know You",
-  strategy: "Exploring Strategies",
-  progress: "Building a Plan",
-  followup: "Following Up",
-}
-
 function formatSessionTime(dateStr: string): string {
   const date = new Date(dateStr)
   const now = new Date()
@@ -95,13 +88,9 @@ export function ChatSidebar({ isOpen, activeSessionId, onSelectSession, onNewCha
                             {s.created_at ? formatSessionTime(s.created_at) : "Session"}
                           </span>
                         </div>
-                        <div className="mt-1 flex items-center gap-2 pl-5.5">
+                        <div className="mt-1 pl-5.5">
                           <span className="text-[11px] text-muted-foreground">
-                            {phaseLabels[s.phase] || s.phase}
-                          </span>
-                          <span className="text-[11px] text-muted-foreground">·</span>
-                          <span className="text-[11px] text-muted-foreground">
-                            {s.turn_count} msgs
+                            {s.turn_count} messages
                           </span>
                         </div>
                       </button>
