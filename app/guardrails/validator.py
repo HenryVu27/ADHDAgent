@@ -10,6 +10,7 @@ need isolated per-message classifiers for these.
 
 import json
 import logging
+import re
 import time
 
 from app.config import settings
@@ -81,13 +82,36 @@ Respond with ONLY a JSON object (no markdown, no explanation):
 {{"medication_recommendation": true/false, "diagnosis_claim": true/false, "scope_violation": true/false, "reasoning": "brief explanation"}}"""
 
 
-def _parse_json(raw: str, model_cls):
-    """Parse structured JSON from LLM output, handling markdown fences."""
-    text = raw.strip()
+def _clean_json_text(text: str) -> str:
+    """Clean common LLM JSON formatting issues before parsing."""
+    text = text.strip()
+    # Strip markdown code fences
     if text.startswith("```"):
         lines = text.split("\n")
         lines = [l for l in lines if not l.strip().startswith("```")]
         text = "\n".join(lines).strip()
+    # Extract JSON object if surrounded by extra text
+    start = text.find("{")
+    end = text.rfind("}") + 1
+    if start >= 0 and end > start:
+        text = text[start:end]
+    # Fix unquoted property names: {crisis: true} -> {"crisis": true}
+    text = re.sub(r'(?<=[{,])\s*(\w+)\s*:', r' "\1":', text)
+    return text
+
+
+def _parse_json(raw, model_cls):
+    """Parse structured JSON from LLM output.
+
+    Accepts a dict, a list, or a raw string from generate().
+    """
+    if isinstance(raw, dict):
+        return model_cls(**raw)
+    if isinstance(raw, list):
+        if raw and isinstance(raw[0], dict):
+            return model_cls(**raw[0])
+        raise TypeError(f"Expected dict, got list: {raw!r}")
+    text = _clean_json_text(raw)
     return model_cls(**json.loads(text))
 
 
@@ -102,7 +126,7 @@ class InputGate:
         start = time.time()
         try:
             prompt = INPUT_GATE_PROMPT.format(user_message=user_message)
-            raw = await self._client.generate(prompt, temperature=0.0, max_output_tokens=256)
+            raw = await self._client.generate(prompt, temperature=0.0, max_output_tokens=1024)
             classification = _parse_json(raw, InputClassification)
 
             duration_ms = (time.time() - start) * 1000
@@ -149,7 +173,7 @@ class OutputGate:
         start = time.time()
         try:
             prompt = OUTPUT_GATE_PROMPT.format(bot_response=bot_response)
-            raw = await self._client.generate(prompt, temperature=0.0, max_output_tokens=256)
+            raw = await self._client.generate(prompt, temperature=0.0, max_output_tokens=1024)
             classification = _parse_json(raw, OutputClassification)
 
             duration_ms = (time.time() - start) * 1000
@@ -184,9 +208,9 @@ class OutputGate:
 
         except (json.JSONDecodeError, KeyError, TypeError) as e:
             duration_ms = (time.time() - start) * 1000
-            logger.warning("Output gate parse error (allowing response): %s", e)
-            return OutputCheckResult(is_valid=True, duration_ms=duration_ms)
+            logger.warning("Output gate parse error (blocking response): %s", e)
+            return OutputCheckResult(is_valid=False, violation_type="error", duration_ms=duration_ms)
         except Exception as e:
             duration_ms = (time.time() - start) * 1000
-            logger.error("Output gate failed (allowing response): %s", e)
-            return OutputCheckResult(is_valid=True, duration_ms=duration_ms)
+            logger.error("Output gate failed (blocking response): %s", e)
+            return OutputCheckResult(is_valid=False, violation_type="error", duration_ms=duration_ms)

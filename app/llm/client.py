@@ -100,15 +100,16 @@ class GeminiClient:
         except json.JSONDecodeError:
             logger.warning("Gemini returned non-JSON, attempting text parse")
             text = response.text or ""
-            start = text.find("[")
-            end = text.rfind("]") + 1
-            if start >= 0 and end > start:
-                return json.loads(text[start:end])
+            # Try object first (most callers expect dicts), then array
             start = text.find("{")
             end = text.rfind("}") + 1
             if start >= 0 and end > start:
                 return json.loads(text[start:end])
-            return []
+            start = text.find("[")
+            end = text.rfind("]") + 1
+            if start >= 0 and end > start:
+                return json.loads(text[start:end])
+            return {}
         except Exception as e:
             logger.error(f"Gemini extract_json failed: {e}")
             raise
