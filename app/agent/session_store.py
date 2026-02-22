@@ -37,17 +37,23 @@ class InMemorySessionStore(SessionStoreBase):
         self._analyses: dict[str, list[TurnAnalysis]] = {}
         self._lock = threading.RLock()
 
+    def _get_or_create(self, session_id: str) -> SessionState:
+        """Get or create internal session state (returns live reference). Caller must hold _lock."""
+        if session_id not in self._sessions:
+            self._sessions[session_id] = SessionState(session_id=session_id)
+        return self._sessions[session_id]
+
     def session_exists(self, session_id: str) -> bool:
         """Check if a session exists without creating it."""
         with self._lock:
             return session_id in self._sessions
 
     def get(self, session_id: str) -> SessionState:
-        """Get or create session state."""
+        """Get or create session state (returns a snapshot copy)."""
         with self._lock:
             if session_id not in self._sessions:
                 self._sessions[session_id] = SessionState(session_id=session_id)
-            return self._sessions[session_id]
+            return self._sessions[session_id].model_copy(deep=True)
 
     def update_profile(self, session_id: str, **kwargs) -> FamilyProfile:
         """Update profile fields, return updated profile."""
@@ -56,7 +62,7 @@ class InMemorySessionStore(SessionStoreBase):
                 if field not in self._VALID_PROFILE_FIELDS:
                     raise ValueError(f"Invalid profile field: {field!r}")
 
-            state = self.get(session_id)
+            state = self._get_or_create(session_id)
             profile = state.family_profile
 
             for field, value in kwargs.items():
@@ -85,7 +91,7 @@ class InMemorySessionStore(SessionStoreBase):
     ) -> Outcome:
         """Log an outcome for a strategy."""
         with self._lock:
-            state = self.get(session_id)
+            state = self._get_or_create(session_id)
             entry = Outcome(
                 goal_description=strategy_name,
                 signal=outcome,
@@ -104,7 +110,7 @@ class InMemorySessionStore(SessionStoreBase):
     ) -> list[Goal]:
         """Add/complete/list goals."""
         with self._lock:
-            state = self.get(session_id)
+            state = self._get_or_create(session_id)
 
             if action == "add" and description:
                 state.goals.append(Goal(
@@ -125,7 +131,7 @@ class InMemorySessionStore(SessionStoreBase):
     def seed_session(self, request: SeedSessionRequest) -> None:
         """Pre-populate a session with onboarding data."""
         with self._lock:
-            state = self.get(request.session_id)
+            state = self._get_or_create(request.session_id)
             state.family_profile.child_name = request.child_name or None
             state.family_profile.child_age = request.child_age or None
             state.family_profile.challenge_areas = request.challenges
@@ -142,7 +148,7 @@ class InMemorySessionStore(SessionStoreBase):
     def increment_turn(self, session_id: str) -> int:
         """Increment and return the turn count."""
         with self._lock:
-            state = self.get(session_id)
+            state = self._get_or_create(session_id)
             state.turn_count += 1
             return state.turn_count
 
@@ -158,7 +164,7 @@ class InMemorySessionStore(SessionStoreBase):
     ) -> None:
         """Persist a single message in conversation_history."""
         with self._lock:
-            state = self.get(session_id)
+            state = self._get_or_create(session_id)
             state.conversation_history.append({
                 "role": role,
                 "content": content,
@@ -173,25 +179,30 @@ class InMemorySessionStore(SessionStoreBase):
         session_id: str,
         limit: int | None = None,
     ) -> list[dict]:
-        """Return message dicts."""
+        """Return message dicts (always a new list)."""
         with self._lock:
-            state = self.get(session_id)
+            state = self._sessions.get(session_id)
+            if not state:
+                return []
             messages = state.conversation_history
             if limit:
-                messages = messages[-limit:]
-            return messages
+                return [dict(m) for m in messages[-limit:]]
+            return [dict(m) for m in messages]
 
     def add_active_strategy(self, session_id: str, strategy_name: str) -> None:
         """Add an active strategy (dedup)."""
         with self._lock:
-            state = self.get(session_id)
+            state = self._get_or_create(session_id)
             if strategy_name not in state.active_strategies:
                 state.active_strategies.append(strategy_name)
 
     def get_active_strategies(self, session_id: str) -> list[str]:
         """Return list of active strategy names."""
         with self._lock:
-            return self.get(session_id).active_strategies
+            state = self._sessions.get(session_id)
+            if not state:
+                return []
+            return list(state.active_strategies)
 
     def get_latest_summary(self, session_id: str) -> SessionSummary | None:
         """Return the most recent session summary, or None."""
@@ -227,7 +238,7 @@ class InMemorySessionStore(SessionStoreBase):
     ) -> list[dict]:
         """Return non-blocked messages in the given turn range (inclusive)."""
         with self._lock:
-            state = self.get(session_id)
+            state = self._get_or_create(session_id)
             result = []
             for msg in state.conversation_history:
                 turn = msg.get("turn", 0)
@@ -295,10 +306,12 @@ class InMemorySessionStore(SessionStoreBase):
     def get_messages_paginated(self, session_id: str, offset: int = 0, limit: int = 50) -> tuple[list[dict], int]:
         """Return paginated messages and total count."""
         with self._lock:
-            state = self.get(session_id)
+            state = self._sessions.get(session_id)
+            if not state:
+                return [], 0
             all_messages = state.conversation_history
             total = len(all_messages)
-            return all_messages[offset:offset + limit], total
+            return [dict(m) for m in all_messages[offset:offset + limit]], total
 
     def get_session_timestamps(self, session_id: str) -> tuple[str, str]:
         """In-memory store has no timestamps."""

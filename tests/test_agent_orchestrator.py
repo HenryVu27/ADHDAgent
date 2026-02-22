@@ -19,8 +19,7 @@ class TestPhaseInference:
         assert self.orchestrator._infer_phase("p1") == ConversationPhase.strategy
 
     def test_active_strategies_means_strategy(self):
-        state = self.store.get("s1")
-        state.active_strategies = ["visual timer"]
+        self.store.add_active_strategy("s1", "visual timer")
         assert self.orchestrator._infer_phase("s1") == ConversationPhase.strategy
 
     def test_outcomes_mean_progress(self):

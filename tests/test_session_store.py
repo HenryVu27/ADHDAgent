@@ -17,11 +17,19 @@ class TestSessionStateStore:
         assert state.turn_count == 0
         assert state.family_profile.child_name is None
 
-    def test_get_returns_same_session(self):
+    def test_get_returns_independent_copy(self):
+        self.store.increment_turn("s1")
         s1 = self.store.get("s1")
-        s1.turn_count = 5
+        assert s1.turn_count == 1
+        # Mutating the copy should not affect internal state
+        s1.turn_count = 999
         s2 = self.store.get("s1")
-        assert s2.turn_count == 5
+        assert s2.turn_count == 1  # still 1, not 999
+
+    def test_get_returns_different_objects(self):
+        s1 = self.store.get("s1")
+        s2 = self.store.get("s1")
+        assert s1 is not s2
 
     def test_increment_turn(self):
         assert self.store.increment_turn("t1") == 1
@@ -119,3 +127,38 @@ class TestSessionStateStore:
         self.store.add_message("s1", "assistant", "Hi", turn=1)
         messages = self.store.get_messages("s1")
         assert messages[0]["tool_calls_summary"] == ""
+
+    def test_session_exists_false_before_creation(self):
+        assert self.store.session_exists("nonexistent") is False
+
+    def test_session_exists_true_after_get(self):
+        self.store.get("new_session")
+        assert self.store.session_exists("new_session") is True
+
+    def test_get_all_sessions_paginated(self):
+        for i in range(5):
+            self.store.get(f"s{i}")
+        items, total = self.store.get_all_sessions_paginated(offset=0, limit=3)
+        assert total == 5
+        assert len(items) == 3
+
+    def test_get_all_sessions_paginated_offset(self):
+        for i in range(5):
+            self.store.get(f"s{i}")
+        items, total = self.store.get_all_sessions_paginated(offset=3, limit=10)
+        assert total == 5
+        assert len(items) == 2
+
+    def test_get_messages_paginated(self):
+        for i in range(5):
+            self.store.add_message("s1", "user", f"msg {i}", turn=i)
+        messages, total = self.store.get_messages_paginated("s1", offset=0, limit=3)
+        assert total == 5
+        assert len(messages) == 3
+
+    def test_get_messages_paginated_offset(self):
+        for i in range(5):
+            self.store.add_message("s1", "user", f"msg {i}", turn=i)
+        messages, total = self.store.get_messages_paginated("s1", offset=3, limit=10)
+        assert total == 5
+        assert len(messages) == 2

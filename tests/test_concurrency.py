@@ -74,37 +74,34 @@ def event_bus_sqlite(sqlite_conn):
 
 class TestInMemoryLiveObjectMutation:
     """
-    Audit finding #4: InMemorySessionStore.get() returns a reference to the
-    live internal SessionState object. Mutations outside the lock are not
-    protected. This test suite documents the current behavior and catches
-    regressions if the store is fixed.
+    Audit finding #4 (FIXED): InMemorySessionStore.get() now returns a deep
+    copy. Mutations outside the lock do not affect internal state.
     """
 
-    def test_get_returns_same_object_reference(self, memory_store):
-        """Two calls to get() for the same session return the SAME object."""
+    def test_get_returns_independent_copies(self, memory_store):
+        """Two calls to get() for the same session return DIFFERENT objects."""
         s1 = memory_store.get("sess-1")
         s2 = memory_store.get("sess-1")
-        assert s1 is s2, (
-            "InMemorySessionStore.get() should return the same object reference. "
-            "If this fails, the store has been fixed (good!) — update dependent tests."
+        assert s1 is not s2, (
+            "InMemorySessionStore.get() should return independent copies."
         )
 
-    def test_direct_mutation_visible_across_references(self, memory_store):
-        """Mutating the returned object modifies the internal state directly."""
+    def test_direct_mutation_not_visible_across_copies(self, memory_store):
+        """Mutating the returned copy does not modify internal state."""
         state = memory_store.get("sess-1")
         state.family_profile.child_name = "Directly Mutated"
 
-        # Another get() sees the mutation
+        # Another get() should NOT see the mutation
         state2 = memory_store.get("sess-1")
-        assert state2.family_profile.child_name == "Directly Mutated"
+        assert state2.family_profile.child_name is None
 
-    def test_list_append_outside_lock_is_visible(self, memory_store):
-        """Appending to a list field outside the lock is visible to other readers."""
+    def test_list_append_outside_lock_not_visible(self, memory_store):
+        """Appending to a list field on a copy is not visible to other readers."""
         state = memory_store.get("sess-1")
         state.goals.append(type("Goal", (), {"description": "test", "status": "active"})())
 
         state2 = memory_store.get("sess-1")
-        assert len(state2.goals) == 1
+        assert len(state2.goals) == 0
 
     def test_concurrent_list_mutation_does_not_crash(self, memory_store):
         """
@@ -138,12 +135,12 @@ class TestInMemoryLiveObjectMutation:
         # Should have all 200 messages (CPython GIL)
         assert len(state.conversation_history) == 200
 
-    def test_get_messages_returns_live_list_without_limit(self, memory_store):
+    def test_get_messages_returns_copy_without_limit(self, memory_store):
         """
-        Audit finding: get_messages(session_id) without limit returns the live
-        internal list — not a copy. Concurrent modifications are visible.
+        Audit finding #4 (FIXED): get_messages(session_id) without limit now
+        returns a new list. Subsequent additions are not visible.
         """
-        session_id = "live-list"
+        session_id = "copy-list"
         memory_store.add_message(session_id, "user", "msg1", 1)
 
         messages = memory_store.get_messages(session_id)  # No limit
@@ -152,16 +149,8 @@ class TestInMemoryLiveObjectMutation:
         # Add another message
         memory_store.add_message(session_id, "assistant", "msg2", 1)
 
-        # If get_messages returned a copy, len would still be original_len
-        # If it returned the live list, len would be +1
-        if len(messages) == original_len + 1:
-            # Live reference confirmed — this is the current (buggy) behavior
-            pass
-        else:
-            # Store was fixed to return a copy — this is the desired behavior
-            pass
-        # Either way, no crash
-        assert len(messages) >= original_len
+        # The previously returned list should NOT have grown
+        assert len(messages) == original_len
 
     def test_get_messages_with_limit_returns_copy(self, memory_store):
         """get_messages with a limit should return a slice (new list)."""
