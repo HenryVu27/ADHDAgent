@@ -292,6 +292,63 @@ class TestSQLiteConcurrentAccess:
             assert len(messages) == 20
             assert len(events) == 20
 
+    def test_get_connection_sets_synchronous_normal(self, tmp_path):
+        """get_connection should set PRAGMA synchronous=NORMAL (safe with WAL)."""
+        db_path = str(tmp_path / "test_sync.db")
+        conn = get_connection(db_path)
+        row = conn.execute("PRAGMA synchronous").fetchone()
+        # NORMAL = 1
+        assert row[0] == 1, f"Expected synchronous=NORMAL (1), got {row[0]}"
+        conn.close()
+
+    def test_store_and_eventbus_separate_connections(self, tmp_path):
+        """
+        Fix for audit finding #1: store and EventBus each get their own
+        SQLite connection to the same DB file. WAL mode supports concurrent
+        readers/writers on separate connections, so this should succeed
+        without races.
+        """
+        db_path = str(tmp_path / "test_separate.db")
+        conn_store = get_connection(db_path)
+        init_db(conn_store)
+        conn_events = get_connection(db_path)
+
+        store = SQLiteSessionStore(conn_store)
+        bus = EventBus(buffer_size=100, conn=conn_events)
+        errors = []
+
+        def store_worker():
+            try:
+                for i in range(20):
+                    store.increment_turn("separate-session")
+                    store.add_message(
+                        "separate-session", "user", f"msg-{i}", i + 1,
+                    )
+            except Exception as e:
+                errors.append(("store", e))
+
+        def bus_worker():
+            try:
+                for i in range(20):
+                    bus.emit("test", f"event-{i}", "separate-session", i + 1)
+            except Exception as e:
+                errors.append(("bus", e))
+
+        t1 = threading.Thread(target=store_worker)
+        t2 = threading.Thread(target=bus_worker)
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+
+        assert not errors, (
+            f"Separate connections should not race: {errors}"
+        )
+        messages = store.get_messages("separate-session")
+        events = bus.get_events("separate-session")
+        assert len(messages) == 20
+        assert len(events) == 20
+
 
 # ---------------------------------------------------------------------------
 # EventBus Thread Safety

@@ -13,9 +13,9 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from app.api.middleware import APIKeyMiddleware
-from app.api.observability_routes import obs_router, set_observability_deps
+from app.api.observability_routes import obs_router
 from app.api.rate_limit import limiter
-from app.api.routes import router, set_knowledge_base, set_orchestrator
+from app.api.routes import router
 from app.config import settings
 
 logging.basicConfig(
@@ -48,7 +48,7 @@ async def lifespan(app: FastAPI):
             logger.info("Qdrant hybrid index built (dense + sparse)")
         except Exception as e:
             logger.error(f"Qdrant index build failed: {e}")
-    set_knowledge_base(store)
+    app.state.knowledge_base = store
 
     # 3. Initialize guardrail gates
     from app.guardrails.validator import InputGate, OutputGate
@@ -63,11 +63,13 @@ async def lifespan(app: FastAPI):
     from app.rag.retriever import HybridRetriever
 
     db_conn = None
+    db_conn_events = None
     if settings.SQLITE_ENABLED:
         from app.agent.sqlite_store import SQLiteSessionStore
         from app.db import get_connection, init_db
         db_conn = get_connection(settings.SQLITE_DB_PATH)
         init_db(db_conn)
+        db_conn_events = get_connection(settings.SQLITE_DB_PATH)
         session_store = SQLiteSessionStore(db_conn)
         logger.info("Using SQLite session store (path=%s)", settings.SQLITE_DB_PATH)
     else:
@@ -90,8 +92,9 @@ async def lifespan(app: FastAPI):
     tools = create_tools(retriever=retriever, session_store=session_store)
 
     # 5. Create event bus (with SQLite persistence when available)
+    #    Uses a separate connection to avoid contention with the session store.
     from app.agent.event_bus import EventBus
-    event_bus = EventBus(buffer_size=settings.EVENT_BUFFER_SIZE, conn=db_conn)
+    event_bus = EventBus(buffer_size=settings.EVENT_BUFFER_SIZE, conn=db_conn_events)
     logger.info("EventBus initialized (buffer_size=%d)", settings.EVENT_BUFFER_SIZE)
 
     # 6. Create context preparation hook
@@ -133,10 +136,10 @@ async def lifespan(app: FastAPI):
         analyzer=analyzer,
         event_bus=event_bus,
     )
-    set_orchestrator(orchestrator)
-
-    # 10. Wire observability dependencies
-    set_observability_deps(session_store, event_bus, analyzer)
+    app.state.orchestrator = orchestrator
+    app.state.session_store = session_store
+    app.state.event_bus = event_bus
+    app.state.analyzer = analyzer
 
     logger.info(
         "ADHDAgent ready (agent_model=%s, utility_model=%s)",
@@ -153,6 +156,9 @@ app = FastAPI(
     version="0.4.0",
     lifespan=lifespan,
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(APIKeyMiddleware)  # Added BEFORE CORS (CORS must be outermost)
 app.add_middleware(
