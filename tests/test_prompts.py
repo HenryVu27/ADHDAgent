@@ -179,3 +179,24 @@ class TestBuildSystemPrompt:
         assert "## Using Search Results" in result
         assert "Evidence framing" in result
         assert "Cite sources" in result
+
+
+def test_enhanced_boundaries_in_system_prompt():
+    """System prompt should include enhanced boundary instructions."""
+    from app.agent.prompts import build_system_prompt
+    from app.models.schemas import FamilyProfile
+
+    prompt = build_system_prompt(
+        profile=FamilyProfile(),
+        active_strategies=[],
+        goals=[],
+        outcomes=[],
+    )
+    # New boundary sections
+    assert "only available in English" in prompt
+    assert "Staying on topic" in prompt
+    assert "Content safety" in prompt
+    assert "harmful practices" in prompt
+    # Existing boundaries still present
+    assert "NEVER discuss medication" in prompt
+    assert "NEVER make or suggest a diagnosis" in prompt
