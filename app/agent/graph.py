@@ -42,22 +42,13 @@ def build_agent(
         Compiled LangGraph.
     """
     # Build the inner ReAct agent (with context assembly as pre_model_hook)
-    if settings.MODEL_ROUTING_ENABLED:
-        from app.agent.model_router import create_model_selector
-        model = create_model_selector()
-        logger.info(
-            "Model routing enabled: fast=%s, standard=%s, complex=%s",
-            settings.GEMINI_MODEL_FAST,
-            settings.GEMINI_MODEL_STANDARD,
-            settings.GEMINI_MODEL_COMPLEX,
-        )
-    else:
-        model = ChatGoogleGenerativeAI(
-            model=settings.GEMINI_MODEL,
-            google_api_key=settings.GEMINI_API_KEY,
-            temperature=0.7,
-            max_output_tokens=6000,
-        )
+    model = ChatGoogleGenerativeAI(
+        model=settings.GEMINI_AGENT_MODEL,
+        google_api_key=settings.GEMINI_API_KEY,
+        temperature=0.7,
+        max_output_tokens=2048,
+        thinking={"type": "enabled", "budget_tokens": settings.GEMINI_THINKING_BUDGET},
+    )
 
     react_agent = create_react_agent(
         model=model,
@@ -175,9 +166,10 @@ def build_agent(
     compiled = graph.compile()
 
     logger.info(
-        "Agent pipeline built: model=%s, tools=%d, routing=%s",
-        settings.GEMINI_MODEL,
+        "Agent pipeline built: agent_model=%s, utility_model=%s, tools=%d, thinking_budget=%d",
+        settings.GEMINI_AGENT_MODEL,
+        settings.GEMINI_UTILITY_MODEL,
         len(tools),
-        settings.MODEL_ROUTING_ENABLED,
+        settings.GEMINI_THINKING_BUDGET,
     )
     return compiled
