@@ -7,6 +7,7 @@ prepare_context: runs as the pre_model_hook in the ReAct agent.
 """
 
 import logging
+from datetime import datetime
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
@@ -126,6 +127,7 @@ def create_prepare_context(
                 phase=phase,
                 recent_tool_calls=recent_tool_names,
                 active_topic=active_topic,
+                current_datetime=datetime.now(),
             )
             system_prompt = state_block + "\n\n" + system_prompt
 

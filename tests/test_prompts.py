@@ -305,6 +305,39 @@ class TestBuildConversationState:
         assert "<focus>Timer worked today</focus>" in result
 
 
+    def test_conversation_state_includes_datetime(self):
+        from datetime import datetime
+        result = build_conversation_state(
+            turn=3,
+            phase="strategy",
+            current_datetime=datetime(2026, 2, 22, 15, 30),
+        )
+        assert "Sunday" in result
+        assert "afternoon" in result
+
+    def test_conversation_state_morning(self):
+        from datetime import datetime
+        result = build_conversation_state(
+            turn=1,
+            phase="intake",
+            current_datetime=datetime(2026, 2, 23, 8, 0),
+        )
+        assert "Monday" in result
+        assert "morning" in result
+
+    def test_conversation_state_evening(self):
+        from datetime import datetime
+        result = build_conversation_state(
+            turn=1,
+            phase="intake",
+            current_datetime=datetime(2026, 2, 23, 19, 0),
+        )
+        assert "evening" in result
+
+    def test_conversation_state_without_datetime(self):
+        result = build_conversation_state(turn=1, phase="intake")
+        assert "datetime" not in result
+
 def test_enhanced_boundaries_in_system_prompt():
     """System prompt should include enhanced boundary instructions."""
     from app.agent.prompts import build_system_prompt

@@ -5,6 +5,8 @@ independently so future phases (summary, episodes) can add sections without
 touching the template.
 """
 
+from datetime import datetime as _datetime
+
 from app.config import settings
 from app.models.schemas import FamilyProfile, Goal, Outcome
 
@@ -233,9 +235,20 @@ def build_conversation_state(
     phase: str,
     recent_tool_calls: list[str] | None = None,
     active_topic: str = "",
+    current_datetime: _datetime | None = None,
 ) -> str:
     """Build a compact <conversation_state> XML block for the current turn."""
     lines = [f"  <turn>{turn}</turn>", f"  <phase>{phase}</phase>"]
+    if current_datetime:
+        day_name = current_datetime.strftime("%A")
+        hour = current_datetime.hour
+        if hour < 12:
+            time_of_day = "morning"
+        elif hour < 17:
+            time_of_day = "afternoon"
+        else:
+            time_of_day = "evening"
+        lines.append(f"  <datetime>{day_name} {time_of_day}</datetime>")
     if recent_tool_calls:
         lines.append(f"  <last_tools>{', '.join(recent_tool_calls)}</last_tools>")
     if active_topic:
