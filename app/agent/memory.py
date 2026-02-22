@@ -17,6 +17,22 @@ logger = logging.getLogger(__name__)
 class MemoryManager:
     """Manages rolling summaries, fact extraction, and episodic memories."""
 
+    _PROFILE_VOCABULARY = frozenset({
+        "son", "daughter", "child", "kid", "boy", "girl", "baby",
+        "name", "age", "old", "year", "years", "grade", "school",
+        "diagnosed", "diagnosis", "adhd", "evaluation", "tested",
+        "struggle", "challenge", "difficult", "hard", "problem", "issue",
+        "tried", "attempt", "strategy", "method", "approach",
+        "morning", "bedtime", "homework", "routine", "meltdown", "tantrum",
+        "worst", "hardest",
+    })
+
+    @staticmethod
+    def _might_contain_facts(message: str) -> bool:
+        """Quick vocabulary check — does the message likely contain profile info?"""
+        words = set(message.lower().split())
+        return bool(words & MemoryManager._PROFILE_VOCABULARY)
+
     def __init__(self, session_store: SessionStoreBase, gemini_client, event_bus=None):
         self._store = session_store
         self._gemini = gemini_client
@@ -116,6 +132,8 @@ Write a concise summary (2-4 sentences) that captures the most important context
         """Extract structured facts from the user message and update the profile."""
         if not self._gemini:
             return
+        if not self._might_contain_facts(user_message):
+            return
 
         # Include recent conversation history so pronouns can be resolved
         state = self._store.get(session_id)
@@ -195,6 +213,8 @@ Parent message:
         outcome_calls: list[dict],
     ) -> None:
         """Create an episodic memory when an outcome is tracked."""
+        emotional_context = await self._infer_emotion(session_id, user_message)
+
         for tc in outcome_calls:
             args = tc.get("args", {})
             strategy_name = args.get("strategy_name", "unknown strategy")
@@ -210,7 +230,7 @@ Parent message:
                 summary=summary,
                 outcome=outcome,
                 strategies_involved=[strategy_name],
-                emotional_context=self._infer_emotion(user_message),
+                emotional_context=emotional_context,
                 turn_range_start=turn,
                 turn_range_end=turn,
             )
@@ -223,18 +243,48 @@ Parent message:
                 self._event_bus.emit("memory", "episode_created", session_id, turn,
                                      detail={"strategy": strategy_name, "outcome": outcome})
 
-    @staticmethod
-    def _infer_emotion(message: str) -> str:
-        """Simple rule-based emotion inference from the user message."""
-        lower = message.lower()
-        if any(w in lower for w in ("frustrated", "angry", "mad", "furious", "fed up")):
-            return "frustrated"
-        if any(w in lower for w in ("worried", "anxious", "scared", "nervous", "afraid")):
-            return "anxious"
-        if any(w in lower for w in ("happy", "great", "amazing", "wonderful", "excited", "thrilled")):
-            return "positive"
-        if any(w in lower for w in ("sad", "hopeless", "overwhelmed", "exhausted", "tired")):
-            return "overwhelmed"
-        if any(w in lower for w in ("worked", "helped", "better", "improved", "progress")):
-            return "hopeful"
-        return ""
+    async def _infer_emotion(self, session_id: str, user_message: str) -> str:
+        """Classify the parent's emotional state using an LLM call with conversation context."""
+        if not self._gemini:
+            return ""
+
+        valid_emotions = {"frustrated", "anxious", "positive", "overwhelmed", "hopeful", "neutral"}
+
+        # Build conversation context from recent history
+        state = self._store.get(session_id)
+        recent_history = state.conversation_history[-3:]
+        context_lines = []
+        for entry in recent_history:
+            if entry.get("role") == "user":
+                context_lines.append(f"Parent: {entry['content']}")
+            elif entry.get("role") == "assistant":
+                context_lines.append(f"Coach: {entry['content']}")
+        conversation_context = (
+            f"Recent conversation:\n{chr(10).join(context_lines)}" if context_lines else ""
+        )
+
+        prompt = f"""Classify the PARENT's emotional state from this message. The parent is talking to a coach about their child with ADHD.
+
+Focus on how the PARENT feels, not the child. Examples:
+- "My son is so frustrated with homework" — the child is frustrated, but the parent may be calm or concerned. Classify the PARENT.
+- "I'm at my wit's end" — the parent is frustrated.
+- "We tried the timer and it worked" — the parent is stating a fact, likely neutral.
+
+{conversation_context}
+
+Return exactly one word from: frustrated, anxious, positive, overwhelmed, hopeful, neutral
+
+Parent message: {user_message}"""
+
+        try:
+            result = await self._gemini.generate(
+                prompt, temperature=0.0, max_output_tokens=16,
+                timeout=settings.MEMORY_TIMEOUT_S,
+            )
+            emotion = result.strip().lower()
+            if emotion not in valid_emotions or emotion == "neutral":
+                return ""
+            return emotion
+        except Exception as e:
+            logger.error("Emotion inference failed: %s", e)
+            raise

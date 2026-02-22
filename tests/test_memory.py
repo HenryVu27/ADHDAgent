@@ -173,13 +173,50 @@ class TestFactExtraction:
         assert profile.child_name is None
 
 
+class TestFactExtractionPreFilter:
+
+    @pytest.mark.asyncio
+    async def test_fact_extraction_skips_non_informative_messages(self):
+        """Messages with no profile-related content should skip the LLM call."""
+        store = InMemorySessionStore()
+        mock_gemini = AsyncMock()
+        memory = MemoryManager(session_store=store, gemini_client=mock_gemini)
+
+        # These are all >40 chars but contain no profile-related vocabulary
+        await memory._extract_facts("test-session", "That sounds really helpful, thank you so much for explaining that to me", 3)
+        mock_gemini.extract_json.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_fact_extraction_proceeds_for_informative_messages(self):
+        """Messages with profile-related content should trigger the LLM call."""
+        store = InMemorySessionStore()
+        mock_gemini = AsyncMock()
+        mock_gemini.extract_json = AsyncMock(return_value={})
+        memory = MemoryManager(session_store=store, gemini_client=mock_gemini)
+
+        await memory._extract_facts("test-session", "My son is 7 years old and was diagnosed with ADHD last year", 3)
+        mock_gemini.extract_json.assert_called_once()
+
+    def test_might_contain_facts_positive(self):
+        """Messages mentioning children/age/challenges should pass the filter."""
+        assert MemoryManager._might_contain_facts("My daughter is struggling with homework every night")
+        assert MemoryManager._might_contain_facts("He was diagnosed with ADHD at age 7")
+        assert MemoryManager._might_contain_facts("We tried the visual timer strategy last week")
+
+    def test_might_contain_facts_negative(self):
+        """Generic acknowledgments should fail the filter."""
+        assert not MemoryManager._might_contain_facts("That sounds really helpful, thank you so much")
+        assert not MemoryManager._might_contain_facts("I appreciate you sharing that with me today")
+        assert not MemoryManager._might_contain_facts("Ok I will try that and let you know how it goes")
+
+
 class TestEpisodicMemory:
 
     @pytest.mark.asyncio
     async def test_episode_created_on_track_outcome(self):
         store = InMemorySessionStore()
         store.increment_turn("s1")
-        gemini = _make_gemini_mock()
+        gemini = _make_gemini_mock(generate_return="hopeful")
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
         tool_calls = [{
@@ -257,25 +294,67 @@ class TestEpisodicMemory:
         assert len(episodes) == 2
 
 
-class TestEmotionInference:
+class TestEmotionInferenceLLM:
 
-    def test_frustrated(self):
-        assert MemoryManager._infer_emotion("I'm so frustrated with bedtime") == "frustrated"
+    @pytest.mark.asyncio
+    async def test_llm_called_with_message(self):
+        store = InMemorySessionStore()
+        store.increment_turn("s1")
+        gemini = _make_gemini_mock(generate_return="frustrated")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
 
-    def test_anxious(self):
-        assert MemoryManager._infer_emotion("I'm worried about his school") == "anxious"
+        result = await mm._infer_emotion("s1", "I'm so frustrated with bedtime")
 
-    def test_positive(self):
-        assert MemoryManager._infer_emotion("It was amazing how well it worked!") == "positive"
+        assert result == "frustrated"
+        prompt_arg = gemini.generate.call_args[0][0]
+        assert "frustrated with bedtime" in prompt_arg
 
-    def test_overwhelmed(self):
-        assert MemoryManager._infer_emotion("I feel overwhelmed and exhausted") == "overwhelmed"
+    @pytest.mark.asyncio
+    async def test_includes_conversation_context(self):
+        store = InMemorySessionStore()
+        store.increment_turn("s1")
+        store.add_message("s1", "user", "My son has ADHD", turn=1)
+        store.add_message("s1", "assistant", "Tell me more about him", turn=1)
+        gemini = _make_gemini_mock(generate_return="anxious")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
 
-    def test_hopeful(self):
-        assert MemoryManager._infer_emotion("Things have really improved lately") == "hopeful"
+        await mm._infer_emotion("s1", "I'm worried about his grades")
 
-    def test_neutral(self):
-        assert MemoryManager._infer_emotion("We tried the timer yesterday") == ""
+        prompt_arg = gemini.generate.call_args[0][0]
+        assert "My son has ADHD" in prompt_arg
+        assert "Tell me more about him" in prompt_arg
+
+    @pytest.mark.asyncio
+    async def test_invalid_output_defaults_empty(self):
+        store = InMemorySessionStore()
+        store.increment_turn("s1")
+        gemini = _make_gemini_mock(generate_return="something unexpected")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        result = await mm._infer_emotion("s1", "We tried the timer")
+
+        assert result == ""
+
+    @pytest.mark.asyncio
+    async def test_neutral_returns_empty(self):
+        store = InMemorySessionStore()
+        store.increment_turn("s1")
+        gemini = _make_gemini_mock(generate_return="neutral")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        result = await mm._infer_emotion("s1", "We tried the timer yesterday")
+
+        assert result == ""
+
+    @pytest.mark.asyncio
+    async def test_no_gemini_returns_empty(self):
+        store = InMemorySessionStore()
+        store.increment_turn("s1")
+        mm = MemoryManager(session_store=store, gemini_client=None)
+
+        result = await mm._infer_emotion("s1", "I'm so frustrated")
+
+        assert result == ""
 
 
 class TestErrorResilience:
