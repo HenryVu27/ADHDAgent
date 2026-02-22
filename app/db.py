@@ -141,11 +141,16 @@ CREATE INDEX IF NOT EXISTS idx_obs_events_session ON observability_events(sessio
 CREATE INDEX IF NOT EXISTS idx_obs_events_category ON observability_events(session_id, category);
 """
 
+SCHEMA_V5 = """
+ALTER TABLE messages ADD COLUMN tool_calls_summary TEXT NOT NULL DEFAULT '';
+"""
+
 MIGRATIONS = {
     1: SCHEMA_V1,
     2: SCHEMA_V2,
     3: SCHEMA_V3,
     4: SCHEMA_V4,
+    5: SCHEMA_V5,
 }
 
 

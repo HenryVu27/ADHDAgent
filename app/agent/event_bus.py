@@ -49,22 +49,22 @@ class EventBus:
             level=level,
         )
 
-        # Always keep in memory for fast reads
         with self._lock:
+            # Always keep in memory for fast reads
             if session_id not in self._buffers:
                 self._buffers[session_id] = deque(maxlen=self._buffer_size)
             self._buffers[session_id].append(event)
 
-        # Persist to SQLite
-        if self._conn:
-            try:
-                self._conn.execute(
-                    "INSERT INTO observability_events (session_id, category, event_type, turn, timestamp, duration_ms, detail_json, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                    (session_id, category, event_type, turn, ts, duration_ms, json.dumps(detail or {}), level),
-                )
-                self._conn.commit()
-            except Exception as e:
-                logger.warning("Failed to persist event to SQLite: %s", e)
+            # Persist to SQLite (inside lock to prevent concurrent connection access)
+            if self._conn:
+                try:
+                    self._conn.execute(
+                        "INSERT INTO observability_events (session_id, category, event_type, turn, timestamp, duration_ms, detail_json, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                        (session_id, category, event_type, turn, ts, duration_ms, json.dumps(detail or {}), level),
+                    )
+                    self._conn.commit()
+                except Exception as e:
+                    logger.warning("Failed to persist event to SQLite: %s", e)
 
     def get_events(
         self,
@@ -73,11 +73,11 @@ class EventBus:
         level: str | None = None,
     ) -> list[ObservabilityEvent]:
         """Return events for a session, optionally filtered by category/level."""
-        if self._conn:
-            return self._get_events_from_db(session_id, category, level)
-
-        # Fallback to in-memory
         with self._lock:
+            if self._conn:
+                return self._get_events_from_db(session_id, category, level)
+
+            # Fallback to in-memory
             events = list(self._buffers.get(session_id, []))
 
         if category:
@@ -92,7 +92,7 @@ class EventBus:
         category: str | None = None,
         level: str | None = None,
     ) -> list[ObservabilityEvent]:
-        """Read events from SQLite with optional filters."""
+        """Read events from SQLite with optional filters. Caller must hold self._lock."""
         query = "SELECT category, event_type, session_id, turn, timestamp, duration_ms, detail_json, level FROM observability_events WHERE session_id = ?"
         params: list = [session_id]
 
@@ -122,11 +122,11 @@ class EventBus:
 
     def get_all_session_ids(self) -> list[str]:
         """Return all session IDs that have events."""
-        if self._conn:
-            rows = self._conn.execute(
-                "SELECT DISTINCT session_id FROM observability_events"
-            ).fetchall()
-            return [r["session_id"] for r in rows]
-
         with self._lock:
+            if self._conn:
+                rows = self._conn.execute(
+                    "SELECT DISTINCT session_id FROM observability_events"
+                ).fetchall()
+                return [r["session_id"] for r in rows]
+
             return list(self._buffers.keys())
