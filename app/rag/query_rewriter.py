@@ -9,10 +9,15 @@ QUERY_REWRITE_PROMPT = """You are a search query optimizer for an ADHD parenting
 
 Given a parent's current message and recent conversation context, rewrite the query to be self-contained and optimized for retrieval. Resolve pronouns, add implicit context, and focus on the core information need.
 
-Current query: {query}
+Current query:
+<query>
+{query}
+</query>
 
 Recent conversation:
+<conversation>
 {conversation_history}
+</conversation>
 
 Family profile: {family_profile}
 

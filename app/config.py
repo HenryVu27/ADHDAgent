@@ -25,6 +25,13 @@ class Settings(BaseSettings):
 
     # App
     LOG_LEVEL: str = "INFO"
+    CORS_ALLOWED_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:8000"]
+    CHAT_TIMEOUT_S: float = 120.0
+    API_KEY: str = ""           # Empty = dev mode (no auth)
+    ADMIN_API_KEY: str = ""     # Empty = no admin gate
+    RATE_LIMIT_CHAT: str = "10/minute"
+    RATE_LIMIT_DEFAULT: str = "60/minute"
+    RATE_LIMIT_ENABLED: bool = True
 
     # Agent
     AGENT_MAX_TOOL_STEPS: int = 5
@@ -44,7 +51,7 @@ class Settings(BaseSettings):
     GEMINI_UTILITY_MODEL: str = ""
 
     # Thinking mode budget (tokens) for the agent model
-    GEMINI_THINKING_BUDGET: int = 2048
+    GEMINI_THINKING_BUDGET: int = 8192
 
     # Memory manager
     SUMMARY_INTERVAL_TURNS: int = 5

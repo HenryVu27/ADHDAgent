@@ -5,10 +5,16 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+
+from app.api.middleware import APIKeyMiddleware
 from app.api.observability_routes import obs_router, set_observability_deps
+from app.api.rate_limit import limiter
 from app.api.routes import router, set_knowledge_base, set_orchestrator
 from app.config import settings
 
@@ -146,6 +152,15 @@ app = FastAPI(
     description="ReAct ADHD coaching agent with guardrail gates",
     version="0.4.0",
     lifespan=lifespan,
+)
+
+app.add_middleware(APIKeyMiddleware)  # Added BEFORE CORS (CORS must be outermost)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(router, prefix="/api")

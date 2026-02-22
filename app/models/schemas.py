@@ -190,8 +190,16 @@ class SeedSessionRequest(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    message: str
+    message: str = Field(..., min_length=1, max_length=5000)
     session_id: str = "default"
+
+    @field_validator("message")
+    @classmethod
+    def validate_message(cls, v: str) -> str:
+        stripped = v.strip()
+        if not stripped:
+            raise ValueError("Message cannot be empty or whitespace only")
+        return stripped
 
     @field_validator("session_id")
     @classmethod

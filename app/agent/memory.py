@@ -99,7 +99,7 @@ New conversation to incorporate:
 Write a concise summary (2-4 sentences) that captures the most important context for continuing this conversation."""
 
         try:
-            summary_text = await self._gemini.generate(prompt, temperature=0.0, max_output_tokens=1024)
+            summary_text = await self._gemini.generate(prompt, temperature=0.0, max_output_tokens=256)
             self._store.save_summary(
                 session_id,
                 SessionSummary(summary=summary_text.strip(), covers_through_turn=current_turn),
@@ -155,7 +155,10 @@ If no NEW profile facts are mentioned, return an empty object {{}}.
 Already known: {profile_text}
 {f"Recent conversation context:{chr(10)}{history_text}" if history_text else ""}
 
-Parent message: "{user_message}"
+Parent message:
+<parent_message>
+{user_message}
+</parent_message>
 """
 
         try:

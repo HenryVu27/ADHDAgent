@@ -28,11 +28,12 @@ logger = logging.getLogger(__name__)
 _RETRYABLE = (ConnectionError, TimeoutError, OSError)
 try:
     from google.api_core.exceptions import (
+        InternalServerError,
         ResourceExhausted,
         ServiceUnavailable,
         DeadlineExceeded,
     )
-    _RETRYABLE = (*_RETRYABLE, ResourceExhausted, ServiceUnavailable, DeadlineExceeded)
+    _RETRYABLE = (*_RETRYABLE, ResourceExhausted, ServiceUnavailable, DeadlineExceeded, InternalServerError)
 except ImportError:
     pass
 

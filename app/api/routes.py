@@ -9,7 +9,11 @@ Endpoints:
 - GET  /api/knowledge/topics — approved topic boundaries
 """
 
+import asyncio
+
 from fastapi import APIRouter, HTTPException
+
+from app.config import settings
 
 from app.models.schemas import (
     ChatRequest,
@@ -53,10 +57,16 @@ async def chat(request: ChatRequest):
     if not _orchestrator:
         raise HTTPException(status_code=503, detail="Service not initialized")
 
-    return await _orchestrator.process(
-        message=request.message,
-        session_id=request.session_id,
-    )
+    try:
+        return await asyncio.wait_for(
+            _orchestrator.process(
+                message=request.message,
+                session_id=request.session_id,
+            ),
+            timeout=settings.CHAT_TIMEOUT_S,
+        )
+    except asyncio.TimeoutError:
+        raise HTTPException(status_code=504, detail="Request timed out. Please try again.")
 
 
 @router.post("/session/seed")
