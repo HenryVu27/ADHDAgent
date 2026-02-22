@@ -181,6 +181,48 @@ class TestBuildSystemPrompt:
         assert "Cite sources" in result
 
 
+class TestPromptEnhancements:
+
+    def _build_prompt(self):
+        return build_system_prompt(
+            profile=FamilyProfile(),
+            active_strategies=[],
+            goals=[],
+            outcomes=[],
+        )
+
+    def test_has_xml_structure(self):
+        prompt = self._build_prompt()
+        for tag in [
+            "<role>", "<boundaries>", "<family-context>",
+            "<tools>", "<examples>", "<reasoning>", "<response-guide>",
+        ]:
+            assert tag in prompt, f"Missing XML tag: {tag}"
+
+    def test_has_consequence_awareness(self):
+        prompt = self._build_prompt()
+        assert "entire response" in prompt
+        assert "discarded and replaced" in prompt
+
+    def test_has_personalization_instructions(self):
+        prompt = self._build_prompt()
+        assert "parent's own language" in prompt
+
+    def test_has_reasoning_checklist(self):
+        prompt = self._build_prompt()
+        assert "Before responding" in prompt
+        assert "staying within scope" in prompt
+
+    def test_has_adaptive_length(self):
+        prompt = self._build_prompt()
+        assert "1-2 sentences" in prompt
+        assert "Keep every response under 200 words" not in prompt
+
+    def test_has_diverse_examples(self):
+        prompt = self._build_prompt()
+        assert prompt.count("Parent:") >= 5
+
+
 def test_enhanced_boundaries_in_system_prompt():
     """System prompt should include enhanced boundary instructions."""
     from app.agent.prompts import build_system_prompt
