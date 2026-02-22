@@ -7,7 +7,6 @@ from datetime import datetime, timezone
 
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 
-from app.agent.prompts import SAFE_OUTPUT_FALLBACK
 from app.agent.store_protocol import SessionStoreBase
 from app.models.schemas import (
     AgentReasoningStep,
@@ -39,14 +38,12 @@ def _extract_text(content) -> str:
 class AgentOrchestrator:
     """Manages sessions and runs the compiled ReAct agent."""
 
-    def __init__(self, agent, session_store: SessionStoreBase, memory_manager=None, analyzer=None, event_bus=None, gemini_client=None, output_gate=None):
+    def __init__(self, agent, session_store: SessionStoreBase, memory_manager=None, analyzer=None, event_bus=None):
         self._agent = agent
         self._session_store = session_store
         self._memory = memory_manager
         self._analyzer = analyzer
         self._event_bus = event_bus
-        self._gemini_client = gemini_client
-        self._output_gate = output_gate
 
     def get_session(self, session_id: str) -> SessionState:
         return self._session_store.get(session_id)
@@ -85,7 +82,11 @@ class AgentOrchestrator:
             if entry["role"] == "user":
                 history_messages.append(HumanMessage(content=entry["content"]))
             elif entry["role"] == "assistant":
-                history_messages.append(AIMessage(content=entry["content"]))
+                content = entry["content"]
+                tcs = entry.get("tool_calls_summary", "")
+                if tcs:
+                    content = f"[Tools used: {tcs}]\n{content}"
+                history_messages.append(AIMessage(content=content))
 
         start = time.time()
         config = {
@@ -102,15 +103,12 @@ class AgentOrchestrator:
                 config=config,
             )
         except Exception as e:
-            # Handle recursion limit (model loops calling tools without final response)
             total_ms = (time.time() - start) * 1000
-            logger.warning("[agent] Agent invocation failed (%s) — using search+synthesis fallback", type(e).__name__)
-            response_text = await self._search_and_synthesize(message, session_id)
-            if not response_text:
-                response_text = (
-                    "I want to make sure I give you the best help. "
-                    "Could you tell me a bit more about what you'd like to focus on?"
-                )
+            logger.warning("[agent] Agent invocation failed (%s) — using static fallback", type(e).__name__)
+            response_text = (
+                "I want to make sure I give you the best help. "
+                "Could you tell me a bit more about what you'd like to focus on?"
+            )
             self._session_store.add_message(session_id, "user", message, turn)
             self._session_store.add_message(session_id, "assistant", response_text, turn)
             trace = PipelineTrace(
@@ -184,7 +182,6 @@ class AgentOrchestrator:
 
         response_text = ""
         tool_calls_made = []
-        tool_results = []  # Collect tool results for synthesis fallback
         for msg in new_messages:
             if isinstance(msg, AIMessage):
                 if msg.tool_calls:
@@ -192,43 +189,20 @@ class AgentOrchestrator:
                 elif msg.content:
                     # Only non-tool-calling AI messages count as final response
                     response_text = _extract_text(msg.content)
-            elif isinstance(msg, ToolMessage) and msg.content:
-                tool_results.append(msg.content)
 
-        # Gemini flash-lite often produces empty final responses after tool
-        # calls — it calls the tool, gets results, but fails to synthesize
-        # them.  When this happens, use a direct LLM call to produce a
-        # response grounded in the tool results or a fresh knowledge search.
-        is_empty = not response_text.strip() if isinstance(response_text, str) else not response_text
-        if is_empty and tool_calls_made:
-            # Check if any tool results look like knowledge base search results
-            search_results = [r for r in tool_results if "[1]" in r or "Source:" in r]
-            if search_results:
-                logger.info("[agent] Empty post-tool response — synthesizing from %d search results", len(search_results))
-                response_text = await self._synthesize_from_tool_results(
-                    message, search_results, session_id,
-                )
-            else:
-                # Tools were called but no search results (e.g., profile updates,
-                # goal management).  Synthesize an acknowledgment based on what
-                # the tools actually did rather than forcing a knowledge search.
-                logger.info("[agent] Empty post-tool response with no search results — synthesizing acknowledgment")
-                response_text = await self._synthesize_acknowledgment(
-                    message, tool_calls_made, tool_results, session_id,
-                )
-
-        # Final fallback if synthesis also failed or no tool calls at all
+        # Fallback if agent produced no final text response
         is_empty = not response_text.strip() if isinstance(response_text, str) else not response_text
         if is_empty:
-            logger.warning("[agent] Empty response from agent — using fallback")
+            logger.warning("[agent] Empty response from agent — using static fallback")
             response_text = (
                 "I want to make sure I give you the best help. "
                 "Could you tell me a bit more about what you'd like to focus on?"
             )
 
         # Record turn in conversation history
+        tool_summary = self._build_tool_calls_summary(tool_calls_made)
         self._session_store.add_message(session_id, "user", message, turn)
-        self._session_store.add_message(session_id, "assistant", response_text, turn)
+        self._session_store.add_message(session_id, "assistant", response_text, turn, tool_calls_summary=tool_summary)
 
         # Build and persist enriched trace
         enriched = self._build_enriched_trace(
@@ -291,132 +265,6 @@ class AgentOrchestrator:
         except Exception as e:
             logger.error("Background task '%s' failed: %s", label, e)
 
-    async def _gate_check(self, response_text: str) -> str:
-        """Run the output gate on a fallback response. Returns safe fallback on violation."""
-        if not self._output_gate:
-            return response_text
-        try:
-            check = await self._output_gate.check(response_text)
-            if not check.is_valid:
-                logger.info("[agent] Output gate caught fallback violation: %s", check.violation_type)
-                return SAFE_OUTPUT_FALLBACK
-        except Exception as e:
-            logger.error("[agent] Output gate failed on fallback (allowing): %s", e)
-        return response_text
-
-    async def _synthesize_from_tool_results(
-        self, user_message: str, tool_results: list[str], session_id: str,
-    ) -> str:
-        """Synthesize a coaching response from tool results via direct LLM call.
-
-        This is a fallback for when Gemini flash-lite calls tools correctly
-        but produces empty content in its final response.
-        """
-        if not self._gemini_client:
-            return ""
-
-        state = self._session_store.get(session_id)
-        child_name = state.family_profile.child_name or "your child"
-
-        results_text = "\n\n".join(tool_results)
-        prompt = (
-            f"You are a warm ADHD parenting coach. A parent said:\n"
-            f"\"{user_message}\"\n\n"
-            f"You searched the knowledge base and found these results:\n"
-            f"{results_text}\n\n"
-            f"Write a warm, practical response (under 200 words) that:\n"
-            f"- Validates the parent's effort\n"
-            f"- Shares 2-3 specific strategies from the search results\n"
-            f"- Uses the child's name ({child_name}) naturally\n"
-            f"- Gives concrete first steps\n"
-            f"- Does NOT use emojis\n"
-            f"Respond directly to the parent."
-        )
-
-        try:
-            response = await self._gemini_client.generate(prompt, temperature=0.7)
-            if response and response.strip():
-                return await self._gate_check(response.strip())
-        except Exception as e:
-            logger.error("[agent] Synthesis fallback failed: %s", e)
-
-        return ""
-
-    async def _synthesize_acknowledgment(
-        self,
-        user_message: str,
-        tool_calls: list[dict],
-        tool_results: list[str],
-        session_id: str,
-    ) -> str:
-        """Synthesize a contextual acknowledgment when non-search tools were called.
-
-        Instead of forcing a knowledge-base search (which produces irrelevant
-        strategy advice for messages like "My child is 7"), this generates a
-        brief acknowledgment grounded in what the tools actually did.
-        """
-        if not self._gemini_client:
-            return ""
-
-        tool_names = [tc.get("name", "unknown") for tc in tool_calls]
-        tool_summary = ", ".join(tool_names)
-        results_text = "\n".join(tool_results) if tool_results else "(no details)"
-
-        state = self._session_store.get(session_id)
-        child_name = state.family_profile.child_name or "your child"
-
-        prompt = (
-            f"You are a warm ADHD parenting coach. A parent said:\n"
-            f"\"{user_message}\"\n\n"
-            f"You performed these actions: {tool_summary}\n"
-            f"Tool outputs:\n{results_text}\n\n"
-            f"Write a brief, warm acknowledgment (under 80 words) that:\n"
-            f"- Confirms what you noted or updated\n"
-            f"- Asks a natural follow-up question to keep the conversation going\n"
-            f"- Uses the child's name ({child_name}) if appropriate\n"
-            f"- Does NOT give unsolicited strategy advice\n"
-            f"- Does NOT use emojis\n"
-            f"Respond directly to the parent."
-        )
-
-        try:
-            response = await self._gemini_client.generate(prompt, temperature=0.7)
-            if response and response.strip():
-                return await self._gate_check(response.strip())
-        except Exception as e:
-            logger.error("[agent] Acknowledgment synthesis failed: %s", e)
-
-        return ""
-
-    async def _search_and_synthesize(self, message: str, session_id: str) -> str:
-        """Fallback: generate a direct response when the agent invocation fails."""
-        if not self._gemini_client:
-            return ""
-
-        state = self._session_store.get(session_id)
-        child_name = state.family_profile.child_name or "your child"
-
-        prompt = (
-            f"You are a warm ADHD parenting coach. A parent said:\n"
-            f"\"{message}\"\n\n"
-            f"Write a warm, helpful response (under 150 words) that:\n"
-            f"- Validates the parent's concern\n"
-            f"- Asks a clarifying question to better understand their situation\n"
-            f"- Uses the child's name ({child_name}) if appropriate\n"
-            f"- Does NOT give specific medical advice\n"
-            f"- Does NOT use emojis\n"
-            f"Respond directly to the parent."
-        )
-
-        try:
-            response = await self._gemini_client.generate(prompt, temperature=0.7)
-            if response and response.strip():
-                return await self._gate_check(response.strip())
-        except Exception as e:
-            logger.error("[agent] Search-and-synthesize fallback failed: %s", e)
-
-        return ""
-
     def _infer_phase(self, session_id: str) -> ConversationPhase:
         """Infer a phase label from session state for API compatibility."""
         state = self._session_store.get(session_id)
@@ -440,6 +288,33 @@ class AgentOrchestrator:
             return ConversationPhase.strategy
 
         return ConversationPhase.intake
+
+    @staticmethod
+    def _build_tool_calls_summary(tool_calls: list[dict]) -> str:
+        """Build a compact one-line summary of tool calls for message metadata."""
+        if not tool_calls:
+            return ""
+        parts = []
+        for tc in tool_calls:
+            name = tc.get("name", "unknown")
+            args = tc.get("args", {})
+            if name == "search_knowledge_base":
+                query = args.get("query", "")
+                parts.append(f'search_knowledge_base(query="{query}")')
+            elif name == "update_family_profile":
+                arg_keys = [k for k in ("child_name", "child_age", "diagnosis_status") if args.get(k)]
+                parts.append(f"update_family_profile({', '.join(arg_keys)})" if arg_keys else "update_family_profile()")
+            elif name == "track_outcome":
+                strategy = args.get("strategy_name", "")
+                signal = args.get("outcome", "")
+                parts.append(f"track_outcome({strategy}: {signal})")
+            elif name == "manage_goals":
+                action = args.get("action", "")
+                desc = args.get("description", "")
+                parts.append(f"manage_goals({action}: {desc})")
+            else:
+                parts.append(name)
+        return "; ".join(parts)
 
     @staticmethod
     def _build_enriched_trace(
