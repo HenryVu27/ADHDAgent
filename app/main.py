@@ -126,15 +126,17 @@ async def lifespan(app: FastAPI):
         memory_manager=memory_manager,
         analyzer=analyzer,
         event_bus=event_bus,
-        gemini_client=gemini,
-        output_gate=output_gate,
     )
     set_orchestrator(orchestrator)
 
     # 10. Wire observability dependencies
     set_observability_deps(session_store, event_bus, analyzer)
 
-    logger.info("ADHDAgent ready (ReAct agent architecture)")
+    logger.info(
+        "ADHDAgent ready (agent_model=%s, utility_model=%s)",
+        settings.GEMINI_AGENT_MODEL,
+        settings.GEMINI_UTILITY_MODEL,
+    )
     yield
     logger.info("ADHDAgent shutting down")
 
