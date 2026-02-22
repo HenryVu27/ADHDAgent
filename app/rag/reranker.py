@@ -2,6 +2,7 @@
 # Scores (query, document) pairs using a trained cross-encoder model.
 # Runs locally via ONNX — no API calls, no extra cost.
 
+import asyncio
 import logging
 
 from app.models.schemas import RetrievalResult
@@ -29,7 +30,10 @@ class FastEmbedReranker:
             return results[:top_k]
 
         documents = [r.content for r in results]
-        raw_scores = list(self._model.rerank(query, documents))
+        # Run CPU-bound ONNX inference off the event loop
+        raw_scores = await asyncio.to_thread(
+            lambda: list(self._model.rerank(query, documents))
+        )
 
         # FastEmbed rerank() returns raw floats in input order for most models.
         scored = sorted(
@@ -37,7 +41,10 @@ class FastEmbedReranker:
             key=lambda x: x[0],
             reverse=True,
         )
-        reranked = [result for _, result in scored[:top_k]]
+        reranked = []
+        for ce_score, result in scored[:top_k]:
+            result.score = ce_score
+            reranked.append(result)
 
         logger.info(
             f"Reranked {len(results)} candidates -> top {len(reranked)} "
