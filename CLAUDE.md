@@ -34,12 +34,11 @@ Input Gate (app/guardrails/validator.py — InputGate)
 Context Assembly (app/agent/hooks.py — prepare_context)
     Family profile, goals, outcomes, rolling summary,
     episodic memory injected into sectioned system prompt.
-    Model routing: classifies complexity -> fast/standard/complex tier.
     Trims conversation history to last N turns.
     |
     v
 Gemini ReAct Agent (app/agent/graph.py — inner create_react_agent)
-    Model selected per-turn by complexity tier (when routing enabled).
+    Uses Pro model with thinking mode (budget_tokens configurable).
     Agent reasons about the parent's message and decides to:
       - Respond directly (greetings, acknowledgments, clarifying questions)
       - Call search_knowledge_base() to find evidence-based strategies
@@ -67,7 +66,7 @@ Response to parent (with PipelineTrace for frontend)
 
 ## Tech Stack
 
-- **LLM**: Google Gemini 3 (3-flash-preview / 3-pro-preview) via langchain-google-genai (ChatGoogleGenerativeAI)
+- **LLM**: Google Gemini 3 — Pro (gemini-3-pro-preview) for ReAct agent with thinking mode, Flash (gemini-3-flash-preview) for utilities (guardrails, memory, analyzer). Tenacity retry on all API calls.
 - **Embeddings**: Gemini gemini-embedding-001 via google-genai SDK
 - **Vector Search**: Qdrant (in-memory for dev, remote for prod) with dense + sparse + RRF
 - **Agent**: LangGraph create_react_agent (ReAct loop with tool calling)
@@ -111,7 +110,6 @@ pytest tests/test_guardrails.py -v
 pytest tests/test_rag.py -v
 pytest tests/test_prompts.py -v
 pytest tests/test_memory.py -v
-pytest tests/test_model_router.py -v
 pytest tests/test_event_bus.py -v
 pytest tests/test_analyzer.py -v
 pytest tests/test_observability_api.py -v
@@ -136,7 +134,7 @@ pytest tests/test_e2e_conversations.py -v -m integration -s
 | File | Purpose |
 |------|---------|
 | `app/main.py` | App startup + dependency wiring |
-| `app/config.py` | All settings (Gemini, Qdrant, agent, memory, routing) |
+| `app/config.py` | All settings (Gemini, Qdrant, agent, memory, thinking) |
 | `app/db.py` | SQLite schema, migrations, connection management |
 | `app/models/schemas.py` | All Pydantic data contracts |
 | `app/api/routes.py` | Core API endpoints |
@@ -149,7 +147,6 @@ pytest tests/test_e2e_conversations.py -v -m integration -s
 | `app/agent/prompts.py` | Sectioned system prompt template + context assembly helpers |
 | `app/agent/state.py` | `CoachingState` extending `MessagesState` |
 | `app/agent/memory.py` | `MemoryManager` — rolling summary, fact extraction, episodic memory |
-| `app/agent/model_router.py` | Complexity classification + per-turn model selection |
 | `app/agent/store_protocol.py` | `SessionStoreBase` ABC — interface for all session stores |
 | `app/agent/session_store.py` | `InMemorySessionStore` implementation |
 | `app/agent/sqlite_store.py` | `SQLiteSessionStore` implementation |
