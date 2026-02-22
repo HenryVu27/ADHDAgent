@@ -5,6 +5,7 @@ independently so future phases (summary, episodes) can add sections without
 touching the template.
 """
 
+from app.config import settings
 from app.models.schemas import FamilyProfile, Goal, Outcome
 
 
@@ -181,6 +182,9 @@ def format_structured_facts(
 def format_goals_and_outcomes(
     goals: list[Goal],
     outcomes: list[Outcome],
+    max_active_goals: int = 5,
+    max_completed_goals: int = 2,
+    max_outcomes: int = 3,
 ) -> str:
     """Format goals and recent outcomes into the goals_and_outcomes section."""
     parts = []
@@ -189,15 +193,27 @@ def format_goals_and_outcomes(
     completed_goals = [g for g in goals if g.status == "completed"]
 
     if active_goals:
-        goal_lines = [f"- {g.description}" for g in active_goals]
-        parts.append("Active goals:\n" + "\n".join(goal_lines))
+        total_active = len(active_goals)
+        capped = active_goals[-max_active_goals:]
+        header = "Active goals"
+        if total_active > max_active_goals:
+            header += f" (showing {max_active_goals} of {total_active})"
+        header += ":"
+        goal_lines = [f"- {g.description}" for g in capped]
+        parts.append(header + "\n" + "\n".join(goal_lines))
 
     if completed_goals:
-        done_lines = [f"- {g.description}" for g in completed_goals]
-        parts.append("Completed goals:\n" + "\n".join(done_lines))
+        total_completed = len(completed_goals)
+        capped = completed_goals[-max_completed_goals:]
+        header = "Completed goals"
+        if total_completed > max_completed_goals:
+            header += f" (showing {max_completed_goals} of {total_completed})"
+        header += ":"
+        done_lines = [f"- {g.description}" for g in capped]
+        parts.append(header + "\n" + "\n".join(done_lines))
 
     if outcomes:
-        recent = outcomes[-3:]
+        recent = outcomes[-max_outcomes:]
         outcome_lines = []
         for o in recent:
             line = f"- {o.goal_description}: {o.signal}"
@@ -212,6 +228,21 @@ def format_goals_and_outcomes(
     return "\n\n".join(parts)
 
 
+def build_conversation_state(
+    turn: int,
+    phase: str,
+    recent_tool_calls: list[str] | None = None,
+    active_topic: str = "",
+) -> str:
+    """Build a compact <conversation_state> XML block for the current turn."""
+    lines = [f"  <turn>{turn}</turn>", f"  <phase>{phase}</phase>"]
+    if recent_tool_calls:
+        lines.append(f"  <last_tools>{', '.join(recent_tool_calls)}</last_tools>")
+    if active_topic:
+        lines.append(f"  <focus>{active_topic}</focus>")
+    return "<conversation_state>\n" + "\n".join(lines) + "\n</conversation_state>"
+
+
 def build_system_prompt(
     profile: FamilyProfile,
     active_strategies: list[str],
@@ -221,7 +252,13 @@ def build_system_prompt(
 ) -> str:
     """Assemble the full system prompt from all context sections."""
     structured_facts = format_structured_facts(profile, active_strategies)
-    goals_and_outcomes = format_goals_and_outcomes(goals, outcomes)
+    goals_and_outcomes = format_goals_and_outcomes(
+        goals,
+        outcomes,
+        max_active_goals=settings.CONTEXT_MAX_ACTIVE_GOALS,
+        max_completed_goals=settings.CONTEXT_MAX_COMPLETED_GOALS,
+        max_outcomes=settings.CONTEXT_MAX_OUTCOMES,
+    )
 
     if not session_summary:
         session_summary = "This is the beginning of the conversation."
