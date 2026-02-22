@@ -42,10 +42,11 @@ def set_knowledge_base(kb):
 @router.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """
-    Main chat endpoint. Processes parent input through the ReAct agent:
-    1. pre_model_hook: NeMo input guardrails + context injection
-    2. ReAct loop: Gemini reasons and calls tools (search, profile, goals, outcomes)
-    3. post_model_hook: NeMo output guardrails
+    Main chat endpoint. Processes parent input through the agent pipeline:
+    1. Input gate: crisis + jailbreak classification
+    2. Context assembly: system prompt + conversation trimming
+    3. ReAct loop: Gemini reasons and calls tools (search, profile, goals, outcomes)
+    4. Output gate: medication + diagnosis + scope classification
 
     Returns full PipelineTrace for frontend visualization.
     """

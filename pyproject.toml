@@ -13,5 +13,5 @@ include = ["app*"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 markers = [
-    "integration: end-to-end tests requiring external services (API keys, NeMo installed)",
+    "integration: end-to-end tests requiring external services (API keys)",
 ]

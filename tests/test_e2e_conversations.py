@@ -2,7 +2,7 @@
 End-to-end conversation tests for ADHDAgent.
 
 Tests realistic multi-turn parent coaching conversations against the full
-application stack: Gemini LLM, Qdrant RAG, NeMo Guardrails, memory manager,
+application stack: Gemini LLM, Qdrant RAG, guardrail gates, memory manager,
 and session store. All tests hit the real API (no mocks) and require a valid
 GEMINI_API_KEY environment variable.
 
@@ -302,7 +302,7 @@ def test_strategy_deep_dive_rag(app_client, session_id):
     )
 
     # Turn 3: follow-up on a specific strategy
-    # Include enough ADHD context so NeMo doesn't flag as off_topic
+    # Include enough ADHD context to stay on-topic
     r3 = chat(
         app_client,
         "Tell me more about the first homework strategy you mentioned for Leo",
