@@ -29,9 +29,24 @@ logger = logging.getLogger(__name__)
 class SQLiteSessionStore(SessionStoreBase):
     """Full SQLite implementation of the session store."""
 
+    _VALID_PROFILE_FIELDS = frozenset({
+        "child_name", "child_age", "diagnosis_status",
+        "challenge_areas", "attempted_strategies",
+        "good_day_description", "hardest_situations",
+    })
+
     def __init__(self, conn: sqlite3.Connection):
         self._conn = conn
         self._lock = threading.RLock()
+
+    def session_exists(self, session_id: str) -> bool:
+        """Check if a session exists without creating it."""
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT 1 FROM sessions WHERE session_id = ?",
+                (session_id,),
+            ).fetchone()
+            return row is not None
 
     def _ensure_session(self, session_id: str) -> None:
         """Create session + profile rows if they don't exist."""
@@ -133,6 +148,10 @@ class SQLiteSessionStore(SessionStoreBase):
     def update_profile(self, session_id: str, **kwargs) -> FamilyProfile:
         """Update profile fields, return updated profile."""
         with self._lock:
+            for field in kwargs:
+                if field not in self._VALID_PROFILE_FIELDS:
+                    raise ValueError(f"Invalid profile field: {field!r}")
+
             self._ensure_session(session_id)
 
             # Read current profile
@@ -522,6 +541,54 @@ class SQLiteSessionStore(SessionStoreBase):
                 )
                 for r in rows
             ]
+
+    def get_all_sessions_paginated(self, offset: int = 0, limit: int = 50) -> tuple[list[SessionListItem], int]:
+        """Return paginated sessions and total count."""
+        with self._lock:
+            total_row = self._conn.execute("SELECT COUNT(*) FROM sessions").fetchone()
+            total = total_row[0]
+
+            rows = self._conn.execute(
+                "SELECT session_id, turn_count, phase, created_at, updated_at FROM sessions ORDER BY updated_at DESC LIMIT ? OFFSET ?",
+                (limit, offset),
+            ).fetchall()
+            items = [
+                SessionListItem(
+                    session_id=r["session_id"],
+                    turn_count=r["turn_count"],
+                    phase=r["phase"],
+                    created_at=r["created_at"] or "",
+                    updated_at=r["updated_at"] or "",
+                )
+                for r in rows
+            ]
+            return items, total
+
+    def get_messages_paginated(self, session_id: str, offset: int = 0, limit: int = 50) -> tuple[list[dict], int]:
+        """Return paginated messages and total count."""
+        with self._lock:
+            total_row = self._conn.execute(
+                "SELECT COUNT(*) FROM messages WHERE session_id = ?",
+                (session_id,),
+            ).fetchone()
+            total = total_row[0]
+
+            rows = self._conn.execute(
+                "SELECT role, content, turn, blocked, blocked_reason, tool_calls_summary FROM messages WHERE session_id = ? ORDER BY id LIMIT ? OFFSET ?",
+                (session_id, limit, offset),
+            ).fetchall()
+            messages = [
+                {
+                    "role": r["role"],
+                    "content": r["content"],
+                    "turn": r["turn"],
+                    "blocked": bool(r["blocked"]),
+                    "blocked_reason": r["blocked_reason"],
+                    "tool_calls_summary": r["tool_calls_summary"],
+                }
+                for r in rows
+            ]
+            return messages, total
 
     def get_session_timestamps(self, session_id: str) -> tuple[str, str]:
         """Return (created_at, updated_at) from the sessions table."""

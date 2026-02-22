@@ -721,18 +721,15 @@ class TestSQLInjectionSurface:
     """
 
     def test_unknown_field_name_raises_or_is_rejected(self, sqlite_store):
-        """Passing an unknown field name should not corrupt the database."""
+        """Passing an unknown field name should raise ValueError before SQL."""
         sqlite_store.increment_turn("inject-test")  # Ensure session exists
 
-        try:
-            # This passes a field that doesn't exist as a column
+        with pytest.raises(ValueError, match="Invalid profile field"):
             sqlite_store.update_profile("inject-test", nonexistent_field="value")
-            # If it didn't raise, verify the DB isn't corrupted
-            state = sqlite_store.get("inject-test")
-            assert state is not None
-        except sqlite3.OperationalError:
-            # Expected: SQLite rejects unknown column
-            pass
+
+        # DB should not be corrupted
+        state = sqlite_store.get("inject-test")
+        assert state is not None
 
     def test_sql_injection_in_field_name_does_not_execute(self, sqlite_store):
         """
@@ -753,3 +750,14 @@ class TestSQLInjectionSurface:
         # Verify sessions table still exists
         state = sqlite_store.get("inject-test-2")
         assert state is not None, "Sessions table should not have been dropped"
+
+    def test_invalid_field_rejected_before_sql(self, sqlite_store):
+        """update_profile should raise ValueError for unknown fields, not OperationalError."""
+        sqlite_store.increment_turn("validate-test")
+        with pytest.raises(ValueError, match="Invalid profile field"):
+            sqlite_store.update_profile("validate-test", bad_field="value")
+
+    def test_inmemory_invalid_field_rejected(self, memory_store):
+        """InMemorySessionStore should also reject unknown fields."""
+        with pytest.raises(ValueError, match="Invalid profile field"):
+            memory_store.update_profile("validate-test", bad_field="value")

@@ -23,6 +23,12 @@ logger = logging.getLogger(__name__)
 class InMemorySessionStore(SessionStoreBase):
     """In-memory session state, accessed by tools via session_id."""
 
+    _VALID_PROFILE_FIELDS = frozenset({
+        "child_name", "child_age", "diagnosis_status",
+        "challenge_areas", "attempted_strategies",
+        "good_day_description", "hardest_situations",
+    })
+
     def __init__(self):
         self._sessions: dict[str, SessionState] = {}
         self._summaries: dict[str, list[SessionSummary]] = {}
@@ -30,6 +36,11 @@ class InMemorySessionStore(SessionStoreBase):
         self._traces: dict[str, list[EnrichedTrace]] = {}
         self._analyses: dict[str, list[TurnAnalysis]] = {}
         self._lock = threading.RLock()
+
+    def session_exists(self, session_id: str) -> bool:
+        """Check if a session exists without creating it."""
+        with self._lock:
+            return session_id in self._sessions
 
     def get(self, session_id: str) -> SessionState:
         """Get or create session state."""
@@ -41,6 +52,10 @@ class InMemorySessionStore(SessionStoreBase):
     def update_profile(self, session_id: str, **kwargs) -> FamilyProfile:
         """Update profile fields, return updated profile."""
         with self._lock:
+            for field in kwargs:
+                if field not in self._VALID_PROFILE_FIELDS:
+                    raise ValueError(f"Invalid profile field: {field!r}")
+
             state = self.get(session_id)
             profile = state.family_profile
 
@@ -260,6 +275,30 @@ class InMemorySessionStore(SessionStoreBase):
                 )
                 for s in self._sessions.values()
             ]
+
+    def get_all_sessions_paginated(self, offset: int = 0, limit: int = 50) -> tuple[list[SessionListItem], int]:
+        """Return paginated sessions and total count."""
+        with self._lock:
+            all_items = [
+                SessionListItem(
+                    session_id=s.session_id,
+                    turn_count=s.turn_count,
+                    phase=s.phase.value if hasattr(s.phase, "value") else str(s.phase),
+                )
+                for s in self._sessions.values()
+            ]
+            total = len(all_items)
+            # Sort by turn_count descending (most active first)
+            all_items.sort(key=lambda x: x.turn_count, reverse=True)
+            return all_items[offset:offset + limit], total
+
+    def get_messages_paginated(self, session_id: str, offset: int = 0, limit: int = 50) -> tuple[list[dict], int]:
+        """Return paginated messages and total count."""
+        with self._lock:
+            state = self.get(session_id)
+            all_messages = state.conversation_history
+            total = len(all_messages)
+            return all_messages[offset:offset + limit], total
 
     def get_session_timestamps(self, session_id: str) -> tuple[str, str]:
         """In-memory store has no timestamps."""
