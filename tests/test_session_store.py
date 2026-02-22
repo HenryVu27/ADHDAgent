@@ -104,3 +104,18 @@ class TestSessionStateStore:
         self.store.update_profile("s2", child_name="Alex")
         assert self.store.get("s1").family_profile.child_name == "Kai"
         assert self.store.get("s2").family_profile.child_name == "Alex"
+
+    def test_tool_calls_summary_stored_and_retrieved(self):
+        self.store.add_message("s1", "user", "Help", turn=1)
+        self.store.add_message(
+            "s1", "assistant", "Sure!", turn=1,
+            tool_calls_summary='search_knowledge_base(query="homework")',
+        )
+        messages = self.store.get_messages("s1")
+        assert messages[0].get("tool_calls_summary", "") == ""
+        assert messages[1]["tool_calls_summary"] == 'search_knowledge_base(query="homework")'
+
+    def test_tool_calls_summary_default_empty(self):
+        self.store.add_message("s1", "assistant", "Hi", turn=1)
+        messages = self.store.get_messages("s1")
+        assert messages[0]["tool_calls_summary"] == ""

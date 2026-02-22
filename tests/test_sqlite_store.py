@@ -132,6 +132,26 @@ class TestMessagePersistence:
         assert messages[0]["content"] == "Hello"
         assert messages[1]["role"] == "assistant"
 
+    def test_tool_calls_summary_stored_and_retrieved(self):
+        self.store.add_message("s1", "user", "Help", turn=1)
+        self.store.add_message(
+            "s1", "assistant", "Sure!", turn=1,
+            tool_calls_summary='search_knowledge_base(query="homework")',
+        )
+        messages = self.store.get_messages("s1")
+        assert messages[0]["tool_calls_summary"] == ""
+        assert messages[1]["tool_calls_summary"] == 'search_knowledge_base(query="homework")'
+
+    def test_tool_calls_summary_default_empty(self):
+        self.store.add_message("s1", "assistant", "Hi", turn=1)
+        messages = self.store.get_messages("s1")
+        assert messages[0]["tool_calls_summary"] == ""
+
+    def test_tool_calls_summary_in_messages_range(self):
+        self.store.add_message("s1", "assistant", "Response", turn=1, tool_calls_summary="update_family_profile(child_name)")
+        msgs = self.store.get_messages_range("s1", start_turn=1)
+        assert msgs[0]["tool_calls_summary"] == "update_family_profile(child_name)"
+
     def test_blocked_messages_recorded(self):
         self.store.add_message(
             "s1", "user", "bad message", turn=1,

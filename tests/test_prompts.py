@@ -3,6 +3,7 @@
 import pytest
 
 from app.agent.prompts import (
+    build_conversation_state,
     build_system_prompt,
     format_goals_and_outcomes,
     format_structured_facts,
@@ -111,6 +112,45 @@ class TestFormatGoalsAndOutcomes:
         assert "strategy_4" in result
         assert "strategy_0" not in result
         assert "strategy_1" not in result
+
+    def test_active_goals_capped(self):
+        """10 active goals should show only the last 5 with annotation."""
+        goals = [Goal(description=f"Goal {i}") for i in range(10)]
+        result = format_goals_and_outcomes(goals, [], max_active_goals=5)
+        assert "showing 5 of 10" in result
+        assert "Goal 5" in result
+        assert "Goal 9" in result
+        assert "Goal 0" not in result
+        assert "Goal 4" not in result
+
+    def test_completed_goals_capped(self):
+        """6 completed goals should show only the last 2 with annotation."""
+        goals = [Goal(description=f"Done {i}", status="completed") for i in range(6)]
+        result = format_goals_and_outcomes(goals, [], max_completed_goals=2)
+        assert "showing 2 of 6" in result
+        assert "Done 4" in result
+        assert "Done 5" in result
+        assert "Done 0" not in result
+
+    def test_under_cap_shows_all_without_annotation(self):
+        """3 active goals with cap=5 should show all without 'showing' annotation."""
+        goals = [Goal(description=f"Goal {i}") for i in range(3)]
+        result = format_goals_and_outcomes(goals, [], max_active_goals=5)
+        assert "showing" not in result
+        assert "Goal 0" in result
+        assert "Goal 1" in result
+        assert "Goal 2" in result
+
+    def test_outcomes_cap_parameter(self):
+        """Custom max_outcomes parameter should be respected."""
+        outcomes = [
+            Outcome(goal_description=f"strat_{i}", signal="positive")
+            for i in range(6)
+        ]
+        result = format_goals_and_outcomes([], outcomes, max_outcomes=2)
+        assert "strat_4" in result
+        assert "strat_5" in result
+        assert "strat_0" not in result
 
 
 class TestBuildSystemPrompt:
@@ -221,6 +261,48 @@ class TestPromptEnhancements:
     def test_has_diverse_examples(self):
         prompt = self._build_prompt()
         assert prompt.count("Parent:") >= 5
+
+
+class TestBuildConversationState:
+
+    def test_basic_output_format(self):
+        result = build_conversation_state(turn=3, phase="strategy")
+        assert "<conversation_state>" in result
+        assert "</conversation_state>" in result
+        assert "<turn>3</turn>" in result
+        assert "<phase>strategy</phase>" in result
+
+    def test_includes_tool_calls(self):
+        result = build_conversation_state(
+            turn=5, phase="progress",
+            recent_tool_calls=["search_knowledge_base", "update_family_profile"],
+        )
+        assert "<last_tools>search_knowledge_base, update_family_profile</last_tools>" in result
+
+    def test_includes_focus(self):
+        result = build_conversation_state(
+            turn=2, phase="intake", active_topic="My child struggles with homework",
+        )
+        assert "<focus>My child struggles with homework</focus>" in result
+
+    def test_omits_tools_when_none(self):
+        result = build_conversation_state(turn=1, phase="intake")
+        assert "last_tools" not in result
+
+    def test_omits_focus_when_empty(self):
+        result = build_conversation_state(turn=1, phase="intake", active_topic="")
+        assert "focus" not in result
+
+    def test_all_fields(self):
+        result = build_conversation_state(
+            turn=10, phase="progress",
+            recent_tool_calls=["track_outcome"],
+            active_topic="Timer worked today",
+        )
+        assert "<turn>10</turn>" in result
+        assert "<phase>progress</phase>" in result
+        assert "<last_tools>track_outcome</last_tools>" in result
+        assert "<focus>Timer worked today</focus>" in result
 
 
 def test_enhanced_boundaries_in_system_prompt():

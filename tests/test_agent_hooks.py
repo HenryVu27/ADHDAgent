@@ -65,6 +65,106 @@ class TestPrepareContext:
         assert len(non_system) <= 12  # CONTEXT_WINDOW_TURNS * 2
 
     @pytest.mark.asyncio
+    async def test_includes_conversation_state_block(self):
+        """System prompt should start with <conversation_state> block."""
+        store = InMemorySessionStore()
+        store.increment_turn("state1")
+        store.increment_turn("state1")
+        prepare = create_prepare_context(store)
+
+        state = {
+            "messages": [HumanMessage(content="Tell me about homework strategies")],
+            "session_id": "state1",
+        }
+
+        result = await prepare(state)
+        system_content = result["llm_input_messages"][0].content
+        assert "<conversation_state>" in system_content
+        assert "<turn>2</turn>" in system_content
+        assert "<phase>" in system_content
+        assert "<focus>" in system_content
+
+    @pytest.mark.asyncio
+    async def test_char_budget_trims_long_messages(self, monkeypatch):
+        """Small CONTEXT_MAX_CHARS should force trimming of long messages."""
+        from app import config
+        monkeypatch.setattr(config.settings, "CONTEXT_MAX_CHARS", 500)
+
+        store = InMemorySessionStore()
+        prepare = create_prepare_context(store)
+
+        messages = []
+        for i in range(5):
+            messages.append(HumanMessage(content=f"Message {i} " + "x" * 200))
+            messages.append(AIMessage(content=f"Response {i} " + "y" * 200))
+
+        state = {"messages": messages, "session_id": "chartest"}
+        result = await prepare(state)
+        non_system = [m for m in result["llm_input_messages"] if not isinstance(m, SystemMessage)]
+        # Should have trimmed — fewer messages than original
+        assert len(non_system) < 10
+        # At least 2 messages always preserved
+        assert len(non_system) >= 2
+
+    @pytest.mark.asyncio
+    async def test_large_char_budget_defers_to_count_cap(self, monkeypatch):
+        """Large CONTEXT_MAX_CHARS should not trim — count cap takes precedence."""
+        from app import config
+        monkeypatch.setattr(config.settings, "CONTEXT_MAX_CHARS", 999999)
+
+        store = InMemorySessionStore()
+        prepare = create_prepare_context(store)
+
+        messages = []
+        for i in range(20):
+            messages.append(HumanMessage(content=f"Turn {i}"))
+            messages.append(AIMessage(content=f"Response {i}"))
+
+        state = {"messages": messages, "session_id": "bigbudget"}
+        result = await prepare(state)
+        non_system = [m for m in result["llm_input_messages"] if not isinstance(m, SystemMessage)]
+        # Count cap (CONTEXT_WINDOW_TURNS * 2 = 12) should apply
+        assert len(non_system) <= 12
+
+    @pytest.mark.asyncio
+    async def test_char_budget_preserves_at_least_two_messages(self, monkeypatch):
+        """Even with tiny budget, at least 2 messages must be preserved."""
+        from app import config
+        monkeypatch.setattr(config.settings, "CONTEXT_MAX_CHARS", 1)
+
+        store = InMemorySessionStore()
+        prepare = create_prepare_context(store)
+
+        messages = [
+            HumanMessage(content="A" * 500),
+            AIMessage(content="B" * 500),
+            HumanMessage(content="C" * 500),
+        ]
+        state = {"messages": messages, "session_id": "tinybudget"}
+        result = await prepare(state)
+        non_system = [m for m in result["llm_input_messages"] if not isinstance(m, SystemMessage)]
+        assert len(non_system) >= 2
+
+    @pytest.mark.asyncio
+    async def test_latest_message_always_preserved(self, monkeypatch):
+        """The latest user message should always be in the output."""
+        from app import config
+        monkeypatch.setattr(config.settings, "CONTEXT_MAX_CHARS", 500)
+
+        store = InMemorySessionStore()
+        prepare = create_prepare_context(store)
+
+        messages = [
+            HumanMessage(content="Old " + "x" * 200),
+            AIMessage(content="Old response " + "y" * 200),
+            HumanMessage(content="Latest question"),
+        ]
+        state = {"messages": messages, "session_id": "latest"}
+        result = await prepare(state)
+        non_system = [m for m in result["llm_input_messages"] if not isinstance(m, SystemMessage)]
+        assert any("Latest question" in m.content for m in non_system)
+
+    @pytest.mark.asyncio
     async def test_passes_through_tool_results(self):
         """prepare_context should work even when last message is a ToolMessage."""
         store = InMemorySessionStore()
