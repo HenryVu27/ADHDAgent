@@ -14,6 +14,7 @@ from app.models.schemas import (
     SessionListItem,
     SessionState,
     SessionSummary,
+    StoredToolResult,
     TurnAnalysis,
 )
 
@@ -35,6 +36,7 @@ class InMemorySessionStore(SessionStoreBase):
         self._episodes: dict[str, list[EpisodicMemory]] = {}
         self._traces: dict[str, list[EnrichedTrace]] = {}
         self._analyses: dict[str, list[TurnAnalysis]] = {}
+        self._tool_results: dict[str, list] = {}
         self._lock = threading.RLock()
 
     def _get_or_create(self, session_id: str) -> SessionState:
@@ -51,6 +53,7 @@ class InMemorySessionStore(SessionStoreBase):
             self._episodes.pop(session_id, None)
             self._traces.pop(session_id, None)
             self._analyses.pop(session_id, None)
+            self._tool_results.pop(session_id, None)
 
     def session_exists(self, session_id: str) -> bool:
         """Check if a session exists without creating it."""
@@ -321,6 +324,19 @@ class InMemorySessionStore(SessionStoreBase):
             all_messages = state.conversation_history
             total = len(all_messages)
             return [dict(m) for m in all_messages[offset:offset + limit]], total
+
+    def save_tool_result(self, session_id: str, tool_name: str, query: str, result_text: str, turn: int) -> None:
+        with self._lock:
+            if session_id not in self._tool_results:
+                self._tool_results[session_id] = []
+            self._tool_results[session_id].append(StoredToolResult(
+                tool_name=tool_name, query=query, result_text=result_text[:5000], turn=turn,
+            ))
+
+    def get_recent_tool_results(self, session_id: str, limit: int = 3) -> list[StoredToolResult]:
+        with self._lock:
+            results = self._tool_results.get(session_id, [])
+            return list(results[-limit:])
 
     def get_session_timestamps(self, session_id: str) -> tuple[str, str]:
         """In-memory store has no timestamps."""

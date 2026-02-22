@@ -16,6 +16,7 @@ from app.models.schemas import (
     SessionListItem,
     SessionState,
     SessionSummary,
+    StoredToolResult,
     TurnAnalysis,
 )
 
@@ -147,6 +148,14 @@ class SessionStoreBase(ABC):
     @abstractmethod
     def delete_session(self, session_id: str) -> None:
         """Delete all data for a session (right-to-erasure)."""
+
+    @abstractmethod
+    def save_tool_result(self, session_id: str, tool_name: str, query: str, result_text: str, turn: int) -> None:
+        """Persist a tool result for cross-turn retrieval."""
+
+    @abstractmethod
+    def get_recent_tool_results(self, session_id: str, limit: int = 3) -> list[StoredToolResult]:
+        """Return the most recent tool results."""
 
     @abstractmethod
     def get_session_timestamps(self, session_id: str) -> tuple[str, str]:

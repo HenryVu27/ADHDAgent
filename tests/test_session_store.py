@@ -174,5 +174,34 @@ class TestSessionStateStore:
         assert state.family_profile.child_name is None
         assert self.store.get_messages("del-test") == []
 
+
+    def test_save_and_get_tool_results(self):
+        self.store.save_tool_result("tr1", "search_knowledge_base", "homework strategies", "Result: visual timer...", turn=1)
+        self.store.save_tool_result("tr1", "search_knowledge_base", "bedtime routines", "Result: bedtime routine...", turn=2)
+        results = self.store.get_recent_tool_results("tr1", limit=5)
+        assert len(results) == 2
+        assert results[0].tool_name == "search_knowledge_base"
+        assert results[0].query == "homework strategies"
+        assert results[0].turn == 1
+        assert results[1].turn == 2
+
+    def test_get_recent_tool_results_respects_limit(self):
+        for i in range(5):
+            self.store.save_tool_result("tr2", "search_knowledge_base", f"query {i}", f"result {i}", turn=i)
+        results = self.store.get_recent_tool_results("tr2", limit=2)
+        assert len(results) == 2
+        # Should be the most recent 2
+        assert results[0].turn == 3
+        assert results[1].turn == 4
+
+    def test_get_recent_tool_results_empty(self):
+        results = self.store.get_recent_tool_results("nonexistent")
+        assert results == []
+
+    def test_delete_session_removes_tool_results(self):
+        self.store.save_tool_result("del-tr", "search_knowledge_base", "q", "r", turn=1)
+        self.store.delete_session("del-tr")
+        results = self.store.get_recent_tool_results("del-tr")
+        assert results == []
     def test_delete_nonexistent_session_is_noop(self):
         self.store.delete_session("does-not-exist")  # Should not raise

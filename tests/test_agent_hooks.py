@@ -164,6 +164,24 @@ class TestPrepareContext:
         non_system = [m for m in result["llm_input_messages"] if not isinstance(m, SystemMessage)]
         assert any("Latest question" in m.content for m in non_system)
 
+
+    @pytest.mark.asyncio
+    async def test_injects_prior_search_evidence(self):
+        store = InMemorySessionStore()
+        store.save_tool_result("ev1", "search_knowledge_base", "homework tips", "Strategy: visual timer with 15-min chunks", turn=1)
+        prepare = create_prepare_context(store)
+
+        state = {
+            "messages": [HumanMessage(content="Remind me of those homework tips")],
+            "session_id": "ev1",
+        }
+
+        result = await prepare(state)
+        system_msg = result["llm_input_messages"][0]
+        assert "<prior-search-evidence>" in system_msg.content
+        assert "visual timer" in system_msg.content
+        assert 'query: "homework tips"' in system_msg.content
+
     @pytest.mark.asyncio
     async def test_passes_through_tool_results(self):
         """prepare_context should work even when last message is a ToolMessage."""

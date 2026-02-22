@@ -146,6 +146,13 @@ class EpisodicMemory(BaseModel):
     turn_range_end: int = 0
 
 
+class StoredToolResult(BaseModel):
+    tool_name: str
+    query: str = ""
+    result_text: str
+    turn: int = 0
+
+
 class SessionState(BaseModel):
     session_id: str
     phase: ConversationPhase = ConversationPhase.intake
@@ -312,6 +319,9 @@ class SessionDetailResponse(BaseModel):
 
 class SessionListResponse(BaseModel):
     sessions: list[SessionOverview] = Field(default_factory=list)
+    total: int = 0
+    offset: int = 0
+    limit: int = 50
 
 
 # --- Main App Session List ---
@@ -326,8 +336,14 @@ class SessionListItem(BaseModel):
 
 class SessionsResponse(BaseModel):
     sessions: list[SessionListItem] = Field(default_factory=list)
+    total: int = 0
+    offset: int = 0
+    limit: int = 50
 
 
 class MessagesResponse(BaseModel):
     session_id: str
     messages: list[dict] = Field(default_factory=list)
+    total: int = 0
+    offset: int = 0
+    limit: int = 50

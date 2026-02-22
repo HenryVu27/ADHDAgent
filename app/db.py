@@ -145,12 +145,28 @@ SCHEMA_V5 = """
 ALTER TABLE messages ADD COLUMN tool_calls_summary TEXT NOT NULL DEFAULT '';
 """
 
+
+SCHEMA_V6 = """
+CREATE TABLE IF NOT EXISTS tool_results (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL REFERENCES sessions(session_id),
+    turn INTEGER NOT NULL,
+    tool_name TEXT NOT NULL,
+    query TEXT NOT NULL DEFAULT '',
+    result_text TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_tool_results_session ON tool_results(session_id);
+"""
+
 MIGRATIONS = {
     1: SCHEMA_V1,
     2: SCHEMA_V2,
     3: SCHEMA_V3,
     4: SCHEMA_V4,
     5: SCHEMA_V5,
+    6: SCHEMA_V6,
 }
 
 

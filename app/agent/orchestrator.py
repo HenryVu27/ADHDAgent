@@ -204,6 +204,20 @@ class AgentOrchestrator:
         self._session_store.add_message(session_id, "user", message, turn)
         self._session_store.add_message(session_id, "assistant", response_text, turn, tool_calls_summary=tool_summary)
 
+        # Persist tool results for cross-turn evidence
+        for msg in new_messages:
+            if isinstance(msg, ToolMessage):
+                tc_name = ""
+                tc_query = ""
+                for tc in tool_calls_made:
+                    if tc.get("id") == msg.tool_call_id:
+                        tc_name = tc.get("name", "")
+                        tc_query = str(tc.get("args", {}).get("query", ""))
+                        break
+                if tc_name == "search_knowledge_base":
+                    result_text = msg.content if isinstance(msg.content, str) else str(msg.content)
+                    self._session_store.save_tool_result(session_id, tc_name, tc_query, result_text, turn)
+
         # Build and persist enriched trace
         enriched = self._build_enriched_trace(
             session_id, turn, result, new_messages, tool_calls_made, total_ms,

@@ -62,6 +62,9 @@ def create_prepare_context(
             episodes_text = "\n\nKey moments:\n" + "\n".join(episode_lines)
             summary_text = (summary_text + episodes_text) if summary_text else episodes_text
 
+        # Load recent tool results for cross-turn evidence
+        recent_tool_results = session_store.get_recent_tool_results(session_id, limit=3)
+
         system_prompt = build_system_prompt(
             profile=session_state.family_profile,
             active_strategies=session_state.active_strategies,
@@ -100,6 +103,13 @@ def create_prepare_context(
             active_topic=active_topic,
         )
         system_prompt = state_block + "\n\n" + system_prompt
+
+        if recent_tool_results:
+            evidence_lines = []
+            for tr in recent_tool_results:
+                evidence_lines.append(f"[Turn {tr.turn}, query: \"{tr.query}\"]:\n{tr.result_text[:2000]}")
+            evidence_block = "\n\n<prior-search-evidence>\n" + "\n---\n".join(evidence_lines) + "\n</prior-search-evidence>"
+            system_prompt += evidence_block
 
         # Trim conversation: message count cap first, then character budget
         max_messages = settings.CONTEXT_WINDOW_TURNS * 2

@@ -20,6 +20,7 @@ from app.models.schemas import (
     SessionListItem,
     SessionState,
     SessionSummary,
+    StoredToolResult,
     TurnAnalysis,
 )
 
@@ -43,7 +44,7 @@ class SQLiteSessionStore(SessionStoreBase):
         """Delete all data for a session (cascading)."""
         with self._lock:
             for table in (
-                "turn_analyses", "traces", "episodes", "session_summaries",
+                "tool_results", "turn_analyses", "traces", "episodes", "session_summaries",
                 "active_strategies", "outcomes", "goals", "messages",
                 "family_profiles", "sessions",
             ):
@@ -630,6 +631,23 @@ class SQLiteSessionStore(SessionStoreBase):
                 for r in rows
             ]
             return messages, total
+
+    def save_tool_result(self, session_id: str, tool_name: str, query: str, result_text: str, turn: int) -> None:
+        with self._lock:
+            self._ensure_session(session_id)
+            self._conn.execute(
+                "INSERT INTO tool_results (session_id, turn, tool_name, query, result_text) VALUES (?, ?, ?, ?, ?)",
+                (session_id, turn, tool_name, query, result_text[:5000]),
+            )
+            self._conn.commit()
+
+    def get_recent_tool_results(self, session_id: str, limit: int = 3) -> list[StoredToolResult]:
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT tool_name, query, result_text, turn FROM tool_results WHERE session_id = ? ORDER BY id DESC LIMIT ?",
+                (session_id, limit),
+            ).fetchall()
+            return [StoredToolResult(tool_name=r["tool_name"], query=r["query"], result_text=r["result_text"], turn=r["turn"]) for r in reversed(rows)]
 
     def get_session_timestamps(self, session_id: str) -> tuple[str, str]:
         """Return (created_at, updated_at) from the sessions table."""
