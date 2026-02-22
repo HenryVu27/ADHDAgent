@@ -147,6 +147,8 @@ async def lifespan(app: FastAPI):
         settings.GEMINI_UTILITY_MODEL,
     )
     yield
+    if hasattr(orchestrator, 'shutdown'):
+        await orchestrator.shutdown()
     logger.info("ADHDAgent shutting down")
 
 

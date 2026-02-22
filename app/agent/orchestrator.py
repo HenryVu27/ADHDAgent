@@ -44,6 +44,7 @@ class AgentOrchestrator:
         self._memory = memory_manager
         self._analyzer = analyzer
         self._event_bus = event_bus
+        self._pending_tasks: set[asyncio.Task] = set()
 
     def get_session(self, session_id: str) -> SessionState:
         return self._session_store.get(session_id)
@@ -235,7 +236,7 @@ class AgentOrchestrator:
 
         # Fire background memory tasks (non-blocking)
         if self._memory:
-            asyncio.create_task(self._safe_background(
+            self._track_task(
                 self._memory.post_turn_tasks(
                     session_id=session_id,
                     turn=turn,
@@ -244,11 +245,11 @@ class AgentOrchestrator:
                     tool_calls=[tc for tc in tool_calls_made],
                 ),
                 "memory",
-            ))
+            )
 
         # Fire background analyzer (non-blocking)
         if self._analyzer:
-            asyncio.create_task(self._safe_background(
+            self._track_task(
                 self._analyzer.analyze_turn(
                     session_id=session_id,
                     turn=turn,
@@ -257,7 +258,7 @@ class AgentOrchestrator:
                     enriched_trace=enriched,
                 ),
                 "analyzer",
-            ))
+            )
 
         trace = self._build_trace(result, total_ms, tool_calls_made)
 
@@ -287,6 +288,23 @@ class AgentOrchestrator:
             await coro
         except Exception as e:
             logger.error("Background task '%s' failed: %s", label, e)
+
+    def _track_task(self, coro, label: str) -> asyncio.Task:
+        """Create a tracked background task."""
+        task = asyncio.create_task(self._safe_background(coro, label))
+        self._pending_tasks.add(task)
+        task.add_done_callback(self._pending_tasks.discard)
+        return task
+
+    async def shutdown(self, timeout: float = 5.0) -> None:
+        """Wait for pending background tasks to complete."""
+        if self._pending_tasks:
+            logger.info("Waiting for %d background tasks...", len(self._pending_tasks))
+            done, pending = await asyncio.wait(self._pending_tasks, timeout=timeout)
+            if pending:
+                logger.warning("Cancelling %d background tasks after timeout", len(pending))
+                for task in pending:
+                    task.cancel()
 
     def _infer_phase(self, session_id: str) -> ConversationPhase:
         """Infer a phase label from session state for API compatibility."""

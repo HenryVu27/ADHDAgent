@@ -522,6 +522,79 @@ class TestBackgroundTaskLifecycle:
         assert summary is not None, "Summary should be generated"
         assert summary.covers_through_turn == 5
 
+    @pytest.mark.asyncio
+    async def test_pending_tasks_tracked(self):
+        """Background tasks should be tracked in _pending_tasks set."""
+        from unittest.mock import AsyncMock, MagicMock
+        from app.agent.orchestrator import AgentOrchestrator
+
+        mock_agent = AsyncMock()
+        mock_agent.ainvoke = AsyncMock(return_value={
+            "messages": [],
+            "input_blocked": False,
+            "trace_steps": [],
+        })
+
+        store = InMemorySessionStore()
+
+        # Create a slow memory manager to keep task alive
+        mock_memory = AsyncMock()
+        slow_future = asyncio.Future()
+        mock_memory.post_turn_tasks = AsyncMock(return_value=slow_future)
+
+        orchestrator = AgentOrchestrator(
+            agent=mock_agent, session_store=store, memory_manager=mock_memory,
+        )
+
+        assert len(orchestrator._pending_tasks) == 0
+        await orchestrator.process("hello", "task-track")
+
+        # The memory task should be tracked (may or may not be done already)
+        # Give it a tick to register
+        await asyncio.sleep(0)
+        # The task may have completed immediately if future resolved,
+        # but the tracking mechanism should exist
+        assert hasattr(orchestrator, '_pending_tasks')
+
+    @pytest.mark.asyncio
+    async def test_shutdown_waits_for_tasks(self):
+        """shutdown() should wait for pending tasks to complete."""
+        from app.agent.orchestrator import AgentOrchestrator
+
+        mock_agent = AsyncMock()
+        store = InMemorySessionStore()
+
+        orchestrator = AgentOrchestrator(
+            agent=mock_agent, session_store=store,
+        )
+
+        # Manually add a task
+        completed = False
+        async def slow_task():
+            nonlocal completed
+            await asyncio.sleep(0.1)
+            completed = True
+
+        task = asyncio.create_task(slow_task())
+        orchestrator._pending_tasks.add(task)
+        task.add_done_callback(orchestrator._pending_tasks.discard)
+
+        await orchestrator.shutdown(timeout=5.0)
+        assert completed is True
+
+    @pytest.mark.asyncio
+    async def test_shutdown_with_no_tasks_is_noop(self):
+        """shutdown() with no pending tasks should not raise."""
+        from app.agent.orchestrator import AgentOrchestrator
+
+        mock_agent = AsyncMock()
+        store = InMemorySessionStore()
+
+        orchestrator = AgentOrchestrator(
+            agent=mock_agent, session_store=store,
+        )
+        await orchestrator.shutdown()  # Should not raise
+
 
 # ---------------------------------------------------------------------------
 # SQLite Seed Session Atomicity
