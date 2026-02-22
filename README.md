@@ -2,13 +2,13 @@
 
 Parent-facing ADHD coaching chatbot using a ReAct agent architecture with multi-layer safety guardrails.
 
-NeMo input guardrails → Gemini ReAct agent with tool calling → Gemini output classifiers.
+Input gate (crisis + jailbreak) → Context assembly → Gemini ReAct agent with tool calling → Output gate (medication + diagnosis + scope).
 
 ## Key Features
 
 - **ReAct agent** with LangGraph tool calling and full observability
 - **Hybrid RAG** - Qdrant dense + sparse vectors with RRF, tag boosting, and local cross-encoder reranking
-- **Multi-layer guardrails** - NeMo Colang input rails + direct Gemini output classifiers
+- **LangGraph-native guardrail gates** - structured Gemini classifiers for input (crisis + jailbreak) and output (medication + diagnosis + scope)
 - **4-tier memory** - SQLite persistence, rolling summaries, episodic memory, gated fact extraction
 - **Model routing** - rule-based complexity classification selects Gemini model tier per turn
 - **Outcome tracking** - goals, progress, strategy effectiveness measurement
@@ -24,7 +24,7 @@ NeMo input guardrails → Gemini ReAct agent with tool calling → Gemini output
 | Vector Search | Qdrant (in-memory for dev, remote for prod) with dense + sparse + RRF |
 | Reranker | FastEmbed cross-encoder (Xenova/ms-marco-MiniLM-L-6-v2), local ONNX inference |
 | Agent | LangGraph create_react_agent (ReAct loop with tool calling) |
-| Guardrails | NeMo Guardrails (Colang 1.0) for input rails + direct Gemini output classifiers |
+| Guardrails | LangGraph-native gate nodes — structured Gemini classifiers (2 calls: input + output) |
 | Persistence | SQLite (default) or in-memory session store |
 | API | FastAPI |
 | Frontend | React 19 + TypeScript + Vite + Tailwind CSS + shadcn/ui |
