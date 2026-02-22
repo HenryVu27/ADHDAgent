@@ -75,10 +75,19 @@ class AgentOrchestrator:
         # Build full message list from conversation history so the agent
         # has multi-turn context (previous turns were stored but never passed back).
         stored_messages = self._session_store.get_messages(session_id)
+
+        # Skip messages already captured by the rolling summary
+        latest_summary = self._session_store.get_latest_summary(session_id)
+        summary_through_turn = latest_summary.covers_through_turn if latest_summary else 0
+
         history_messages = []
         for entry in stored_messages:
             if entry.get("blocked"):
                 continue  # Skip blocked turns
+            # Skip messages from turns already covered by the rolling summary
+            msg_turn = entry.get("turn", 0)
+            if summary_through_turn > 0 and msg_turn <= summary_through_turn:
+                continue
             if entry["role"] == "user":
                 history_messages.append(HumanMessage(content=entry["content"]))
             elif entry["role"] == "assistant":

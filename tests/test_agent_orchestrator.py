@@ -90,3 +90,90 @@ class TestBuildToolCallsSummary:
         tool_calls = [{"name": "some_new_tool", "args": {}}]
         result = AgentOrchestrator._build_tool_calls_summary(tool_calls)
         assert result == "some_new_tool"
+
+
+import pytest
+from unittest.mock import AsyncMock
+
+from langchain_core.messages import AIMessage, HumanMessage
+
+from app.models.schemas import SessionSummary
+
+
+class TestHistoryExcludesSummarizedTurns:
+    """Messages from turns covered by the rolling summary should be excluded."""
+
+    def setup_method(self):
+        self.store = SessionStateStore()
+        self.mock_agent = AsyncMock()
+        # Configure the mock agent to return a minimal valid result
+        self.mock_agent.ainvoke.return_value = {
+            "messages": [
+                HumanMessage(content="new question"),
+                AIMessage(content="Here is my response."),
+            ],
+            "trace_steps": [],
+            "input_blocked": False,
+        }
+        self.orchestrator = AgentOrchestrator(
+            agent=self.mock_agent,
+            session_store=self.store,
+        )
+
+    @pytest.mark.asyncio
+    async def test_history_excludes_summarized_turns(self):
+        """Messages from turns covered by the rolling summary should not be in history."""
+        sid = "summ-test"
+
+        # Add messages for turns 1-8
+        for i in range(1, 9):
+            self.store.increment_turn(sid)
+            self.store.add_message(sid, "user", f"user-msg-{i}", i)
+            self.store.add_message(sid, "assistant", f"assistant-msg-{i}", i)
+
+        # Save summary covering turns 1-5
+        self.store.save_summary(
+            sid,
+            SessionSummary(summary="Summary of turns 1-5.", covers_through_turn=5),
+        )
+
+        # Call process — capture what the agent receives
+        result = await self.orchestrator.process("new question", sid)
+
+        # The agent was invoked with messages — check the invoke call
+        call_args = self.mock_agent.ainvoke.call_args
+        messages_passed = call_args[0][0]["messages"]
+
+        # Should NOT contain messages from turns 1-5
+        contents = [m.content for m in messages_passed if hasattr(m, "content")]
+        for i in range(1, 6):
+            assert f"user-msg-{i}" not in contents, f"Turn {i} should be excluded (covered by summary)"
+            assert f"assistant-msg-{i}" not in contents, f"Turn {i} assistant should be excluded"
+
+        # Should contain messages from turns 6-8
+        for i in range(6, 9):
+            assert f"user-msg-{i}" in contents, f"Turn {i} should be included"
+
+        # Should contain the new message
+        assert "new question" in contents
+
+    @pytest.mark.asyncio
+    async def test_no_summary_includes_all_turns(self):
+        """Without a summary, all messages appear in history."""
+        sid = "no-summ"
+
+        for i in range(1, 4):
+            self.store.increment_turn(sid)
+            self.store.add_message(sid, "user", f"user-msg-{i}", i)
+            self.store.add_message(sid, "assistant", f"assistant-msg-{i}", i)
+
+        result = await self.orchestrator.process("new question", sid)
+
+        call_args = self.mock_agent.ainvoke.call_args
+        messages_passed = call_args[0][0]["messages"]
+        contents = [m.content for m in messages_passed if hasattr(m, "content")]
+
+        # All turns should be present
+        for i in range(1, 4):
+            assert f"user-msg-{i}" in contents, f"Turn {i} should be included"
+        assert "new question" in contents
