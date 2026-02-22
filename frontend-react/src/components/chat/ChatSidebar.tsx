@@ -12,6 +12,21 @@ const phaseLabels: Record<string, string> = {
   followup: "Following Up",
 }
 
+function formatSessionTime(dateStr: string): string {
+  const date = new Date(dateStr)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  if (diffDays === 0) {
+    return "Today, " + date.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+  }
+  if (diffDays === 1) {
+    return "Yesterday"
+  }
+  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" })
+}
+
 interface Props {
   isOpen: boolean
   activeSessionId: string
@@ -77,24 +92,17 @@ export function ChatSidebar({ isOpen, activeSessionId, onSelectSession, onNewCha
                         <div className="flex items-center gap-2">
                           <MessageCircle className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                           <span className="truncate text-xs font-medium">
-                            {phaseLabels[s.phase] || s.phase}
+                            {s.created_at ? formatSessionTime(s.created_at) : "Session"}
                           </span>
                         </div>
                         <div className="mt-1 flex items-center gap-2 pl-5.5">
                           <span className="text-[11px] text-muted-foreground">
+                            {phaseLabels[s.phase] || s.phase}
+                          </span>
+                          <span className="text-[11px] text-muted-foreground">·</span>
+                          <span className="text-[11px] text-muted-foreground">
                             {s.turn_count} msgs
                           </span>
-                          {s.created_at && (
-                            <>
-                              <span className="text-[11px] text-muted-foreground">·</span>
-                              <span className="text-[11px] text-muted-foreground">
-                                {new Date(s.created_at).toLocaleDateString(undefined, {
-                                  month: "short",
-                                  day: "numeric",
-                                })}
-                              </span>
-                            </>
-                          )}
                         </div>
                       </button>
                     )
