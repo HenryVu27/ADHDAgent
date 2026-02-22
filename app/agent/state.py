@@ -18,4 +18,3 @@ class CoachingState(MessagesState):
     input_blocked: bool = False
     block_response: str = ""
     trace_steps: Annotated[list[dict], lambda a, b: a + b] = []
-    model_tier: str = "standard"

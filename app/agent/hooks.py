@@ -3,19 +3,33 @@
 prepare_context: runs as the pre_model_hook in the ReAct agent.
   - Builds system prompt from session state (family profile, goals, summary, episodes).
   - Trims conversation history to recent turns.
-  - Optionally classifies message complexity for model routing.
 """
 
 import logging
 
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 
-from app.agent.prompts import build_system_prompt
+from app.agent.prompts import build_conversation_state, build_system_prompt
 from app.agent.store_protocol import SessionStoreBase
 from app.agent.state import CoachingState
 from app.config import settings
 
 logger = logging.getLogger(__name__)
+
+
+def _estimate_chars(messages) -> int:
+    """Sum the character length of all message contents."""
+    total = 0
+    for m in messages:
+        content = m.content if hasattr(m, "content") else ""
+        if isinstance(content, str):
+            total += len(content)
+        elif isinstance(content, list):
+            total += sum(
+                len(part.get("text", "")) if isinstance(part, dict) else len(str(part))
+                for part in content
+            )
+    return total
 
 
 def create_prepare_context(
@@ -56,25 +70,53 @@ def create_prepare_context(
             session_summary=summary_text,
         )
 
-        # Trim conversation to recent turns (keep system prompt + last N*2 messages)
+        # Build conversation state block
+        turn_count = session_state.turn_count
+        phase = session_state.phase.value if hasattr(session_state.phase, "value") else str(session_state.phase)
+
+        # Get tool names from the last trace, if available
+        recent_tool_names: list[str] | None = None
+        try:
+            traces = session_store.get_traces(session_id)
+            if traces:
+                last_trace = traces[-1]
+                if last_trace.tool_calls:
+                    recent_tool_names = [tc.name for tc in last_trace.tool_calls]
+        except Exception:
+            pass
+
+        # Derive active topic from the last user message
+        active_topic = ""
+        user_messages = [m for m in messages if isinstance(m, HumanMessage)]
+        if user_messages:
+            last_user = user_messages[-1].content
+            if isinstance(last_user, str) and last_user.strip():
+                active_topic = last_user.strip()[:60]
+
+        state_block = build_conversation_state(
+            turn=turn_count,
+            phase=phase,
+            recent_tool_calls=recent_tool_names,
+            active_topic=active_topic,
+        )
+        system_prompt = state_block + "\n\n" + system_prompt
+
+        # Trim conversation: message count cap first, then character budget
         max_messages = settings.CONTEXT_WINDOW_TURNS * 2
         conversation_messages = [m for m in messages if not isinstance(m, SystemMessage)]
         if len(conversation_messages) > max_messages:
             conversation_messages = conversation_messages[-max_messages:]
 
+        # Character budget trimming (drops oldest messages until within budget)
+        remaining_budget = settings.CONTEXT_MAX_CHARS - len(system_prompt)
+        while (
+            _estimate_chars(conversation_messages) > remaining_budget
+            and len(conversation_messages) > 2
+        ):
+            conversation_messages = conversation_messages[1:]
+
         # Build augmented message list for the LLM
         llm_messages = [SystemMessage(content=system_prompt)] + conversation_messages
-        result = {"llm_input_messages": llm_messages}
-
-        # Model routing: classify complexity and set tier in state
-        if settings.MODEL_ROUTING_ENABLED:
-            from app.agent.model_router import classify_complexity
-            tier = classify_complexity(state)
-            result["model_tier"] = tier
-            logger.info("Model tier classified: %s", tier)
-            if event_bus:
-                event_bus.emit("model_routing", "tier_classified", session_id, detail={"tier": tier})
-
-        return result
+        return {"llm_input_messages": llm_messages}
 
     return prepare_context
