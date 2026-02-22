@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 
+from app.agent.prompts import SAFE_OUTPUT_FALLBACK
 from app.agent.store_protocol import SessionStoreBase
 from app.models.schemas import (
     AgentReasoningStep,
@@ -38,13 +39,14 @@ def _extract_text(content) -> str:
 class AgentOrchestrator:
     """Manages sessions and runs the compiled ReAct agent."""
 
-    def __init__(self, agent, session_store: SessionStoreBase, memory_manager=None, analyzer=None, event_bus=None, gemini_client=None):
+    def __init__(self, agent, session_store: SessionStoreBase, memory_manager=None, analyzer=None, event_bus=None, gemini_client=None, output_gate=None):
         self._agent = agent
         self._session_store = session_store
         self._memory = memory_manager
         self._analyzer = analyzer
         self._event_bus = event_bus
         self._gemini_client = gemini_client
+        self._output_gate = output_gate
 
     def get_session(self, session_id: str) -> SessionState:
         return self._session_store.get(session_id)
@@ -289,6 +291,19 @@ class AgentOrchestrator:
         except Exception as e:
             logger.error("Background task '%s' failed: %s", label, e)
 
+    async def _gate_check(self, response_text: str) -> str:
+        """Run the output gate on a fallback response. Returns safe fallback on violation."""
+        if not self._output_gate:
+            return response_text
+        try:
+            check = await self._output_gate.check(response_text)
+            if not check.is_valid:
+                logger.info("[agent] Output gate caught fallback violation: %s", check.violation_type)
+                return SAFE_OUTPUT_FALLBACK
+        except Exception as e:
+            logger.error("[agent] Output gate failed on fallback (allowing): %s", e)
+        return response_text
+
     async def _synthesize_from_tool_results(
         self, user_message: str, tool_results: list[str], session_id: str,
     ) -> str:
@@ -321,7 +336,7 @@ class AgentOrchestrator:
         try:
             response = await self._gemini_client.generate(prompt, temperature=0.7)
             if response and response.strip():
-                return response.strip()
+                return await self._gate_check(response.strip())
         except Exception as e:
             logger.error("[agent] Synthesis fallback failed: %s", e)
 
@@ -367,7 +382,7 @@ class AgentOrchestrator:
         try:
             response = await self._gemini_client.generate(prompt, temperature=0.7)
             if response and response.strip():
-                return response.strip()
+                return await self._gate_check(response.strip())
         except Exception as e:
             logger.error("[agent] Acknowledgment synthesis failed: %s", e)
 
@@ -396,7 +411,7 @@ class AgentOrchestrator:
         try:
             response = await self._gemini_client.generate(prompt, temperature=0.7)
             if response and response.strip():
-                return response.strip()
+                return await self._gate_check(response.strip())
         except Exception as e:
             logger.error("[agent] Search-and-synthesize fallback failed: %s", e)
 
