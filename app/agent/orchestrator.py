@@ -23,6 +23,18 @@ from app.models.schemas import (
 logger = logging.getLogger(__name__)
 
 
+def _extract_text(content) -> str:
+    """Extract text from Gemini content (may be str or list of parts)."""
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        return "".join(
+            part.get("text", "") if isinstance(part, dict) else str(part)
+            for part in content
+        )
+    return str(content)
+
+
 class AgentOrchestrator:
     """Manages sessions and runs the compiled ReAct agent."""
 
@@ -120,7 +132,7 @@ class AgentOrchestrator:
             # Record blocked turn
             blocked_reason = ""
             for step in result.get("trace_steps", []):
-                if step.get("name") == "input_guardrails":
+                if step.get("name") == "input_gate":
                     blocked_reason = step.get("detail", {}).get("blocked_reason", "")
             self._session_store.add_message(
                 session_id, "user", message, turn,
@@ -141,17 +153,17 @@ class AgentOrchestrator:
                 total_duration_ms=total_ms,
                 input_blocked=True,
                 blocked_reason=blocked_reason,
-                agent_used="guardrails",
+                agent_used="input_gate",
             )
             self._session_store.save_trace(session_id, enriched)
 
             if self._event_bus:
                 self._event_bus.emit("agent", "turn_blocked", session_id, turn, total_ms, detail={"reason": blocked_reason})
 
-            logger.info("[agent] === BLOCKED === session=%s, reason=input_guardrails", session_id)
+            logger.info("[agent] === BLOCKED === session=%s, reason=input_gate", session_id)
             return ChatResponse(
                 response=response_text,
-                agent_used="guardrails",
+                agent_used="input_gate",
                 phase=self._infer_phase(session_id),
                 pipeline_trace=trace,
                 session_id=session_id,
@@ -175,9 +187,9 @@ class AgentOrchestrator:
             if isinstance(msg, AIMessage):
                 if msg.tool_calls:
                     tool_calls_made.extend(msg.tool_calls)
-                elif msg.content and isinstance(msg.content, str):
+                elif msg.content:
                     # Only non-tool-calling AI messages count as final response
-                    response_text = msg.content
+                    response_text = _extract_text(msg.content)
             elif isinstance(msg, ToolMessage) and msg.content:
                 tool_results.append(msg.content)
 
@@ -358,6 +370,35 @@ class AgentOrchestrator:
                 return response.strip()
         except Exception as e:
             logger.error("[agent] Acknowledgment synthesis failed: %s", e)
+
+        return ""
+
+    async def _search_and_synthesize(self, message: str, session_id: str) -> str:
+        """Fallback: generate a direct response when the agent invocation fails."""
+        if not self._gemini_client:
+            return ""
+
+        state = self._session_store.get(session_id)
+        child_name = state.family_profile.child_name or "your child"
+
+        prompt = (
+            f"You are a warm ADHD parenting coach. A parent said:\n"
+            f"\"{message}\"\n\n"
+            f"Write a warm, helpful response (under 150 words) that:\n"
+            f"- Validates the parent's concern\n"
+            f"- Asks a clarifying question to better understand their situation\n"
+            f"- Uses the child's name ({child_name}) if appropriate\n"
+            f"- Does NOT give specific medical advice\n"
+            f"- Does NOT use emojis\n"
+            f"Respond directly to the parent."
+        )
+
+        try:
+            response = await self._gemini_client.generate(prompt, temperature=0.7)
+            if response and response.strip():
+                return response.strip()
+        except Exception as e:
+            logger.error("[agent] Search-and-synthesize fallback failed: %s", e)
 
         return ""
 

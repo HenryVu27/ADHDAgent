@@ -44,10 +44,11 @@ async def lifespan(app: FastAPI):
             logger.error(f"Qdrant index build failed: {e}")
     set_knowledge_base(store)
 
-    # 3. Initialize NeMo Guardrails (required)
-    from app.guardrails.validator import GuardrailsValidator
-    guardrails = GuardrailsValidator(gemini_client=gemini)
-    logger.info("NeMo Guardrails initialized (input + output rails)")
+    # 3. Initialize guardrail gates
+    from app.guardrails.validator import InputGate, OutputGate
+    input_gate = InputGate(gemini_client=gemini) if gemini else None
+    output_gate = OutputGate(gemini_client=gemini) if gemini else None
+    logger.info("Guardrail gates initialized (input + output)")
 
     # 4. Create session store, retriever, tools
     from app.agent.session_store import InMemorySessionStore
@@ -87,10 +88,9 @@ async def lifespan(app: FastAPI):
     event_bus = EventBus(buffer_size=settings.EVENT_BUFFER_SIZE, conn=db_conn)
     logger.info("EventBus initialized (buffer_size=%d)", settings.EVENT_BUFFER_SIZE)
 
-    # 6. Create hooks (guardrails + context injection)
-    from app.agent.hooks import create_hooks
-    pre_model_hook, post_model_hook = create_hooks(
-        guardrails=guardrails,
+    # 6. Create context preparation hook
+    from app.agent.hooks import create_prepare_context
+    prepare_context = create_prepare_context(
         session_store=session_store,
         event_bus=event_bus,
     )
@@ -116,8 +116,9 @@ async def lifespan(app: FastAPI):
 
     agent = build_agent(
         tools=tools,
-        pre_model_hook=pre_model_hook,
-        post_model_hook=post_model_hook,
+        prepare_context=prepare_context,
+        input_gate=input_gate,
+        output_gate=output_gate,
     )
     orchestrator = AgentOrchestrator(
         agent=agent,
@@ -139,7 +140,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="ADHDAgent",
-    description="ReAct ADHD coaching agent with NeMo Guardrails",
+    description="ReAct ADHD coaching agent with guardrail gates",
     version="0.4.0",
     lifespan=lifespan,
 )
