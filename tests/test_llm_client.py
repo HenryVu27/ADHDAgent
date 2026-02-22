@@ -1,4 +1,6 @@
-"""Tests for GeminiClient -- retry logic and max_output_tokens parameter."""
+"""Tests for GeminiClient -- retry logic, max_output_tokens, and timeout."""
+
+import asyncio
 
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -107,3 +109,46 @@ class TestRetryBehavior:
                 client.generate("test prompt")
             )
         assert mock_client.models.generate_content.call_count == 1
+
+
+class TestTimeout:
+    """Verify timeout wraps asyncio.to_thread in wait_for."""
+
+    @patch("app.llm.client.genai")
+    @pytest.mark.asyncio
+    async def test_generate_raises_timeout(self, mock_genai):
+        """generate() with timeout raises asyncio.TimeoutError when LLM hangs."""
+        mock_client = MagicMock()
+        # Simulate a slow API call
+        mock_client.models.generate_content.side_effect = lambda **kw: asyncio.get_event_loop().run_until_complete(asyncio.sleep(5))
+        mock_genai.Client.return_value = mock_client
+
+        client = GeminiClient()
+        with pytest.raises(asyncio.TimeoutError):
+            await client.generate("test prompt", timeout=0.01)
+
+    @patch("app.llm.client.genai")
+    @pytest.mark.asyncio
+    async def test_extract_json_raises_timeout(self, mock_genai):
+        """extract_json() with timeout raises asyncio.TimeoutError when LLM hangs."""
+        mock_client = MagicMock()
+        mock_client.models.generate_content.side_effect = lambda **kw: asyncio.get_event_loop().run_until_complete(asyncio.sleep(5))
+        mock_genai.Client.return_value = mock_client
+
+        client = GeminiClient()
+        with pytest.raises(asyncio.TimeoutError):
+            await client.extract_json("test prompt", timeout=0.01)
+
+    @patch("app.llm.client.genai")
+    @pytest.mark.asyncio
+    async def test_generate_no_timeout_succeeds(self, mock_genai):
+        """generate() without timeout param works as before."""
+        mock_response = MagicMock()
+        mock_response.text = "ok"
+        mock_client = MagicMock()
+        mock_client.models.generate_content.return_value = mock_response
+        mock_genai.Client.return_value = mock_client
+
+        client = GeminiClient()
+        result = await client.generate("test prompt")
+        assert result == "ok"

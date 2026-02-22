@@ -9,6 +9,7 @@ import logging
 from datetime import datetime, timezone
 
 from app.agent.store_protocol import SessionStoreBase
+from app.config import settings
 from app.models.schemas import AnalysisFlag, EnrichedTrace, TurnAnalysis
 
 logger = logging.getLogger(__name__)
@@ -115,7 +116,8 @@ class ConversationAnalyzer:
                 tool_results=tool_results,
             )
 
-            result = await self._gemini.extract_json(prompt, temperature=0.0, max_output_tokens=1024)
+            result = await self._gemini.extract_json(prompt, temperature=0.0, max_output_tokens=1024,
+                                                        timeout=settings.MEMORY_TIMEOUT_S)
 
             if not isinstance(result, dict):
                 logger.warning("Analyzer returned non-dict for session %s turn %d", session_id, turn)

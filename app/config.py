@@ -56,6 +56,7 @@ class Settings(BaseSettings):
     # Memory manager
     SUMMARY_INTERVAL_TURNS: int = 5
     FACT_EXTRACTION_MIN_LENGTH: int = 40
+    MEMORY_TIMEOUT_S: float = 30.0
 
     # SQLite persistence
     SQLITE_DB_PATH: str = "adhd_agent.db"

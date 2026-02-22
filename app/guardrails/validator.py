@@ -132,7 +132,8 @@ class InputGate:
         start = time.time()
         try:
             prompt = INPUT_GATE_PROMPT.format(user_message=user_message)
-            raw = await self._client.generate(prompt, temperature=0.0, max_output_tokens=2048)
+            raw = await self._client.generate(prompt, temperature=0.0, max_output_tokens=2048,
+                                               timeout=self._timeout_s)
             classification = _parse_json(raw, InputClassification)
 
             duration_ms = (time.time() - start) * 1000
@@ -179,7 +180,8 @@ class OutputGate:
         start = time.time()
         try:
             prompt = OUTPUT_GATE_PROMPT.format(bot_response=bot_response)
-            raw = await self._client.generate(prompt, temperature=0.0, max_output_tokens=2048)
+            raw = await self._client.generate(prompt, temperature=0.0, max_output_tokens=2048,
+                                               timeout=self._timeout_s)
             classification = _parse_json(raw, OutputClassification)
 
             duration_ms = (time.time() - start) * 1000

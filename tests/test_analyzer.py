@@ -1,5 +1,7 @@
 """Tests for ConversationAnalyzer — quality analysis with mocked Gemini."""
 
+import asyncio
+
 import pytest
 from unittest.mock import AsyncMock, MagicMock
 
@@ -177,6 +179,21 @@ class TestConversationAnalyzer:
             assistant_response="test",
             enriched_trace=trace,
         )
+        assert result is None
+
+    @pytest.mark.asyncio
+    async def test_timeout_returns_none(self, analyzer, mock_gemini):
+        """TimeoutError from extract_json() should return None (not crash)."""
+        mock_gemini.extract_json.side_effect = asyncio.TimeoutError()
+
+        trace = _make_trace()
+        result = await analyzer.analyze_turn(
+            session_id="s1", turn=1,
+            user_message="test",
+            assistant_response="test",
+            enriched_trace=trace,
+        )
+
         assert result is None
 
     @pytest.mark.asyncio

@@ -1,5 +1,7 @@
 """Tests for guardrail gate classifiers."""
 
+import asyncio
+
 import pytest
 from app.models.schemas import (
     InputCheckResult,
@@ -115,6 +117,16 @@ class TestInputGate:
         gate = InputGate(gemini_client=mock)
         result = await gate.check("Hello")
         assert result.duration_ms >= 0
+
+    @pytest.mark.asyncio
+    async def test_timeout_allows_message(self):
+        """Input gate timeout should fail open (allow message)."""
+        from app.guardrails.validator import InputGate
+        mock = AsyncMock()
+        mock.generate = AsyncMock(side_effect=asyncio.TimeoutError())
+        gate = InputGate(gemini_client=mock)
+        result = await gate.check("Hello")
+        assert result.is_allowed is True
 
 
 class TestOutputGate:
@@ -232,3 +244,14 @@ class TestOutputGate:
         gate = OutputGate(gemini_client=mock)
         result = await gate.check("Some safe response")
         assert result.duration_ms >= 0
+
+    @pytest.mark.asyncio
+    async def test_timeout_blocks_response(self):
+        """Output gate timeout should fail closed (block response)."""
+        from app.guardrails.validator import OutputGate
+        mock = AsyncMock()
+        mock.generate = AsyncMock(side_effect=asyncio.TimeoutError())
+        gate = OutputGate(gemini_client=mock)
+        result = await gate.check("Some response")
+        assert result.is_valid is False
+        assert result.violation_type == "error"

@@ -1,5 +1,7 @@
 """Tests for MemoryManager — summary, fact extraction, episodic memory."""
 
+import asyncio
+
 import pytest
 from unittest.mock import AsyncMock, patch
 
@@ -307,5 +309,41 @@ class TestErrorResilience:
         )
 
         # Profile should not be updated since extraction failed
+        profile = store.get("s1").family_profile
+        assert profile.child_name is None
+
+    @pytest.mark.asyncio
+    async def test_summary_timeout_raises(self):
+        """TimeoutError from generate() should propagate (caught by gather)."""
+        store = _make_store_with_messages(turn_count=5)
+        gemini = _make_gemini_mock()
+        gemini.generate = AsyncMock(side_effect=asyncio.TimeoutError())
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        # post_turn_tasks catches exceptions via gather(return_exceptions=True)
+        await mm.post_turn_tasks(
+            session_id="s1", turn=5,
+            user_message="Some long message that should trigger fact extraction here",
+            assistant_response="Response.",
+        )
+
+        # Summary should NOT have been saved
+        assert store.get_latest_summary("s1") is None
+
+    @pytest.mark.asyncio
+    async def test_fact_extraction_timeout_does_not_crash(self):
+        """TimeoutError from extract_json() should not crash post_turn_tasks."""
+        store = InMemorySessionStore()
+        store.increment_turn("s1")
+        gemini = _make_gemini_mock()
+        gemini.extract_json = AsyncMock(side_effect=asyncio.TimeoutError())
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        await mm.post_turn_tasks(
+            session_id="s1", turn=1,
+            user_message="My son Kai is 7 and he has trouble with homework every day",
+            assistant_response="I understand.",
+        )
+
         profile = store.get("s1").family_profile
         assert profile.child_name is None

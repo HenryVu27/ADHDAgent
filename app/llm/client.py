@@ -60,10 +60,11 @@ class GeminiClient:
         temperature: float = 0.7,
         model: str | None = None,
         max_output_tokens: int = 2048,
+        timeout: float | None = None,
     ) -> str:
         """Generate text from a prompt."""
         try:
-            response = await asyncio.to_thread(
+            coro = asyncio.to_thread(
                 _retry_policy(self._client.models.generate_content),
                 model=model or self._model,
                 contents=prompt,
@@ -72,6 +73,10 @@ class GeminiClient:
                     max_output_tokens=max_output_tokens,
                 ),
             )
+            if timeout is not None:
+                response = await asyncio.wait_for(coro, timeout=timeout)
+            else:
+                response = await coro
             return response.text or ""
         except Exception as e:
             logger.error(f"Gemini generate failed: {e}")
@@ -83,10 +88,11 @@ class GeminiClient:
         temperature: float = 0.0,
         model: str | None = None,
         max_output_tokens: int = 1024,
+        timeout: float | None = None,
     ) -> Any:
         """Generate structured JSON output. Returns parsed JSON."""
         try:
-            response = await asyncio.to_thread(
+            coro = asyncio.to_thread(
                 _retry_policy(self._client.models.generate_content),
                 model=model or self._model,
                 contents=prompt,
@@ -96,6 +102,10 @@ class GeminiClient:
                     response_mime_type="application/json",
                 ),
             )
+            if timeout is not None:
+                response = await asyncio.wait_for(coro, timeout=timeout)
+            else:
+                response = await coro
             text = response.text or "[]"
             return json.loads(text)
         except json.JSONDecodeError:
@@ -115,22 +125,30 @@ class GeminiClient:
             logger.error(f"Gemini extract_json failed: {e}")
             raise
 
-    async def embed(self, text: str) -> list[float]:
+    async def embed(self, text: str, timeout: float | None = None) -> list[float]:
         """Get embedding vector for a single text."""
-        result = await asyncio.to_thread(
+        coro = asyncio.to_thread(
             _retry_policy(self._client.models.embed_content),
             model=self._embedding_model,
             contents=text,
         )
+        if timeout is not None:
+            result = await asyncio.wait_for(coro, timeout=timeout)
+        else:
+            result = await coro
         return list(result.embeddings[0].values)
 
-    async def embed_batch(self, texts: list[str]) -> list[list[float]]:
+    async def embed_batch(self, texts: list[str], timeout: float | None = None) -> list[list[float]]:
         """Get embedding vectors for a batch of texts."""
         if not texts:
             return []
-        result = await asyncio.to_thread(
+        coro = asyncio.to_thread(
             _retry_policy(self._client.models.embed_content),
             model=self._embedding_model,
             contents=texts,
         )
+        if timeout is not None:
+            result = await asyncio.wait_for(coro, timeout=timeout)
+        else:
+            result = await coro
         return [list(e.values) for e in result.embeddings]
