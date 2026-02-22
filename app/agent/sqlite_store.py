@@ -279,10 +279,12 @@ class SQLiteSessionStore(SessionStoreBase):
             ]
 
     def seed_session(self, request: SeedSessionRequest) -> None:
-        """Pre-populate a session with onboarding data."""
+        """Pre-populate a session with onboarding data (single transaction)."""
         with self._lock:
             self._ensure_session(request.session_id)
 
+            # Build profile updates inline (avoid calling update_profile which commits separately)
+            list_fields = ("challenge_areas", "attempted_strategies", "hardest_situations")
             updates = {}
             if request.child_name:
                 updates["child_name"] = request.child_name
@@ -294,13 +296,40 @@ class SQLiteSessionStore(SessionStoreBase):
                 updates["attempted_strategies"] = request.tried_strategies
 
             if updates:
-                self.update_profile(request.session_id, **updates)
+                # Validate field names
+                for field in updates:
+                    if field not in self._VALID_PROFILE_FIELDS:
+                        raise ValueError(f"Invalid profile field: {field!r}")
+
+                prof_row = self._conn.execute(
+                    "SELECT * FROM family_profiles WHERE session_id = ?",
+                    (request.session_id,),
+                ).fetchone()
+
+                for field, value in updates.items():
+                    if field in list_fields:
+                        current = json.loads(prof_row[field])
+                        if isinstance(value, list):
+                            merged = list(dict.fromkeys(current + value))
+                        else:
+                            merged = list(dict.fromkeys(current + [value]))
+                        self._conn.execute(
+                            f"UPDATE family_profiles SET {field} = ? WHERE session_id = ?",
+                            (json.dumps(merged), request.session_id),
+                        )
+                    else:
+                        self._conn.execute(
+                            f"UPDATE family_profiles SET {field} = ? WHERE session_id = ?",
+                            (value, request.session_id),
+                        )
 
             for goal_text in request.goals:
                 self._conn.execute(
                     "INSERT INTO goals (session_id, description) VALUES (?, ?)",
                     (request.session_id, goal_text),
                 )
+
+            # Single commit for the entire seed operation
             self._conn.commit()
 
             logger.info(
