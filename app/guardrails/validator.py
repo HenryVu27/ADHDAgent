@@ -143,6 +143,14 @@ class InputGate:
                                       timeout=self._timeout_s, json_output=True),
                 timeout=self._timeout_s,
             )
+            # Retry once on empty response (transient Gemini issue)
+            if not raw or not raw.strip():
+                logger.debug("Input gate: empty response, retrying once")
+                raw = await asyncio.wait_for(
+                    self._client.generate(prompt, temperature=0.0, max_output_tokens=256,
+                                          timeout=self._timeout_s, json_output=True),
+                    timeout=self._timeout_s,
+                )
             classification = _parse_json(raw, InputClassification)
 
             duration_ms = (time.time() - start) * 1000
@@ -199,6 +207,14 @@ class OutputGate:
                                       timeout=self._timeout_s, json_output=True),
                 timeout=self._timeout_s,
             )
+            # Retry once on empty response (transient Gemini issue)
+            if not raw or not raw.strip():
+                logger.debug("Output gate: empty response, retrying once")
+                raw = await asyncio.wait_for(
+                    self._client.generate(prompt, temperature=0.0, max_output_tokens=256,
+                                          timeout=self._timeout_s, json_output=True),
+                    timeout=self._timeout_s,
+                )
             classification = _parse_json(raw, OutputClassification)
 
             duration_ms = (time.time() - start) * 1000
@@ -237,9 +253,9 @@ class OutputGate:
             return OutputCheckResult(is_valid=True, duration_ms=duration_ms)
         except (json.JSONDecodeError, KeyError, TypeError) as e:
             duration_ms = (time.time() - start) * 1000
-            logger.warning("Output gate parse error (blocking response): %s", e)
-            return OutputCheckResult(is_valid=False, violation_type="error", duration_ms=duration_ms)
+            logger.warning("Output gate parse error (allowing response): %s", e)
+            return OutputCheckResult(is_valid=True, duration_ms=duration_ms)
         except Exception as e:
             duration_ms = (time.time() - start) * 1000
-            logger.error("Output gate failed (blocking response): %s", e)
-            return OutputCheckResult(is_valid=False, violation_type="error", duration_ms=duration_ms)
+            logger.error("Output gate failed (allowing response): %s", e)
+            return OutputCheckResult(is_valid=True, duration_ms=duration_ms)

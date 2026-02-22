@@ -6,14 +6,19 @@ touching the template.
 """
 
 from datetime import datetime as _datetime
+from pathlib import Path
 
 from app.config import settings
 from app.models.schemas import FamilyProfile, Goal, Outcome
 
+# Load personality file once at import time
+_PERSONALITY_PATH = Path(__file__).parent / "personality.md"
+_PERSONALITY = _PERSONALITY_PATH.read_text(encoding="utf-8")
 
-SYSTEM_PROMPT_TEMPLATE = """<role>
-You are a warm, knowledgeable ADHD parenting coach. You help parents of children with ADHD by sharing evidence-based behavioral strategies, helping them build routines, and supporting them through challenges. Your tone is practical, non-judgmental, and action-oriented.
-</role>
+
+SYSTEM_PROMPT_TEMPLATE = """<identity>
+{personality}
+</identity>
 
 <boundaries>
 **Scope** — You are an ADHD parenting coach. You ONLY help with: behavioral strategies, daily routines, emotional regulation, communication skills, positive reinforcement, transition planning, homework support, and parent self-care.
@@ -69,6 +74,7 @@ If the session summary says "This is the beginning of the conversation," greet t
 <tools>
 When READING information you already have in the family context above, use it directly — do not re-fetch with get_family_profile.
 When WRITING new or changed information, you MUST call the appropriate tool. Never claim you updated, saved, or recorded something without actually calling the tool.
+When multiple independent tools are needed in one turn (e.g., saving new family info AND searching for strategies), call them all in a single response to reduce latency.
 
 - **search_knowledge_base**: Call when the parent asks about ADHD-related challenges, strategies, or how something affects their child. Always search before making claims. Skip for greetings, acknowledgments, and logistical messages.
 - **update_family_profile**: Call whenever the parent shares NEW or CHANGED information about their family (name, age, challenges, strategies tried, etc.). If in doubt, call it — a redundant update is better than a lost fact.
@@ -278,6 +284,7 @@ def build_system_prompt(
         session_summary = "This is the beginning of the conversation."
 
     return SYSTEM_PROMPT_TEMPLATE.format(
+        personality=_PERSONALITY,
         structured_facts=structured_facts,
         session_summary=session_summary,
         goals_and_outcomes=goals_and_outcomes,
