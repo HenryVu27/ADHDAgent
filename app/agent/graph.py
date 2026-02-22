@@ -137,7 +137,12 @@ def build_agent(
         if not check.is_valid:
             logger.info("Output gate triggered: %s", check.violation_type)
             safe_msg = AIMessage(content=SAFE_OUTPUT_FALLBACK)
-            new_messages = [m for m in messages if m is not last_ai] + [safe_msg]
+            # Replace the last non-tool AI message by position (not identity)
+            new_messages = list(messages)
+            for i in range(len(new_messages) - 1, -1, -1):
+                if isinstance(new_messages[i], AIMessage) and new_messages[i].content and not getattr(new_messages[i], "tool_calls", None):
+                    new_messages[i] = safe_msg
+                    break
             return {
                 "messages": new_messages,
                 "trace_steps": [trace_step],

@@ -246,12 +246,46 @@ class TestOutputGate:
         assert result.duration_ms >= 0
 
     @pytest.mark.asyncio
-    async def test_timeout_blocks_response(self):
-        """Output gate timeout should fail closed (block response)."""
+    async def test_timeout_allows_response(self):
+        """Output gate timeout should fail open (allow response)."""
         from app.guardrails.validator import OutputGate
         mock = AsyncMock()
         mock.generate = AsyncMock(side_effect=asyncio.TimeoutError())
         gate = OutputGate(gemini_client=mock)
         result = await gate.check("Some response")
-        assert result.is_valid is False
-        assert result.violation_type == "error"
+        assert result.is_valid is True
+
+    @pytest.mark.asyncio
+    async def test_input_gate_wait_for_enforces_timeout(self):
+        """Input gate should cancel slow generate calls via asyncio.wait_for."""
+        from app.guardrails.validator import InputGate
+
+        async def slow_generate(*args, **kwargs):
+            await asyncio.sleep(60)  # Simulate a very slow call
+            return '{"crisis": false, "jailbreak": false, "reasoning": "ok"}'
+
+        mock = AsyncMock()
+        mock.generate = slow_generate
+        gate = InputGate(gemini_client=mock)
+        gate._timeout_s = 0.05  # 50ms timeout
+        result = await gate.check("Hello")
+        assert result.is_allowed is True
+        assert result.duration_ms < 5000  # Should complete quickly, not wait 60s
+
+    @pytest.mark.asyncio
+    async def test_output_gate_wait_for_enforces_timeout(self):
+        """Output gate should cancel slow generate calls via asyncio.wait_for."""
+        from app.guardrails.validator import OutputGate
+
+        async def slow_generate(*args, **kwargs):
+            await asyncio.sleep(60)  # Simulate a very slow call
+            return '{"medication_recommendation": false, "diagnosis_claim": false, "scope_violation": false, "reasoning": "ok"}'
+
+        mock = AsyncMock()
+        mock.generate = slow_generate
+        gate = OutputGate(gemini_client=mock)
+        gate._timeout_s = 0.05  # 50ms timeout
+        result = await gate.check("Some response")
+        assert result.is_valid is True
+        assert result.duration_ms < 5000  # Should complete quickly, not wait 60s
+

@@ -8,6 +8,7 @@ by the system prompt — the agent sees full conversation context and doesn't
 need isolated per-message classifiers for these.
 """
 
+import asyncio
 import json
 import logging
 import re
@@ -132,8 +133,11 @@ class InputGate:
         start = time.time()
         try:
             prompt = INPUT_GATE_PROMPT.format(user_message=user_message)
-            raw = await self._client.generate(prompt, temperature=0.0, max_output_tokens=2048,
-                                               timeout=self._timeout_s)
+            raw = await asyncio.wait_for(
+                self._client.generate(prompt, temperature=0.0, max_output_tokens=2048,
+                                      timeout=self._timeout_s),
+                timeout=self._timeout_s,
+            )
             classification = _parse_json(raw, InputClassification)
 
             duration_ms = (time.time() - start) * 1000
@@ -159,6 +163,10 @@ class InputGate:
 
             return InputCheckResult(is_allowed=True, duration_ms=duration_ms)
 
+        except asyncio.TimeoutError:
+            duration_ms = (time.time() - start) * 1000
+            logger.warning("Input gate timed out after %.0fms (allowing message)", duration_ms)
+            return InputCheckResult(is_allowed=True, duration_ms=duration_ms)
         except (json.JSONDecodeError, KeyError, TypeError) as e:
             duration_ms = (time.time() - start) * 1000
             logger.warning("Input gate parse error (allowing message): %s", e)
@@ -180,8 +188,11 @@ class OutputGate:
         start = time.time()
         try:
             prompt = OUTPUT_GATE_PROMPT.format(bot_response=bot_response)
-            raw = await self._client.generate(prompt, temperature=0.0, max_output_tokens=2048,
-                                               timeout=self._timeout_s)
+            raw = await asyncio.wait_for(
+                self._client.generate(prompt, temperature=0.0, max_output_tokens=2048,
+                                      timeout=self._timeout_s),
+                timeout=self._timeout_s,
+            )
             classification = _parse_json(raw, OutputClassification)
 
             duration_ms = (time.time() - start) * 1000
@@ -214,6 +225,10 @@ class OutputGate:
 
             return OutputCheckResult(is_valid=True, duration_ms=duration_ms)
 
+        except asyncio.TimeoutError:
+            duration_ms = (time.time() - start) * 1000
+            logger.warning("Output gate timed out after %.0fms (allowing response)", duration_ms)
+            return OutputCheckResult(is_valid=True, duration_ms=duration_ms)
         except (json.JSONDecodeError, KeyError, TypeError) as e:
             duration_ms = (time.time() - start) * 1000
             logger.warning("Output gate parse error (blocking response): %s", e)
