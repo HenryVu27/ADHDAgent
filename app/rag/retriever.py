@@ -70,7 +70,18 @@ class HybridRetriever:
 
         # Step 3: Rerank (optional, behind config flag)
         if self._reranker and len(candidates) > top_k:
-            candidates = await self._reranker.rerank(search_query, candidates, top_k)
+            try:
+                candidates = await self._reranker.rerank(search_query, candidates, top_k)
+            except Exception as e:
+                logger.warning("Reranker failed, using pre-rerank order: %s", e)
+
+        # Step 3b: Relevance threshold (only with reranker — RRF scores aren't calibrated)
+        if self._reranker:
+            pre_filter = len(candidates)
+            candidates = [r for r in candidates if r.score >= settings.RAG_RELEVANCE_THRESHOLD]
+            if pre_filter > len(candidates):
+                logger.info("Relevance threshold %.2f filtered %d -> %d results",
+                            settings.RAG_RELEVANCE_THRESHOLD, pre_filter, len(candidates))
 
         # Step 4: Compute facets
         facets = self._compute_facets(candidates)
@@ -109,7 +120,7 @@ class HybridRetriever:
 
         # Qdrant hybrid: dense + sparse + RRF
         if self._store.has_sparse and self._gemini:
-            query_vector = await self._gemini.embed(query)
+            query_vector = await self._gemini.embed(query, timeout=settings.RAG_EMBED_TIMEOUT_S)
             hybrid_results = self._store.search_hybrid(
                 query_vector=query_vector,
                 query_text=query,

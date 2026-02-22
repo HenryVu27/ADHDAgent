@@ -41,17 +41,30 @@ def build_agent(
     Returns:
         Compiled LangGraph.
     """
-    # Build the inner ReAct agent (with context assembly as pre_model_hook)
-    model = ChatGoogleGenerativeAI(
+    # Build two ReAct agents: Pro (complex queries) and Flash (simple messages)
+    pro_model = ChatGoogleGenerativeAI(
         model=settings.GEMINI_AGENT_MODEL,
         google_api_key=settings.GEMINI_API_KEY,
         temperature=0.7,
         max_output_tokens=2048,
         thinking_budget=settings.GEMINI_THINKING_BUDGET,
     )
+    flash_model = ChatGoogleGenerativeAI(
+        model=settings.GEMINI_FAST_MODEL,
+        google_api_key=settings.GEMINI_API_KEY,
+        temperature=0.7,
+        max_output_tokens=2048,
+        thinking_budget=settings.GEMINI_FAST_THINKING_BUDGET,
+    )
 
-    react_agent = create_react_agent(
-        model=model,
+    pro_react_agent = create_react_agent(
+        model=pro_model,
+        tools=tools,
+        pre_model_hook=prepare_context,
+        state_schema=CoachingState,
+    )
+    flash_react_agent = create_react_agent(
+        model=flash_model,
         tools=tools,
         pre_model_hook=prepare_context,
         state_schema=CoachingState,
@@ -96,7 +109,7 @@ def build_agent(
                 "messages": [AIMessage(content=check.override_response or "")],
             }
 
-        return {"trace_steps": [trace_step]}
+        return {"trace_steps": [trace_step], "route": check.route}
 
     async def output_gate_node(state: CoachingState):
         """Run output gate classifier on the agent's response."""
@@ -150,31 +163,40 @@ def build_agent(
 
         return {"trace_steps": [trace_step]}
 
-    # Route after input gate
+    # Route after input gate: blocked -> END, simple -> flash, complex -> pro
     def route_after_input_gate(state: CoachingState):
         if state.get("input_blocked"):
             return END
-        return "react_agent"
+        if state.get("route") == "flash":
+            return "flash_react_agent"
+        return "pro_react_agent"
 
     # Build the outer pipeline graph
     graph = StateGraph(CoachingState)
 
     graph.add_node("input_gate", input_gate_node)
-    graph.add_node("react_agent", react_agent)
+    graph.add_node("pro_react_agent", pro_react_agent)
+    graph.add_node("flash_react_agent", flash_react_agent)
     graph.add_node("output_gate", output_gate_node)
 
     graph.set_entry_point("input_gate")
-    graph.add_conditional_edges("input_gate", route_after_input_gate, {END: END, "react_agent": "react_agent"})
-    graph.add_edge("react_agent", "output_gate")
+    graph.add_conditional_edges("input_gate", route_after_input_gate, {
+        END: END,
+        "pro_react_agent": "pro_react_agent",
+        "flash_react_agent": "flash_react_agent",
+    })
+    graph.add_edge("pro_react_agent", "output_gate")
+    graph.add_edge("flash_react_agent", "output_gate")
     graph.add_edge("output_gate", END)
 
     compiled = graph.compile()
 
     logger.info(
-        "Agent pipeline built: agent_model=%s, utility_model=%s, tools=%d, thinking_budget=%d",
+        "Agent pipeline built: pro_model=%s (thinking=%d), fast_model=%s (thinking=%d), tools=%d",
         settings.GEMINI_AGENT_MODEL,
-        settings.GEMINI_UTILITY_MODEL,
-        len(tools),
         settings.GEMINI_THINKING_BUDGET,
+        settings.GEMINI_FAST_MODEL,
+        settings.GEMINI_FAST_THINKING_BUDGET,
+        len(tools),
     )
     return compiled

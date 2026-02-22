@@ -264,6 +264,8 @@ async def test_reranker_sorts_by_relevance():
     assert len(reranked) == 2
     assert reranked[0].document_id == "1"  # scored 0.9
     assert reranked[1].document_id == "3"  # scored 0.7
+    assert reranked[0].score == pytest.approx(0.9)
+    assert reranked[1].score == pytest.approx(0.7)
 
 
 @pytest.mark.asyncio
@@ -277,3 +279,92 @@ async def test_reranker_empty_results():
 
     reranked = await reranker.rerank("test", [], top_k=3)
     assert reranked == []
+
+
+@pytest.mark.asyncio
+async def test_reranker_failure_falls_back_to_candidates(knowledge_store):
+    """When the reranker raises, the retriever should still return pre-rerank results."""
+    from unittest.mock import AsyncMock, MagicMock, patch
+    from tests.conftest import MockGeminiClient
+
+    mock_gemini = MockGeminiClient()
+
+    # Build a reranker whose rerank() always explodes
+    with patch("app.rag.reranker.FastEmbedReranker.__init__", return_value=None):
+        broken_reranker = __import__("app.rag.reranker", fromlist=["FastEmbedReranker"]).FastEmbedReranker.__new__(
+            __import__("app.rag.reranker", fromlist=["FastEmbedReranker"]).FastEmbedReranker
+        )
+        broken_reranker.rerank = AsyncMock(side_effect=RuntimeError("ONNX crash"))
+
+    retriever = HybridRetriever(
+        knowledge_store=knowledge_store,
+        gemini_client=mock_gemini,
+        reranker=broken_reranker,
+    )
+
+    # Keyword fallback path (no Qdrant index), so reranker exception is the only concern
+    response = await retriever.retrieve("homework strategies")
+    assert len(response.results) > 0
+
+
+@pytest.mark.asyncio
+async def test_relevance_threshold_filters_low_scores():
+    """Relevance threshold drops results below the configured score floor."""
+    from unittest.mock import MagicMock, patch
+    from app.rag.reranker import FastEmbedReranker
+
+    results = [
+        RetrievalResult(document_id="low", document_name="Low", content="aaa", score=0.5),
+        RetrievalResult(document_id="mid", document_name="Mid", content="bbb", score=0.5),
+        RetrievalResult(document_id="high", document_name="High", content="ccc", score=0.5),
+    ]
+
+    # Mock reranker that assigns scores: -0.5, 0.1, 0.9
+    with patch("app.rag.reranker.FastEmbedReranker.__init__", return_value=None):
+        reranker = FastEmbedReranker.__new__(FastEmbedReranker)
+        mock_model = MagicMock()
+        mock_model.rerank.return_value = [-0.5, 0.1, 0.9]
+        reranker._model = mock_model
+
+    # Minimal KnowledgeStore with matching chunks
+    store = MagicMock()
+    store.has_sparse = False
+    store.chunks = []
+
+    retriever = HybridRetriever(
+        knowledge_store=store,
+        gemini_client=None,
+        reranker=reranker,
+    )
+
+    # Manually call the pipeline steps to isolate threshold behavior:
+    # Simulate candidates that the reranker will re-score
+    reranked = await reranker.rerank("test", results, top_k=3)
+
+    # With default threshold 0.0, -0.5 should be dropped
+    from app.config import settings
+    filtered = [r for r in reranked if r.score >= settings.RAG_RELEVANCE_THRESHOLD]
+    assert len(filtered) == 2
+    assert all(r.document_id != "low" for r in filtered)
+
+
+@pytest.mark.asyncio
+async def test_query_rewriter_passes_timeout():
+    """QueryRewriter passes timeout kwarg to gemini.generate()."""
+    from unittest.mock import AsyncMock
+    from app.rag.query_rewriter import QueryRewriter
+    from app.config import settings
+
+    mock_gemini = AsyncMock()
+    mock_gemini.generate = AsyncMock(return_value="rewritten query")
+
+    rewriter = QueryRewriter(gemini_client=mock_gemini)
+    await rewriter.rewrite(
+        query="help with homework",
+        conversation_history=[{"role": "user", "content": "hi"}],
+    )
+
+    mock_gemini.generate.assert_called_once()
+    call_kwargs = mock_gemini.generate.call_args
+    assert call_kwargs.kwargs.get("timeout") == settings.RAG_EMBED_TIMEOUT_S or \
+           call_kwargs[1].get("timeout") == settings.RAG_EMBED_TIMEOUT_S

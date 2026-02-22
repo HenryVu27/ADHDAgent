@@ -9,10 +9,11 @@ Endpoints:
 
 import asyncio
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
+from app.agent.store_protocol import SessionStoreBase
+from app.api.deps import get_analyzer, get_event_bus, get_session_store
 from app.models.schemas import (
-    ObservabilityEvent,
     SessionDetailResponse,
     SessionListResponse,
     SessionOverview,
@@ -20,45 +21,30 @@ from app.models.schemas import (
 
 obs_router = APIRouter(prefix="/observability")
 
-# Set during app startup
-_session_store = None
-_event_bus = None
-_analyzer = None
-
-
-def set_observability_deps(session_store, event_bus, analyzer):
-    global _session_store, _event_bus, _analyzer
-    _session_store = session_store
-    _event_bus = event_bus
-    _analyzer = analyzer
-
 
 @obs_router.get("/sessions", response_model=SessionListResponse)
-async def list_sessions():
+async def list_sessions(
+    offset: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    session_store: SessionStoreBase = Depends(get_session_store),
+    event_bus=Depends(get_event_bus),
+):
     """List all sessions with overview stats."""
-    if not _session_store:
-        raise HTTPException(status_code=503, detail="Not initialized")
-
     # Collect session IDs from store and event bus
     session_ids: set[str] = set()
 
-    if hasattr(_session_store, "get_all_sessions"):
-        all_sessions = _session_store.get_all_sessions()
-        if isinstance(all_sessions, list):
-            for s in all_sessions:
-                if hasattr(s, "session_id"):
-                    session_ids.add(s.session_id)
-                elif isinstance(s, dict):
-                    session_ids.add(s["session_id"])
+    all_sessions = session_store.get_all_sessions()
+    for s in all_sessions:
+        session_ids.add(s.session_id)
 
-    if _event_bus:
-        session_ids.update(_event_bus.get_all_session_ids())
+    if event_bus:
+        session_ids.update(event_bus.get_all_session_ids())
 
     overviews = []
     for sid in session_ids:
-        state = _session_store.get(sid)
-        traces = _session_store.get_traces(sid)
-        analyses = _session_store.get_analyses(sid)
+        state = session_store.get(sid)
+        traces = session_store.get_traces(sid)
+        analyses = session_store.get_analyses(sid)
 
         total_flags = sum(len(a.flags) for a in analyses)
         avg_quality = (
@@ -68,8 +54,7 @@ async def list_sessions():
         tool_calls_count = sum(len(t.tool_calls) for t in traces)
         blocked_count = sum(1 for t in traces if t.input_blocked)
 
-        # Get timestamps via public protocol method
-        created_at, updated_at = _session_store.get_session_timestamps(sid)
+        created_at, updated_at = session_store.get_session_timestamps(sid)
 
         overviews.append(SessionOverview(
             session_id=sid,
@@ -84,19 +69,25 @@ async def list_sessions():
 
     # Sort by turn count descending (most active first)
     overviews.sort(key=lambda o: o.turn_count, reverse=True)
-    return SessionListResponse(sessions=overviews)
+    total = len(overviews)
+    paginated = overviews[offset:offset + limit]
+    return SessionListResponse(sessions=paginated, total=total, offset=offset, limit=limit)
 
 
 @obs_router.get("/sessions/{session_id}", response_model=SessionDetailResponse)
-async def get_session_detail(session_id: str):
+async def get_session_detail(
+    session_id: str,
+    session_store: SessionStoreBase = Depends(get_session_store),
+    event_bus=Depends(get_event_bus),
+):
     """Full session detail: messages, traces, analyses, events."""
-    if not _session_store:
-        raise HTTPException(status_code=503, detail="Not initialized")
+    if not session_store.session_exists(session_id):
+        raise HTTPException(status_code=404, detail="Session not found")
 
-    messages = _session_store.get_messages(session_id)
-    traces = _session_store.get_traces(session_id)
-    analyses = _session_store.get_analyses(session_id)
-    events = _event_bus.get_events(session_id) if _event_bus else []
+    messages = session_store.get_messages(session_id)
+    traces = session_store.get_traces(session_id)
+    analyses = session_store.get_analyses(session_id)
+    events = event_bus.get_events(session_id) if event_bus else []
 
     return SessionDetailResponse(
         session_id=session_id,
@@ -111,25 +102,35 @@ async def get_session_detail(session_id: str):
 async def get_session_events(
     session_id: str,
     category: str | None = Query(None),
+    session_store: SessionStoreBase = Depends(get_session_store),
+    event_bus=Depends(get_event_bus),
 ):
     """Filtered event log for a session."""
-    if not _event_bus:
+    if not session_store.session_exists(session_id):
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    if not event_bus:
         return {"events": []}
 
-    events = _event_bus.get_events(session_id, category=category)
+    events = event_bus.get_events(session_id, category=category)
     return {"events": [e.model_dump() for e in events]}
 
 
 @obs_router.post("/sessions/{session_id}/analyze")
-async def analyze_session(session_id: str):
+async def analyze_session(
+    session_id: str,
+    session_store: SessionStoreBase = Depends(get_session_store),
+    analyzer=Depends(get_analyzer),
+):
     """On-demand re-analysis of all turns in a session."""
-    if not _analyzer:
+    if not analyzer:
         raise HTTPException(status_code=503, detail="Analyzer not available")
-    if not _session_store:
-        raise HTTPException(status_code=503, detail="Not initialized")
 
-    messages = _session_store.get_messages(session_id)
-    traces = _session_store.get_traces(session_id)
+    if not session_store.session_exists(session_id):
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    messages = session_store.get_messages(session_id)
+    traces = session_store.get_traces(session_id)
 
     # Group messages by turn
     turns: dict[int, dict] = {}
@@ -152,7 +153,7 @@ async def analyze_session(session_id: str):
         if turn_data["user"] and turn_data["assistant"]:
             from app.models.schemas import EnrichedTrace
             t = trace or EnrichedTrace(session_id=session_id, turn=turn_num)
-            tasks.append(_analyzer.analyze_turn(
+            tasks.append(analyzer.analyze_turn(
                 session_id=session_id,
                 turn=turn_num,
                 user_message=turn_data["user"],
@@ -163,7 +164,7 @@ async def analyze_session(session_id: str):
     if tasks:
         await asyncio.gather(*tasks, return_exceptions=True)
 
-    analyses = _session_store.get_analyses(session_id)
+    analyses = session_store.get_analyses(session_id)
     return {
         "status": "ok",
         "turns_analyzed": len(tasks),

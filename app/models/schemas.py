@@ -26,6 +26,7 @@ class InputCheckResult(BaseModel):
     blocked_reason: str | None = None  # "jailbreak" | "crisis" | "out_of_scope" | "content" | "off_topic"
     override_response: str | None = None  # Pre-built response for crisis/OOS
     duration_ms: float = 0.0
+    route: str = "pro"  # "pro" (default/safe) or "flash" (simple messages)
 
 
 class OutputCheckResult(BaseModel):
@@ -38,6 +39,7 @@ class InputClassification(BaseModel):
     """Structured output from the input gate classifier."""
     crisis: bool = False
     jailbreak: bool = False
+    complexity: str = "complex"  # "simple" or "complex" — defaults complex for safety
     reasoning: str = ""
 
 

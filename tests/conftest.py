@@ -20,18 +20,18 @@ class MockGeminiClient:
         self.generate_calls = []
         self.extract_json_calls = []
 
-    async def generate(self, prompt, temperature=0.7):
+    async def generate(self, prompt, temperature=0.7, **kwargs):
         self.generate_calls.append(prompt)
         return self._generate_response
 
-    async def extract_json(self, prompt, temperature=0.0):
+    async def extract_json(self, prompt, temperature=0.0, **kwargs):
         self.extract_json_calls.append(prompt)
         return self._extract_json_response
 
-    def embed(self, text):
+    async def embed(self, text, **kwargs):
         return [0.1] * 768
 
-    def embed_batch(self, texts):
+    async def embed_batch(self, texts, **kwargs):
         return [[0.1] * 768 for _ in texts]
 
 

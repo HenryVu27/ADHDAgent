@@ -8,7 +8,7 @@ load_dotenv()
 class Settings(BaseSettings):
     # Gemini
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-3-flash-preview"
+    GEMINI_MODEL: str = "gemini-2.5-flash"
     GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-001"
 
     # RAG
@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     RAG_RERANK_ENABLED: bool = True
     RAG_RERANK_CANDIDATES: int = 10
     RAG_RERANK_MODEL: str = "BAAI/bge-reranker-base"
+    RAG_RELEVANCE_THRESHOLD: float = 0.0   # Cross-encoder score floor (bge-reranker-base: 0 = decision boundary)
+    RAG_EMBED_TIMEOUT_S: float = 30.0      # Timeout for embed/embed_batch API calls
 
     # Qdrant
     QDRANT_URL: str = ":memory:"
@@ -47,11 +49,15 @@ class Settings(BaseSettings):
     CONTEXT_MAX_CHARS: int = 120000  # ~30k tokens at 4 chars/token
 
     # Model split: Pro for agent, Flash for utilities
-    GEMINI_AGENT_MODEL: str = "gemini-3-pro-preview"
+    GEMINI_AGENT_MODEL: str = "gemini-2.5-pro"
     GEMINI_UTILITY_MODEL: str = ""
 
     # Thinking mode budget (tokens) for the agent model
     GEMINI_THINKING_BUDGET: int = 8192
+
+    # Fast model for simple messages (defaults to utility/flash model)
+    GEMINI_FAST_MODEL: str = ""
+    GEMINI_FAST_THINKING_BUDGET: int = 0
 
     # Memory manager
     SUMMARY_INTERVAL_TURNS: int = 5
@@ -71,6 +77,8 @@ class Settings(BaseSettings):
         """GEMINI_UTILITY_MODEL defaults to GEMINI_MODEL (flash) when not set."""
         if not self.GEMINI_UTILITY_MODEL:
             self.GEMINI_UTILITY_MODEL = self.GEMINI_MODEL
+        if not self.GEMINI_FAST_MODEL:
+            self.GEMINI_FAST_MODEL = self.GEMINI_UTILITY_MODEL
         return self
 
 

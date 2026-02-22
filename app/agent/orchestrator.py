@@ -273,9 +273,12 @@ class AgentOrchestrator:
             session_id, len(tool_calls_made), total_ms,
         )
 
+        route = result.get("route", "pro")
+        agent_label = "flash_react_agent" if route == "flash" else "react_agent"
+
         return ChatResponse(
             response=response_text,
-            agent_used="react_agent",
+            agent_used=agent_label,
             phase=self._infer_phase(session_id),
             pipeline_trace=trace,
             session_id=session_id,
@@ -413,7 +416,9 @@ class AgentOrchestrator:
                     ))
                     step_index += 1
 
-        model_tier = result.get("model_tier", "standard")
+        route = result.get("route", "pro")
+        model_tier = "fast" if route == "flash" else "standard"
+        agent_label = "flash_react_agent" if route == "flash" else "react_agent"
 
         return EnrichedTrace(
             session_id=session_id,
@@ -424,7 +429,7 @@ class AgentOrchestrator:
             reasoning_steps=reasoning_steps,
             tool_calls=tool_records,
             model_tier=model_tier,
-            agent_used="react_agent",
+            agent_used=agent_label,
         )
 
     @staticmethod
@@ -434,6 +439,9 @@ class AgentOrchestrator:
         tool_calls: list | None = None,
     ) -> PipelineTrace:
         """Build a PipelineTrace from the agent result."""
+        route = result.get("route", "pro")
+        agent_label = "flash_react_agent" if route == "flash" else "react_agent"
+
         steps = []
 
         # Add trace steps recorded by hooks
@@ -449,12 +457,12 @@ class AgentOrchestrator:
 
         # Add the agent step
         steps.append(PipelineStep(
-            name="react_agent",
+            name=agent_label,
             duration_ms=total_ms,
         ))
 
         return PipelineTrace(
             steps=steps,
             total_duration_ms=total_ms,
-            agent_used="react_agent",
+            agent_used=agent_label,
         )

@@ -1,5 +1,10 @@
 # ADHDAgent
 
+## Git Conventions
+
+- Never add `Co-Authored-By` lines to commits.
+- No conventional commit prefixes (`fix:`, `feat:`, `test:`, etc.). Just write a plain commit message.
+
 Parent-facing ADHD coaching chatbot using a ReAct agent architecture:
 Input gate (crisis + jailbreak) -> Context assembly -> Gemini ReAct agent with tool calling -> Output gate (medication + diagnosis + scope).
 
@@ -92,6 +97,11 @@ uvicorn app.main:app --reload
 # Open browser
 # http://localhost:8000
 ```
+
+## Testing Policy
+
+- **Never run integration tests or E2E tests** that require a real API key (e.g., `GEMINI_API_KEY`). These consume limited API quota.
+- **Always ask the user before running any tests**, even mock-only unit tests.
 
 ## Running Tests
 

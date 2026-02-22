@@ -3,6 +3,8 @@
 
 import logging
 
+from app.config import settings
+
 logger = logging.getLogger(__name__)
 
 QUERY_REWRITE_PROMPT = """You are a search query optimizer for an ADHD parenting coach knowledge base.
@@ -81,7 +83,10 @@ class QueryRewriter:
                 family_profile=profile_text or "Not yet gathered",
             )
 
-            rewritten = await self._gemini.generate(prompt, temperature=0.0, max_output_tokens=256)
+            rewritten = await self._gemini.generate(
+                prompt, temperature=0.0, max_output_tokens=256,
+                timeout=settings.RAG_EMBED_TIMEOUT_S,
+            )
             rewritten = rewritten.strip().strip('"').strip("'")
 
             if rewritten and len(rewritten) < 500:

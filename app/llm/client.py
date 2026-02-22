@@ -61,17 +61,21 @@ class GeminiClient:
         model: str | None = None,
         max_output_tokens: int = 2048,
         timeout: float | None = None,
+        json_output: bool = False,
     ) -> str:
         """Generate text from a prompt."""
         try:
+            config = GenerateContentConfig(
+                temperature=temperature,
+                max_output_tokens=max_output_tokens,
+            )
+            if json_output:
+                config.response_mime_type = "application/json"
             coro = asyncio.to_thread(
                 _retry_policy(self._client.models.generate_content),
                 model=model or self._model,
                 contents=prompt,
-                config=GenerateContentConfig(
-                    temperature=temperature,
-                    max_output_tokens=max_output_tokens,
-                ),
+                config=config,
             )
             if timeout is not None:
                 response = await asyncio.wait_for(coro, timeout=timeout)

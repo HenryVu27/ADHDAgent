@@ -17,4 +17,5 @@ class CoachingState(MessagesState):
     session_id: str
     input_blocked: bool = False
     block_response: str = ""
+    route: str = "pro"
     trace_steps: Annotated[list[dict], lambda a, b: a + b] = []

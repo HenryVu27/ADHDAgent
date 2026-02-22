@@ -55,9 +55,9 @@ SQLITE_ENABLED=false
 
 # Model routing (default: single model)
 MODEL_ROUTING_ENABLED=true
-GEMINI_MODEL_FAST=gemini-3-flash-preview
-GEMINI_MODEL_STANDARD=gemini-3-flash-preview
-GEMINI_MODEL_COMPLEX=gemini-3-pro-preview
+GEMINI_MODEL_FAST=gemini-2.5-flash
+GEMINI_MODEL_STANDARD=gemini-2.5-flash
+GEMINI_MODEL_COMPLEX=gemini-2.5-pro
 ```
 
 ## Running Tests

@@ -173,43 +173,6 @@ class TestFactExtraction:
         assert profile.child_name is None
 
 
-class TestFactExtractionPreFilter:
-
-    @pytest.mark.asyncio
-    async def test_fact_extraction_skips_non_informative_messages(self):
-        """Messages with no profile-related content should skip the LLM call."""
-        store = InMemorySessionStore()
-        mock_gemini = AsyncMock()
-        memory = MemoryManager(session_store=store, gemini_client=mock_gemini)
-
-        # These are all >40 chars but contain no profile-related vocabulary
-        await memory._extract_facts("test-session", "That sounds really helpful, thank you so much for explaining that to me", 3)
-        mock_gemini.extract_json.assert_not_called()
-
-    @pytest.mark.asyncio
-    async def test_fact_extraction_proceeds_for_informative_messages(self):
-        """Messages with profile-related content should trigger the LLM call."""
-        store = InMemorySessionStore()
-        mock_gemini = AsyncMock()
-        mock_gemini.extract_json = AsyncMock(return_value={})
-        memory = MemoryManager(session_store=store, gemini_client=mock_gemini)
-
-        await memory._extract_facts("test-session", "My son is 7 years old and was diagnosed with ADHD last year", 3)
-        mock_gemini.extract_json.assert_called_once()
-
-    def test_might_contain_facts_positive(self):
-        """Messages mentioning children/age/challenges should pass the filter."""
-        assert MemoryManager._might_contain_facts("My daughter is struggling with homework every night")
-        assert MemoryManager._might_contain_facts("He was diagnosed with ADHD at age 7")
-        assert MemoryManager._might_contain_facts("We tried the visual timer strategy last week")
-
-    def test_might_contain_facts_negative(self):
-        """Generic acknowledgments should fail the filter."""
-        assert not MemoryManager._might_contain_facts("That sounds really helpful, thank you so much")
-        assert not MemoryManager._might_contain_facts("I appreciate you sharing that with me today")
-        assert not MemoryManager._might_contain_facts("Ok I will try that and let you know how it goes")
-
-
 class TestEpisodicMemory:
 
     @pytest.mark.asyncio

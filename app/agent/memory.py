@@ -17,22 +17,6 @@ logger = logging.getLogger(__name__)
 class MemoryManager:
     """Manages rolling summaries, fact extraction, and episodic memories."""
 
-    _PROFILE_VOCABULARY = frozenset({
-        "son", "daughter", "child", "kid", "boy", "girl", "baby",
-        "name", "age", "old", "year", "years", "grade", "school",
-        "diagnosed", "diagnosis", "adhd", "evaluation", "tested",
-        "struggle", "challenge", "difficult", "hard", "problem", "issue",
-        "tried", "attempt", "strategy", "method", "approach",
-        "morning", "bedtime", "homework", "routine", "meltdown", "tantrum",
-        "worst", "hardest",
-    })
-
-    @staticmethod
-    def _might_contain_facts(message: str) -> bool:
-        """Quick vocabulary check — does the message likely contain profile info?"""
-        words = set(message.lower().split())
-        return bool(words & MemoryManager._PROFILE_VOCABULARY)
-
     def __init__(self, session_store: SessionStoreBase, gemini_client, event_bus=None):
         self._store = session_store
         self._gemini = gemini_client
@@ -131,8 +115,6 @@ Write a concise summary (2-4 sentences) that captures the most important context
     async def _extract_facts(self, session_id: str, user_message: str, turn: int) -> None:
         """Extract structured facts from the user message and update the profile."""
         if not self._gemini:
-            return
-        if not self._might_contain_facts(user_message):
             return
 
         # Include recent conversation history so pronouns can be resolved

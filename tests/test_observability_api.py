@@ -1,7 +1,7 @@
 """Tests for observability API endpoints."""
 
 import pytest
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock
 
 from fastapi.testclient import TestClient
 from langchain_core.messages import AIMessage, HumanMessage
@@ -9,8 +9,7 @@ from langchain_core.messages import AIMessage, HumanMessage
 from app.agent.event_bus import EventBus
 from app.agent.orchestrator import AgentOrchestrator
 from app.agent.session_store import InMemorySessionStore
-from app.api.observability_routes import set_observability_deps
-from app.api.routes import set_knowledge_base, set_orchestrator
+from app.api.deps import get_analyzer, get_event_bus, get_knowledge_base, get_orchestrator, get_session_store
 from app.main import app
 from app.models.schemas import EnrichedTrace, TurnAnalysis, AnalysisFlag
 from app.rag.knowledge_store import KnowledgeStore
@@ -31,6 +30,14 @@ def _make_mock_agent():
     return agent
 
 
+@pytest.fixture(autouse=True)
+def _disable_rate_limiting():
+    from app.api.rate_limit import limiter
+    limiter.enabled = False
+    yield
+    limiter.enabled = True
+
+
 @pytest.fixture
 def setup():
     """Set up store, event_bus, and client with observability deps wired."""
@@ -41,12 +48,16 @@ def setup():
     orchestrator = AgentOrchestrator(
         agent=agent, session_store=store, event_bus=event_bus,
     )
-    set_orchestrator(orchestrator)
-    set_knowledge_base(kb)
-    set_observability_deps(store, event_bus, None)
+
+    app.dependency_overrides[get_orchestrator] = lambda: orchestrator
+    app.dependency_overrides[get_knowledge_base] = lambda: kb
+    app.dependency_overrides[get_session_store] = lambda: store
+    app.dependency_overrides[get_event_bus] = lambda: event_bus
+    app.dependency_overrides[get_analyzer] = lambda: None
 
     client = TestClient(app, raise_server_exceptions=False)
-    return store, event_bus, client
+    yield store, event_bus, client
+    app.dependency_overrides.clear()
 
 
 class TestObservabilityAPI:
@@ -109,7 +120,10 @@ class TestObservabilityAPI:
         assert len(data["events"]) >= 1
 
     def test_session_events_filtered(self, setup):
-        _, event_bus, client = setup
+        store, event_bus, client = setup
+        # Create the session so it passes 404 check
+        store.get("events_test")
+
         event_bus.emit("guardrails", "input_check_passed", "events_test")
         event_bus.emit("agent", "turn_start", "events_test")
         event_bus.emit("memory", "summary_updated", "events_test")
@@ -126,14 +140,10 @@ class TestObservabilityAPI:
         assert len(events) == 1
         assert events[0]["category"] == "guardrails"
 
-    def test_session_detail_empty(self, setup):
+    def test_session_detail_nonexistent_returns_404(self, setup):
         _, _, client = setup
         response = client.get("/api/observability/sessions/nonexistent")
-        assert response.status_code == 200
-        data = response.json()
-        assert data["session_id"] == "nonexistent"
-        assert data["messages"] == []
-        assert data["traces"] == []
+        assert response.status_code == 404
 
     def test_list_sessions_includes_event_only_sessions(self, setup):
         _, event_bus, client = setup

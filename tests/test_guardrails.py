@@ -129,6 +129,70 @@ class TestInputGate:
         assert result.is_allowed is True
 
 
+class TestInputGateRouting:
+    """Tests for complexity-based model routing in the input gate."""
+
+    @pytest.mark.asyncio
+    async def test_simple_message_routes_to_flash(self):
+        from app.guardrails.validator import InputGate
+        mock = _make_mock_gemini({"crisis": False, "jailbreak": False, "complexity": "simple", "reasoning": "greeting"})
+        gate = InputGate(gemini_client=mock)
+        result = await gate.check("Hey, how are you?")
+        assert result.is_allowed is True
+        assert result.route == "flash"
+
+    @pytest.mark.asyncio
+    async def test_complex_message_routes_to_pro(self):
+        from app.guardrails.validator import InputGate
+        mock = _make_mock_gemini({"crisis": False, "jailbreak": False, "complexity": "complex", "reasoning": "strategy request"})
+        gate = InputGate(gemini_client=mock)
+        result = await gate.check("What strategies help with homework focus?")
+        assert result.is_allowed is True
+        assert result.route == "pro"
+
+    @pytest.mark.asyncio
+    async def test_missing_complexity_defaults_to_pro(self):
+        """Old-format responses without complexity field should default to pro."""
+        from app.guardrails.validator import InputGate
+        mock = _make_mock_gemini({"crisis": False, "jailbreak": False, "reasoning": "normal"})
+        gate = InputGate(gemini_client=mock)
+        result = await gate.check("Hello")
+        assert result.is_allowed is True
+        assert result.route == "pro"
+
+    @pytest.mark.asyncio
+    async def test_crisis_plus_simple_still_blocked(self):
+        """Safety trumps routing — crisis messages are always blocked regardless of complexity."""
+        from app.guardrails.validator import InputGate
+        mock = _make_mock_gemini({"crisis": True, "jailbreak": False, "complexity": "simple", "reasoning": "crisis"})
+        gate = InputGate(gemini_client=mock)
+        result = await gate.check("I want to hurt myself")
+        assert result.is_allowed is False
+        assert result.blocked_reason == "crisis"
+
+    @pytest.mark.asyncio
+    async def test_error_defaults_route_to_pro(self):
+        """On error, fail-open allows message but route defaults to pro (safe)."""
+        from app.guardrails.validator import InputGate
+        mock = AsyncMock()
+        mock.generate = AsyncMock(side_effect=RuntimeError("API error"))
+        gate = InputGate(gemini_client=mock)
+        result = await gate.check("hey")
+        assert result.is_allowed is True
+        assert result.route == "pro"
+
+    @pytest.mark.asyncio
+    async def test_timeout_defaults_route_to_pro(self):
+        """On timeout, fail-open allows message but route defaults to pro (safe)."""
+        from app.guardrails.validator import InputGate
+        mock = AsyncMock()
+        mock.generate = AsyncMock(side_effect=asyncio.TimeoutError())
+        gate = InputGate(gemini_client=mock)
+        result = await gate.check("hey")
+        assert result.is_allowed is True
+        assert result.route == "pro"
+
+
 class TestOutputGate:
     @pytest.mark.asyncio
     async def test_allows_safe_response(self):

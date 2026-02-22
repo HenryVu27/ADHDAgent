@@ -145,7 +145,7 @@ class KnowledgeStore:
 
         texts = [chunk["text"] for chunk in self.chunks]
         logger.info(f"Embedding {len(texts)} chunks...")
-        raw_embeddings = await gemini_client.embed_batch(texts)
+        raw_embeddings = await gemini_client.embed_batch(texts, timeout=settings.RAG_EMBED_TIMEOUT_S)
         dim = len(raw_embeddings[0])
 
         self._client.recreate_collection(

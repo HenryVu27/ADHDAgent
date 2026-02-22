@@ -28,6 +28,7 @@ export function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [showChips, setShowChips] = useState(true)
   const initialized = useRef(false)
+  const pendingSeed = useRef<Promise<unknown> | null>(null)
 
   // On mount: persist session ID and load existing messages if resuming
   useEffect(() => {
@@ -44,7 +45,8 @@ export function ChatPage() {
           // New session — seed with onboarding data
           const onboarding = getOnboarding()
           if (onboarding) {
-            api.seedSession(sessionId, onboarding).catch(() => {})
+            pendingSeed.current = api.seedSession(sessionId, onboarding)
+              .catch((err) => console.warn("[seed] Failed to seed session:", err))
           }
         } else {
           // Resuming — hide chips since conversation is already going
@@ -63,10 +65,13 @@ export function ChatPage() {
     setShowChips(true)
     initialized.current = false
 
-    // Seed new session with onboarding
+    // Seed new session with onboarding — store promise so handleSend can await it
     const onboarding = getOnboarding()
     if (onboarding) {
-      api.seedSession(newId, onboarding).catch(() => {})
+      pendingSeed.current = api.seedSession(newId, onboarding)
+        .catch((err) => console.warn("[seed] Failed to seed session:", err))
+    } else {
+      pendingSeed.current = null
     }
     initialized.current = true
   }, [clearMessages, getOnboarding])
@@ -81,6 +86,11 @@ export function ChatPage() {
   }, [sessionId, clearMessages])
 
   const handleSend = useCallback(async (content: string) => {
+    // Wait for any pending seed to complete so the agent has family context
+    if (pendingSeed.current) {
+      await pendingSeed.current
+      pendingSeed.current = null
+    }
     setShowChips(false)
     const data = await sendMessage(content)
     if (data) {

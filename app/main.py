@@ -142,8 +142,9 @@ async def lifespan(app: FastAPI):
     app.state.analyzer = analyzer
 
     logger.info(
-        "ADHDAgent ready (agent_model=%s, utility_model=%s)",
+        "ADHDAgent ready (pro_model=%s, fast_model=%s, utility_model=%s)",
         settings.GEMINI_AGENT_MODEL,
+        settings.GEMINI_FAST_MODEL,
         settings.GEMINI_UTILITY_MODEL,
     )
     yield
