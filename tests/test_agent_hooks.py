@@ -199,3 +199,60 @@ class TestPrepareContext:
 
         result = await prepare(state)
         assert "llm_input_messages" in result
+
+    @pytest.mark.asyncio
+    async def test_prepare_context_caches_system_prompt(self):
+        """System prompt should be cached within a single turn's ReAct loop."""
+        from app.agent.hooks import _prompt_cache
+        _prompt_cache.clear()
+
+        store = InMemorySessionStore()
+        store.increment_turn("cache-test")  # Set turn to 1
+        prepare = create_prepare_context(store)
+
+        state = {
+            "messages": [HumanMessage(content="hello")],
+            "session_id": "cache-test",
+        }
+
+        result1 = await prepare(state)
+        prompt1 = result1["llm_input_messages"][0].content
+
+        # Call again with same state (simulates next ReAct iteration)
+        result2 = await prepare(state)
+        prompt2 = result2["llm_input_messages"][0].content
+
+        assert prompt1 == prompt2, "Prompt should be identical (cached)"
+
+    @pytest.mark.asyncio
+    async def test_cache_invalidated_after_mutating_tool(self):
+        """Cache should be invalidated when a state-mutating tool runs."""
+        from app.agent.hooks import _prompt_cache
+        _prompt_cache.clear()
+
+        store = InMemorySessionStore()
+        store.increment_turn("mut-test")
+        prepare = create_prepare_context(store)
+
+        state1 = {
+            "messages": [HumanMessage(content="hello")],
+            "session_id": "mut-test",
+        }
+        result1 = await prepare(state1)
+        prompt1 = result1["llm_input_messages"][0].content
+
+        # Simulate a tool call that mutates state
+        store.update_profile("mut-test", child_name="Kai")
+        state2 = {
+            "messages": [
+                HumanMessage(content="hello"),
+                AIMessage(content="", tool_calls=[{"id": "tc1", "name": "update_family_profile", "args": {"child_name": "Kai"}}]),
+                ToolMessage(content="Profile updated", tool_call_id="tc1", name="update_family_profile"),
+            ],
+            "session_id": "mut-test",
+        }
+        result2 = await prepare(state2)
+        prompt2 = result2["llm_input_messages"][0].content
+
+        # Prompt should now include "Kai" since cache was invalidated
+        assert "Kai" in prompt2
