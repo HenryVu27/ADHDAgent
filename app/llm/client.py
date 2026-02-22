@@ -50,7 +50,7 @@ class GeminiClient:
 
     def __init__(self):
         self._client = genai.Client(api_key=settings.GEMINI_API_KEY)
-        self._model = settings.GEMINI_MODEL
+        self._model = settings.GEMINI_UTILITY_MODEL
         self._embedding_model = settings.GEMINI_EMBEDDING_MODEL
 
     async def generate(
