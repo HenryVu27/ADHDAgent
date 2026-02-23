@@ -63,7 +63,7 @@ class TestSQLiteSessionStore:
 
     def test_add_outcome(self):
         outcome = self.store.add_outcome("o1", "visual timer", "positive", "worked great")
-        assert outcome.goal_description == "visual timer"
+        assert outcome.strategy_name == "visual timer"
         assert outcome.signal == "positive"
         assert outcome.detail == "worked great"
 

@@ -50,7 +50,7 @@ export interface Goal {
 }
 
 export interface Outcome {
-  goal_description: string
+  strategy_name: string
   signal: string
   detail: string
   turn: number

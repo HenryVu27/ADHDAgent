@@ -128,7 +128,7 @@ class Goal(BaseModel):
 
 
 class Outcome(BaseModel):
-    goal_description: str
+    strategy_name: str
     signal: str  # "positive" or "negative"
     detail: str = ""
     turn: int = 0

@@ -164,6 +164,10 @@ SCHEMA_V7 = """
 ALTER TABLE family_profiles ADD COLUMN adhd_subtype TEXT;
 """
 
+SCHEMA_V8 = """
+ALTER TABLE outcomes RENAME COLUMN goal_description TO strategy_name;
+"""
+
 MIGRATIONS = {
     1: SCHEMA_V1,
     2: SCHEMA_V2,
@@ -172,6 +176,7 @@ MIGRATIONS = {
     5: SCHEMA_V5,
     6: SCHEMA_V6,
     7: SCHEMA_V7,
+    8: SCHEMA_V8,
 }
 
 

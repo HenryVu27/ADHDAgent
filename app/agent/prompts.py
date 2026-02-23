@@ -227,7 +227,7 @@ def format_goals_and_outcomes(
         recent = outcomes[-max_outcomes:]
         outcome_lines = []
         for o in recent:
-            line = f"- {o.goal_description}: {o.signal}"
+            line = f"- {o.strategy_name}: {o.signal}"
             if o.detail:
                 line += f" ({o.detail})"
             outcome_lines.append(line)

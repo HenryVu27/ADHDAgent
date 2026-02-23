@@ -119,12 +119,12 @@ class SQLiteSessionStore(SessionStoreBase):
 
             # Outcomes
             outcome_rows = self._conn.execute(
-                "SELECT goal_description, signal, detail, turn FROM outcomes WHERE session_id = ?",
+                "SELECT strategy_name, signal, detail, turn FROM outcomes WHERE session_id = ?",
                 (session_id,),
             ).fetchall()
             outcomes = [
                 Outcome(
-                    goal_description=r["goal_description"],
+                    strategy_name=r["strategy_name"],
                     signal=r["signal"],
                     detail=r["detail"],
                     turn=r["turn"],
@@ -234,13 +234,13 @@ class SQLiteSessionStore(SessionStoreBase):
             turn = row["turn_count"]
 
             self._conn.execute(
-                "INSERT INTO outcomes (session_id, goal_description, signal, detail, turn) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO outcomes (session_id, strategy_name, signal, detail, turn) VALUES (?, ?, ?, ?, ?)",
                 (session_id, strategy_name, outcome, notes, turn),
             )
             self._conn.commit()
 
             entry = Outcome(
-                goal_description=strategy_name,
+                strategy_name=strategy_name,
                 signal=outcome,
                 detail=notes,
                 turn=turn,

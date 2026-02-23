@@ -94,8 +94,8 @@ class TestFormatGoalsAndOutcomes:
 
     def test_outcomes(self):
         outcomes = [
-            Outcome(goal_description="visual timer", signal="positive", detail="worked great"),
-            Outcome(goal_description="reward chart", signal="negative"),
+            Outcome(strategy_name="visual timer", signal="positive", detail="worked great"),
+            Outcome(strategy_name="reward chart", signal="negative"),
         ]
         result = format_goals_and_outcomes([], outcomes)
         assert "visual timer: positive (worked great)" in result
@@ -103,7 +103,7 @@ class TestFormatGoalsAndOutcomes:
 
     def test_only_last_3_outcomes(self):
         outcomes = [
-            Outcome(goal_description=f"strategy_{i}", signal="positive")
+            Outcome(strategy_name=f"strategy_{i}", signal="positive")
             for i in range(5)
         ]
         result = format_goals_and_outcomes([], outcomes)
@@ -144,7 +144,7 @@ class TestFormatGoalsAndOutcomes:
     def test_outcomes_cap_parameter(self):
         """Custom max_outcomes parameter should be respected."""
         outcomes = [
-            Outcome(goal_description=f"strat_{i}", signal="positive")
+            Outcome(strategy_name=f"strat_{i}", signal="positive")
             for i in range(6)
         ]
         result = format_goals_and_outcomes([], outcomes, max_outcomes=2)

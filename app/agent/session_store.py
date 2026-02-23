@@ -105,7 +105,7 @@ class InMemorySessionStore(SessionStoreBase):
         with self._lock:
             state = self._get_or_create(session_id)
             entry = Outcome(
-                goal_description=strategy_name,
+                strategy_name=strategy_name,
                 signal=outcome,
                 detail=notes,
                 turn=state.turn_count,
