@@ -41,6 +41,8 @@ export const api = {
         session_id: sessionId,
         child_name: onboarding.childName,
         child_age: onboarding.childAge,
+        diagnosis_status: onboarding.diagnosisStatus,
+        adhd_subtype: onboarding.adhdSubtype,
         challenges: onboarding.challenges,
         tried_strategies: onboarding.triedStrategies,
         goals: onboarding.goals,

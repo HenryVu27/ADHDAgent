@@ -4,12 +4,14 @@ import { ArrowLeft, ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { StepChildInfo } from "./StepChildInfo"
+import { StepDiagnosis } from "./StepDiagnosis"
+import { StepSubtype } from "./StepSubtype"
 import { StepChallenges } from "./StepChallenges"
 import { StepStrategies } from "./StepStrategies"
 import { StepGoals } from "./StepGoals"
 import type { OnboardingData } from "@/types"
 
-const STEPS = ["Child Info", "Challenges", "Strategies", "Goals"]
+const STEPS = ["Child Info", "Diagnosis", "ADHD Type", "Challenges", "Strategies", "Goals"]
 
 interface Props {
   onComplete: (data: OnboardingData) => void
@@ -20,6 +22,8 @@ export function OnboardingWizard({ onComplete }: Props) {
   const [data, setData] = useState<OnboardingData>({
     childName: "",
     childAge: "",
+    diagnosisStatus: "",
+    adhdSubtype: "",
     challenges: [],
     triedStrategies: [],
     goals: [],
@@ -34,10 +38,14 @@ export function OnboardingWizard({ onComplete }: Props) {
       case 0:
         return data.childAge !== ""
       case 1:
-        return data.challenges.length > 0
+        return data.diagnosisStatus !== ""
       case 2:
-        return data.triedStrategies.length > 0
+        return data.adhdSubtype !== ""
       case 3:
+        return data.challenges.length > 0
+      case 4:
+        return data.triedStrategies.length > 0
+      case 5:
         return data.goals.length > 0
       default:
         return false
@@ -75,9 +83,11 @@ export function OnboardingWizard({ onComplete }: Props) {
           transition={{ duration: 0.25 }}
         >
           {step === 0 && <StepChildInfo data={data} onChange={update} />}
-          {step === 1 && <StepChallenges data={data} onChange={update} />}
-          {step === 2 && <StepStrategies data={data} onChange={update} />}
-          {step === 3 && <StepGoals data={data} onChange={update} />}
+          {step === 1 && <StepDiagnosis data={data} onChange={update} />}
+          {step === 2 && <StepSubtype data={data} onChange={update} />}
+          {step === 3 && <StepChallenges data={data} onChange={update} />}
+          {step === 4 && <StepStrategies data={data} onChange={update} />}
+          {step === 5 && <StepGoals data={data} onChange={update} />}
         </motion.div>
       </AnimatePresence>
 
