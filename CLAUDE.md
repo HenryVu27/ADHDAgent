@@ -76,7 +76,7 @@ Response to parent (with PipelineTrace for frontend)
 - **Vector Search**: Qdrant (in-memory for dev, remote for prod) with dense + sparse + RRF
 - **Agent**: LangGraph create_react_agent (ReAct loop with tool calling)
 - **Guardrails**: LangGraph-native gate nodes — structured Gemini classifiers for input (crisis + jailbreak) and output (medication + diagnosis + scope)
-- **Reranker**: FastEmbed cross-encoder (Xenova/ms-marco-MiniLM-L-6-v2), local ONNX inference
+- **Reranker**: FastEmbed cross-encoder (BAAI/bge-reranker-base), local ONNX inference
 - **Persistence**: SQLite (default) or in-memory session store
 - **API**: FastAPI
 - **Frontend**: React 19 + TypeScript + Vite + Tailwind CSS + shadcn/ui

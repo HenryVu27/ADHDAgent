@@ -4,6 +4,7 @@
 
 import asyncio
 import logging
+import math
 
 from app.models.schemas import RetrievalResult
 
@@ -35,9 +36,10 @@ class FastEmbedReranker:
             lambda: list(self._model.rerank(query, documents))
         )
 
-        # FastEmbed rerank() returns raw floats in input order for most models.
+        # BAAI/bge-reranker-base returns raw logits; apply sigmoid to normalize to [0, 1].
+        scores = [1 / (1 + math.exp(-s)) for s in raw_scores]
         scored = sorted(
-            zip(raw_scores, results),
+            zip(scores, results),
             key=lambda x: x[0],
             reverse=True,
         )

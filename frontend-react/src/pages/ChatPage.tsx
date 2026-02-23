@@ -58,6 +58,7 @@ export function ChatPage() {
   }, [sessionId, getOnboarding, loadMessages, refresh])
 
   const handleNewChat = useCallback(() => {
+    const prevSessionId = sessionId
     const newId = createSessionId()
     setSessionId(newId)
     setActiveSessionId(newId)
@@ -65,16 +66,31 @@ export function ChatPage() {
     setShowChips(true)
     initialized.current = false
 
-    // Seed new session with onboarding — store promise so handleSend can await it
-    const onboarding = getOnboarding()
-    if (onboarding) {
-      pendingSeed.current = api.seedSession(newId, onboarding)
-        .catch((err) => console.warn("[seed] Failed to seed session:", err))
-    } else {
-      pendingSeed.current = null
-    }
+    // Seed new session: prefer live profile from previous session (reflects agent
+    // updates like age changes), fall back to localStorage onboarding data.
+    pendingSeed.current = api.getSession(prevSessionId)
+      .then((prev) => {
+        const p = prev.family_profile
+        return api.seedSession(newId, {
+          childName: p.child_name || "",
+          childAge: p.child_age || "",
+          diagnosisStatus: p.diagnosis_status || "",
+          adhdSubtype: p.adhd_subtype || "",
+          challenges: p.challenge_areas,
+          triedStrategies: p.attempted_strategies,
+          goals: prev.goals.filter((g) => g.status === "active").map((g) => g.description),
+        })
+      })
+      .catch(() => {
+        // Previous session not found (e.g. first ever session) — fall back to onboarding
+        const onboarding = getOnboarding()
+        if (onboarding) {
+          return api.seedSession(newId, onboarding)
+        }
+      })
+      .catch((err) => console.warn("[seed] Failed to seed session:", err))
     initialized.current = true
-  }, [clearMessages, getOnboarding])
+  }, [sessionId, clearMessages, getOnboarding])
 
   const handleSelectSession = useCallback((selectedId: string) => {
     if (selectedId === sessionId) return
