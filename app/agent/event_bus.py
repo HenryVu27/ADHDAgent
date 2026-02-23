@@ -60,7 +60,6 @@ class EventBus:
                     "INSERT INTO observability_events (session_id, category, event_type, turn, timestamp, duration_ms, detail_json, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     (session_id, category, event_type, turn, ts, duration_ms, json.dumps(detail or {}), level),
                 )
-                await self._conn.commit()
             except Exception as e:
                 logger.warning("Failed to persist event to SQLite: %s", e)
 

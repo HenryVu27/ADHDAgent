@@ -92,16 +92,12 @@ class AgentOrchestrator:
             if entry["role"] == "user":
                 history_messages.append(HumanMessage(content=entry["content"]))
             elif entry["role"] == "assistant":
-                content = entry["content"]
-                tcs = entry.get("tool_calls_summary", "")
-                if tcs:
-                    content = f"[Tools used: {tcs}]\n{content}"
-                history_messages.append(AIMessage(content=content))
+                history_messages.append(AIMessage(content=entry["content"]))
 
         start = time.time()
         config = {
             "configurable": {"session_id": session_id},
-            "recursion_limit": settings.AGENT_MAX_TOOL_STEPS * 2 + 1,
+            "recursion_limit": settings.AGENT_MAX_TOOL_STEPS * 2 + 5,
         }
 
         try:

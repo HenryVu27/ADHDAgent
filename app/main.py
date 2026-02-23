@@ -62,13 +62,11 @@ async def lifespan(app: FastAPI):
     from app.rag.retriever import HybridRetriever
 
     db_conn = None
-    db_conn_events = None
     if settings.SQLITE_ENABLED:
         from app.agent.sqlite_store import SQLiteSessionStore
         from app.db import get_async_connection, init_db_async
         db_conn = await get_async_connection(settings.SQLITE_DB_PATH)
         await init_db_async(db_conn)
-        db_conn_events = await get_async_connection(settings.SQLITE_DB_PATH)
         session_store = SQLiteSessionStore(db_conn)
         logger.info("Using SQLite session store (path=%s)", settings.SQLITE_DB_PATH)
     else:
@@ -94,7 +92,7 @@ async def lifespan(app: FastAPI):
     # 5. Create event bus (with SQLite persistence when available)
     #    Uses a separate connection to avoid contention with the session store.
     from app.agent.event_bus import EventBus
-    event_bus = EventBus(buffer_size=settings.EVENT_BUFFER_SIZE, conn=db_conn_events)
+    event_bus = EventBus(buffer_size=settings.EVENT_BUFFER_SIZE, conn=db_conn)
     logger.info("EventBus initialized (buffer_size=%d)", settings.EVENT_BUFFER_SIZE)
 
     # 6. Create context preparation hook
@@ -152,8 +150,6 @@ async def lifespan(app: FastAPI):
         await orchestrator.shutdown()
     if db_conn:
         await db_conn.close()
-    if db_conn_events:
-        await db_conn_events.close()
     logger.info("ADHDAgent shutting down")
 
 
