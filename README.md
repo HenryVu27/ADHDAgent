@@ -19,7 +19,7 @@ Input gate (crisis + jailbreak) → Context assembly → Gemini ReAct agent with
 
 | Component | Technology |
 |-----------|-----------|
-| LLM | Google Gemini 3 (3-flash-preview / 3-pro-preview) via langchain-google-genai |
+| LLM | Google Gemini 2.5 (Pro for agent, Flash for utilities/guardrails) via langchain-google-genai |
 | Embeddings | Gemini gemini-embedding-001 via google-genai SDK |
 | Vector Search | Qdrant (in-memory for dev, remote for prod) with dense + sparse + RRF |
 | Reranker | FastEmbed cross-encoder (BAAI/bge-reranker-base), local ONNX inference |
@@ -50,14 +50,13 @@ uvicorn app.main:app --reload
 Enable via environment variables:
 
 ```bash
-# Disable SQLite persistence (enabled by default)
+# Disable aiosqlite persistence (enabled by default)
 SQLITE_ENABLED=false
 
-# Model routing (default: single model)
-MODEL_ROUTING_ENABLED=true
-GEMINI_MODEL_FAST=gemini-2.5-flash
-GEMINI_MODEL_STANDARD=gemini-2.5-flash
-GEMINI_MODEL_COMPLEX=gemini-2.5-pro
+# Model configuration (defaults shown)
+GEMINI_AGENT_MODEL=gemini-2.5-pro      # Pro for ReAct agent (with thinking)
+GEMINI_FAST_MODEL=gemini-2.5-flash     # Flash for simple messages
+GEMINI_UTILITY_MODEL=gemini-2.5-flash  # Flash for guardrails, memory, analyzer
 ```
 
 ## Running Tests
@@ -77,7 +76,8 @@ pytest tests/ -v -m "not integration"
 | Method | Path | Description |
 |--------|------|-------------|
 | POST | `/api/chat` | Process message through ReAct agent pipeline |
-| POST | `/api/session/seed` | Pre-populate session with onboarding data |
+| POST | `/api/session/seed` | Seed session with family profile (from prior session or onboarding) |
+| DELETE | `/api/session/{id}` | Delete all data for a session |
 | GET | `/api/session/{id}` | Session state (phase, profile, strategies) |
 | GET | `/api/session/{id}/outcomes` | Outcome tracking data |
 | GET | `/api/session/{id}/messages` | Full message history |
