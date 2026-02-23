@@ -9,7 +9,7 @@ Input gate (crisis + jailbreak) → Context assembly → Gemini ReAct agent with
 - **ReAct agent** with LangGraph tool calling and full observability
 - **Hybrid RAG** - Qdrant dense + sparse vectors with RRF, tag boosting, and local cross-encoder reranking
 - **LangGraph-native guardrail gates** - structured Gemini classifiers for input (crisis + jailbreak) and output (medication + diagnosis + scope)
-- **4-tier memory** - SQLite persistence, rolling summaries, episodic memory, gated fact extraction
+- **4-tier memory** - aiosqlite async persistence, rolling summaries, episodic memory, gated fact extraction
 - **Model routing** - rule-based complexity classification selects Gemini model tier per turn
 - **Outcome tracking** - goals, progress, strategy effectiveness measurement
 - **Observability** - structured event bus, per-turn conversation analysis, observability dashboard
@@ -25,7 +25,7 @@ Input gate (crisis + jailbreak) → Context assembly → Gemini ReAct agent with
 | Reranker | FastEmbed cross-encoder (BAAI/bge-reranker-base), local ONNX inference |
 | Agent | LangGraph create_react_agent (ReAct loop with tool calling) |
 | Guardrails | LangGraph-native gate nodes — structured Gemini classifiers (2 calls: input + output) |
-| Persistence | SQLite (default) or in-memory session store |
+| Persistence | aiosqlite (default) or in-memory session store |
 | API | FastAPI |
 | Frontend | React 19 + TypeScript + Vite + Tailwind CSS + shadcn/ui |
 
