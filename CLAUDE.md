@@ -71,13 +71,13 @@ Response to parent (with PipelineTrace for frontend)
 
 ## Tech Stack
 
-- **LLM**: Google Gemini 3 — Pro (gemini-3-pro-preview) for ReAct agent with thinking mode, Flash (gemini-3-flash-preview) for utilities (guardrails, memory, analyzer). Tenacity retry on all API calls.
+- **LLM**: Google Gemini 2.5 — Pro (gemini-2.5-pro) for ReAct agent with thinking mode, Flash (gemini-2.5-flash) for utilities (guardrails, memory, analyzer). Tenacity retry on all API calls.
 - **Embeddings**: Gemini gemini-embedding-001 via google-genai SDK
 - **Vector Search**: Qdrant (in-memory for dev, remote for prod) with dense + sparse + RRF
 - **Agent**: LangGraph create_react_agent (ReAct loop with tool calling)
 - **Guardrails**: LangGraph-native gate nodes — structured Gemini classifiers for input (crisis + jailbreak) and output (medication + diagnosis + scope)
 - **Reranker**: FastEmbed cross-encoder (BAAI/bge-reranker-base), local ONNX inference
-- **Persistence**: SQLite (default) or in-memory session store
+- **Persistence**: aiosqlite (default) or in-memory session store
 - **API**: FastAPI
 - **Frontend**: React 19 + TypeScript + Vite + Tailwind CSS + shadcn/ui
 
@@ -145,7 +145,7 @@ pytest tests/test_e2e_conversations.py -v -m integration -s
 |------|---------|
 | `app/main.py` | App startup + dependency wiring |
 | `app/config.py` | All settings (Gemini, Qdrant, agent, memory, thinking) |
-| `app/db.py` | SQLite schema, migrations, connection management |
+| `app/db.py` | aiosqlite schema, migrations, connection management |
 | `app/models/schemas.py` | All Pydantic data contracts |
 | `app/api/routes.py` | Core API endpoints |
 | `app/api/observability_routes.py` | Observability API endpoints |
