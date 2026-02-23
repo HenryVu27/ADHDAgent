@@ -2,7 +2,8 @@
 
 import logging
 import sqlite3
-from pathlib import Path
+
+import aiosqlite
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ CREATE TABLE IF NOT EXISTS family_profiles (
     child_name TEXT,
     child_age TEXT,
     diagnosis_status TEXT,
+    adhd_subtype TEXT,
     challenge_areas TEXT NOT NULL DEFAULT '[]',
     attempted_strategies TEXT NOT NULL DEFAULT '[]',
     good_day_description TEXT,
@@ -38,6 +40,7 @@ CREATE TABLE IF NOT EXISTS messages (
     content TEXT NOT NULL,
     blocked INTEGER NOT NULL DEFAULT 0,
     blocked_reason TEXT NOT NULL DEFAULT '',
+    tool_calls_summary TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -57,7 +60,7 @@ CREATE INDEX IF NOT EXISTS idx_goals_session ON goals(session_id);
 CREATE TABLE IF NOT EXISTS outcomes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     session_id TEXT NOT NULL REFERENCES sessions(session_id),
-    goal_description TEXT NOT NULL,
+    strategy_name TEXT NOT NULL,
     signal TEXT NOT NULL,
     detail TEXT NOT NULL DEFAULT '',
     turn INTEGER NOT NULL DEFAULT 0,
@@ -72,9 +75,7 @@ CREATE TABLE IF NOT EXISTS active_strategies (
     strategy_name TEXT NOT NULL,
     UNIQUE(session_id, strategy_name)
 );
-"""
 
-SCHEMA_V2 = """
 CREATE TABLE IF NOT EXISTS session_summaries (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     session_id TEXT NOT NULL REFERENCES sessions(session_id),
@@ -99,9 +100,7 @@ CREATE TABLE IF NOT EXISTS episodes (
 );
 
 CREATE INDEX IF NOT EXISTS idx_episodes_session ON episodes(session_id);
-"""
 
-SCHEMA_V3 = """
 CREATE TABLE IF NOT EXISTS traces (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     session_id TEXT NOT NULL REFERENCES sessions(session_id),
@@ -121,9 +120,7 @@ CREATE TABLE IF NOT EXISTS turn_analyses (
 );
 
 CREATE INDEX IF NOT EXISTS idx_turn_analyses_session ON turn_analyses(session_id);
-"""
 
-SCHEMA_V4 = """
 CREATE TABLE IF NOT EXISTS observability_events (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     session_id TEXT NOT NULL,
@@ -139,14 +136,7 @@ CREATE TABLE IF NOT EXISTS observability_events (
 
 CREATE INDEX IF NOT EXISTS idx_obs_events_session ON observability_events(session_id);
 CREATE INDEX IF NOT EXISTS idx_obs_events_category ON observability_events(session_id, category);
-"""
 
-SCHEMA_V5 = """
-ALTER TABLE messages ADD COLUMN tool_calls_summary TEXT NOT NULL DEFAULT '';
-"""
-
-
-SCHEMA_V6 = """
 CREATE TABLE IF NOT EXISTS tool_results (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     session_id TEXT NOT NULL REFERENCES sessions(session_id),
@@ -160,23 +150,8 @@ CREATE TABLE IF NOT EXISTS tool_results (
 CREATE INDEX IF NOT EXISTS idx_tool_results_session ON tool_results(session_id);
 """
 
-SCHEMA_V7 = """
-ALTER TABLE family_profiles ADD COLUMN adhd_subtype TEXT;
-"""
-
-SCHEMA_V8 = """
-ALTER TABLE outcomes RENAME COLUMN goal_description TO strategy_name;
-"""
-
 MIGRATIONS = {
     1: SCHEMA_V1,
-    2: SCHEMA_V2,
-    3: SCHEMA_V3,
-    4: SCHEMA_V4,
-    5: SCHEMA_V5,
-    6: SCHEMA_V6,
-    7: SCHEMA_V7,
-    8: SCHEMA_V8,
 }
 
 
@@ -217,3 +192,41 @@ def init_db(conn: sqlite3.Connection) -> None:
 def run_migrations(conn: sqlite3.Connection) -> None:
     """Alias for init_db — applies any pending migrations."""
     init_db(conn)
+
+
+# --- Async variants (aiosqlite) ---
+
+
+async def get_async_connection(db_path: str) -> aiosqlite.Connection:
+    """Create an async SQLite connection with WAL mode and foreign keys."""
+    conn = await aiosqlite.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    await conn.execute("PRAGMA journal_mode=WAL")
+    await conn.execute("PRAGMA synchronous=NORMAL")
+    await conn.execute("PRAGMA foreign_keys=ON")
+    return conn
+
+
+async def _get_schema_version_async(conn: aiosqlite.Connection) -> int:
+    """Get current schema version asynchronously."""
+    try:
+        cursor = await conn.execute("SELECT MAX(version) FROM schema_version")
+        row = await cursor.fetchone()
+        return row[0] or 0
+    except Exception:
+        return 0
+
+
+async def init_db_async(conn: aiosqlite.Connection) -> None:
+    """Initialize or migrate the database schema asynchronously."""
+    current = await _get_schema_version_async(conn)
+    for version in sorted(MIGRATIONS.keys()):
+        if version > current:
+            logger.info("Applying migration v%d", version)
+            await conn.executescript(MIGRATIONS[version])
+            await conn.execute(
+                "INSERT OR REPLACE INTO schema_version (version) VALUES (?)",
+                (version,),
+            )
+            await conn.commit()
+    logger.info("Database schema at v%d", max(MIGRATIONS.keys()))

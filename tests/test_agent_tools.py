@@ -3,7 +3,7 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock
 
-from app.agent.session_store import SessionStateStore
+from app.agent.session_store import create_in_memory_store
 from app.agent.tools import (
     _age_to_range,
     _format_result,
@@ -18,8 +18,8 @@ from app.models.schemas import RetrievalResponse, RetrievalResult
 
 
 @pytest.fixture
-def session_store():
-    return SessionStateStore()
+async def session_store():
+    return await create_in_memory_store()
 
 
 @pytest.fixture
@@ -72,7 +72,7 @@ def mock_retriever():
 
 
 @pytest.fixture
-def tools(mock_retriever, session_store):
+async def tools(mock_retriever, session_store):
     return create_tools(retriever=mock_retriever, session_store=session_store)
 
 
@@ -82,7 +82,6 @@ def _config(session_id="test"):
 
 class TestSearchKnowledgeBase:
 
-    @pytest.mark.asyncio
     async def test_returns_structured_results(self, tools, mock_retriever):
         result = await search_knowledge_base.ainvoke(
             {"query": "homework strategies"},
@@ -103,7 +102,6 @@ class TestSearchKnowledgeBase:
         # Citations
         assert "APA Behavior Guide" in result
 
-    @pytest.mark.asyncio
     async def test_returns_no_results_message(self, tools):
         from app.agent import tools as tools_module
         tools_module._retriever.retrieve = AsyncMock(
@@ -115,7 +113,6 @@ class TestSearchKnowledgeBase:
         )
         assert "No relevant documents found" in result
 
-    @pytest.mark.asyncio
     async def test_passes_filters(self, tools, mock_retriever):
         await search_knowledge_base.ainvoke(
             {"query": "homework", "document_type": "strategy", "tags": ["homework"]},
@@ -124,9 +121,9 @@ class TestSearchKnowledgeBase:
         call_args = mock_retriever.retrieve.call_args
         assert call_args.kwargs["filters"] is not None
 
-    @pytest.mark.asyncio
     async def test_auto_applies_age_filter(self, tools, mock_retriever, session_store):
-        session_store.update_profile("age_test", child_age="7")
+        await session_store.update_profile("age_test", child_age="7")
+        await session_store.commit()
         await search_knowledge_base.ainvoke(
             {"query": "homework help"},
             config=_config("age_test"),
@@ -136,9 +133,9 @@ class TestSearchKnowledgeBase:
         assert filters is not None
         assert filters.age_range == "school_age"
 
-    @pytest.mark.asyncio
     async def test_explicit_age_overrides_profile(self, tools, mock_retriever, session_store):
-        session_store.update_profile("age_test2", child_age="4")
+        await session_store.update_profile("age_test2", child_age="4")
+        await session_store.commit()
         await search_knowledge_base.ainvoke(
             {"query": "strategies", "age_range": "adolescent"},
             config=_config("age_test2"),
@@ -147,7 +144,6 @@ class TestSearchKnowledgeBase:
         filters = call_args.kwargs["filters"]
         assert filters.age_range == "adolescent"
 
-    @pytest.mark.asyncio
     async def test_no_age_filter_without_profile(self, tools, mock_retriever):
         await search_knowledge_base.ainvoke(
             {"query": "strategies"},
@@ -159,68 +155,73 @@ class TestSearchKnowledgeBase:
 
 class TestGetFamilyProfile:
 
-    def test_empty_profile(self, tools):
-        result = get_family_profile.invoke({}, config=_config("empty_session"))
+    async def test_empty_profile(self, tools):
+        result = await get_family_profile.ainvoke({}, config=_config("empty_session"))
         assert "No family profile information yet" in result
 
-    def test_populated_profile(self, tools, session_store):
-        session_store.update_profile("prof1", child_name="Kai", child_age="7")
-        session_store.update_profile("prof1", challenge_areas=["homework"])
-        result = get_family_profile.invoke({}, config=_config("prof1"))
+    async def test_populated_profile(self, tools, session_store):
+        await session_store.update_profile("prof1", child_name="Kai", child_age="7")
+        await session_store.update_profile("prof1", challenge_areas=["homework"])
+        await session_store.commit()
+        result = await get_family_profile.ainvoke({}, config=_config("prof1"))
         assert "Kai" in result
         assert "7" in result
         assert "homework" in result
 
-    def test_includes_goals(self, tools, session_store):
-        session_store.update_profile("goal_prof", child_name="Kai")
-        session_store.manage_goal("goal_prof", "add", "Homework by 6pm")
-        result = get_family_profile.invoke({}, config=_config("goal_prof"))
+    async def test_includes_goals(self, tools, session_store):
+        await session_store.update_profile("goal_prof", child_name="Kai")
+        await session_store.manage_goal("goal_prof", "add", "Homework by 6pm")
+        await session_store.commit()
+        result = await get_family_profile.ainvoke({}, config=_config("goal_prof"))
         assert "Homework by 6pm" in result
 
 
 class TestUpdateFamilyProfile:
 
-    def test_updates_fields(self, tools, session_store):
-        result = update_family_profile.invoke(
+    async def test_updates_fields(self, tools, session_store):
+        result = await update_family_profile.ainvoke(
             {"child_name": "Kai", "child_age": "7"},
             config=_config("update1"),
         )
         assert "Profile updated" in result
         assert "child_name" in result
 
-        profile = session_store.get("update1").family_profile
+        await session_store.commit()
+        profile = (await session_store.get("update1")).family_profile
         assert profile.child_name == "Kai"
         assert profile.child_age == "7"
 
-    def test_no_updates(self, tools):
-        result = update_family_profile.invoke({}, config=_config("noop"))
+    async def test_no_updates(self, tools):
+        result = await update_family_profile.ainvoke({}, config=_config("noop"))
         assert "No updates provided" in result
 
 
 class TestTrackOutcome:
 
-    def test_tracks_positive(self, tools, session_store):
-        result = track_outcome.invoke(
+    async def test_tracks_positive(self, tools, session_store):
+        result = await track_outcome.ainvoke(
             {"strategy_name": "visual timer", "outcome": "positive", "notes": "worked well"},
             config=_config("outcome1"),
         )
         assert "positive" in result
-        state = session_store.get("outcome1")
+        await session_store.commit()
+        state = await session_store.get("outcome1")
         assert len(state.outcomes) == 1
         assert "visual timer" in state.active_strategies
 
-    def test_tracks_negative(self, tools, session_store):
-        result = track_outcome.invoke(
+    async def test_tracks_negative(self, tools, session_store):
+        result = await track_outcome.ainvoke(
             {"strategy_name": "reward chart", "outcome": "negative"},
             config=_config("outcome2"),
         )
         assert "negative" in result
-        state = session_store.get("outcome2")
+        await session_store.commit()
+        state = await session_store.get("outcome2")
         assert len(state.outcomes) == 1
         assert "reward chart" not in state.active_strategies
 
-    def test_invalid_outcome(self, tools):
-        result = track_outcome.invoke(
+    async def test_invalid_outcome(self, tools):
+        result = await track_outcome.ainvoke(
             {"strategy_name": "timer", "outcome": "maybe"},
             config=_config("bad"),
         )
@@ -229,40 +230,40 @@ class TestTrackOutcome:
 
 class TestManageGoals:
 
-    def test_add_goal(self, tools, session_store):
-        result = manage_goals.invoke(
+    async def test_add_goal(self, tools, session_store):
+        result = await manage_goals.ainvoke(
             {"action": "add", "description": "Homework done by 6pm"},
             config=_config("goals1"),
         )
         assert "Homework done by 6pm" in result
         assert "[active]" in result
 
-    def test_complete_goal(self, tools, session_store):
-        manage_goals.invoke(
+    async def test_complete_goal(self, tools, session_store):
+        await manage_goals.ainvoke(
             {"action": "add", "description": "Homework done by 6pm"},
             config=_config("goals2"),
         )
-        result = manage_goals.invoke(
+        result = await manage_goals.ainvoke(
             {"action": "complete", "description": "Homework done by 6pm"},
             config=_config("goals2"),
         )
         assert "[done]" in result
 
-    def test_list_goals(self, tools, session_store):
-        manage_goals.invoke({"action": "add", "description": "Goal A"}, config=_config("goals3"))
-        manage_goals.invoke({"action": "add", "description": "Goal B"}, config=_config("goals3"))
-        result = manage_goals.invoke({"action": "list"}, config=_config("goals3"))
+    async def test_list_goals(self, tools, session_store):
+        await manage_goals.ainvoke({"action": "add", "description": "Goal A"}, config=_config("goals3"))
+        await manage_goals.ainvoke({"action": "add", "description": "Goal B"}, config=_config("goals3"))
+        result = await manage_goals.ainvoke({"action": "list"}, config=_config("goals3"))
         assert "2 total" in result
 
-    def test_invalid_action(self, tools):
-        result = manage_goals.invoke(
+    async def test_invalid_action(self, tools):
+        result = await manage_goals.ainvoke(
             {"action": "delete", "description": "test"},
             config=_config("bad"),
         )
         assert "Invalid action" in result
 
-    def test_add_without_description(self, tools):
-        result = manage_goals.invoke({"action": "add"}, config=_config("bad2"))
+    async def test_add_without_description(self, tools):
+        result = await manage_goals.ainvoke({"action": "add"}, config=_config("bad2"))
         assert "Description required" in result
 
 

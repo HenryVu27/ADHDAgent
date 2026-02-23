@@ -57,7 +57,6 @@ async def lifespan(app: FastAPI):
     logger.info("Guardrail gates initialized (input + output)")
 
     # 4. Create session store, retriever, tools
-    from app.agent.session_store import InMemorySessionStore
     from app.agent.tools import create_tools
     from app.rag.query_rewriter import QueryRewriter
     from app.rag.retriever import HybridRetriever
@@ -66,14 +65,15 @@ async def lifespan(app: FastAPI):
     db_conn_events = None
     if settings.SQLITE_ENABLED:
         from app.agent.sqlite_store import SQLiteSessionStore
-        from app.db import get_connection, init_db
-        db_conn = get_connection(settings.SQLITE_DB_PATH)
-        init_db(db_conn)
-        db_conn_events = get_connection(settings.SQLITE_DB_PATH)
+        from app.db import get_async_connection, init_db_async
+        db_conn = await get_async_connection(settings.SQLITE_DB_PATH)
+        await init_db_async(db_conn)
+        db_conn_events = await get_async_connection(settings.SQLITE_DB_PATH)
         session_store = SQLiteSessionStore(db_conn)
         logger.info("Using SQLite session store (path=%s)", settings.SQLITE_DB_PATH)
     else:
-        session_store = InMemorySessionStore()
+        from app.agent.session_store import create_in_memory_store
+        session_store = await create_in_memory_store()
         logger.info("Using in-memory session store")
     query_rewriter = QueryRewriter(gemini_client=gemini)
 
@@ -150,6 +150,10 @@ async def lifespan(app: FastAPI):
     yield
     if hasattr(orchestrator, 'shutdown'):
         await orchestrator.shutdown()
+    if db_conn:
+        await db_conn.close()
+    if db_conn_events:
+        await db_conn_events.close()
     logger.info("ADHDAgent shutting down")
 
 

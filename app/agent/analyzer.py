@@ -71,8 +71,8 @@ class ConversationAnalyzer:
 
         try:
             # Fetch recent conversation history for circular detection
-            state = self._store.get(session_id)
-            recent_history = state.conversation_history[-5:]
+            recent_messages = await self._store.get_messages(session_id, limit=10)
+            recent_history = [m for m in recent_messages if not m.get("blocked")][-5:]
             if recent_history:
                 history_lines = []
                 for entry in recent_history:
@@ -143,7 +143,7 @@ class ConversationAnalyzer:
                 timestamp=datetime.now(timezone.utc).isoformat(),
             )
 
-            self._store.save_analysis(session_id, analysis)
+            await self._store.save_analysis(session_id, analysis)
 
             if flags:
                 logger.info(

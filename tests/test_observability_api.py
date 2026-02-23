@@ -3,12 +3,13 @@
 import pytest
 from unittest.mock import AsyncMock
 
-from fastapi.testclient import TestClient
+import httpx
+from httpx import ASGITransport
 from langchain_core.messages import AIMessage, HumanMessage
 
 from app.agent.event_bus import EventBus
 from app.agent.orchestrator import AgentOrchestrator
-from app.agent.session_store import InMemorySessionStore
+from app.agent.session_store import create_in_memory_store
 from app.api.deps import get_analyzer, get_event_bus, get_knowledge_base, get_orchestrator, get_session_store
 from app.main import app
 from app.models.schemas import EnrichedTrace, TurnAnalysis, AnalysisFlag
@@ -39,9 +40,9 @@ def _disable_rate_limiting():
 
 
 @pytest.fixture
-def setup():
+async def setup():
     """Set up store, event_bus, and client with observability deps wired."""
-    store = InMemorySessionStore()
+    store = await create_in_memory_store()
     event_bus = EventBus(buffer_size=100)
     kb = KnowledgeStore()
     agent = _make_mock_agent()
@@ -55,62 +56,67 @@ def setup():
     app.dependency_overrides[get_event_bus] = lambda: event_bus
     app.dependency_overrides[get_analyzer] = lambda: None
 
-    client = TestClient(app, raise_server_exceptions=False)
-    yield store, event_bus, client
+    transport = ASGITransport(app=app)
+    async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+        yield store, event_bus, client
     app.dependency_overrides.clear()
 
 
 class TestObservabilityAPI:
 
-    def test_list_sessions_empty(self, setup):
+    async def test_list_sessions_empty(self, setup):
         _, _, client = setup
-        response = client.get("/api/observability/sessions")
+        response = await client.get("/api/observability/sessions")
         assert response.status_code == 200
         data = response.json()
         assert data["sessions"] == []
 
-    def test_list_sessions_with_data(self, setup):
+    async def test_list_sessions_with_data(self, setup):
         store, event_bus, client = setup
         # Create a session with some data
-        store.get("obs_test_1")
-        store.increment_turn("obs_test_1")
-        store.add_message("obs_test_1", "user", "Hello", 1)
-        store.add_message("obs_test_1", "assistant", "Hi there!", 1)
+        await store.get("obs_test_1")
+        await store.increment_turn("obs_test_1")
+        await store.add_message("obs_test_1", "user", "Hello", 1)
+        await store.add_message("obs_test_1", "assistant", "Hi there!", 1)
 
         # Add a trace
         trace = EnrichedTrace(session_id="obs_test_1", turn=1, total_duration_ms=500)
-        store.save_trace("obs_test_1", trace)
+        await store.save_trace("obs_test_1", trace)
 
         # Emit an event so the session shows up in event_bus too
-        event_bus.emit("agent", "turn_start", "obs_test_1", turn=1)
+        await event_bus.emit("agent", "turn_start", "obs_test_1", turn=1)
 
-        response = client.get("/api/observability/sessions")
+        await store.commit()
+
+        response = await client.get("/api/observability/sessions")
         assert response.status_code == 200
         data = response.json()
         assert len(data["sessions"]) >= 1
         session = next(s for s in data["sessions"] if s["session_id"] == "obs_test_1")
         assert session["turn_count"] == 1
 
-    def test_session_detail(self, setup):
+    async def test_session_detail(self, setup):
         store, event_bus, client = setup
-        store.get("detail_test")
-        store.increment_turn("detail_test")
-        store.add_message("detail_test", "user", "Hello", 1)
-        store.add_message("detail_test", "assistant", "Hi!", 1)
+        await store.get("detail_test")
+        await store.increment_turn("detail_test")
+        await store.add_message("detail_test", "user", "Hello", 1)
+        await store.add_message("detail_test", "assistant", "Hi!", 1)
 
         trace = EnrichedTrace(session_id="detail_test", turn=1, total_duration_ms=300)
-        store.save_trace("detail_test", trace)
+        await store.save_trace("detail_test", trace)
 
         analysis = TurnAnalysis(
             session_id="detail_test", turn=1,
             quality_score=0.8, summary="Decent turn",
             flags=[AnalysisFlag(flag_type="tone_issue", severity="info", description="Minor tone issue")],
         )
-        store.save_analysis("detail_test", analysis)
+        await store.save_analysis("detail_test", analysis)
 
-        event_bus.emit("agent", "turn_start", "detail_test", turn=1)
+        await event_bus.emit("agent", "turn_start", "detail_test", turn=1)
 
-        response = client.get("/api/observability/sessions/detail_test")
+        await store.commit()
+
+        response = await client.get("/api/observability/sessions/detail_test")
         assert response.status_code == 200
         data = response.json()
         assert data["session_id"] == "detail_test"
@@ -119,38 +125,39 @@ class TestObservabilityAPI:
         assert len(data["analyses"]) == 1
         assert len(data["events"]) >= 1
 
-    def test_session_events_filtered(self, setup):
+    async def test_session_events_filtered(self, setup):
         store, event_bus, client = setup
         # Create the session so it passes 404 check
-        store.get("events_test")
+        await store.get("events_test")
+        await store.commit()
 
-        event_bus.emit("guardrails", "input_check_passed", "events_test")
-        event_bus.emit("agent", "turn_start", "events_test")
-        event_bus.emit("memory", "summary_updated", "events_test")
+        await event_bus.emit("guardrails", "input_check_passed", "events_test")
+        await event_bus.emit("agent", "turn_start", "events_test")
+        await event_bus.emit("memory", "summary_updated", "events_test")
 
         # All events
-        response = client.get("/api/observability/sessions/events_test/events")
+        response = await client.get("/api/observability/sessions/events_test/events")
         assert response.status_code == 200
         assert len(response.json()["events"]) == 3
 
         # Filtered by category
-        response = client.get("/api/observability/sessions/events_test/events?category=guardrails")
+        response = await client.get("/api/observability/sessions/events_test/events?category=guardrails")
         assert response.status_code == 200
         events = response.json()["events"]
         assert len(events) == 1
         assert events[0]["category"] == "guardrails"
 
-    def test_session_detail_nonexistent_returns_404(self, setup):
+    async def test_session_detail_nonexistent_returns_404(self, setup):
         _, _, client = setup
-        response = client.get("/api/observability/sessions/nonexistent")
+        response = await client.get("/api/observability/sessions/nonexistent")
         assert response.status_code == 404
 
-    def test_list_sessions_includes_event_only_sessions(self, setup):
+    async def test_list_sessions_includes_event_only_sessions(self, setup):
         _, event_bus, client = setup
         # Session exists only in event bus, not in store
-        event_bus.emit("agent", "turn_start", "event_only_session")
+        await event_bus.emit("agent", "turn_start", "event_only_session")
 
-        response = client.get("/api/observability/sessions")
+        response = await client.get("/api/observability/sessions")
         data = response.json()
         ids = [s["session_id"] for s in data["sessions"]]
         assert "event_only_session" in ids

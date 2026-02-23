@@ -62,7 +62,7 @@ def create_prepare_context(
         session_id = state.get("session_id", "default")
 
         # Get session state (cheap read) for turn count and cache key
-        session_state = session_store.get(session_id)
+        session_state = await session_store.get(session_id)
         turn_count = session_state.turn_count
         cache_key = (session_id, turn_count)
 
@@ -74,11 +74,11 @@ def create_prepare_context(
         else:
             # Full prompt build (existing logic)
             # Load rolling summary if available
-            latest_summary = session_store.get_latest_summary(session_id)
+            latest_summary = await session_store.get_latest_summary(session_id)
             summary_text = latest_summary.summary if latest_summary else ""
 
             # Load recent episodes into summary context
-            recent_episodes = session_store.get_recent_episodes(session_id, limit=5)
+            recent_episodes = await session_store.get_recent_episodes(session_id, limit=5)
             if recent_episodes:
                 episode_lines = []
                 for ep in recent_episodes:
@@ -90,7 +90,7 @@ def create_prepare_context(
                 summary_text = (summary_text + episodes_text) if summary_text else episodes_text
 
             # Load recent tool results for cross-turn evidence
-            recent_tool_results = session_store.get_recent_tool_results(session_id, limit=3)
+            recent_tool_results = await session_store.get_recent_tool_results(session_id, limit=3)
 
             system_prompt = build_system_prompt(
                 profile=session_state.family_profile,
@@ -106,7 +106,7 @@ def create_prepare_context(
             # Get tool names from the last trace, if available
             recent_tool_names: list[str] | None = None
             try:
-                traces = session_store.get_traces(session_id)
+                traces = await session_store.get_traces(session_id)
                 if traces:
                     last_trace = traces[-1]
                     if last_trace.tool_calls:

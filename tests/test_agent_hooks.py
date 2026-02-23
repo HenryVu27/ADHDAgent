@@ -6,14 +6,14 @@ from unittest.mock import AsyncMock
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 
 from app.agent.hooks import create_prepare_context
-from app.agent.session_store import InMemorySessionStore
+from app.agent.session_store import create_in_memory_store
 
 
 class TestPrepareContext:
 
     @pytest.mark.asyncio
     async def test_injects_system_prompt(self):
-        store = InMemorySessionStore()
+        store = await create_in_memory_store()
         prepare = create_prepare_context(store)
 
         state = {
@@ -29,8 +29,9 @@ class TestPrepareContext:
 
     @pytest.mark.asyncio
     async def test_injects_profile_context(self):
-        store = InMemorySessionStore()
-        store.update_profile("ctx1", child_name="Kai", child_age="7")
+        store = await create_in_memory_store()
+        await store.update_profile("ctx1", child_name="Kai", child_age="7")
+        await store.commit()
         prepare = create_prepare_context(store)
 
         state = {
@@ -45,7 +46,7 @@ class TestPrepareContext:
 
     @pytest.mark.asyncio
     async def test_trims_long_conversation(self):
-        store = InMemorySessionStore()
+        store = await create_in_memory_store()
         prepare = create_prepare_context(store)
 
         messages = []
@@ -67,9 +68,10 @@ class TestPrepareContext:
     @pytest.mark.asyncio
     async def test_includes_conversation_state_block(self):
         """System prompt should start with <conversation_state> block."""
-        store = InMemorySessionStore()
-        store.increment_turn("state1")
-        store.increment_turn("state1")
+        store = await create_in_memory_store()
+        await store.increment_turn("state1")
+        await store.increment_turn("state1")
+        await store.commit()
         prepare = create_prepare_context(store)
 
         state = {
@@ -90,7 +92,7 @@ class TestPrepareContext:
         from app import config
         monkeypatch.setattr(config.settings, "CONTEXT_MAX_CHARS", 500)
 
-        store = InMemorySessionStore()
+        store = await create_in_memory_store()
         prepare = create_prepare_context(store)
 
         messages = []
@@ -112,7 +114,7 @@ class TestPrepareContext:
         from app import config
         monkeypatch.setattr(config.settings, "CONTEXT_MAX_CHARS", 999999)
 
-        store = InMemorySessionStore()
+        store = await create_in_memory_store()
         prepare = create_prepare_context(store)
 
         messages = []
@@ -132,7 +134,7 @@ class TestPrepareContext:
         from app import config
         monkeypatch.setattr(config.settings, "CONTEXT_MAX_CHARS", 1)
 
-        store = InMemorySessionStore()
+        store = await create_in_memory_store()
         prepare = create_prepare_context(store)
 
         messages = [
@@ -151,7 +153,7 @@ class TestPrepareContext:
         from app import config
         monkeypatch.setattr(config.settings, "CONTEXT_MAX_CHARS", 500)
 
-        store = InMemorySessionStore()
+        store = await create_in_memory_store()
         prepare = create_prepare_context(store)
 
         messages = [
@@ -167,8 +169,9 @@ class TestPrepareContext:
 
     @pytest.mark.asyncio
     async def test_injects_prior_search_evidence(self):
-        store = InMemorySessionStore()
-        store.save_tool_result("ev1", "search_knowledge_base", "homework tips", "Strategy: visual timer with 15-min chunks", turn=1)
+        store = await create_in_memory_store()
+        await store.save_tool_result("ev1", "search_knowledge_base", "homework tips", "Strategy: visual timer with 15-min chunks", turn=1)
+        await store.commit()
         prepare = create_prepare_context(store)
 
         state = {
@@ -185,7 +188,7 @@ class TestPrepareContext:
     @pytest.mark.asyncio
     async def test_passes_through_tool_results(self):
         """prepare_context should work even when last message is a ToolMessage."""
-        store = InMemorySessionStore()
+        store = await create_in_memory_store()
         prepare = create_prepare_context(store)
 
         state = {
@@ -206,8 +209,9 @@ class TestPrepareContext:
         from app.agent.hooks import _prompt_cache
         _prompt_cache.clear()
 
-        store = InMemorySessionStore()
-        store.increment_turn("cache-test")  # Set turn to 1
+        store = await create_in_memory_store()
+        await store.increment_turn("cache-test")  # Set turn to 1
+        await store.commit()
         prepare = create_prepare_context(store)
 
         state = {
@@ -230,8 +234,9 @@ class TestPrepareContext:
         from app.agent.hooks import _prompt_cache
         _prompt_cache.clear()
 
-        store = InMemorySessionStore()
-        store.increment_turn("mut-test")
+        store = await create_in_memory_store()
+        await store.increment_turn("mut-test")
+        await store.commit()
         prepare = create_prepare_context(store)
 
         state1 = {
@@ -242,7 +247,8 @@ class TestPrepareContext:
         prompt1 = result1["llm_input_messages"][0].content
 
         # Simulate a tool call that mutates state
-        store.update_profile("mut-test", child_name="Kai")
+        await store.update_profile("mut-test", child_name="Kai")
+        await store.commit()
         state2 = {
             "messages": [
                 HumanMessage(content="hello"),

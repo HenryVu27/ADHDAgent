@@ -125,7 +125,7 @@ async def search_knowledge_base(
     from app.models.schemas import RetrievalFilters
 
     session_id = _get_session_id(config)
-    state = _session_store.get(session_id)
+    state = await _session_store.get(session_id)
 
     # Auto-apply age filter from family profile if not explicitly provided
     effective_age_range = age_range
@@ -153,13 +153,13 @@ async def search_knowledge_base(
 
 
 @tool
-def get_family_profile(config: RunnableConfig = None) -> str:
+async def get_family_profile(config: RunnableConfig = None) -> str:
     """Get the current family profile to check what you already know about this family.
 
     Call this before asking questions to avoid asking for information you already have.
     """
     session_id = _get_session_id(config)
-    state = _session_store.get(session_id)
+    state = await _session_store.get(session_id)
     profile = state.family_profile
 
     lines = []
@@ -195,7 +195,7 @@ def get_family_profile(config: RunnableConfig = None) -> str:
 
 
 @tool
-def update_family_profile(
+async def update_family_profile(
     child_name: Optional[str] = None,
     child_age: Optional[str] = None,
     diagnosis_status: Optional[str] = None,
@@ -240,14 +240,14 @@ def update_family_profile(
     if not updates:
         return "No updates provided."
 
-    profile = _session_store.update_profile(session_id, **updates)
+    profile = await _session_store.update_profile(session_id, **updates)
 
     updated_fields = list(updates.keys())
     return f"Profile updated: {', '.join(updated_fields)}. Current profile has {len([f for f in profile.model_dump().values() if f])} fields populated."
 
 
 @tool
-def track_outcome(
+async def track_outcome(
     strategy_name: str,
     outcome: str,
     notes: Optional[str] = None,
@@ -267,7 +267,7 @@ def track_outcome(
     if outcome not in ("positive", "negative", "mixed"):
         return f"Invalid outcome '{outcome}'. Must be 'positive', 'negative', or 'mixed'."
 
-    entry = _session_store.add_outcome(
+    entry = await _session_store.add_outcome(
         session_id=session_id,
         strategy_name=strategy_name,
         outcome=outcome,
@@ -276,13 +276,13 @@ def track_outcome(
 
     # Also track as active strategy if positive
     if outcome == "positive":
-        _session_store.add_active_strategy(session_id, strategy_name)
+        await _session_store.add_active_strategy(session_id, strategy_name)
 
     return f"Outcome recorded: '{strategy_name}' -> {outcome}." + (f" Notes: {notes}" if notes else "")
 
 
 @tool
-def manage_goals(
+async def manage_goals(
     action: str,
     description: Optional[str] = None,
     config: RunnableConfig = None,
@@ -303,7 +303,7 @@ def manage_goals(
     if action in ("add", "complete") and not description:
         return f"Description required for '{action}' action."
 
-    goals = _session_store.manage_goal(
+    goals = await _session_store.manage_goal(
         session_id=session_id,
         action=action,
         description=description or "",

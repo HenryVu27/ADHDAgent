@@ -6,17 +6,18 @@ import pytest
 from unittest.mock import AsyncMock, patch
 
 from app.agent.memory import MemoryManager
-from app.agent.session_store import InMemorySessionStore
+from app.agent.session_store import create_in_memory_store
 from app.models.schemas import EpisodicMemory, SessionSummary
 
 
-def _make_store_with_messages(session_id="s1", turn_count=5):
+async def _make_store_with_messages(session_id="s1", turn_count=5):
     """Create a store with some conversation history."""
-    store = InMemorySessionStore()
+    store = await create_in_memory_store()
     for t in range(1, turn_count + 1):
-        store.increment_turn(session_id)
-        store.add_message(session_id, "user", f"User message turn {t}", turn=t)
-        store.add_message(session_id, "assistant", f"Assistant response turn {t}", turn=t)
+        await store.increment_turn(session_id)
+        await store.add_message(session_id, "user", f"User message turn {t}", turn=t)
+        await store.add_message(session_id, "assistant", f"Assistant response turn {t}", turn=t)
+    await store.commit()
     return store
 
 
@@ -32,7 +33,7 @@ class TestSummaryInterval:
 
     @pytest.mark.asyncio
     async def test_summary_triggered_at_interval(self):
-        store = _make_store_with_messages(turn_count=5)
+        store = await _make_store_with_messages(turn_count=5)
         gemini = _make_gemini_mock(generate_return="The parent discussed homework challenges.")
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -43,14 +44,14 @@ class TestSummaryInterval:
         )
 
         # Summary should have been saved (turn 5 % 5 == 0)
-        summary = store.get_latest_summary("s1")
+        summary = await store.get_latest_summary("s1")
         assert summary is not None
         assert summary.covers_through_turn == 5
         assert "homework" in summary.summary
 
     @pytest.mark.asyncio
     async def test_summary_not_triggered_off_interval(self):
-        store = _make_store_with_messages(turn_count=3)
+        store = await _make_store_with_messages(turn_count=3)
         gemini = _make_gemini_mock()
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -61,11 +62,11 @@ class TestSummaryInterval:
         )
 
         # Turn 3 % 5 != 0, no summary
-        assert store.get_latest_summary("s1") is None
+        assert await store.get_latest_summary("s1") is None
 
     @pytest.mark.asyncio
     async def test_summary_skipped_without_gemini(self):
-        store = _make_store_with_messages(turn_count=5)
+        store = await _make_store_with_messages(turn_count=5)
         mm = MemoryManager(session_store=store, gemini_client=None)
 
         await mm.post_turn_tasks(
@@ -74,17 +75,18 @@ class TestSummaryInterval:
             assistant_response="Response.",
         )
 
-        assert store.get_latest_summary("s1") is None
+        assert await store.get_latest_summary("s1") is None
 
     @pytest.mark.asyncio
     async def test_summary_includes_prior(self):
         """Second summary should include reference to prior summary in prompt."""
-        store = _make_store_with_messages(turn_count=10)
+        store = await _make_store_with_messages(turn_count=10)
         gemini = _make_gemini_mock(generate_return="Extended summary.")
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
         # Seed a prior summary
-        store.save_summary("s1", SessionSummary(summary="First summary.", covers_through_turn=5))
+        await store.save_summary("s1", SessionSummary(summary="First summary.", covers_through_turn=5))
+        await store.commit()
 
         await mm.post_turn_tasks(
             session_id="s1", turn=10,
@@ -101,8 +103,9 @@ class TestFactExtraction:
 
     @pytest.mark.asyncio
     async def test_extracts_facts_from_long_message(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock(extract_json_return={"child_name": "Kai", "child_age": "7"})
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -113,14 +116,15 @@ class TestFactExtraction:
             assistant_response="I understand.",
         )
 
-        profile = store.get("s1").family_profile
+        profile = (await store.get("s1")).family_profile
         assert profile.child_name == "Kai"
         assert profile.child_age == "7"
 
     @pytest.mark.asyncio
     async def test_skips_short_messages(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock()
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -135,8 +139,9 @@ class TestFactExtraction:
 
     @pytest.mark.asyncio
     async def test_filters_invalid_fields(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock(extract_json_return={
             "child_name": "Kai",
             "invalid_field": "should be ignored",
@@ -151,13 +156,14 @@ class TestFactExtraction:
             assistant_response="I see.",
         )
 
-        profile = store.get("s1").family_profile
+        profile = (await store.get("s1")).family_profile
         assert profile.child_name == "Kai"
 
     @pytest.mark.asyncio
     async def test_skips_empty_extraction(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock(extract_json_return={})
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -169,7 +175,7 @@ class TestFactExtraction:
         )
 
         # Profile should remain untouched
-        profile = store.get("s1").family_profile
+        profile = (await store.get("s1")).family_profile
         assert profile.child_name is None
 
 
@@ -177,8 +183,9 @@ class TestEpisodicMemory:
 
     @pytest.mark.asyncio
     async def test_episode_created_on_track_outcome(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock(generate_return="hopeful")
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -198,7 +205,7 @@ class TestEpisodicMemory:
             tool_calls=tool_calls,
         )
 
-        episodes = store.get_recent_episodes("s1")
+        episodes = await store.get_recent_episodes("s1")
         assert len(episodes) == 1
         assert episodes[0].event_type == "outcome_reported"
         assert "visual timer" in episodes[0].summary
@@ -208,8 +215,9 @@ class TestEpisodicMemory:
 
     @pytest.mark.asyncio
     async def test_no_episode_without_track_outcome(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock()
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -225,13 +233,14 @@ class TestEpisodicMemory:
             tool_calls=tool_calls,
         )
 
-        episodes = store.get_recent_episodes("s1")
+        episodes = await store.get_recent_episodes("s1")
         assert len(episodes) == 0
 
     @pytest.mark.asyncio
     async def test_multiple_outcomes_create_multiple_episodes(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock()
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -253,7 +262,7 @@ class TestEpisodicMemory:
             tool_calls=tool_calls,
         )
 
-        episodes = store.get_recent_episodes("s1")
+        episodes = await store.get_recent_episodes("s1")
         assert len(episodes) == 2
 
 
@@ -261,8 +270,9 @@ class TestEmotionInferenceLLM:
 
     @pytest.mark.asyncio
     async def test_llm_called_with_message(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock(generate_return="frustrated")
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -274,10 +284,11 @@ class TestEmotionInferenceLLM:
 
     @pytest.mark.asyncio
     async def test_includes_conversation_context(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
-        store.add_message("s1", "user", "My son has ADHD", turn=1)
-        store.add_message("s1", "assistant", "Tell me more about him", turn=1)
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.add_message("s1", "user", "My son has ADHD", turn=1)
+        await store.add_message("s1", "assistant", "Tell me more about him", turn=1)
+        await store.commit()
         gemini = _make_gemini_mock(generate_return="anxious")
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -289,8 +300,9 @@ class TestEmotionInferenceLLM:
 
     @pytest.mark.asyncio
     async def test_invalid_output_defaults_empty(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock(generate_return="something unexpected")
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -300,8 +312,9 @@ class TestEmotionInferenceLLM:
 
     @pytest.mark.asyncio
     async def test_neutral_returns_empty(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock(generate_return="neutral")
         mm = MemoryManager(session_store=store, gemini_client=gemini)
 
@@ -311,8 +324,9 @@ class TestEmotionInferenceLLM:
 
     @pytest.mark.asyncio
     async def test_no_gemini_returns_empty(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         mm = MemoryManager(session_store=store, gemini_client=None)
 
         result = await mm._infer_emotion("s1", "I'm so frustrated")
@@ -324,7 +338,7 @@ class TestErrorResilience:
 
     @pytest.mark.asyncio
     async def test_summary_error_does_not_crash(self):
-        store = _make_store_with_messages(turn_count=5)
+        store = await _make_store_with_messages(turn_count=5)
         gemini = _make_gemini_mock()
         gemini.generate = AsyncMock(side_effect=Exception("API error"))
         mm = MemoryManager(session_store=store, gemini_client=gemini)
@@ -338,8 +352,9 @@ class TestErrorResilience:
 
     @pytest.mark.asyncio
     async def test_fact_extraction_error_does_not_crash(self):
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock()
         gemini.extract_json = AsyncMock(side_effect=Exception("Parse error"))
         mm = MemoryManager(session_store=store, gemini_client=gemini)
@@ -351,13 +366,13 @@ class TestErrorResilience:
         )
 
         # Profile should not be updated since extraction failed
-        profile = store.get("s1").family_profile
+        profile = (await store.get("s1")).family_profile
         assert profile.child_name is None
 
     @pytest.mark.asyncio
     async def test_summary_timeout_raises(self):
         """TimeoutError from generate() should propagate (caught by gather)."""
-        store = _make_store_with_messages(turn_count=5)
+        store = await _make_store_with_messages(turn_count=5)
         gemini = _make_gemini_mock()
         gemini.generate = AsyncMock(side_effect=asyncio.TimeoutError())
         mm = MemoryManager(session_store=store, gemini_client=gemini)
@@ -370,13 +385,14 @@ class TestErrorResilience:
         )
 
         # Summary should NOT have been saved
-        assert store.get_latest_summary("s1") is None
+        assert await store.get_latest_summary("s1") is None
 
     @pytest.mark.asyncio
     async def test_fact_extraction_timeout_does_not_crash(self):
         """TimeoutError from extract_json() should not crash post_turn_tasks."""
-        store = InMemorySessionStore()
-        store.increment_turn("s1")
+        store = await create_in_memory_store()
+        await store.increment_turn("s1")
+        await store.commit()
         gemini = _make_gemini_mock()
         gemini.extract_json = AsyncMock(side_effect=asyncio.TimeoutError())
         mm = MemoryManager(session_store=store, gemini_client=gemini)
@@ -387,5 +403,5 @@ class TestErrorResilience:
             assistant_response="I understand.",
         )
 
-        profile = store.get("s1").family_profile
+        profile = (await store.get("s1")).family_profile
         assert profile.child_name is None

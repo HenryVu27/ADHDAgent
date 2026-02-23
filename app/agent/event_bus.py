@@ -1,15 +1,15 @@
-"""EventBus — structured event store per session.
+"""EventBus — async structured event store per session.
 
-Uses SQLite for persistence when available, falls back to in-memory ring buffer.
+Uses aiosqlite for persistence when available, falls back to in-memory ring buffer.
 Events survive server restarts when SQLite is enabled.
 """
 
 import json
 import logging
-import sqlite3
-import threading
 from collections import deque
 from datetime import datetime, timezone
+
+import aiosqlite
 
 from app.models.schemas import ObservabilityEvent
 
@@ -17,16 +17,15 @@ logger = logging.getLogger(__name__)
 
 
 class EventBus:
-    """Thread-safe per-session event store with optional SQLite persistence."""
+    """Async per-session event store with optional aiosqlite persistence."""
 
-    def __init__(self, buffer_size: int = 200, conn: sqlite3.Connection | None = None):
+    def __init__(self, buffer_size: int = 200, conn: aiosqlite.Connection | None = None):
         self._buffer_size = buffer_size
         self._conn = conn
         # In-memory buffer used as cache and fallback when no DB
         self._buffers: dict[str, deque[ObservabilityEvent]] = {}
-        self._lock = threading.Lock()
 
-    def emit(
+    async def emit(
         self,
         category: str,
         event_type: str,
@@ -49,50 +48,47 @@ class EventBus:
             level=level,
         )
 
-        with self._lock:
-            # Always keep in memory for fast reads
-            if session_id not in self._buffers:
-                self._buffers[session_id] = deque(maxlen=self._buffer_size)
-            self._buffers[session_id].append(event)
+        # Always keep in memory for fast reads
+        if session_id not in self._buffers:
+            self._buffers[session_id] = deque(maxlen=self._buffer_size)
+        self._buffers[session_id].append(event)
 
-            # Persist to SQLite (inside lock to prevent concurrent connection access)
-            if self._conn:
-                try:
-                    self._conn.execute(
-                        "INSERT INTO observability_events (session_id, category, event_type, turn, timestamp, duration_ms, detail_json, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                        (session_id, category, event_type, turn, ts, duration_ms, json.dumps(detail or {}), level),
-                    )
-                    self._conn.commit()
-                except Exception as e:
-                    logger.warning("Failed to persist event to SQLite: %s", e)
+        # Persist to SQLite
+        if self._conn:
+            try:
+                await self._conn.execute(
+                    "INSERT INTO observability_events (session_id, category, event_type, turn, timestamp, duration_ms, detail_json, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    (session_id, category, event_type, turn, ts, duration_ms, json.dumps(detail or {}), level),
+                )
+                await self._conn.commit()
+            except Exception as e:
+                logger.warning("Failed to persist event to SQLite: %s", e)
 
-    def get_events(
+    async def get_events(
         self,
         session_id: str,
         category: str | None = None,
         level: str | None = None,
     ) -> list[ObservabilityEvent]:
         """Return events for a session, optionally filtered by category/level."""
-        with self._lock:
-            if self._conn:
-                return self._get_events_from_db(session_id, category, level)
+        if self._conn:
+            return await self._get_events_from_db(session_id, category, level)
 
-            # Fallback to in-memory
-            events = list(self._buffers.get(session_id, []))
-
+        # Fallback to in-memory
+        events = list(self._buffers.get(session_id, []))
         if category:
             events = [e for e in events if e.category == category]
         if level:
             events = [e for e in events if e.level == level]
         return events
 
-    def _get_events_from_db(
+    async def _get_events_from_db(
         self,
         session_id: str,
         category: str | None = None,
         level: str | None = None,
     ) -> list[ObservabilityEvent]:
-        """Read events from SQLite with optional filters. Caller must hold self._lock."""
+        """Read events from SQLite with optional filters."""
         query = "SELECT category, event_type, session_id, turn, timestamp, duration_ms, detail_json, level FROM observability_events WHERE session_id = ?"
         params: list = [session_id]
 
@@ -105,7 +101,8 @@ class EventBus:
 
         query += " ORDER BY id"
 
-        rows = self._conn.execute(query, params).fetchall()
+        cursor = await self._conn.execute(query, params)
+        rows = await cursor.fetchall()
         return [
             ObservabilityEvent(
                 category=r["category"],
@@ -120,13 +117,13 @@ class EventBus:
             for r in rows
         ]
 
-    def get_all_session_ids(self) -> list[str]:
+    async def get_all_session_ids(self) -> list[str]:
         """Return all session IDs that have events."""
-        with self._lock:
-            if self._conn:
-                rows = self._conn.execute(
-                    "SELECT DISTINCT session_id FROM observability_events"
-                ).fetchall()
-                return [r["session_id"] for r in rows]
+        if self._conn:
+            cursor = await self._conn.execute(
+                "SELECT DISTINCT session_id FROM observability_events"
+            )
+            rows = await cursor.fetchall()
+            return [r["session_id"] for r in rows]
 
-            return list(self._buffers.keys())
+        return list(self._buffers.keys())

@@ -46,39 +46,39 @@ class AgentOrchestrator:
         self._event_bus = event_bus
         self._pending_tasks: set[asyncio.Task] = set()
 
-    def get_session(self, session_id: str) -> SessionState:
-        return self._session_store.get(session_id)
+    async def get_session(self, session_id: str) -> SessionState:
+        return await self._session_store.get(session_id)
 
     def get_session_store(self) -> SessionStoreBase:
         """Public accessor for the session store."""
         return self._session_store
 
-    def infer_phase(self, session_id: str) -> ConversationPhase:
+    async def infer_phase(self, session_id: str) -> ConversationPhase:
         """Infer a phase label from session state."""
-        return self._infer_phase(session_id)
+        return await self._infer_phase(session_id)
 
-    def seed_session(self, request: SeedSessionRequest) -> None:
-        self._session_store.seed_session(request)
+    async def seed_session(self, request: SeedSessionRequest) -> None:
+        await self._session_store.seed_session(request)
 
     async def process(self, message: str, session_id: str) -> ChatResponse:
         """Run the ReAct agent for a single parent message."""
-        turn = self._session_store.increment_turn(session_id)
+        turn = await self._session_store.increment_turn(session_id)
         logger.info(
             "[agent] === START === session=%s, turn=%d, message=%.80s",
             session_id, turn, message,
         )
 
         if self._event_bus:
-            self._event_bus.emit("agent", "turn_start", session_id, turn, detail={"message_preview": message[:80]})
+            await self._event_bus.emit("agent", "turn_start", session_id, turn, detail={"message_preview": message[:80]})
 
         from app.config import settings
 
         # Build full message list from conversation history so the agent
         # has multi-turn context (previous turns were stored but never passed back).
-        stored_messages = self._session_store.get_messages(session_id)
+        stored_messages = await self._session_store.get_messages(session_id)
 
         # Skip messages already captured by the rolling summary
-        latest_summary = self._session_store.get_latest_summary(session_id)
+        latest_summary = await self._session_store.get_latest_summary(session_id)
         summary_through_turn = latest_summary.covers_through_turn if latest_summary else 0
 
         history_messages = []
@@ -119,8 +119,9 @@ class AgentOrchestrator:
                 "I want to make sure I give you the best help. "
                 "Could you tell me a bit more about what you'd like to focus on?"
             )
-            self._session_store.add_message(session_id, "user", message, turn)
-            self._session_store.add_message(session_id, "assistant", response_text, turn)
+            await self._session_store.add_message(session_id, "user", message, turn)
+            await self._session_store.add_message(session_id, "assistant", response_text, turn)
+            await self._session_store.commit()
             trace = PipelineTrace(
                 steps=[PipelineStep(name="react_agent", duration_ms=total_ms, detail={"error": str(e)})],
                 total_duration_ms=total_ms,
@@ -129,7 +130,7 @@ class AgentOrchestrator:
             return ChatResponse(
                 response=response_text,
                 agent_used="react_agent_fallback",
-                phase=self._infer_phase(session_id),
+                phase=await self._infer_phase(session_id),
                 pipeline_trace=trace,
                 session_id=session_id,
             )
@@ -144,11 +145,11 @@ class AgentOrchestrator:
             for step in result.get("trace_steps", []):
                 if step.get("name") == "input_gate":
                     blocked_reason = step.get("detail", {}).get("blocked_reason", "")
-            self._session_store.add_message(
+            await self._session_store.add_message(
                 session_id, "user", message, turn,
                 blocked=True, blocked_reason=blocked_reason,
             )
-            self._session_store.add_message(
+            await self._session_store.add_message(
                 session_id, "assistant", response_text, turn,
                 blocked=True, blocked_reason=blocked_reason,
             )
@@ -165,16 +166,17 @@ class AgentOrchestrator:
                 blocked_reason=blocked_reason,
                 agent_used="input_gate",
             )
-            self._session_store.save_trace(session_id, enriched)
+            await self._session_store.save_trace(session_id, enriched)
+            await self._session_store.commit()
 
             if self._event_bus:
-                self._event_bus.emit("agent", "turn_blocked", session_id, turn, total_ms, detail={"reason": blocked_reason})
+                await self._event_bus.emit("agent", "turn_blocked", session_id, turn, total_ms, detail={"reason": blocked_reason})
 
             logger.info("[agent] === BLOCKED === session=%s, reason=input_gate", session_id)
             return ChatResponse(
                 response=response_text,
                 agent_used="input_gate",
-                phase=self._infer_phase(session_id),
+                phase=await self._infer_phase(session_id),
                 pipeline_trace=trace,
                 session_id=session_id,
             )
@@ -211,8 +213,8 @@ class AgentOrchestrator:
 
         # Record turn in conversation history
         tool_summary = self._build_tool_calls_summary(tool_calls_made)
-        self._session_store.add_message(session_id, "user", message, turn)
-        self._session_store.add_message(session_id, "assistant", response_text, turn, tool_calls_summary=tool_summary)
+        await self._session_store.add_message(session_id, "user", message, turn)
+        await self._session_store.add_message(session_id, "assistant", response_text, turn, tool_calls_summary=tool_summary)
 
         # Persist tool results for cross-turn evidence
         for msg in new_messages:
@@ -226,13 +228,14 @@ class AgentOrchestrator:
                         break
                 if tc_name == "search_knowledge_base":
                     result_text = msg.content if isinstance(msg.content, str) else str(msg.content)
-                    self._session_store.save_tool_result(session_id, tc_name, tc_query, result_text, turn)
+                    await self._session_store.save_tool_result(session_id, tc_name, tc_query, result_text, turn)
 
         # Build and persist enriched trace
         enriched = self._build_enriched_trace(
             session_id, turn, result, new_messages, tool_calls_made, total_ms,
         )
-        self._session_store.save_trace(session_id, enriched)
+        await self._session_store.save_trace(session_id, enriched)
+        await self._session_store.commit()
 
         # Fire background memory tasks (non-blocking)
         if self._memory:
@@ -263,7 +266,7 @@ class AgentOrchestrator:
         trace = self._build_trace(result, total_ms, tool_calls_made)
 
         if self._event_bus:
-            self._event_bus.emit(
+            await self._event_bus.emit(
                 "agent", "turn_end", session_id, turn, total_ms,
                 detail={"tools": len(tool_calls_made), "model_tier": enriched.model_tier},
             )
@@ -279,7 +282,7 @@ class AgentOrchestrator:
         return ChatResponse(
             response=response_text,
             agent_used=agent_label,
-            phase=self._infer_phase(session_id),
+            phase=await self._infer_phase(session_id),
             pipeline_trace=trace,
             session_id=session_id,
         )
@@ -309,9 +312,9 @@ class AgentOrchestrator:
                 for task in pending:
                     task.cancel()
 
-    def _infer_phase(self, session_id: str) -> ConversationPhase:
+    async def _infer_phase(self, session_id: str) -> ConversationPhase:
         """Infer a phase label from session state for API compatibility."""
-        state = self._session_store.get(session_id)
+        state = await self._session_store.get(session_id)
         profile = state.family_profile
 
         # If we have outcomes, we're in progress tracking

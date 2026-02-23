@@ -70,10 +70,10 @@ class MemoryManager:
             return
 
         # Determine which turns to summarize
-        existing = self._store.get_latest_summary(session_id)
+        existing = await self._store.get_latest_summary(session_id)
         start_turn = (existing.covers_through_turn + 1) if existing else 1
 
-        messages = self._store.get_messages_range(session_id, start_turn, current_turn)
+        messages = await self._store.get_messages_range(session_id, start_turn, current_turn)
         if not messages:
             return
 
@@ -101,13 +101,13 @@ Write a concise summary (2-4 sentences) that captures the most important context
         try:
             summary_text = await self._gemini.generate(prompt, temperature=0.0, max_output_tokens=256,
                                                            timeout=settings.MEMORY_TIMEOUT_S)
-            self._store.save_summary(
+            await self._store.save_summary(
                 session_id,
                 SessionSummary(summary=summary_text.strip(), covers_through_turn=current_turn),
             )
             logger.info("Summary updated for session %s through turn %d", session_id, current_turn)
             if self._event_bus:
-                self._event_bus.emit("memory", "summary_updated", session_id, current_turn)
+                await self._event_bus.emit("memory", "summary_updated", session_id, current_turn)
         except Exception as e:
             logger.error("Summary generation failed for session %s: %s", session_id, e)
             raise
@@ -118,8 +118,9 @@ Write a concise summary (2-4 sentences) that captures the most important context
             return
 
         # Include recent conversation history so pronouns can be resolved
-        state = self._store.get(session_id)
-        recent_history = state.conversation_history[-3:]
+        recent_messages = await self._store.get_messages(session_id, limit=6)
+        # Filter to last 3 user/assistant exchanges
+        recent_history = [m for m in recent_messages if not m.get("blocked")][-3:]
         history_text = ""
         if recent_history:
             lines = []
@@ -131,6 +132,7 @@ Write a concise summary (2-4 sentences) that captures the most important context
             history_text = "\n".join(lines)
 
         # Include current profile so we know what's already captured
+        state = await self._store.get(session_id)
         profile = state.family_profile
         known_facts = []
         if profile.child_name:
@@ -175,14 +177,14 @@ Parent message:
                 }
                 filtered = {k: v for k, v in facts.items() if k in valid_fields and v}
                 if filtered:
-                    self._store.update_profile(session_id, **filtered)
+                    await self._store.update_profile(session_id, **filtered)
                     logger.info(
                         "Facts extracted for session %s (turn %d): %s",
                         session_id, turn, list(filtered.keys()),
                     )
                     if self._event_bus:
-                        self._event_bus.emit("memory", "facts_extracted", session_id, turn,
-                                             detail={"fields": list(filtered.keys())})
+                        await self._event_bus.emit("memory", "facts_extracted", session_id, turn,
+                                                   detail={"fields": list(filtered.keys())})
         except Exception as e:
             logger.error("Fact extraction failed for session %s: %s", session_id, e)
             raise
@@ -217,14 +219,14 @@ Parent message:
                 turn_range_start=turn,
                 turn_range_end=turn,
             )
-            self._store.add_episode(session_id, episode)
+            await self._store.add_episode(session_id, episode)
             logger.info(
                 "Episode created for session %s: %s -> %s",
                 session_id, strategy_name, outcome,
             )
             if self._event_bus:
-                self._event_bus.emit("memory", "episode_created", session_id, turn,
-                                     detail={"strategy": strategy_name, "outcome": outcome})
+                await self._event_bus.emit("memory", "episode_created", session_id, turn,
+                                           detail={"strategy": strategy_name, "outcome": outcome})
 
     async def _infer_emotion(self, session_id: str, user_message: str) -> str:
         """Classify the parent's emotional state using an LLM call with conversation context."""
@@ -234,8 +236,8 @@ Parent message:
         valid_emotions = {"frustrated", "anxious", "positive", "overwhelmed", "hopeful", "neutral"}
 
         # Build conversation context from recent history
-        state = self._store.get(session_id)
-        recent_history = state.conversation_history[-3:]
+        recent_messages = await self._store.get_messages(session_id, limit=6)
+        recent_history = [m for m in recent_messages if not m.get("blocked")][-3:]
         context_lines = []
         for entry in recent_history:
             if entry.get("role") == "user":

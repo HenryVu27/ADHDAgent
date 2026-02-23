@@ -67,7 +67,7 @@ async def seed_session(
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
 ):
     """Pre-populate a session with onboarding data so the agent has family context from the start."""
-    orchestrator.seed_session(body)
+    await orchestrator.seed_session(body)
     return {"status": "ok", "session_id": body.session_id}
 
 
@@ -78,9 +78,9 @@ async def delete_session(
 ):
     """Delete all data for a session (right-to-erasure)."""
     store = orchestrator.get_session_store()
-    if not store.session_exists(session_id):
+    if not await store.session_exists(session_id):
         raise HTTPException(status_code=404, detail="Session not found")
-    store.delete_session(session_id)
+    await store.delete_session(session_id)
     return {"status": "deleted", "session_id": session_id}
 
 
@@ -91,11 +91,11 @@ async def get_session(
 ):
     """Returns current conversation state for a session."""
     store = orchestrator.get_session_store()
-    if not store.session_exists(session_id):
+    if not await store.session_exists(session_id):
         raise HTTPException(status_code=404, detail="Session not found")
 
-    state = orchestrator.get_session(session_id)
-    phase = orchestrator.infer_phase(session_id)
+    state = await orchestrator.get_session(session_id)
+    phase = await orchestrator.infer_phase(session_id)
     return SessionResponse(
         session_id=state.session_id,
         phase=phase,
@@ -113,10 +113,10 @@ async def get_outcomes(
 ):
     """Returns outcome tracking data for a session."""
     store = orchestrator.get_session_store()
-    if not store.session_exists(session_id):
+    if not await store.session_exists(session_id):
         raise HTTPException(status_code=404, detail="Session not found")
 
-    state = orchestrator.get_session(session_id)
+    state = await orchestrator.get_session(session_id)
     return OutcomesResponse(
         session_id=state.session_id,
         outcomes=state.outcomes,
@@ -133,7 +133,7 @@ async def list_sessions(
 ):
     """Returns all sessions ordered by most recently updated."""
     store = orchestrator.get_session_store()
-    items, total = store.get_all_sessions_paginated(offset=offset, limit=limit)
+    items, total = await store.get_all_sessions_paginated(offset=offset, limit=limit)
     return SessionsResponse(sessions=items, total=total, offset=offset, limit=limit)
 
 
@@ -146,10 +146,10 @@ async def get_session_messages(
 ):
     """Returns all messages for a session."""
     store = orchestrator.get_session_store()
-    if not store.session_exists(session_id):
+    if not await store.session_exists(session_id):
         raise HTTPException(status_code=404, detail="Session not found")
 
-    messages, total = store.get_messages_paginated(session_id, offset=offset, limit=limit)
+    messages, total = await store.get_messages_paginated(session_id, offset=offset, limit=limit)
     return MessagesResponse(session_id=session_id, messages=messages, total=total, offset=offset, limit=limit)
 
 

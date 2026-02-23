@@ -1,43 +1,61 @@
 """Tests for AgentOrchestrator — session management and phase inference."""
 
+import pytest
+from unittest.mock import AsyncMock
+
+from langchain_core.messages import AIMessage, HumanMessage
+
 from app.agent.orchestrator import AgentOrchestrator
-from app.agent.session_store import SessionStateStore
-from app.models.schemas import ConversationPhase, SeedSessionRequest
+from app.agent.session_store import create_in_memory_store
+from app.models.schemas import ConversationPhase, SeedSessionRequest, SessionSummary
 
 
 class TestPhaseInference:
 
-    def setup_method(self):
-        self.store = SessionStateStore()
-        self.orchestrator = AgentOrchestrator(agent=None, session_store=self.store)
+    @pytest.mark.asyncio
+    async def test_new_session_is_intake(self):
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        assert await orchestrator._infer_phase("new") == ConversationPhase.intake
 
-    def test_new_session_is_intake(self):
-        assert self.orchestrator._infer_phase("new") == ConversationPhase.intake
+    @pytest.mark.asyncio
+    async def test_profile_data_means_strategy(self):
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        await store.update_profile("p1", child_age="7", challenge_areas=["homework"])
+        await store.commit()
+        assert await orchestrator._infer_phase("p1") == ConversationPhase.strategy
 
-    def test_profile_data_means_strategy(self):
-        self.store.update_profile("p1", child_age="7", challenge_areas=["homework"])
-        assert self.orchestrator._infer_phase("p1") == ConversationPhase.strategy
+    @pytest.mark.asyncio
+    async def test_active_strategies_means_strategy(self):
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        await store.add_active_strategy("s1", "visual timer")
+        await store.commit()
+        assert await orchestrator._infer_phase("s1") == ConversationPhase.strategy
 
-    def test_active_strategies_means_strategy(self):
-        self.store.add_active_strategy("s1", "visual timer")
-        assert self.orchestrator._infer_phase("s1") == ConversationPhase.strategy
-
-    def test_outcomes_mean_progress(self):
-        self.store.add_outcome("o1", "timer", "positive")
-        assert self.orchestrator._infer_phase("o1") == ConversationPhase.progress
+    @pytest.mark.asyncio
+    async def test_outcomes_mean_progress(self):
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        await store.add_outcome("o1", "timer", "positive")
+        await store.commit()
+        assert await orchestrator._infer_phase("o1") == ConversationPhase.progress
 
 
 class TestSessionManagement:
 
-    def setup_method(self):
-        self.store = SessionStateStore()
-        self.orchestrator = AgentOrchestrator(agent=None, session_store=self.store)
-
-    def test_get_session(self):
-        state = self.orchestrator.get_session("test_session")
+    @pytest.mark.asyncio
+    async def test_get_session(self):
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        state = await orchestrator.get_session("test_session")
         assert state.session_id == "test_session"
 
-    def test_seed_session(self):
+    @pytest.mark.asyncio
+    async def test_seed_session(self):
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
         request = SeedSessionRequest(
             session_id="seeded",
             child_name="Kai",
@@ -45,8 +63,8 @@ class TestSessionManagement:
             challenges=["homework"],
             goals=["Better homework routine"],
         )
-        self.orchestrator.seed_session(request)
-        state = self.orchestrator.get_session("seeded")
+        await orchestrator.seed_session(request)
+        state = await orchestrator.get_session("seeded")
         assert state.family_profile.child_name == "Kai"
         assert len(state.goals) == 1
 
@@ -92,22 +110,13 @@ class TestBuildToolCallsSummary:
         assert result == "some_new_tool"
 
 
-import pytest
-from unittest.mock import AsyncMock
-
-from langchain_core.messages import AIMessage, HumanMessage
-
-from app.models.schemas import SessionSummary
-
-
 class TestHistoryExcludesSummarizedTurns:
     """Messages from turns covered by the rolling summary should be excluded."""
 
-    def setup_method(self):
-        self.store = SessionStateStore()
-        self.mock_agent = AsyncMock()
-        # Configure the mock agent to return a minimal valid result
-        self.mock_agent.ainvoke.return_value = {
+    async def _make_orchestrator(self):
+        store = await create_in_memory_store()
+        mock_agent = AsyncMock()
+        mock_agent.ainvoke.return_value = {
             "messages": [
                 HumanMessage(content="new question"),
                 AIMessage(content="Here is my response."),
@@ -115,33 +124,36 @@ class TestHistoryExcludesSummarizedTurns:
             "trace_steps": [],
             "input_blocked": False,
         }
-        self.orchestrator = AgentOrchestrator(
-            agent=self.mock_agent,
-            session_store=self.store,
+        orchestrator = AgentOrchestrator(
+            agent=mock_agent,
+            session_store=store,
         )
+        return store, mock_agent, orchestrator
 
     @pytest.mark.asyncio
     async def test_history_excludes_summarized_turns(self):
         """Messages from turns covered by the rolling summary should not be in history."""
+        store, mock_agent, orchestrator = await self._make_orchestrator()
         sid = "summ-test"
 
         # Add messages for turns 1-8
         for i in range(1, 9):
-            self.store.increment_turn(sid)
-            self.store.add_message(sid, "user", f"user-msg-{i}", i)
-            self.store.add_message(sid, "assistant", f"assistant-msg-{i}", i)
+            await store.increment_turn(sid)
+            await store.add_message(sid, "user", f"user-msg-{i}", i)
+            await store.add_message(sid, "assistant", f"assistant-msg-{i}", i)
 
         # Save summary covering turns 1-5
-        self.store.save_summary(
+        await store.save_summary(
             sid,
             SessionSummary(summary="Summary of turns 1-5.", covers_through_turn=5),
         )
+        await store.commit()
 
         # Call process — capture what the agent receives
-        result = await self.orchestrator.process("new question", sid)
+        result = await orchestrator.process("new question", sid)
 
         # The agent was invoked with messages — check the invoke call
-        call_args = self.mock_agent.ainvoke.call_args
+        call_args = mock_agent.ainvoke.call_args
         messages_passed = call_args[0][0]["messages"]
 
         # Should NOT contain messages from turns 1-5
@@ -160,16 +172,18 @@ class TestHistoryExcludesSummarizedTurns:
     @pytest.mark.asyncio
     async def test_no_summary_includes_all_turns(self):
         """Without a summary, all messages appear in history."""
+        store, mock_agent, orchestrator = await self._make_orchestrator()
         sid = "no-summ"
 
         for i in range(1, 4):
-            self.store.increment_turn(sid)
-            self.store.add_message(sid, "user", f"user-msg-{i}", i)
-            self.store.add_message(sid, "assistant", f"assistant-msg-{i}", i)
+            await store.increment_turn(sid)
+            await store.add_message(sid, "user", f"user-msg-{i}", i)
+            await store.add_message(sid, "assistant", f"assistant-msg-{i}", i)
+        await store.commit()
 
-        result = await self.orchestrator.process("new question", sid)
+        result = await orchestrator.process("new question", sid)
 
-        call_args = self.mock_agent.ainvoke.call_args
+        call_args = mock_agent.ainvoke.call_args
         messages_passed = call_args[0][0]["messages"]
         contents = [m.content for m in messages_passed if hasattr(m, "content")]
 

@@ -6,13 +6,13 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 
 from app.agent.analyzer import ConversationAnalyzer
-from app.agent.session_store import InMemorySessionStore
+from app.agent.session_store import create_in_memory_store
 from app.models.schemas import EnrichedTrace, ToolCallRecord
 
 
 @pytest.fixture
-def store():
-    return InMemorySessionStore()
+async def store():
+    return await create_in_memory_store()
 
 
 @pytest.fixture
@@ -23,7 +23,7 @@ def mock_gemini():
 
 
 @pytest.fixture
-def analyzer(store, mock_gemini):
+async def analyzer(store, mock_gemini):
     return ConversationAnalyzer(session_store=store, gemini_client=mock_gemini)
 
 
@@ -58,7 +58,7 @@ class TestConversationAnalyzer:
         assert result.quality_score == 1.0
         assert len(result.flags) == 0
         # Verify it was saved
-        analyses = store.get_analyses("s1")
+        analyses = await store.get_analyses("s1")
         assert len(analyses) == 1
 
     @pytest.mark.asyncio
@@ -170,7 +170,8 @@ class TestConversationAnalyzer:
         assert result is None
 
     @pytest.mark.asyncio
-    async def test_no_gemini_client(self, store):
+    async def test_no_gemini_client(self):
+        store = await create_in_memory_store()
         analyzer = ConversationAnalyzer(session_store=store, gemini_client=None)
         trace = _make_trace()
         result = await analyzer.analyze_turn(

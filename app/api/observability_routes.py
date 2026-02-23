@@ -33,18 +33,18 @@ async def list_sessions(
     # Collect session IDs from store and event bus
     session_ids: set[str] = set()
 
-    all_sessions = session_store.get_all_sessions()
+    all_sessions = await session_store.get_all_sessions()
     for s in all_sessions:
         session_ids.add(s.session_id)
 
     if event_bus:
-        session_ids.update(event_bus.get_all_session_ids())
+        session_ids.update(await event_bus.get_all_session_ids())
 
     overviews = []
     for sid in session_ids:
-        state = session_store.get(sid)
-        traces = session_store.get_traces(sid)
-        analyses = session_store.get_analyses(sid)
+        state = await session_store.get(sid)
+        traces = await session_store.get_traces(sid)
+        analyses = await session_store.get_analyses(sid)
 
         total_flags = sum(len(a.flags) for a in analyses)
         avg_quality = (
@@ -54,7 +54,7 @@ async def list_sessions(
         tool_calls_count = sum(len(t.tool_calls) for t in traces)
         blocked_count = sum(1 for t in traces if t.input_blocked)
 
-        created_at, updated_at = session_store.get_session_timestamps(sid)
+        created_at, updated_at = await session_store.get_session_timestamps(sid)
 
         overviews.append(SessionOverview(
             session_id=sid,
@@ -81,13 +81,13 @@ async def get_session_detail(
     event_bus=Depends(get_event_bus),
 ):
     """Full session detail: messages, traces, analyses, events."""
-    if not session_store.session_exists(session_id):
+    if not await session_store.session_exists(session_id):
         raise HTTPException(status_code=404, detail="Session not found")
 
-    messages = session_store.get_messages(session_id)
-    traces = session_store.get_traces(session_id)
-    analyses = session_store.get_analyses(session_id)
-    events = event_bus.get_events(session_id) if event_bus else []
+    messages = await session_store.get_messages(session_id)
+    traces = await session_store.get_traces(session_id)
+    analyses = await session_store.get_analyses(session_id)
+    events = await event_bus.get_events(session_id) if event_bus else []
 
     return SessionDetailResponse(
         session_id=session_id,
@@ -106,13 +106,13 @@ async def get_session_events(
     event_bus=Depends(get_event_bus),
 ):
     """Filtered event log for a session."""
-    if not session_store.session_exists(session_id):
+    if not await session_store.session_exists(session_id):
         raise HTTPException(status_code=404, detail="Session not found")
 
     if not event_bus:
         return {"events": []}
 
-    events = event_bus.get_events(session_id, category=category)
+    events = await event_bus.get_events(session_id, category=category)
     return {"events": [e.model_dump() for e in events]}
 
 
@@ -126,11 +126,11 @@ async def analyze_session(
     if not analyzer:
         raise HTTPException(status_code=503, detail="Analyzer not available")
 
-    if not session_store.session_exists(session_id):
+    if not await session_store.session_exists(session_id):
         raise HTTPException(status_code=404, detail="Session not found")
 
-    messages = session_store.get_messages(session_id)
-    traces = session_store.get_traces(session_id)
+    messages = await session_store.get_messages(session_id)
+    traces = await session_store.get_traces(session_id)
 
     # Group messages by turn
     turns: dict[int, dict] = {}
@@ -164,7 +164,7 @@ async def analyze_session(
     if tasks:
         await asyncio.gather(*tasks, return_exceptions=True)
 
-    analyses = session_store.get_analyses(session_id)
+    analyses = await session_store.get_analyses(session_id)
     return {
         "status": "ok",
         "turns_analyzed": len(tasks),
