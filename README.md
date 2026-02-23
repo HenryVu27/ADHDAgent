@@ -22,7 +22,7 @@ Input gate (crisis + jailbreak) → Context assembly → Gemini ReAct agent with
 | LLM | Google Gemini 3 (3-flash-preview / 3-pro-preview) via langchain-google-genai |
 | Embeddings | Gemini gemini-embedding-001 via google-genai SDK |
 | Vector Search | Qdrant (in-memory for dev, remote for prod) with dense + sparse + RRF |
-| Reranker | FastEmbed cross-encoder (Xenova/ms-marco-MiniLM-L-6-v2), local ONNX inference |
+| Reranker | FastEmbed cross-encoder (BAAI/bge-reranker-base), local ONNX inference |
 | Agent | LangGraph create_react_agent (ReAct loop with tool calling) |
 | Guardrails | LangGraph-native gate nodes — structured Gemini classifiers (2 calls: input + output) |
 | Persistence | SQLite (default) or in-memory session store |
