@@ -144,6 +144,7 @@ Return a JSON object with only the fields that are explicitly mentioned or clear
 - child_name (string)
 - child_age (string, e.g. "7" or "8-9" if ambiguous)
 - diagnosis_status (string: "diagnosed", "suspected", "evaluating", "not diagnosed")
+- adhd_subtype (string: "inattentive", "hyperactive-impulsive", "combined")
 - challenge_areas (list of strings)
 - attempted_strategies (list of strings)
 - good_day_description (string)
@@ -168,7 +169,7 @@ Parent message:
             if isinstance(facts, dict) and facts:
                 # Filter to valid profile fields only
                 valid_fields = {
-                    "child_name", "child_age", "diagnosis_status",
+                    "child_name", "child_age", "diagnosis_status", "adhd_subtype",
                     "challenge_areas", "attempted_strategies",
                     "good_day_description", "hardest_situations",
                 }

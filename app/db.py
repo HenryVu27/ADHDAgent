@@ -160,6 +160,10 @@ CREATE TABLE IF NOT EXISTS tool_results (
 CREATE INDEX IF NOT EXISTS idx_tool_results_session ON tool_results(session_id);
 """
 
+SCHEMA_V7 = """
+ALTER TABLE family_profiles ADD COLUMN adhd_subtype TEXT;
+"""
+
 MIGRATIONS = {
     1: SCHEMA_V1,
     2: SCHEMA_V2,
@@ -167,6 +171,7 @@ MIGRATIONS = {
     4: SCHEMA_V4,
     5: SCHEMA_V5,
     6: SCHEMA_V6,
+    7: SCHEMA_V7,
 }
 
 

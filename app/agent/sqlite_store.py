@@ -31,7 +31,7 @@ class SQLiteSessionStore(SessionStoreBase):
     """Full SQLite implementation of the session store."""
 
     _VALID_PROFILE_FIELDS = frozenset({
-        "child_name", "child_age", "diagnosis_status",
+        "child_name", "child_age", "diagnosis_status", "adhd_subtype",
         "challenge_areas", "attempted_strategies",
         "good_day_description", "hardest_situations",
     })
@@ -95,6 +95,7 @@ class SQLiteSessionStore(SessionStoreBase):
                 child_name=prof_row["child_name"],
                 child_age=prof_row["child_age"],
                 diagnosis_status=prof_row["diagnosis_status"],
+                adhd_subtype=prof_row["adhd_subtype"],
                 challenge_areas=json.loads(prof_row["challenge_areas"]),
                 attempted_strategies=json.loads(prof_row["attempted_strategies"]),
                 good_day_description=prof_row["good_day_description"],
@@ -303,6 +304,10 @@ class SQLiteSessionStore(SessionStoreBase):
                 updates["child_name"] = request.child_name
             if request.child_age:
                 updates["child_age"] = request.child_age
+            if request.diagnosis_status:
+                updates["diagnosis_status"] = request.diagnosis_status
+            if request.adhd_subtype:
+                updates["adhd_subtype"] = request.adhd_subtype
             if request.challenges:
                 updates["challenge_areas"] = request.challenges
             if request.tried_strategies:

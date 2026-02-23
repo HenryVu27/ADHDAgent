@@ -170,6 +170,8 @@ def format_structured_facts(
         items.append(f"Child's age: {profile.child_age}")
     if profile.diagnosis_status:
         items.append(f"Diagnosis status: {profile.diagnosis_status}")
+    if profile.adhd_subtype:
+        items.append(f"ADHD subtype: {profile.adhd_subtype}")
     if profile.challenge_areas:
         items.append(f"Challenges: {', '.join(profile.challenge_areas)}")
     if profile.attempted_strategies:

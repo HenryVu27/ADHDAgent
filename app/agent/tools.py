@@ -169,6 +169,8 @@ def get_family_profile(config: RunnableConfig = None) -> str:
         lines.append(f"Child's age: {profile.child_age}")
     if profile.diagnosis_status:
         lines.append(f"Diagnosis status: {profile.diagnosis_status}")
+    if profile.adhd_subtype:
+        lines.append(f"ADHD subtype: {profile.adhd_subtype}")
     if profile.challenge_areas:
         lines.append(f"Challenge areas: {', '.join(profile.challenge_areas)}")
     if profile.attempted_strategies:
@@ -197,6 +199,7 @@ def update_family_profile(
     child_name: Optional[str] = None,
     child_age: Optional[str] = None,
     diagnosis_status: Optional[str] = None,
+    adhd_subtype: Optional[str] = None,
     challenge_areas: Optional[list[str]] = None,
     attempted_strategies: Optional[list[str]] = None,
     good_day_description: Optional[str] = None,
@@ -213,6 +216,7 @@ def update_family_profile(
         child_name: The child's name
         child_age: The child's age (as a string, e.g. "7")
         diagnosis_status: ADHD diagnosis status (e.g. "diagnosed", "suspected", "evaluating")
+        adhd_subtype: ADHD subtype (e.g. "inattentive", "hyperactive-impulsive", "combined")
         challenge_areas: Areas of difficulty (e.g. ["homework", "bedtime", "emotions"])
         attempted_strategies: Strategies already tried (e.g. ["timer", "reward chart"])
         good_day_description: What a good day looks like for the family
@@ -225,6 +229,7 @@ def update_family_profile(
             "child_name": child_name,
             "child_age": child_age,
             "diagnosis_status": diagnosis_status,
+            "adhd_subtype": adhd_subtype,
             "challenge_areas": challenge_areas,
             "attempted_strategies": attempted_strategies,
             "good_day_description": good_day_description,

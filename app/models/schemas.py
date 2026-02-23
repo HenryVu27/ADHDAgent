@@ -113,6 +113,7 @@ class FamilyProfile(BaseModel):
     child_age: str | None = None
     child_name: str | None = None
     diagnosis_status: str | None = None
+    adhd_subtype: str | None = None
     challenge_areas: list[str] = Field(default_factory=list)
     attempted_strategies: list[str] = Field(default_factory=list)
     good_day_description: str | None = None
@@ -193,6 +194,8 @@ class SeedSessionRequest(BaseModel):
     session_id: str
     child_name: str = ""
     child_age: str = ""
+    diagnosis_status: str = ""
+    adhd_subtype: str = ""
     challenges: list[str] = Field(default_factory=list)
     tried_strategies: list[str] = Field(default_factory=list)
     goals: list[str] = Field(default_factory=list)

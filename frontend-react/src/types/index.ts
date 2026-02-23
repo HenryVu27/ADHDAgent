@@ -35,6 +35,7 @@ export interface FamilyProfile {
   child_age: string | null
   child_name: string | null
   diagnosis_status: string | null
+  adhd_subtype: string | null
   challenge_areas: string[]
   attempted_strategies: string[]
   good_day_description: string | null
@@ -132,6 +133,8 @@ export interface User {
 export interface OnboardingData {
   childName: string
   childAge: string
+  diagnosisStatus: string
+  adhdSubtype: string
   challenges: string[]
   triedStrategies: string[]
   goals: string[]

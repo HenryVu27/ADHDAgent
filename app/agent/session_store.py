@@ -146,6 +146,8 @@ class InMemorySessionStore(SessionStoreBase):
             state = self._get_or_create(request.session_id)
             state.family_profile.child_name = request.child_name or None
             state.family_profile.child_age = request.child_age or None
+            state.family_profile.diagnosis_status = request.diagnosis_status or None
+            state.family_profile.adhd_subtype = request.adhd_subtype or None
             state.family_profile.challenge_areas = request.challenges
             state.family_profile.attempted_strategies = request.tried_strategies
             for goal_text in request.goals:
