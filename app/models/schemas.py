@@ -149,6 +149,22 @@ class EpisodicMemory(BaseModel):
     turn_range_end: int = 0
 
 
+class ProfileChange(BaseModel):
+    field: str
+    old_value: str
+    new_value: str
+    turn: int = 0
+    created_at: str = ""
+
+
+class EpisodeLink(BaseModel):
+    source_id: int
+    target_id: int
+    link_type: str   # "same_strategy" | "same_emotion" | "same_goal"
+    link_reason: str = ""
+    created_at: str = ""
+
+
 class StoredToolResult(BaseModel):
     tool_name: str
     query: str = ""

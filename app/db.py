@@ -150,8 +150,40 @@ CREATE TABLE IF NOT EXISTS tool_results (
 CREATE INDEX IF NOT EXISTS idx_tool_results_session ON tool_results(session_id);
 """
 
+SCHEMA_V2 = """
+CREATE TABLE IF NOT EXISTS profile_changelog (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL REFERENCES sessions(session_id),
+    field TEXT NOT NULL,
+    old_value TEXT NOT NULL,
+    new_value TEXT NOT NULL,
+    turn INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_changelog_session ON profile_changelog(session_id);
+"""
+
+SCHEMA_V3 = """
+CREATE TABLE IF NOT EXISTS episode_links (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL REFERENCES sessions(session_id),
+    source_id INTEGER NOT NULL REFERENCES episodes(id),
+    target_id INTEGER NOT NULL REFERENCES episodes(id),
+    link_type TEXT NOT NULL,
+    link_reason TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE(source_id, target_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_episode_links_session ON episode_links(session_id);
+CREATE INDEX IF NOT EXISTS idx_episode_links_source ON episode_links(source_id);
+"""
+
 MIGRATIONS = {
     1: SCHEMA_V1,
+    2: SCHEMA_V2,
+    3: SCHEMA_V3,
 }
 
 

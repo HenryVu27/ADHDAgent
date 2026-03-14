@@ -7,10 +7,12 @@ from abc import ABC, abstractmethod
 
 from app.models.schemas import (
     EnrichedTrace,
+    EpisodeLink,
     EpisodicMemory,
     FamilyProfile,
     Goal,
     Outcome,
+    ProfileChange,
     SeedSessionRequest,
     SessionListItem,
     SessionState,
@@ -100,12 +102,28 @@ class SessionStoreBase(ABC):
         """Persist a rolling session summary."""
 
     @abstractmethod
-    async def add_episode(self, session_id: str, episode: EpisodicMemory) -> None:
-        """Persist an episodic memory."""
+    async def add_episode(self, session_id: str, episode: EpisodicMemory) -> int:
+        """Persist an episodic memory. Returns the new episode's row ID."""
 
     @abstractmethod
     async def get_recent_episodes(self, session_id: str, limit: int = 5) -> list[EpisodicMemory]:
         """Return the most recent episodic memories."""
+
+    @abstractmethod
+    async def get_episodes_with_ids(self, session_id: str, limit: int = 20) -> list[tuple[int, EpisodicMemory]]:
+        """Return (id, EpisodicMemory) tuples for recent episodes, for linking purposes."""
+
+    @abstractmethod
+    async def get_profile_changelog(self, session_id: str) -> list[ProfileChange]:
+        """Return all recorded profile field changes for a session, oldest first."""
+
+    @abstractmethod
+    async def add_episode_link(self, session_id: str, link: EpisodeLink) -> None:
+        """Persist a link between two episodes."""
+
+    @abstractmethod
+    async def get_episode_links(self, session_id: str) -> list[EpisodeLink]:
+        """Return all episode links for a session."""
 
     @abstractmethod
     async def get_messages_range(

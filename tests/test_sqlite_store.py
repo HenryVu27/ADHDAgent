@@ -355,3 +355,73 @@ class TestSchemaInit:
         init_db(conn)  # Should not raise
         version = conn.execute("SELECT MAX(version) FROM schema_version").fetchone()[0]
         assert version >= 1  # Current max version
+
+
+class TestProfileChangelog:
+
+    async def test_scalar_update_writes_changelog(self):
+        store = await _make_store()
+        # First set a value
+        await store.update_profile("s1", child_age="7")
+        await store.commit()
+        # Now update it — should write a changelog entry
+        await store.update_profile("s1", child_age="8")
+        await store.commit()
+
+        changelog = await store.get_profile_changelog("s1")
+        assert len(changelog) == 1
+        assert changelog[0].field == "child_age"
+        assert changelog[0].old_value == "7"
+        assert changelog[0].new_value == "8"
+
+    async def test_no_changelog_on_first_set(self):
+        """Setting a field for the first time (from None) should not log a change."""
+        store = await _make_store()
+        await store.update_profile("s1", child_name="Kai")
+        await store.commit()
+
+        changelog = await store.get_profile_changelog("s1")
+        assert len(changelog) == 0
+
+    async def test_list_fields_not_logged(self):
+        """List field appends are not logged — only scalar overwrites are."""
+        store = await _make_store()
+        await store.update_profile("s1", challenge_areas=["homework"])
+        await store.update_profile("s1", challenge_areas=["bedtime"])
+        await store.commit()
+
+        changelog = await store.get_profile_changelog("s1")
+        assert len(changelog) == 0
+
+    async def test_same_value_no_changelog(self):
+        """Updating a field to the same value should not create a changelog entry."""
+        store = await _make_store()
+        await store.update_profile("s1", child_age="7")
+        await store.update_profile("s1", child_age="7")
+        await store.commit()
+
+        changelog = await store.get_profile_changelog("s1")
+        assert len(changelog) == 0
+
+    async def test_changelog_deleted_with_session(self):
+        store = await _make_store()
+        await store.update_profile("s1", child_age="7")
+        await store.commit()
+        await store.update_profile("s1", child_age="8")
+        await store.commit()
+
+        await store.delete_session("s1")
+        changelog = await store.get_profile_changelog("s1")
+        assert changelog == []
+
+    async def test_multiple_fields_multiple_entries(self):
+        store = await _make_store()
+        await store.update_profile("s1", child_age="7", child_name="Kai")
+        await store.commit()
+        await store.update_profile("s1", child_age="8", child_name="Lucas")
+        await store.commit()
+
+        changelog = await store.get_profile_changelog("s1")
+        fields = {c.field for c in changelog}
+        assert "child_age" in fields
+        assert "child_name" in fields

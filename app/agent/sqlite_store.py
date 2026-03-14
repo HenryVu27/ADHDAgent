@@ -16,10 +16,12 @@ import aiosqlite
 from app.agent.store_protocol import SessionStoreBase
 from app.models.schemas import (
     EnrichedTrace,
+    EpisodeLink,
     EpisodicMemory,
     FamilyProfile,
     Goal,
     Outcome,
+    ProfileChange,
     SeedSessionRequest,
     SessionListItem,
     SessionState,
@@ -40,6 +42,11 @@ class SQLiteSessionStore(SessionStoreBase):
         "good_day_description", "hardest_situations",
     })
 
+    _SCALAR_PROFILE_FIELDS = frozenset({
+        "child_name", "child_age", "diagnosis_status",
+        "adhd_subtype", "good_day_description",
+    })
+
     def __init__(self, conn: aiosqlite.Connection):
         self._conn = conn
 
@@ -57,9 +64,9 @@ class SQLiteSessionStore(SessionStoreBase):
     async def delete_session(self, session_id: str) -> None:
         """Delete all data for a session (cascading). Commits internally."""
         for table in (
-            "tool_results", "turn_analyses", "traces", "episodes", "session_summaries",
-            "active_strategies", "outcomes", "goals", "messages",
-            "family_profiles", "sessions",
+            "tool_results", "turn_analyses", "traces", "episode_links", "episodes",
+            "session_summaries", "active_strategies", "outcomes", "goals", "messages",
+            "family_profiles", "profile_changelog", "sessions",
         ):
             await self._conn.execute(f"DELETE FROM {table} WHERE session_id = ?", (session_id,))
         await self._conn.commit()
@@ -186,6 +193,14 @@ class SQLiteSessionStore(SessionStoreBase):
 
         list_fields = ("challenge_areas", "attempted_strategies", "hardest_situations")
 
+        # Get current turn for changelog entries
+        cursor2 = await self._conn.execute(
+            "SELECT turn_count FROM sessions WHERE session_id = ?",
+            (session_id,),
+        )
+        turn_row = await cursor2.fetchone()
+        current_turn = turn_row["turn_count"] if turn_row else 0
+
         for field, value in kwargs.items():
             if value is None:
                 continue
@@ -198,6 +213,17 @@ class SQLiteSessionStore(SessionStoreBase):
                 await self._conn.execute(
                     f"UPDATE family_profiles SET {field} = ? WHERE session_id = ?",
                     (json.dumps(merged), session_id),
+                )
+            elif field in self._SCALAR_PROFILE_FIELDS:
+                old_value = prof_row[field]
+                if old_value is not None and old_value != value:
+                    await self._conn.execute(
+                        "INSERT INTO profile_changelog (session_id, field, old_value, new_value, turn) VALUES (?, ?, ?, ?, ?)",
+                        (session_id, field, str(old_value), str(value), current_turn),
+                    )
+                await self._conn.execute(
+                    f"UPDATE family_profiles SET {field} = ? WHERE session_id = ?",
+                    (value, session_id),
                 )
             else:
                 await self._conn.execute(
@@ -469,10 +495,29 @@ class SQLiteSessionStore(SessionStoreBase):
         )
         await self._touch_updated(session_id)
 
-    async def add_episode(self, session_id: str, episode: EpisodicMemory) -> None:
-        """Persist an episodic memory."""
+    async def get_profile_changelog(self, session_id: str) -> list[ProfileChange]:
+        """Return all profile field changes, oldest first."""
+        cursor = await self._conn.execute(
+            "SELECT field, old_value, new_value, turn, created_at "
+            "FROM profile_changelog WHERE session_id = ? ORDER BY id",
+            (session_id,),
+        )
+        rows = await cursor.fetchall()
+        return [
+            ProfileChange(
+                field=r["field"],
+                old_value=r["old_value"],
+                new_value=r["new_value"],
+                turn=r["turn"],
+                created_at=r["created_at"] or "",
+            )
+            for r in rows
+        ]
+
+    async def add_episode(self, session_id: str, episode: EpisodicMemory) -> int:
+        """Persist an episodic memory. Returns the new episode's row ID."""
         await self._ensure_session(session_id)
-        await self._conn.execute(
+        cursor = await self._conn.execute(
             "INSERT INTO episodes (session_id, event_type, summary, outcome, strategies_involved, emotional_context, turn_range_start, turn_range_end) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 session_id,
@@ -486,6 +531,7 @@ class SQLiteSessionStore(SessionStoreBase):
             ),
         )
         await self._touch_updated(session_id)
+        return cursor.lastrowid
 
     async def get_recent_episodes(self, session_id: str, limit: int = 5) -> list[EpisodicMemory]:
         """Return the most recent episodic memories."""
@@ -505,6 +551,58 @@ class SQLiteSessionStore(SessionStoreBase):
                 turn_range_end=r["turn_range_end"],
             )
             for r in reversed(rows)
+        ]
+
+    async def get_episodes_with_ids(self, session_id: str, limit: int = 20) -> list[tuple[int, EpisodicMemory]]:
+        """Return (id, EpisodicMemory) tuples for recent episodes, for linking purposes."""
+        cursor = await self._conn.execute(
+            "SELECT id, event_type, summary, outcome, strategies_involved, emotional_context, "
+            "turn_range_start, turn_range_end FROM episodes WHERE session_id = ? ORDER BY id DESC LIMIT ?",
+            (session_id, limit),
+        )
+        rows = await cursor.fetchall()
+        return [
+            (
+                r["id"],
+                EpisodicMemory(
+                    event_type=r["event_type"],
+                    summary=r["summary"],
+                    outcome=r["outcome"],
+                    strategies_involved=json.loads(r["strategies_involved"]),
+                    emotional_context=r["emotional_context"],
+                    turn_range_start=r["turn_range_start"],
+                    turn_range_end=r["turn_range_end"],
+                ),
+            )
+            for r in reversed(rows)
+        ]
+
+    async def add_episode_link(self, session_id: str, link: EpisodeLink) -> None:
+        """Persist a link between two episodes."""
+        await self._ensure_session(session_id)
+        await self._conn.execute(
+            "INSERT OR IGNORE INTO episode_links (session_id, source_id, target_id, link_type, link_reason) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (session_id, link.source_id, link.target_id, link.link_type, link.link_reason),
+        )
+
+    async def get_episode_links(self, session_id: str) -> list[EpisodeLink]:
+        """Return all episode links for a session."""
+        cursor = await self._conn.execute(
+            "SELECT source_id, target_id, link_type, link_reason, created_at "
+            "FROM episode_links WHERE session_id = ? ORDER BY id",
+            (session_id,),
+        )
+        rows = await cursor.fetchall()
+        return [
+            EpisodeLink(
+                source_id=r["source_id"],
+                target_id=r["target_id"],
+                link_type=r["link_type"],
+                link_reason=r["link_reason"],
+                created_at=r["created_at"] or "",
+            )
+            for r in rows
         ]
 
     async def get_messages_range(
