@@ -405,3 +405,62 @@ class TestErrorResilience:
 
         profile = (await store.get("s1")).family_profile
         assert profile.child_name is None
+
+
+class TestConflictDetection:
+
+    @pytest.mark.asyncio
+    async def test_negated_strategy_triggers_outcome(self):
+        """When user says a strategy doesn't work, an outcome entry is created."""
+        store = await create_in_memory_store()
+        await store.update_profile("s1", attempted_strategies=["timer technique"])
+        await store.commit()
+
+        # LLM extracts a negation
+        gemini = _make_gemini_mock(extract_json_return={
+            "negated_strategies": ["timer technique"],
+        })
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+        await mm._extract_facts(
+            "s1",
+            "We stopped using the timer, it just made him more anxious.",
+            turn=3,
+        )
+
+        state = await store.get("s1")
+        negative_outcomes = [o for o in state.outcomes if o.signal == "negative"]
+        assert any("timer" in o.strategy_name.lower() for o in negative_outcomes)
+
+    @pytest.mark.asyncio
+    async def test_scalar_correction_emits_event(self):
+        """When age changes, the event bus receives a correction event."""
+        from unittest.mock import AsyncMock
+        store = await create_in_memory_store()
+        await store.update_profile("s1", child_age="7")
+        await store.commit()
+
+        event_bus = AsyncMock()
+        event_bus.emit = AsyncMock()
+
+        gemini = _make_gemini_mock(extract_json_return={"child_age": "8"})
+        mm = MemoryManager(session_store=store, gemini_client=gemini, event_bus=event_bus)
+
+        await mm._extract_facts("s1", "Oh, he just turned 8 last week.", turn=4)
+
+        event_bus.emit.assert_called()
+        call_args = [str(c) for c in event_bus.emit.call_args_list]
+        assert any("correction" in arg.lower() or "profile_corrected" in arg for arg in call_args)
+
+    @pytest.mark.asyncio
+    async def test_no_negation_in_normal_message(self):
+        """Normal message with no negations should not create negative outcomes."""
+        store = await create_in_memory_store()
+        await store.update_profile("s1", attempted_strategies=["timer technique"])
+        await store.commit()
+
+        gemini = _make_gemini_mock(extract_json_return={"child_age": "8"})
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+        await mm._extract_facts("s1", "He just turned 8.", turn=4)
+
+        state = await store.get("s1")
+        assert state.outcomes == []

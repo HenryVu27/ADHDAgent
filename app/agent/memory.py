@@ -29,6 +29,7 @@ class MemoryManager:
         user_message: str,
         assistant_response: str,
         tool_calls: list[dict] | None = None,
+        force_summary: bool = False,
     ) -> None:
         """Fire background memory tasks after a turn completes.
 
@@ -37,8 +38,8 @@ class MemoryManager:
         """
         tasks = []
 
-        # Rolling summary: only at interval boundaries
-        if turn > 0 and turn % settings.SUMMARY_INTERVAL_TURNS == 0:
+        # Rolling summary: at interval boundaries OR when context is filling up
+        if turn > 0 and (turn % settings.SUMMARY_INTERVAL_TURNS == 0 or force_summary):
             tasks.append(self._update_summary(session_id, turn))
 
         # Fact extraction: only for substantive user messages
@@ -82,21 +83,42 @@ class MemoryManager:
             f"{m['role'].upper()}: {m['content']}" for m in messages
         )
 
-        prior_summary = existing.summary if existing else ""
-        prompt = f"""Summarize this ADHD coaching conversation concisely. Focus on:
-- Key family information shared
-- Strategies discussed or recommended
-- Parent's emotional state and concerns
-- Any outcomes or progress reported
+        # Load structured profile so the summary doesn't duplicate it
+        state = await self._store.get(session_id)
+        profile = state.family_profile
+        known_facts = []
+        if profile.child_name:
+            known_facts.append(f"child_name={profile.child_name}")
+        if profile.child_age:
+            known_facts.append(f"child_age={profile.child_age}")
+        if profile.challenge_areas:
+            known_facts.append(f"challenges={', '.join(profile.challenge_areas)}")
+        if profile.attempted_strategies:
+            known_facts.append(f"tried={', '.join(profile.attempted_strategies)}")
+        profile_note = (
+            f"Already stored in structured profile (do NOT repeat in summary): {'; '.join(known_facts)}"
+            if known_facts else ""
+        )
 
-Omit: greetings, small talk, generic acknowledgments, and information already captured in the previous summary.
+        prior_summary = existing.summary if existing else ""
+        prompt = f"""Summarize the emotional and narrative arc of this ADHD coaching conversation.
+
+Focus ONLY on what is NOT already captured in the structured family profile:
+- How the parent is feeling and what's weighing on them
+- Specific concerns, quotes, or worries they've expressed
+- How the conversation has evolved (what was tried, how they reacted)
+- Relational context (frustration level, trust built, resistance encountered)
+
+{profile_note}
+
+Omit: demographic facts, strategy names, diagnosis details, and anything already in the previous summary.
 
 {f"Previous summary: {prior_summary}" if prior_summary else ""}
 
 New conversation to incorporate:
 {conversation_text}
 
-Write a concise summary (2-4 sentences) that captures the most important context for continuing this conversation."""
+Write a concise summary (2-4 sentences) focused on narrative and emotional context only."""
 
         try:
             summary_text = await self._gemini.generate(prompt, temperature=0.0, max_output_tokens=256,
@@ -151,6 +173,11 @@ Return a JSON object with only the fields that are explicitly mentioned or clear
 - attempted_strategies (list of strings)
 - good_day_description (string)
 - hardest_situations (list of strings)
+- negated_strategies (list of strings — strategies explicitly stated to NOT work, be abandoned, or cause problems)
+
+For negated_strategies: include a strategy name ONLY if the parent explicitly says it failed, stopped working,
+was abandoned, caused problems, or they no longer use it. Examples: "we stopped using timers",
+"the reward chart didn't work", "sticker charts made things worse".
 
 If the parent corrects previously shared information, extract the CORRECTED value.
 If information is ambiguous, use the parent's phrasing (e.g., "about 8 or 9" -> "8-9").
@@ -169,6 +196,27 @@ Parent message:
             facts = await self._gemini.extract_json(prompt, max_output_tokens=512,
                                                         timeout=settings.MEMORY_TIMEOUT_S)
             if isinstance(facts, dict) and facts:
+                # Handle negated strategies — create negative outcomes
+                negated = facts.get("negated_strategies", [])
+                if isinstance(negated, list) and negated:
+                    for strategy in negated:
+                        if isinstance(strategy, str) and strategy.strip():
+                            await self._store.add_outcome(
+                                session_id,
+                                strategy_name=strategy.strip(),
+                                outcome="negative",
+                                notes="Parent indicated this strategy is not working or was abandoned.",
+                            )
+                            logger.info(
+                                "Negated strategy recorded for session %s (turn %d): %s",
+                                session_id, turn, strategy,
+                            )
+                            if self._event_bus:
+                                await self._event_bus.emit(
+                                    "memory", "strategy_negated", session_id, turn,
+                                    detail={"strategy": strategy},
+                                )
+
                 # Filter to valid profile fields only
                 valid_fields = {
                     "child_name", "child_age", "diagnosis_status", "adhd_subtype",
@@ -185,6 +233,23 @@ Parent message:
                     if self._event_bus:
                         await self._event_bus.emit("memory", "facts_extracted", session_id, turn,
                                                    detail={"fields": list(filtered.keys())})
+                    # Check for scalar corrections via changelog
+                    scalar_fields = {"child_name", "child_age", "diagnosis_status", "adhd_subtype", "good_day_description"}
+                    corrections = {k: v for k, v in filtered.items() if k in scalar_fields}
+                    if corrections and self._event_bus:
+                        changelog = await self._store.get_profile_changelog(session_id)
+                        # A changelog entry for a field we just updated means a correction was detected
+                        corrected_field_names = set(corrections.keys())
+                        detected = [
+                            c for c in changelog
+                            if c.field in corrected_field_names
+                            and c.new_value == str(corrections.get(c.field, ""))
+                        ]
+                        if detected:
+                            await self._event_bus.emit(
+                                "memory", "profile_corrected", session_id, turn,
+                                detail={"fields": [c.field for c in detected]},
+                            )
         except Exception as e:
             logger.error("Fact extraction failed for session %s: %s", session_id, e)
             raise
