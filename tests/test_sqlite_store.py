@@ -425,3 +425,44 @@ class TestProfileChangelog:
         fields = {c.field for c in changelog}
         assert "child_age" in fields
         assert "child_name" in fields
+
+
+class TestEpisodeLinks:
+
+    async def test_add_and_retrieve_link(self):
+        store = await _make_store()
+        from app.models.schemas import EpisodicMemory, EpisodeLink
+        ep1 = EpisodicMemory(event_type="outcome_reported", summary="Timer failed", outcome="negative",
+                             strategies_involved=["timer"], turn_range_start=1, turn_range_end=1)
+        ep2 = EpisodicMemory(event_type="outcome_reported", summary="Timer failed again", outcome="negative",
+                             strategies_involved=["timer"], turn_range_start=5, turn_range_end=5)
+        await store.add_episode("s1", ep1)
+        await store.add_episode("s1", ep2)
+        await store.commit()
+
+        links_before = await store.get_episode_links("s1")
+        assert links_before == []
+
+        link = EpisodeLink(source_id=1, target_id=2, link_type="same_strategy",
+                           link_reason="Both involve 'timer'")
+        await store.add_episode_link("s1", link)
+        await store.commit()
+
+        links = await store.get_episode_links("s1")
+        assert len(links) == 1
+        assert links[0].link_type == "same_strategy"
+
+    async def test_links_deleted_with_session(self):
+        store = await _make_store()
+        from app.models.schemas import EpisodicMemory, EpisodeLink
+        ep = EpisodicMemory(event_type="outcome_reported", summary="test", outcome="negative",
+                            strategies_involved=[], turn_range_start=1, turn_range_end=1)
+        ep_id = await store.add_episode("s1", ep)
+        await store.commit()
+        link = EpisodeLink(source_id=ep_id, target_id=ep_id, link_type="self", link_reason="test")
+        await store.add_episode_link("s1", link)
+        await store.commit()
+
+        await store.delete_session("s1")
+        links = await store.get_episode_links("s1")
+        assert links == []

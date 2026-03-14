@@ -9,7 +9,7 @@ import logging
 
 from app.agent.store_protocol import SessionStoreBase
 from app.config import settings
-from app.models.schemas import EpisodicMemory, SessionSummary
+from app.models.schemas import EpisodeLink, EpisodicMemory, SessionSummary
 
 logger = logging.getLogger(__name__)
 
@@ -297,7 +297,7 @@ Parent message:
                 turn_range_start=turn,
                 turn_range_end=turn,
             )
-            await self._store.add_episode(session_id, episode)
+            episode_id = await self._store.add_episode(session_id, episode)
             logger.info(
                 "Episode created for session %s: %s -> %s",
                 session_id, strategy_name, outcome,
@@ -305,6 +305,7 @@ Parent message:
             if self._event_bus:
                 await self._event_bus.emit("memory", "episode_created", session_id, turn,
                                            detail={"strategy": strategy_name, "outcome": outcome})
+            asyncio.create_task(self._link_episode(session_id, episode_id, episode))
 
     _HIGH_INTENSITY_EMOTIONS = frozenset({"overwhelmed", "frustrated", "anxious"})
     _POSITIVE_EMOTIONS = frozenset({"positive", "hopeful"})
@@ -344,13 +345,14 @@ Parent message:
                 turn_range_start=turn,
                 turn_range_end=turn,
             )
-            await self._store.add_episode(session_id, episode)
+            episode_id = await self._store.add_episode(session_id, episode)
             logger.info("Goal episode created for session %s: %s", session_id, event_type)
             if self._event_bus:
                 await self._event_bus.emit(
                     "memory", event_type, session_id, turn,
                     detail={"goal": description},
                 )
+            asyncio.create_task(self._link_episode(session_id, episode_id, episode))
 
     async def _create_emotional_shift_episode(
         self,
@@ -381,18 +383,54 @@ Parent message:
             turn_range_start=turn,
             turn_range_end=turn,
         )
-        await self._store.add_episode(session_id, episode)
+        episode_id = await self._store.add_episode(session_id, episode)
         logger.info("Emotional shift episode for session %s: %s", session_id, emotion)
         if self._event_bus:
             await self._event_bus.emit(
                 "memory", "emotional_shift", session_id, turn,
                 detail={"emotion": emotion},
             )
+        asyncio.create_task(self._link_episode(session_id, episode_id, episode))
 
     async def _run_emotional_shift_check(self, session_id: str, turn: int, user_message: str) -> None:
         """Infer emotion and create episode if high-intensity or strongly positive."""
         emotion = await self._infer_emotion(session_id, user_message)
         await self._create_emotional_shift_episode(session_id, turn, user_message, emotion)
+
+    async def _link_episode(self, session_id: str, new_episode_id: int, new_episode: EpisodicMemory) -> None:
+        """Find related prior episodes and create rule-based links."""
+        try:
+            prior = await self._store.get_episodes_with_ids(session_id, limit=20)
+            for prior_id, prior_ep in prior:
+                if prior_id == new_episode_id:
+                    continue
+                link_type = None
+                link_reason = ""
+
+                # Same strategy involved
+                shared_strategies = set(new_episode.strategies_involved) & set(prior_ep.strategies_involved)
+                if shared_strategies:
+                    link_type = "same_strategy"
+                    link_reason = f"Both involve: {', '.join(shared_strategies)}"
+
+                # Same strong emotion
+                elif (new_episode.emotional_context
+                      and prior_ep.emotional_context
+                      and new_episode.emotional_context == prior_ep.emotional_context
+                      and new_episode.emotional_context in self._HIGH_INTENSITY_EMOTIONS | self._POSITIVE_EMOTIONS):
+                    link_type = "same_emotion"
+                    link_reason = f"Both reflect '{new_episode.emotional_context}' emotional state"
+
+                if link_type:
+                    link = EpisodeLink(
+                        source_id=new_episode_id,
+                        target_id=prior_id,
+                        link_type=link_type,
+                        link_reason=link_reason,
+                    )
+                    await self._store.add_episode_link(session_id, link)
+        except Exception as e:
+            logger.warning("Episode linking failed (non-critical): %s", e)
 
     async def _infer_emotion(self, session_id: str, user_message: str) -> str:
         """Classify the parent's emotional state using an LLM call with conversation context."""
