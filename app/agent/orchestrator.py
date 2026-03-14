@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import time
+from collections.abc import AsyncGenerator
 from datetime import datetime, timezone
 
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
@@ -10,7 +11,6 @@ from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 from app.agent.store_protocol import SessionStoreBase
 from app.models.schemas import (
     AgentReasoningStep,
-    ChatResponse,
     ConversationPhase,
     EnrichedTrace,
     PipelineStep,
@@ -38,6 +38,31 @@ def _extract_text(content) -> str:
 class AgentOrchestrator:
     """Manages sessions and runs the compiled ReAct agent."""
 
+    _STATIC_FALLBACK = (
+        "I want to make sure I give you the best help. "
+        "Could you tell me a bit more about what you'd like to focus on?"
+    )
+
+    _TOOL_STATUS_MAP = {
+        "search_knowledge_base": "Looking up strategies...",
+        "get_family_profile": "Reading your profile...",
+        "update_family_profile": "Updating your profile...",
+        "track_outcome": "Recording outcome...",
+        "manage_goals": "Managing goals...",
+    }
+
+    @staticmethod
+    def _extract_token_text(chunk) -> str:
+        """Extract streamable text from an AIMessageChunk, skipping thinking parts."""
+        content = getattr(chunk, "content", "")
+        if isinstance(content, list):
+            return "".join(
+                part.get("text", "")
+                for part in content
+                if isinstance(part, dict) and part.get("type") == "text"
+            )
+        return content if isinstance(content, str) else ""
+
     def __init__(self, agent, session_store: SessionStoreBase, memory_manager=None, analyzer=None, event_bus=None):
         self._agent = agent
         self._session_store = session_store
@@ -60,32 +85,50 @@ class AgentOrchestrator:
     async def seed_session(self, request: SeedSessionRequest) -> None:
         await self._session_store.seed_session(request)
 
-    async def process(self, message: str, session_id: str) -> ChatResponse:
-        """Run the ReAct agent for a single parent message."""
+    async def process_stream(
+        self, message: str, session_id: str
+    ) -> AsyncGenerator[tuple[str, dict], None]:
+        """Stream the ReAct agent response as SSE (event_type, data) tuples.
+
+        Event sequence:
+            status  -- input gate passed; each tool invocation
+            token   -- one text chunk from the final LLM response
+            replace -- output gate replaced the streamed response
+            done    -- stream complete, session committed
+            error   -- timeout or unhandled exception
+
+        Design notes (see docs/superpowers/specs/2026-03-13-streaming-design.md):
+        - Tokens filtered by: (1) checkpoint namespace starting with pro/flash_react_agent,
+          (2) no tool_call_chunks, (3) skip thinking content parts (type="thinking").
+        - Route captured from first on_chain_start with langgraph_node == pro/flash_react_agent.
+        - Output gate replacement detected from trace_steps, not string comparison.
+        - On error/timeout: persists fallback text, yields error event, returns.
+        - Memory and analyzer run as background tasks after done is emitted.
+        """
         turn = await self._session_store.increment_turn(session_id)
         logger.info(
-            "[agent] === START === session=%s, turn=%d, message=%.80s",
+            "[agent:stream] === START === session=%s, turn=%d, message=%.80s",
             session_id, turn, message,
         )
 
         if self._event_bus:
-            await self._event_bus.emit("agent", "turn_start", session_id, turn, detail={"message_preview": message[:80]})
+            await self._event_bus.emit(
+                "agent", "turn_start", session_id, turn,
+                detail={"message_preview": message[:80]},
+            )
 
         from app.config import settings
 
-        # Build full message list from conversation history so the agent
-        # has multi-turn context (previous turns were stored but never passed back).
+        # Build history (same logic as the former process())
         stored_messages = await self._session_store.get_messages(session_id)
-
-        # Skip messages already captured by the rolling summary
         latest_summary = await self._session_store.get_latest_summary(session_id)
         summary_through_turn = latest_summary.covers_through_turn if latest_summary else 0
 
         history_messages = []
+        unsummarized_chars = 0
         for entry in stored_messages:
             if entry.get("blocked"):
-                continue  # Skip blocked turns
-            # Skip messages from turns already covered by the rolling summary
+                continue
             msg_turn = entry.get("turn", 0)
             if summary_through_turn > 0 and msg_turn <= summary_through_turn:
                 continue
@@ -93,54 +136,93 @@ class AgentOrchestrator:
                 history_messages.append(HumanMessage(content=entry["content"]))
             elif entry["role"] == "assistant":
                 history_messages.append(AIMessage(content=entry["content"]))
+            unsummarized_chars += len(entry.get("content", ""))
 
-        start = time.time()
+        # Trigger rolling summary if unsummarized history fills context budget
+        context_utilization = unsummarized_chars / settings.CONTEXT_MAX_CHARS
+        force_summary = context_utilization >= 0.8
+
         config = {
             "configurable": {"session_id": session_id},
             "recursion_limit": settings.AGENT_MAX_TOOL_STEPS * 2 + 5,
         }
 
+        start = time.time()
+        route = "pro"
+        accumulated_text = ""
+        result_state: dict = {}
+
         try:
-            result = await self._agent.ainvoke(
-                {
-                    "messages": history_messages + [HumanMessage(content=message)],
-                    "session_id": session_id,
-                },
-                config=config,
-            )
-        except Exception as e:
-            total_ms = (time.time() - start) * 1000
-            logger.warning("[agent] Agent invocation failed (%s) — using static fallback", type(e).__name__)
-            response_text = (
-                "I want to make sure I give you the best help. "
-                "Could you tell me a bit more about what you'd like to focus on?"
-            )
+            async with asyncio.timeout(settings.CHAT_TIMEOUT_S):
+                async for event in self._agent.astream_events(
+                    {
+                        "messages": history_messages + [HumanMessage(content=message)],
+                        "session_id": session_id,
+                    },
+                    config=config,
+                    version="v2",
+                ):
+                    etype = event["event"]
+                    meta = event.get("metadata", {})
+                    node = meta.get("langgraph_node", "")
+                    ns = meta.get("langgraph_checkpoint_ns", "")
+
+                    # Detect which react agent ran (sets route for agent_used label)
+                    if etype == "on_chain_start" and node in ("pro_react_agent", "flash_react_agent"):
+                        route = "flash" if node == "flash_react_agent" else "pro"
+                        yield ("status", {"text": "Thinking..."})
+
+                    # Named status per tool call
+                    elif etype == "on_tool_start" and node == "tools":
+                        tool_name = event.get("name", "")
+                        yield ("status", {"text": self._TOOL_STATUS_MAP.get(tool_name, "Working on it...")})
+
+                    # Stream final-response tokens only
+                    elif (
+                        etype == "on_chat_model_stream"
+                        and node == "agent"
+                        and (ns.startswith("pro_react_agent") or ns.startswith("flash_react_agent"))
+                    ):
+                        chunk = event["data"]["chunk"]
+                        if getattr(chunk, "tool_call_chunks", None):
+                            continue  # tool-invocation step -- skip
+                        text = self._extract_token_text(chunk)
+                        if text:
+                            accumulated_text += text
+                            yield ("token", {"text": text})
+
+                    # Capture final graph state from top-level on_chain_end
+                    elif etype == "on_chain_end" and not node and not ns:
+                        output = event.get("data", {}).get("output", {})
+                        if isinstance(output, dict):
+                            result_state = output
+
+        except asyncio.TimeoutError:
+            logger.warning("[agent:stream] Timeout session=%s", session_id)
             await self._session_store.add_message(session_id, "user", message, turn)
-            await self._session_store.add_message(session_id, "assistant", response_text, turn)
+            await self._session_store.add_message(session_id, "assistant", self._STATIC_FALLBACK, turn)
             await self._session_store.commit()
-            trace = PipelineTrace(
-                steps=[PipelineStep(name="react_agent", duration_ms=total_ms, detail={"error": str(e)})],
-                total_duration_ms=total_ms,
-                agent_used="react_agent_fallback",
-            )
-            return ChatResponse(
-                response=response_text,
-                agent_used="react_agent_fallback",
-                phase=await self._infer_phase(session_id),
-                pipeline_trace=trace,
-                session_id=session_id,
-            )
+            yield ("error", {"message": "Request timed out. Please try again."})
+            return
+
+        except Exception as exc:
+            logger.warning("[agent:stream] Exception session=%s: %s", session_id, exc)
+            await self._session_store.add_message(session_id, "user", message, turn)
+            await self._session_store.add_message(session_id, "assistant", self._STATIC_FALLBACK, turn)
+            await self._session_store.commit()
+            yield ("error", {"message": "Something went wrong. Please try again."})
+            return
 
         total_ms = (time.time() - start) * 1000
 
-        # Check if input was blocked
-        if result.get("input_blocked"):
-            response_text = result.get("block_response", "")
-            # Record blocked turn
+        # --- Input-blocked path ---
+        if result_state.get("input_blocked"):
+            response_text = result_state.get("block_response", "")
             blocked_reason = ""
-            for step in result.get("trace_steps", []):
+            for step in result_state.get("trace_steps", []):
                 if step.get("name") == "input_gate":
                     blocked_reason = step.get("detail", {}).get("blocked_reason", "")
+
             await self._session_store.add_message(
                 session_id, "user", message, turn,
                 blocked=True, blocked_reason=blocked_reason,
@@ -149,14 +231,11 @@ class AgentOrchestrator:
                 session_id, "assistant", response_text, turn,
                 blocked=True, blocked_reason=blocked_reason,
             )
-            trace = self._build_trace(result, total_ms)
-
-            # Persist enriched trace for blocked turns
             enriched = EnrichedTrace(
                 session_id=session_id,
                 turn=turn,
                 timestamp=datetime.now(timezone.utc).isoformat(),
-                pipeline_steps=[PipelineStep(**s) for s in result.get("trace_steps", [])],
+                pipeline_steps=[PipelineStep(**s) for s in result_state.get("trace_steps", [])],
                 total_duration_ms=total_ms,
                 input_blocked=True,
                 blocked_reason=blocked_reason,
@@ -166,21 +245,24 @@ class AgentOrchestrator:
             await self._session_store.commit()
 
             if self._event_bus:
-                await self._event_bus.emit("agent", "turn_blocked", session_id, turn, total_ms, detail={"reason": blocked_reason})
+                await self._event_bus.emit(
+                    "agent", "turn_blocked", session_id, turn, total_ms,
+                    detail={"reason": blocked_reason},
+                )
 
-            logger.info("[agent] === BLOCKED === session=%s, reason=input_gate", session_id)
-            return ChatResponse(
-                response=response_text,
-                agent_used="input_gate",
-                phase=await self._infer_phase(session_id),
-                pipeline_trace=trace,
-                session_id=session_id,
-            )
+            trace = self._build_trace(result_state, total_ms)
+            phase = await self._infer_phase(session_id)
+            yield ("done", {
+                "session_id": session_id,
+                "agent_used": "input_gate",
+                "phase": phase.value,
+                "pipeline_trace": trace.model_dump(),
+                "response": response_text,
+            })
+            return
 
-        # Extract the final AI response from NEW messages only (skip history).
-        # Anchor on the last HumanMessage (our current message) rather than
-        # counting, since LangGraph may modify the message list internally.
-        all_messages = result.get("messages", [])
+        # --- Normal path: extract final response from result state ---
+        all_messages = result_state.get("messages", [])
         last_human_idx = -1
         for i in range(len(all_messages) - 1, -1, -1):
             if isinstance(all_messages[i], HumanMessage):
@@ -188,35 +270,37 @@ class AgentOrchestrator:
                 break
         new_messages = all_messages[last_human_idx + 1:] if last_human_idx >= 0 else []
 
-        response_text = ""
+        final_response = ""
         tool_calls_made = []
         for msg in new_messages:
             if isinstance(msg, AIMessage):
                 if msg.tool_calls:
                     tool_calls_made.extend(msg.tool_calls)
                 elif msg.content:
-                    # Only non-tool-calling AI messages count as final response
-                    response_text = _extract_text(msg.content)
+                    final_response = _extract_text(msg.content)
 
-        # Fallback if agent produced no final text response
-        is_empty = not response_text.strip() if isinstance(response_text, str) else not response_text
-        if is_empty:
-            logger.warning("[agent] Empty response from agent — using static fallback")
-            response_text = (
-                "I want to make sure I give you the best help. "
-                "Could you tell me a bit more about what you'd like to focus on?"
-            )
+        if not final_response.strip():
+            final_response = self._STATIC_FALLBACK
 
-        # Record turn in conversation history
+        # Emit replace event if output gate replaced the streamed content
+        output_gate_replaced = any(
+            s.get("name") == "output_gate" and not s.get("detail", {}).get("is_valid", True)
+            for s in result_state.get("trace_steps", [])
+        )
+        if output_gate_replaced:
+            yield ("replace", {"text": final_response})
+
+        # Post-processing -- these block done to keep trace accurate
         tool_summary = self._build_tool_calls_summary(tool_calls_made)
         await self._session_store.add_message(session_id, "user", message, turn)
-        await self._session_store.add_message(session_id, "assistant", response_text, turn, tool_calls_summary=tool_summary)
+        await self._session_store.add_message(
+            session_id, "assistant", final_response, turn,
+            tool_calls_summary=tool_summary,
+        )
 
-        # Persist tool results for cross-turn evidence
         for msg in new_messages:
             if isinstance(msg, ToolMessage):
-                tc_name = ""
-                tc_query = ""
+                tc_name = tc_query = ""
                 for tc in tool_calls_made:
                     if tc.get("id") == msg.tool_call_id:
                         tc_name = tc.get("name", "")
@@ -224,42 +308,41 @@ class AgentOrchestrator:
                         break
                 if tc_name == "search_knowledge_base":
                     result_text = msg.content if isinstance(msg.content, str) else str(msg.content)
-                    await self._session_store.save_tool_result(session_id, tc_name, tc_query, result_text, turn)
+                    await self._session_store.save_tool_result(
+                        session_id, tc_name, tc_query, result_text, turn,
+                    )
 
-        # Build and persist enriched trace
         enriched = self._build_enriched_trace(
-            session_id, turn, result, new_messages, tool_calls_made, total_ms,
+            session_id, turn, result_state, new_messages, tool_calls_made, total_ms,
         )
         await self._session_store.save_trace(session_id, enriched)
         await self._session_store.commit()
 
-        # Fire background memory tasks (non-blocking)
+        # Background tasks -- non-blocking, do not delay done
         if self._memory:
             self._track_task(
                 self._memory.post_turn_tasks(
                     session_id=session_id,
                     turn=turn,
                     user_message=message,
-                    assistant_response=response_text,
-                    tool_calls=[tc for tc in tool_calls_made],
+                    assistant_response=final_response,
+                    tool_calls=list(tool_calls_made),
+                    force_summary=force_summary,
                 ),
                 "memory",
             )
 
-        # Fire background analyzer (non-blocking)
         if self._analyzer:
             self._track_task(
                 self._analyzer.analyze_turn(
                     session_id=session_id,
                     turn=turn,
                     user_message=message,
-                    assistant_response=response_text,
+                    assistant_response=final_response,
                     enriched_trace=enriched,
                 ),
                 "analyzer",
             )
-
-        trace = self._build_trace(result, total_ms, tool_calls_made)
 
         if self._event_bus:
             await self._event_bus.emit(
@@ -267,21 +350,22 @@ class AgentOrchestrator:
                 detail={"tools": len(tool_calls_made), "model_tier": enriched.model_tier},
             )
 
+        agent_label = "flash_react_agent" if route == "flash" else "react_agent"
+        trace = self._build_trace(result_state, total_ms, tool_calls_made)
+        phase = await self._infer_phase(session_id)
+
         logger.info(
-            "[agent] === END === session=%s, tools=%d, duration=%.0fms",
+            "[agent:stream] === END === session=%s, tools=%d, duration=%.0fms",
             session_id, len(tool_calls_made), total_ms,
         )
 
-        route = result.get("route", "pro")
-        agent_label = "flash_react_agent" if route == "flash" else "react_agent"
-
-        return ChatResponse(
-            response=response_text,
-            agent_used=agent_label,
-            phase=await self._infer_phase(session_id),
-            pipeline_trace=trace,
-            session_id=session_id,
-        )
+        yield ("done", {
+            "session_id": session_id,
+            "agent_used": agent_label,
+            "phase": phase.value,
+            "pipeline_trace": trace.model_dump(),
+            "response": None,
+        })
 
     @staticmethod
     async def _safe_background(coro, label: str = "background") -> None:
