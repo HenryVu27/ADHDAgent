@@ -57,6 +57,19 @@ class MemoryManager:
                 session_id, turn, user_message, assistant_response, outcome_calls,
             ))
 
+        # Goal events: goal_set and goal_completed
+        goal_calls = [
+            tc for tc in tool_calls
+            if tc.get("name") == "manage_goals"
+            and tc.get("args", {}).get("action") in ("add", "complete")
+        ]
+        if goal_calls:
+            tasks.append(self._create_goal_episode(session_id, turn, user_message, goal_calls))
+
+        # Emotional shift: infer emotion for every substantive message
+        if len(user_message.strip()) >= settings.FACT_EXTRACTION_MIN_LENGTH:
+            tasks.append(self._run_emotional_shift_check(session_id, turn, user_message))
+
         if not tasks:
             return
 
@@ -292,6 +305,94 @@ Parent message:
             if self._event_bus:
                 await self._event_bus.emit("memory", "episode_created", session_id, turn,
                                            detail={"strategy": strategy_name, "outcome": outcome})
+
+    _HIGH_INTENSITY_EMOTIONS = frozenset({"overwhelmed", "frustrated", "anxious"})
+    _POSITIVE_EMOTIONS = frozenset({"positive", "hopeful"})
+
+    async def _create_goal_episode(
+        self,
+        session_id: str,
+        turn: int,
+        user_message: str,
+        goal_calls: list[dict],
+    ) -> None:
+        """Create an episodic memory for goal set or completion events."""
+        emotional_context = await self._infer_emotion(session_id, user_message)
+
+        for tc in goal_calls:
+            args = tc.get("args", {})
+            action = args.get("action", "")
+            description = args.get("description", "unknown goal")
+
+            if action == "add":
+                event_type = "goal_set"
+                summary = f"Parent set new goal: '{description}'"
+                outcome = ""
+            elif action == "complete":
+                event_type = "goal_completed"
+                summary = f"Parent completed goal: '{description}'"
+                outcome = "positive"
+            else:
+                continue
+
+            episode = EpisodicMemory(
+                event_type=event_type,
+                summary=summary,
+                outcome=outcome,
+                strategies_involved=[],
+                emotional_context=emotional_context,
+                turn_range_start=turn,
+                turn_range_end=turn,
+            )
+            await self._store.add_episode(session_id, episode)
+            logger.info("Goal episode created for session %s: %s", session_id, event_type)
+            if self._event_bus:
+                await self._event_bus.emit(
+                    "memory", event_type, session_id, turn,
+                    detail={"goal": description},
+                )
+
+    async def _create_emotional_shift_episode(
+        self,
+        session_id: str,
+        turn: int,
+        user_message: str,
+        emotion: str,
+    ) -> None:
+        """Create an episode for strongly negative emotions or positive breakthroughs."""
+        if not emotion:
+            return
+
+        if emotion in self._HIGH_INTENSITY_EMOTIONS:
+            summary = f"Parent expressed {emotion} emotional state at turn {turn}"
+            outcome = "mixed"
+        elif emotion in self._POSITIVE_EMOTIONS:
+            summary = f"Parent expressed {emotion} emotional state at turn {turn}"
+            outcome = "positive"
+        else:
+            return
+
+        episode = EpisodicMemory(
+            event_type="emotional_shift",
+            summary=summary,
+            outcome=outcome,
+            strategies_involved=[],
+            emotional_context=emotion,
+            turn_range_start=turn,
+            turn_range_end=turn,
+        )
+        await self._store.add_episode(session_id, episode)
+        logger.info("Emotional shift episode for session %s: %s", session_id, emotion)
+        if self._event_bus:
+            await self._event_bus.emit(
+                "memory", "emotional_shift", session_id, turn,
+                detail={"emotion": emotion},
+            )
+
+    async def _run_emotional_shift_check(self, session_id: str, turn: int, user_message: str) -> None:
+        """Infer emotion and create episode if high-intensity or strongly positive."""
+        emotion = await self._infer_emotion(session_id, user_message)
+        await self._create_emotional_shift_episode(session_id, turn, user_message, emotion)
 
     async def _infer_emotion(self, session_id: str, user_message: str) -> str:
         """Classify the parent's emotional state using an LLM call with conversation context."""

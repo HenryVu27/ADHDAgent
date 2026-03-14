@@ -206,12 +206,14 @@ class TestEpisodicMemory:
         )
 
         episodes = await store.get_recent_episodes("s1")
-        assert len(episodes) == 1
-        assert episodes[0].event_type == "outcome_reported"
-        assert "visual timer" in episodes[0].summary
-        assert episodes[0].outcome == "positive"
-        assert "visual timer" in episodes[0].strategies_involved
-        assert episodes[0].emotional_context == "hopeful"
+        # May include an emotional_shift episode in addition to outcome_reported
+        assert len(episodes) >= 1
+        outcome_eps = [ep for ep in episodes if ep.event_type == "outcome_reported"]
+        assert len(outcome_eps) == 1
+        assert "visual timer" in outcome_eps[0].summary
+        assert outcome_eps[0].outcome == "positive"
+        assert "visual timer" in outcome_eps[0].strategies_involved
+        assert outcome_eps[0].emotional_context == "hopeful"
 
     @pytest.mark.asyncio
     async def test_no_episode_without_track_outcome(self):
@@ -464,3 +466,73 @@ class TestConflictDetection:
 
         state = await store.get("s1")
         assert state.outcomes == []
+
+
+class TestBroaderEpisodicEvents:
+
+    @pytest.mark.asyncio
+    async def test_goal_set_creates_episode(self):
+        store = await _make_store_with_messages(turn_count=2)
+        gemini = _make_gemini_mock(generate_return="neutral")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        await mm.post_turn_tasks(
+            session_id="s1", turn=2,
+            user_message="Let's work on improving bedtime.",
+            assistant_response="Great, I'll set that as a goal.",
+            tool_calls=[{"name": "manage_goals", "args": {"action": "add", "description": "Improve bedtime routine"}}],
+        )
+
+        episodes = await store.get_recent_episodes("s1")
+        assert any(ep.event_type == "goal_set" for ep in episodes)
+
+    @pytest.mark.asyncio
+    async def test_goal_completed_creates_episode(self):
+        store = await _make_store_with_messages(turn_count=3)
+        gemini = _make_gemini_mock(generate_return="hopeful")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        await mm.post_turn_tasks(
+            session_id="s1", turn=3,
+            user_message="We actually got bedtime sorted!",
+            assistant_response="That's wonderful progress.",
+            tool_calls=[{"name": "manage_goals", "args": {"action": "complete", "description": "Improve bedtime routine"}}],
+        )
+
+        episodes = await store.get_recent_episodes("s1")
+        assert any(ep.event_type == "goal_completed" for ep in episodes)
+        completed = next(ep for ep in episodes if ep.event_type == "goal_completed")
+        assert completed.outcome == "positive"
+
+    @pytest.mark.asyncio
+    async def test_emotional_shift_creates_episode(self):
+        """A strongly negative emotion (overwhelmed) should create an emotional_shift episode."""
+        store = await _make_store_with_messages(turn_count=4)
+        # Mock: emotion inference returns "overwhelmed"
+        gemini = _make_gemini_mock(generate_return="overwhelmed")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        await mm.post_turn_tasks(
+            session_id="s1", turn=4,
+            user_message="I just don't know what to do anymore, I feel completely lost.",
+            assistant_response="I hear you, this sounds really hard.",
+        )
+
+        episodes = await store.get_recent_episodes("s1")
+        assert any(ep.event_type == "emotional_shift" for ep in episodes)
+
+    @pytest.mark.asyncio
+    async def test_neutral_emotion_no_emotional_episode(self):
+        """Neutral emotion should not create an emotional_shift episode."""
+        store = await _make_store_with_messages(turn_count=2)
+        gemini = _make_gemini_mock(generate_return="neutral")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        await mm.post_turn_tasks(
+            session_id="s1", turn=2,
+            user_message="He did okay today at school.",
+            assistant_response="Good to hear.",
+        )
+
+        episodes = await store.get_recent_episodes("s1")
+        assert not any(ep.event_type == "emotional_shift" for ep in episodes)
