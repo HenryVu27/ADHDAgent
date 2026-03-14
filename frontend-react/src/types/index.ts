@@ -78,13 +78,42 @@ export interface ChatRequest {
   session_id: string
 }
 
-export interface ChatResponse {
-  response: string
+// SSE streaming events from POST /api/chat/stream
+export interface StreamStatusEvent {
+  type: "status"
+  text: string
+}
+
+export interface StreamTokenEvent {
+  type: "token"
+  text: string
+}
+
+export interface StreamReplaceEvent {
+  type: "replace"
+  text: string
+}
+
+export interface StreamDoneEvent {
+  type: "done"
+  session_id: string
   agent_used: string
   phase: ConversationPhase
-  pipeline_trace: PipelineTrace
-  session_id: string
+  pipeline_trace: PipelineTrace | null
+  response: string | null  // only set on input-blocked path
 }
+
+export interface StreamErrorEvent {
+  type: "error"
+  message: string
+}
+
+export type StreamEvent =
+  | StreamStatusEvent
+  | StreamTokenEvent
+  | StreamReplaceEvent
+  | StreamDoneEvent
+  | StreamErrorEvent
 
 export interface SessionResponse {
   session_id: string
