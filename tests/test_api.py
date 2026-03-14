@@ -5,6 +5,7 @@ session store shares the same event loop as the test.
 """
 
 import asyncio
+import json as _json
 
 import httpx
 import pytest
@@ -21,19 +22,68 @@ from app.rag.knowledge_store import KnowledgeStore
 
 
 def _make_mock_agent():
-    """Create a mock agent that returns a simple AI response."""
+    """Mock agent whose astream_events yields a minimal successful event sequence."""
+    from langchain_core.messages import AIMessageChunk
+
+    response_text = "I'm here to help with ADHD parenting strategies."
+
+    async def mock_astream_events(*args, **kwargs):
+        yield {
+            "event": "on_chain_start",
+            "name": "LangGraph",
+            "metadata": {
+                "langgraph_node": "pro_react_agent",
+                "langgraph_checkpoint_ns": "pro_react_agent:test",
+            },
+            "data": {},
+        }
+        yield {
+            "event": "on_chat_model_stream",
+            "metadata": {
+                "langgraph_node": "agent",
+                "langgraph_checkpoint_ns": "pro_react_agent:test",
+            },
+            "data": {"chunk": AIMessageChunk(content=response_text)},
+        }
+        yield {
+            "event": "on_chain_end",
+            "metadata": {"langgraph_node": "", "langgraph_checkpoint_ns": ""},
+            "data": {
+                "output": {
+                    "messages": [
+                        HumanMessage(content="test message"),
+                        AIMessage(content=response_text),
+                    ],
+                    "input_blocked": False,
+                    "trace_steps": [],
+                }
+            },
+        }
+
     agent = AsyncMock()
-    agent.ainvoke = AsyncMock(return_value={
-        "messages": [
-            HumanMessage(content="test message"),
-            AIMessage(content="I'm here to help with ADHD parenting strategies."),
-        ],
-        "session_id": "test",
-        "input_blocked": False,
-        "block_response": "",
-        "trace_steps": [],
-    })
+    agent.astream_events = mock_astream_events
     return agent
+
+
+async def _consume_stream(response) -> dict:
+    """Parse a streaming /api/chat/stream response and return the done payload."""
+    assert response.status_code == 200
+    done_data = {}
+    buffer = ""
+    async for chunk in response.aiter_bytes():
+        buffer += chunk.decode()
+        while "\n\n" in buffer:
+            block, buffer = buffer.split("\n\n", 1)
+            event_type = ""
+            data_str = ""
+            for line in block.split("\n"):
+                if line.startswith("event: "):
+                    event_type = line[7:].strip()
+                elif line.startswith("data: "):
+                    data_str = line[6:]
+            if event_type == "done" and data_str:
+                done_data = _json.loads(data_str)
+    return done_data
 
 
 @pytest.fixture(autouse=True)
@@ -68,25 +118,23 @@ async def test_health_endpoint(client):
 
 
 async def test_chat_endpoint(client):
-    response = await client.post("/api/chat", json={
+    response = await client.post("/api/chat/stream", json={
         "message": "Hi, I need help with my child",
         "session_id": "api_test",
     })
-    assert response.status_code == 200
-    data = response.json()
-    assert "response" in data
+    data = await _consume_stream(response)
+    assert data["session_id"] == "api_test"
     assert "agent_used" in data
     assert "phase" in data
     assert "pipeline_trace" in data
-    assert data["session_id"] == "api_test"
 
 
 async def test_chat_returns_pipeline_trace(client):
-    response = await client.post("/api/chat", json={
+    response = await client.post("/api/chat/stream", json={
         "message": "My 7 year old won't do homework",
         "session_id": "trace_test",
     })
-    data = response.json()
+    data = await _consume_stream(response)
     trace = data["pipeline_trace"]
     assert len(trace["steps"]) > 0
     assert trace["total_duration_ms"] >= 0
@@ -94,7 +142,8 @@ async def test_chat_returns_pipeline_trace(client):
 
 async def test_session_endpoint(client):
     # Send a message first to create session
-    await client.post("/api/chat", json={"message": "Hi", "session_id": "session_api_test"})
+    stream_resp = await client.post("/api/chat/stream", json={"message": "Hi", "session_id": "session_api_test"})
+    await _consume_stream(stream_resp)
 
     response = await client.get("/api/session/session_api_test")
     assert response.status_code == 200
@@ -105,7 +154,8 @@ async def test_session_endpoint(client):
 
 
 async def test_outcomes_endpoint(client):
-    await client.post("/api/chat", json={"message": "Hi", "session_id": "outcomes_test"})
+    stream_resp = await client.post("/api/chat/stream", json={"message": "Hi", "session_id": "outcomes_test"})
+    await _consume_stream(stream_resp)
 
     response = await client.get("/api/session/outcomes_test/outcomes")
     assert response.status_code == 200
@@ -144,7 +194,7 @@ async def test_seed_session(client):
 # --- Step 2: Message validation tests ---
 
 async def test_chat_rejects_empty_message(client):
-    response = await client.post("/api/chat", json={
+    response = await client.post("/api/chat/stream", json={
         "message": "",
         "session_id": "val_test",
     })
@@ -152,7 +202,7 @@ async def test_chat_rejects_empty_message(client):
 
 
 async def test_chat_rejects_whitespace_message(client):
-    response = await client.post("/api/chat", json={
+    response = await client.post("/api/chat/stream", json={
         "message": "   \n\t  ",
         "session_id": "val_test",
     })
@@ -160,7 +210,7 @@ async def test_chat_rejects_whitespace_message(client):
 
 
 async def test_chat_rejects_oversized_message(client):
-    response = await client.post("/api/chat", json={
+    response = await client.post("/api/chat/stream", json={
         "message": "x" * 5001,
         "session_id": "val_test",
     })
@@ -170,23 +220,28 @@ async def test_chat_rejects_oversized_message(client):
 # --- Step 3: Timeout test ---
 
 async def test_chat_timeout(client):
-    async def slow_process(**kwargs):
-        await asyncio.sleep(10)
-
-    # Get the orchestrator from the override
-    orchestrator = app.dependency_overrides[get_orchestrator]()
-    orchestrator.process = slow_process
-
     from app.config import settings
+
+    async def slow_astream_events(*args, **kwargs):
+        await asyncio.sleep(60)
+        yield {}  # never reached
+
+    slow_agent = AsyncMock()
+    slow_agent.astream_events = slow_astream_events
+    store = await create_in_memory_store()
+    slow_orchestrator = AgentOrchestrator(agent=slow_agent, session_store=store)
+    app.dependency_overrides[get_orchestrator] = lambda: slow_orchestrator
+
     original = settings.CHAT_TIMEOUT_S
-    settings.CHAT_TIMEOUT_S = 0.01
+    settings.CHAT_TIMEOUT_S = 0.05
     try:
-        response = await client.post("/api/chat", json={
+        response = await client.post("/api/chat/stream", json={
             "message": "Hello",
             "session_id": "timeout_test",
         })
-        assert response.status_code == 504
-        assert "timed out" in response.json()["detail"]
+        assert response.status_code == 200
+        content = response.content.decode()
+        assert '"error"' in content
     finally:
         settings.CHAT_TIMEOUT_S = original
 
@@ -261,19 +316,19 @@ async def test_rate_limit_on_chat(client):
     original = settings.RATE_LIMIT_CHAT
     settings.RATE_LIMIT_CHAT = "2/minute"
     limiter.enabled = True
-    # Clear any prior rate limit state
     limiter.reset()
     try:
         # First 2 should succeed
         for _ in range(2):
-            response = await client.post("/api/chat", json={
+            response = await client.post("/api/chat/stream", json={
                 "message": "Hello",
                 "session_id": "rate_test",
             })
             assert response.status_code == 200
+            await _consume_stream(response)
 
         # Third should be rate limited
-        response = await client.post("/api/chat", json={
+        response = await client.post("/api/chat/stream", json={
             "message": "Hello",
             "session_id": "rate_test",
         })
@@ -306,7 +361,8 @@ async def test_get_nonexistent_session_outcomes_returns_404(client):
 async def test_sessions_list_pagination(client):
     # Create a few sessions
     for i in range(3):
-        await client.post("/api/chat", json={"message": "Hi", "session_id": f"page_{i}"})
+        r = await client.post("/api/chat/stream", json={"message": "Hi", "session_id": f"page_{i}"})
+        await _consume_stream(r)
 
     response = await client.get("/api/sessions?offset=0&limit=2")
     assert response.status_code == 200
@@ -320,7 +376,8 @@ async def test_sessions_list_pagination(client):
 async def test_messages_pagination(client):
     # Create a session with messages
     for i in range(3):
-        await client.post("/api/chat", json={"message": f"msg {i}", "session_id": "paginate_msgs"})
+        r = await client.post("/api/chat/stream", json={"message": f"msg {i}", "session_id": "paginate_msgs"})
+        await _consume_stream(r)
 
     response = await client.get("/api/session/paginate_msgs/messages?offset=0&limit=2")
     assert response.status_code == 200
