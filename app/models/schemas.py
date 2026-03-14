@@ -221,12 +221,12 @@ class ChatRequest(BaseModel):
         return v
 
 
-class ChatResponse(BaseModel):
-    response: str
-    agent_used: str
-    phase: ConversationPhase
-    pipeline_trace: PipelineTrace
+class StreamDonePayload(BaseModel):
     session_id: str
+    agent_used: str                        # "react_agent" | "flash_react_agent" | "input_gate"
+    phase: str                             # ConversationPhase value
+    pipeline_trace: PipelineTrace | None = None
+    response: str | None = None            # Only populated on input-blocked path
 
 
 class SessionResponse(BaseModel):
