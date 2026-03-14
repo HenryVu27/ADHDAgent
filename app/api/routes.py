@@ -2,16 +2,17 @@
 API routes for ADHDAgent.
 
 Endpoints:
-- POST /api/chat       — main pipeline
+- POST /api/chat/stream — main pipeline (SSE)
 - GET  /api/session/{id}  — session state
 - GET  /api/session/{id}/outcomes — outcome tracking
 - GET  /api/health      — health check
 - GET  /api/knowledge/topics — approved topic boundaries
 """
 
-import asyncio
+import json
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi.responses import StreamingResponse
 
 from app.agent.orchestrator import AgentOrchestrator
 from app.api.deps import get_knowledge_base, get_orchestrator
@@ -19,7 +20,6 @@ from app.api.rate_limit import limiter
 from app.config import settings
 from app.models.schemas import (
     ChatRequest,
-    ChatResponse,
     MessagesResponse,
     OutcomesResponse,
     SeedSessionRequest,
@@ -31,32 +31,41 @@ from app.rag.knowledge_store import KnowledgeStore
 router = APIRouter()
 
 
-@router.post("/chat", response_model=ChatResponse)
+@router.post("/chat/stream")
 @limiter.limit(lambda: settings.RATE_LIMIT_CHAT)
-async def chat(
+async def chat_stream(
     request: Request,
     body: ChatRequest,
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
 ):
     """
-    Main chat endpoint. Processes parent input through the agent pipeline:
-    1. Input gate: crisis + jailbreak classification
-    2. Context assembly: system prompt + conversation trimming
-    3. ReAct loop: Gemini reasons and calls tools (search, profile, goals, outcomes)
-    4. Output gate: medication + diagnosis + scope classification
+    Streaming chat endpoint. Emits Server-Sent Events:
+      - status  { text }              — pipeline stage updates
+      - token   { text }              — one LLM response chunk
+      - replace { text }              — output gate replaced the response
+      - done    { session_id, agent_used, phase, pipeline_trace, response? }
+      - error   { message }           — timeout or unhandled exception
 
-    Returns full PipelineTrace for frontend visualization.
+    Design: uses LangGraph astream_events(version="v2") to stream tokens
+    from the ReAct agent's final response in real time. See spec at
+    docs/superpowers/specs/2026-03-13-streaming-design.md.
     """
-    try:
-        return await asyncio.wait_for(
-            orchestrator.process(
-                message=body.message,
-                session_id=body.session_id,
-            ),
-            timeout=settings.CHAT_TIMEOUT_S,
-        )
-    except asyncio.TimeoutError:
-        raise HTTPException(status_code=504, detail="Request timed out. Please try again.")
+    async def event_generator():
+        async for event_type, data in orchestrator.process_stream(
+            message=body.message,
+            session_id=body.session_id,
+        ):
+            yield f"event: {event_type}\ndata: {json.dumps(data)}\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 @router.post("/session/seed")
