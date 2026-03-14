@@ -262,3 +262,22 @@ class TestPrepareContext:
 
         # Prompt should now include "Kai" since cache was invalidated
         assert "Kai" in prompt2
+
+    @pytest.mark.asyncio
+    async def test_memory_usage_event_emitted(self):
+        """Context assembly should emit a memory_usage event listing injected profile fields."""
+        from unittest.mock import AsyncMock
+        store = await create_in_memory_store()
+        await store.update_profile("s1", child_name="Kai", child_age="8")
+        await store.commit()
+
+        event_bus = AsyncMock()
+        event_bus.emit = AsyncMock()
+
+        prepare_context = create_prepare_context(store, event_bus=event_bus)
+        state = {"messages": [HumanMessage(content="Hello")], "session_id": "s1"}
+        await prepare_context(state)
+
+        event_bus.emit.assert_called()
+        calls_flat = " ".join(str(c) for c in event_bus.emit.call_args_list)
+        assert "memory_usage" in calls_flat

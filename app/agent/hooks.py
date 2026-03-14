@@ -69,10 +69,35 @@ def create_prepare_context(
         # Check if a state-mutating tool ran in this iteration
         has_mutation = _has_mutating_tool(messages)
 
+        # Always build the per-turn state block (attached to HumanMessage, not system prompt).
+        phase = session_state.phase.value if hasattr(session_state.phase, "value") else str(session_state.phase)
+        recent_tool_names: list[str] | None = None
+        try:
+            traces = await session_store.get_traces(session_id)
+            if traces:
+                last_trace = traces[-1]
+                if last_trace.tool_calls:
+                    recent_tool_names = [tc.name for tc in last_trace.tool_calls]
+        except Exception:
+            pass
+        active_topic = ""
+        user_messages = [m for m in messages if isinstance(m, HumanMessage)]
+        if user_messages:
+            last_user = user_messages[-1].content
+            if isinstance(last_user, str) and last_user.strip():
+                active_topic = last_user.strip()[:60]
+        state_block = build_conversation_state(
+            turn=turn_count,
+            phase=phase,
+            recent_tool_calls=recent_tool_names,
+            active_topic=active_topic,
+            current_datetime=datetime.now(),
+        )
+
         if cache_key in _prompt_cache and not has_mutation:
             system_prompt = _prompt_cache[cache_key]
         else:
-            # Full prompt build (existing logic)
+            # Full prompt build
             # Load rolling summary if available
             latest_summary = await session_store.get_latest_summary(session_id)
             summary_text = latest_summary.summary if latest_summary else ""
@@ -100,37 +125,6 @@ def create_prepare_context(
                 session_summary=summary_text,
             )
 
-            # Build conversation state block
-            phase = session_state.phase.value if hasattr(session_state.phase, "value") else str(session_state.phase)
-
-            # Get tool names from the last trace, if available
-            recent_tool_names: list[str] | None = None
-            try:
-                traces = await session_store.get_traces(session_id)
-                if traces:
-                    last_trace = traces[-1]
-                    if last_trace.tool_calls:
-                        recent_tool_names = [tc.name for tc in last_trace.tool_calls]
-            except Exception:
-                pass
-
-            # Derive active topic from the last user message
-            active_topic = ""
-            user_messages = [m for m in messages if isinstance(m, HumanMessage)]
-            if user_messages:
-                last_user = user_messages[-1].content
-                if isinstance(last_user, str) and last_user.strip():
-                    active_topic = last_user.strip()[:60]
-
-            state_block = build_conversation_state(
-                turn=turn_count,
-                phase=phase,
-                recent_tool_calls=recent_tool_names,
-                active_topic=active_topic,
-                current_datetime=datetime.now(),
-            )
-            system_prompt = state_block + "\n\n" + system_prompt
-
             if recent_tool_results:
                 evidence_lines = []
                 for tr in recent_tool_results:
@@ -144,6 +138,29 @@ def create_prepare_context(
             if len(_prompt_cache) > 10:
                 oldest = next(iter(_prompt_cache))
                 del _prompt_cache[oldest]
+
+            # Emit memory usage event for utility tracking
+            if event_bus:
+                injected_fields = []
+                profile = session_state.family_profile
+                for field in ("child_name", "child_age", "diagnosis_status", "adhd_subtype",
+                              "good_day_description"):
+                    if getattr(profile, field, None):
+                        injected_fields.append(field)
+                for field in ("challenge_areas", "attempted_strategies", "hardest_situations"):
+                    if getattr(profile, field, []):
+                        injected_fields.append(field)
+                if session_state.goals:
+                    injected_fields.append("goals")
+                if session_state.outcomes:
+                    injected_fields.append("outcomes")
+                try:
+                    await event_bus.emit(
+                        "memory_usage", "profile_injected", session_id, turn_count,
+                        detail={"fields": injected_fields, "episode_count": len(recent_episodes)},
+                    )
+                except Exception:
+                    pass  # Never block context assembly for observability
 
         # Trim conversation: message count cap first, then character budget
         max_messages = settings.CONTEXT_WINDOW_TURNS * 2
@@ -159,7 +176,18 @@ def create_prepare_context(
         ):
             conversation_messages = conversation_messages[1:]
 
-        # Build augmented message list for the LLM
+        # Build augmented message list for the LLM.
+        # conversation_state is appended to the last HumanMessage (not the system prompt)
+        # so the system message stays stable for KV-cache reuse.
+        if conversation_messages:
+            last_msg = conversation_messages[-1]
+            if isinstance(last_msg, HumanMessage):
+                state_suffix = "\n\n" + state_block
+                original_content = last_msg.content if isinstance(last_msg.content, str) else str(last_msg.content)
+                conversation_messages = conversation_messages[:-1] + [
+                    HumanMessage(content=original_content + state_suffix)
+                ]
+
         llm_messages = [SystemMessage(content=system_prompt)] + conversation_messages
         return {"llm_input_messages": llm_messages}
 
