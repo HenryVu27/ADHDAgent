@@ -63,14 +63,20 @@ BENIGN_EXAMPLES = [
 ### `app/config.py` (modified)
 
 ```python
-SEMANTIC_FAST_PATH_MODEL: str = "all-MiniLM-L6-v2"   # ~22MB, CPU, no GPU needed
+SEMANTIC_FAST_PATH_MODEL: str = "all-MiniLM-L6-v2"   # bundled in fastembed, no new dependency
 SEMANTIC_FAST_PATH_THRESHOLD: float = 0.82
 SEMANTIC_FAST_PATH_ENABLED: bool = True
 ```
 
 ### `app/main.py` (modified)
 
-Build and warm `SemanticFastPath` at startup (encode examples once), inject into `InputGate`. If `SEMANTIC_FAST_PATH_ENABLED = false`, inject `None`.
+Build and warm `SemanticFastPath` at startup (encode examples once), inject into `InputGate`. If `SEMANTIC_FAST_PATH_ENABLED = false` or no `GEMINI_API_KEY` (i.e. `InputGate` is not constructed), inject `None`.
+
+`build_index()` is synchronous and called before the `yield` in the `lifespan` async context manager — this intentionally blocks startup once (~1-2s for model load + 15 encodes). This is acceptable for a one-time startup cost. No `run_in_executor` needed.
+
+### Dependency
+
+No new dependency. `fastembed>=0.7.4` is already in `requirements.txt` (used by the reranker) and bundles `all-MiniLM-L6-v2` as an ONNX model. `SemanticFastPath` uses `fastembed.TextEmbedding` rather than `sentence-transformers`.
 
 ## Data Flow
 
@@ -124,8 +130,11 @@ Every failure mode falls through to the Gemini gate. The fast path never blocks 
 | Model load fails at startup | Log error, set `fast_path = None`, Gemini gate runs for all messages |
 | Encoding fails at inference | Catch exception, log warning, return `None` |
 | `SEMANTIC_FAST_PATH_ENABLED = false` | `InputGate` injected with `None`, fast path never called |
+| No `GEMINI_API_KEY` (dev/test mode) | `InputGate` is not constructed at all; fast path irrelevant |
 
 No retries within the fast path. Failure always means "hand off to Gemini."
+
+`classify()` is a synchronous method called from the `async` `InputGate.check()`. At ~5ms on CPU this is acceptable — it does not block the event loop long enough to cause issues. If profiling shows otherwise, wrap with `asyncio.to_thread()` (same pattern as the reranker).
 
 ## Example Set Guidelines
 
@@ -134,6 +143,7 @@ Keep examples narrow and unambiguous:
 - No mixed messages (e.g., "thanks, also my son hasn't slept" — this should NOT be in examples)
 - Cover four semantic clusters: greetings, acknowledgments, thank-yous, brief follow-ups
 - 3–5 examples per cluster (~15 total) is sufficient — the embedding model generalizes within clusters
+- Single-word responses like `"yes"` and `"no"` are technically benign but sit close to the edge — validate in the threshold sweep that messages such as "no he's still hurting" do not score above the threshold against these anchors. If they do, remove `"yes"`/`"no"` from the example set.
 
 ## Threshold Guidance
 
@@ -141,7 +151,7 @@ Start at `0.82`. Use the evaluation runner to tune before changing defaults:
 - **Too low** (< 0.75): complex coaching queries may be incorrectly bypassed
 - **Too high** (> 0.90): legitimate greetings may fall through to Gemini unnecessarily
 
-Log `(score, was_bypassed)` in production for one week before adjusting.
+Log `(score, was_bypassed)` in production for one week before adjusting. Fast-path bypasses must appear in the `PipelineTrace` `input_gate` step with `detail: {"bypassed": true, "score": 0.91, "route": "flash"}` so the observability dashboard can distinguish a fast-path turn from a dev-mode turn where `InputGate` is `None`.
 
 ## Evaluation
 
@@ -158,16 +168,23 @@ Log `(score, was_bypassed)` in production for one week before adjusting.
 
 ### Runner: `eval/runners/input_gate_runner.py`
 
-1. Loads golden dataset
+1. Loads golden dataset (path from `eval/config.py` → `GOLDEN_INPUT_GATE_PATH`)
 2. Runs `SemanticFastPath.classify()` against every message, records `score` and `bypassed`
 3. Reports per-class:
    - Bypass rate (want: high for `benign`, zero for all others)
    - False bypass rate (must be zero for `crisis` and `jailbreak`)
    - Score distribution: min/max/mean per label
 4. Threshold sweep from 0.70 → 0.95 in 0.05 steps showing precision/recall at each value
-5. Writes results to `eval/data/results/input_gate_YYYY-MM-DD.json`
+5. Prints a structured `PASS` / `FAIL` summary line (matching the style of existing runners)
+6. Exits with code `0` on pass, `1` on fail — enables use in CI
+7. Writes full results to `eval/data/results/input_gate_YYYY-MM-DD.json`
 
 **Pass criteria:** zero false bypasses on `crisis` and `jailbreak` labels at the configured threshold.
+
+Register the dataset path in `eval/config.py`:
+```python
+GOLDEN_INPUT_GATE_PATH = DATA_DIR / "golden_input_gate.json"
+```
 
 ## Expected Latency Impact
 
@@ -177,7 +194,7 @@ Log `(score, was_bypassed)` in production for one week before adjusting.
 | Coaching queries | 500–2000ms (Gemini) | 500–2000ms (Gemini, unchanged) |
 | Crisis / jailbreak | 500–2000ms (Gemini) | 500–2000ms (Gemini, unchanged) |
 
-Estimated 60–70% of real-world turns in a coaching conversation are greetings, acknowledgments, or brief follow-ups — these all benefit from the fast path.
+Greetings, acknowledgments, and brief follow-ups are expected to represent a significant share of turns in a coaching conversation (this is an assumption to be validated against real usage logs once deployed).
 
 ## Files Changed
 
