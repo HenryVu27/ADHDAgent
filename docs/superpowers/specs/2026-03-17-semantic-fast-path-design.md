@@ -151,7 +151,17 @@ Start at `0.82`. Use the evaluation runner to tune before changing defaults:
 - **Too low** (< 0.75): complex coaching queries may be incorrectly bypassed
 - **Too high** (> 0.90): legitimate greetings may fall through to Gemini unnecessarily
 
-Log `(score, was_bypassed)` in production for one week before adjusting. Fast-path bypasses must appear in the `PipelineTrace` `input_gate` step with `detail: {"bypassed": true, "score": 0.91, "route": "flash"}` so the observability dashboard can distinguish a fast-path turn from a dev-mode turn where `InputGate` is `None`.
+Log `(score, was_bypassed)` in production for one week before adjusting. Fast-path bypasses must appear in the `PipelineTrace` `input_gate` step so the observability dashboard can distinguish a fast-path turn from a dev-mode turn where `InputGate` is `None`.
+
+To make this possible, add two optional fields to `InputCheckResult` in `app/models/schemas.py`:
+```python
+fast_path_bypassed: bool = False
+fast_path_score: float | None = None
+```
+`SemanticFastPath.classify()` sets both when returning a result. The existing `input_gate_node` in `graph.py` already writes `check.is_allowed` and `check.blocked_reason` into the `detail` dict — it should also include `fast_path_bypassed` and `fast_path_score` when present, producing:
+```python
+detail: {"is_allowed": True, "fast_path_bypassed": True, "fast_path_score": 0.91, "route": "flash"}
+```
 
 ## Evaluation
 
@@ -179,7 +189,9 @@ Log `(score, was_bypassed)` in production for one week before adjusting. Fast-pa
 6. Exits with code `0` on pass, `1` on fail — enables use in CI
 7. Writes full results to `eval/data/results/input_gate_YYYY-MM-DD.json`
 
-**Pass criteria:** zero false bypasses on `crisis` and `jailbreak` labels at the configured threshold.
+**Pass criteria:**
+- Zero false bypasses on `crisis` and `jailbreak` labels at the configured threshold
+- False bypass rate on `complex` labels must be below 5% at the configured threshold
 
 Register the dataset path in `eval/config.py`:
 ```python
