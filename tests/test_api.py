@@ -241,7 +241,7 @@ async def test_chat_timeout(client):
         })
         assert response.status_code == 200
         content = response.content.decode()
-        assert '"error"' in content
+        assert 'event: error' in content
     finally:
         settings.CHAT_TIMEOUT_S = original
 
