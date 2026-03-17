@@ -9,7 +9,7 @@ from qdrant_client.models import Prefetch
 
 logger = logging.getLogger(__name__)
 
-# Import lazily so the 500 MB model download is deferred until first use
+# Import at module level; the model download is deferred to ColBERTIndex.__init__
 try:
     from fastembed.late_interaction import LateInteractionTextEmbedding
 except ImportError:
@@ -49,10 +49,7 @@ class ColBERTIndex:
         matrices = list(self._model.embed(texts))
         # Use .tolist() to convert numpy arrays to plain Python floats.
         # list(numpy_array) produces numpy scalar elements, which Qdrant rejects.
-        return [
-            [token_vec.tolist() for token_vec in matrix]
-            for matrix in matrices
-        ]
+        return [matrix.tolist() for matrix in matrices]
 
     def make_prefetch(self, query_text: str, limit: int) -> Prefetch:
         """Build a Qdrant Prefetch for the 'colbert' named vector.
@@ -63,7 +60,7 @@ class ColBERTIndex:
         query_matrices = list(self._model.query_embed([query_text]))
         # Use .tolist() — list() on a numpy array produces numpy scalar elements
         # which Qdrant rejects. .tolist() recurses and returns plain Python floats.
-        query_matrix = [token_vec.tolist() for token_vec in query_matrices[0]]
+        query_matrix = query_matrices[0].tolist()
         return Prefetch(
             query=query_matrix,
             using="colbert",
