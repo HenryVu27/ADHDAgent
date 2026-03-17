@@ -82,6 +82,7 @@ class AgentOrchestrator:
         summary_through_turn = latest_summary.covers_through_turn if latest_summary else 0
 
         history_messages = []
+        unsummarized_chars = 0
         for entry in stored_messages:
             if entry.get("blocked"):
                 continue  # Skip blocked turns
@@ -93,6 +94,11 @@ class AgentOrchestrator:
                 history_messages.append(HumanMessage(content=entry["content"]))
             elif entry["role"] == "assistant":
                 history_messages.append(AIMessage(content=entry["content"]))
+            unsummarized_chars += len(entry.get("content", ""))
+
+        # Trigger summary if unsummarized history is filling the context budget
+        context_utilization = unsummarized_chars / settings.CONTEXT_MAX_CHARS
+        force_summary = context_utilization >= 0.8
 
         start = time.time()
         config = {
@@ -242,6 +248,7 @@ class AgentOrchestrator:
                     user_message=message,
                     assistant_response=response_text,
                     tool_calls=[tc for tc in tool_calls_made],
+                    force_summary=force_summary,
                 ),
                 "memory",
             )

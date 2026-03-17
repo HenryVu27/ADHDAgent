@@ -1,0 +1,702 @@
+[
+  {
+    "id": "persona_01",
+    "description": "Mother of a newly diagnosed 7-year-old boy, overwhelmed and in denial",
+    "facts": {
+      "child_name": "Liam",
+      "child_age": "7",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["homework", "emotional dysregulation", "morning routine"],
+      "attempted_strategies": ["reward charts", "timeouts"],
+      "hardest_situations": ["getting ready for school", "bedtime"],
+      "good_day_description": "He finishes dinner without a meltdown and gets to school on time"
+    }
+  },
+  {
+    "id": "persona_02",
+    "description": "Father of a 10-year-old girl, suspected ADHD not yet evaluated",
+    "facts": {
+      "child_name": "Maya",
+      "child_age": "10",
+      "diagnosis_status": "suspected",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["focus during homework", "forgetting assignments", "losing things"],
+      "attempted_strategies": ["study schedules", "removing distractions"],
+      "hardest_situations": ["independent homework time", "multi-step instructions"],
+      "good_day_description": "She completes homework without reminders and remembers her backpack"
+    }
+  },
+  {
+    "id": "persona_03",
+    "description": "Single mother of a 12-year-old boy with hyperactive ADHD, worn out",
+    "facts": {
+      "child_name": "Jaylen",
+      "child_age": "12",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "hyperactive-impulsive",
+      "challenge_areas": ["sitting still", "impulse control", "peer relationships", "screen time"],
+      "attempted_strategies": ["medication", "behavior therapy", "screen time limits"],
+      "hardest_situations": ["restaurant and public places", "doing homework after school"],
+      "good_day_description": "He plays outside, eats dinner calmly, and does half his homework unprompted"
+    }
+  },
+  {
+    "id": "persona_04",
+    "description": "Both parents have ADHD, raising a 9-year-old with similar struggles",
+    "facts": {
+      "child_name": "Cora",
+      "child_age": "9",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["transitions between activities", "emotional regulation", "reading"],
+      "attempted_strategies": ["visual timers", "social stories", "praise-based systems"],
+      "hardest_situations": ["transitioning off screens", "starting homework"],
+      "good_day_description": "She transitions off the iPad without a tantrum and reads for 15 minutes"
+    }
+  },
+  {
+    "id": "persona_05",
+    "description": "Parent of a 6-year-old just starting the evaluation process",
+    "facts": {
+      "child_name": "Noah",
+      "child_age": "6",
+      "diagnosis_status": "evaluating",
+      "adhd_subtype": null,
+      "challenge_areas": ["sitting at circle time", "listening to instructions", "impulsivity"],
+      "attempted_strategies": ["structured play", "consistent bedtime routine"],
+      "hardest_situations": ["kindergarten circle time", "waiting his turn"],
+      "good_day_description": "His teacher doesn't send a note home and he naps without a fight"
+    }
+  },
+  {
+    "id": "persona_06",
+    "description": "Parent of a teenager with ADHD and anxiety comorbidity",
+    "facts": {
+      "child_name": "Zoe",
+      "child_age": "15",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["executive function", "long-term projects", "social anxiety", "test-taking"],
+      "attempted_strategies": ["extended time accommodations", "therapy", "planner systems"],
+      "hardest_situations": ["starting large school projects", "group social situations"],
+      "good_day_description": "She gets through school without a panic attack and does some homework before midnight"
+    }
+  },
+  {
+    "id": "persona_07",
+    "description": "Father skeptical of ADHD diagnosis, looking for non-medication approaches",
+    "facts": {
+      "child_name": "Ethan",
+      "child_age": "8",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "hyperactive-impulsive",
+      "challenge_areas": ["attention", "following rules", "aggression when frustrated"],
+      "attempted_strategies": ["exercise routines", "reduced sugar diet", "firm boundaries"],
+      "hardest_situations": ["transitions", "losing games or competitions"],
+      "good_day_description": "He loses a game and doesn't melt down, completes one homework assignment"
+    }
+  },
+  {
+    "id": "persona_08",
+    "description": "Mother dealing with ADHD plus learning disability (dyslexia)",
+    "facts": {
+      "child_name": "Ava",
+      "child_age": "11",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["reading comprehension", "working memory", "self-esteem", "organization"],
+      "attempted_strategies": ["tutoring", "audiobooks", "color-coded folders"],
+      "hardest_situations": ["reading aloud in class", "multi-step math problems"],
+      "good_day_description": "She reads one chapter without shutting down and doesn't cry about school"
+    }
+  },
+  {
+    "id": "persona_09",
+    "description": "Parent of a 5-year-old, no diagnosis yet, looking for early support",
+    "facts": {
+      "child_name": "Leo",
+      "child_age": "5",
+      "diagnosis_status": "not diagnosed",
+      "adhd_subtype": null,
+      "challenge_areas": ["sustained attention during play", "following two-step instructions", "emotional outbursts"],
+      "attempted_strategies": ["short task chunks", "lots of praise", "visual schedules"],
+      "hardest_situations": ["grocery shopping", "cleanup time"],
+      "good_day_description": "He puts his toys away when asked and sits for a short storytime"
+    }
+  },
+  {
+    "id": "persona_10",
+    "description": "Adoptive parent, child with trauma history and ADHD",
+    "facts": {
+      "child_name": "Marcus",
+      "child_age": "9",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["trust and attachment", "emotional regulation", "school behavior", "impulsivity"],
+      "attempted_strategies": ["trauma-informed therapy", "sensory breaks", "co-regulation techniques"],
+      "hardest_situations": ["discipline moments that feel like rejection", "crowded environments"],
+      "good_day_description": "He asks for a hug instead of running away and finishes lunch at school"
+    }
+  },
+  {
+    "id": "persona_11",
+    "description": "Parent of an 8-year-old whose ADHD mainly shows up at school",
+    "facts": {
+      "child_name": "Isla",
+      "child_age": "8",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["classroom focus", "following teacher instructions", "completing classwork"],
+      "attempted_strategies": ["504 plan", "preferential seating", "frequent check-ins with teacher"],
+      "hardest_situations": ["unstructured classroom time", "writing assignments"],
+      "good_day_description": "Her teacher reports she stayed on task and finished her work in class"
+    }
+  },
+  {
+    "id": "persona_12",
+    "description": "Parent burned out after years of trying everything with a 13-year-old",
+    "facts": {
+      "child_name": "Ryan",
+      "child_age": "13",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["motivation", "homework refusal", "sleep dysregulation", "gaming addiction"],
+      "attempted_strategies": ["multiple medication trials", "behavior contracts", "gaming restrictions", "family therapy"],
+      "hardest_situations": ["homework battles every night", "getting off games before midnight"],
+      "good_day_description": "He does 30 minutes of homework without a fight and is asleep by 11"
+    }
+  },
+  {
+    "id": "persona_13",
+    "description": "Latina mother, first-generation immigrant, 8-year-old son, language barrier with school",
+    "facts": {
+      "child_name": "Miguel",
+      "child_age": "8",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "hyperactive-impulsive",
+      "challenge_areas": ["communication with school", "homework in second language", "impulsivity", "peer conflict"],
+      "attempted_strategies": ["bilingual support at home", "church-based support group"],
+      "hardest_situations": ["IEP meetings in English only", "school calling for behavior issues"],
+      "good_day_description": "The school doesn't call and he plays nicely with the neighbor kids after school"
+    }
+  },
+  {
+    "id": "persona_14",
+    "description": "South Asian father, high academic expectations, 11-year-old daughter recently diagnosed",
+    "facts": {
+      "child_name": "Priya",
+      "child_age": "11",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["sustained reading", "math homework", "self-esteem around grades", "organization"],
+      "attempted_strategies": ["private tutoring", "structured after-school schedule", "reduced extracurriculars"],
+      "hardest_situations": ["standardized tests", "comparing herself to cousins"],
+      "good_day_description": "She finishes math homework without crying and reads for 20 minutes"
+    }
+  },
+  {
+    "id": "persona_15",
+    "description": "Grandmother as primary caregiver, 10-year-old grandson, limited familiarity with ADHD",
+    "facts": {
+      "child_name": "Devon",
+      "child_age": "10",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["respecting authority", "completing chores", "homework", "attention span"],
+      "attempted_strategies": ["strict routine", "chore charts", "no screens on weekdays"],
+      "hardest_situations": ["him talking back", "parent-teacher conferences alone"],
+      "good_day_description": "He does his chores and goes to bed without an argument"
+    }
+  },
+  {
+    "id": "persona_16",
+    "description": "Same-sex couple raising a 7-year-old recently diagnosed, navigating school pushback",
+    "facts": {
+      "child_name": "Sam",
+      "child_age": "7",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["classroom disruptions", "transitions", "emotional outbursts", "teacher relationship"],
+      "attempted_strategies": ["IEP evaluation", "occupational therapy", "weighted blanket at bedtime"],
+      "hardest_situations": ["school calling us in for meetings", "other kids reacting to meltdowns"],
+      "good_day_description": "No call from school and Sam comes home happy"
+    }
+  },
+  {
+    "id": "persona_17",
+    "description": "Military family, frequent relocations, 9-year-old with ADHD struggling with instability",
+    "facts": {
+      "child_name": "Tyler",
+      "child_age": "9",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["school transitions", "making new friends", "maintaining routines across moves", "anxiety from change"],
+      "attempted_strategies": ["portable routine toolkit", "therapist who does video calls", "buddy system at new schools"],
+      "hardest_situations": ["first month at a new school", "parent deployment periods"],
+      "good_day_description": "He introduces himself to one new kid and does his homework in the hotel room"
+    }
+  },
+  {
+    "id": "persona_18",
+    "description": "Parent of a 14-year-old with ADHD and oppositional defiant disorder",
+    "facts": {
+      "child_name": "Jordan",
+      "child_age": "14",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "hyperactive-impulsive",
+      "challenge_areas": ["defiance and rule refusal", "explosive anger", "school suspensions", "sibling conflict"],
+      "attempted_strategies": ["parent-child interaction therapy", "natural consequences", "de-escalation scripts"],
+      "hardest_situations": ["being told no", "homework time becoming a power struggle"],
+      "good_day_description": "He disagrees without screaming and does at least one piece of homework"
+    }
+  },
+  {
+    "id": "persona_19",
+    "description": "Homeschooling parent of a 10-year-old with ADHD, struggling to maintain structure",
+    "facts": {
+      "child_name": "Finn",
+      "child_age": "10",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["staying on curriculum schedule", "parent authority at home", "social isolation", "attention during lessons"],
+      "attempted_strategies": ["flexible scheduling", "project-based learning", "homeschool co-op group"],
+      "hardest_situations": ["getting through math without shutting down", "sitting for any subject longer than 10 minutes"],
+      "good_day_description": "He finishes two subjects and goes to the co-op without a meltdown"
+    }
+  },
+  {
+    "id": "persona_20",
+    "description": "Parent with chronic illness, limited energy, raising a 8-year-old with ADHD",
+    "facts": {
+      "child_name": "Lily",
+      "child_age": "8",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "hyperactive-impulsive",
+      "challenge_areas": ["hyperactivity indoors", "need for constant supervision", "morning routine", "safety awareness"],
+      "attempted_strategies": ["quiet activity bins", "neighbor help after school", "visual schedule cards"],
+      "hardest_situations": ["high-energy days when parent is flaring", "managing Lily solo on bad pain days"],
+      "good_day_description": "Lily plays independently for 30 minutes and gets herself ready for school"
+    }
+  },
+  {
+    "id": "persona_21",
+    "description": "Parent of a twice-exceptional child: ADHD and giftedness, 11-year-old",
+    "facts": {
+      "child_name": "Kai",
+      "child_age": "11",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["boredom-driven behavior", "perfectionism", "refusing easy work", "emotional intensity"],
+      "attempted_strategies": ["grade acceleration in math", "enrichment programs", "strength-based framing"],
+      "hardest_situations": ["classroom activities below his level", "when he can't get something perfect immediately"],
+      "good_day_description": "He engages in class, asks three good questions, and finishes an assignment even if imperfect"
+    }
+  },
+  {
+    "id": "persona_22",
+    "description": "Blended family, 6-year-old with ADHD, conflicting parenting styles between households",
+    "facts": {
+      "child_name": "Bella",
+      "child_age": "6",
+      "diagnosis_status": "evaluating",
+      "adhd_subtype": null,
+      "challenge_areas": ["inconsistency between homes", "emotional dysregulation after custody switches", "sleep problems", "impulsivity"],
+      "attempted_strategies": ["communication app with co-parent", "consistent bedtime both homes", "calming kit"],
+      "hardest_situations": ["Sunday night transitions back from dad's house", "different rules causing confusion"],
+      "good_day_description": "She transitions between homes without a breakdown and falls asleep before 9pm"
+    }
+  },
+  {
+    "id": "persona_23",
+    "description": "Parent of a 16-year-old transitioning to independence, ADHD and low self-awareness",
+    "facts": {
+      "child_name": "Alex",
+      "child_age": "16",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["self-advocacy", "time management for college prep", "forgetting medications", "low insight into ADHD impact"],
+      "attempted_strategies": ["phone reminders for medication", "college counselor with ADHD experience", "motivational interviewing at home"],
+      "hardest_situations": ["getting Alex to use any planning tool consistently", "convincing him to request accommodations himself"],
+      "good_day_description": "He takes his medication without reminding and spends 20 minutes on college applications"
+    }
+  },
+  {
+    "id": "persona_24",
+    "description": "East Asian mother, cultural stigma around mental health, 9-year-old daughter",
+    "facts": {
+      "child_name": "Mei",
+      "child_age": "9",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["sustaining attention in piano practice", "homework completion", "daydreaming in class", "family pressure to succeed"],
+      "attempted_strategies": ["shorter practice sessions", "reward systems tied to grades", "private tutoring"],
+      "hardest_situations": ["extended family questioning the diagnosis", "Mei feeling ashamed compared to cousins"],
+      "good_day_description": "Mei practices piano for 20 minutes and finishes her homework before dinner"
+    }
+  },
+  {
+    "id": "persona_25",
+    "description": "Parent of a 4-year-old with extreme tantrums and possible ADHD, pre-diagnosis",
+    "facts": {
+      "child_name": "Nico",
+      "child_age": "4",
+      "diagnosis_status": "not diagnosed",
+      "adhd_subtype": null,
+      "challenge_areas": ["regulation of extreme tantrums", "sensory sensitivities", "sleep resistance", "aggressive behavior toward siblings"],
+      "attempted_strategies": ["sensory diet from OT", "picture schedules", "calm-down corner"],
+      "hardest_situations": ["grocery store tantrums", "hitting the baby when frustrated"],
+      "good_day_description": "Nico uses words when upset and naps for an hour"
+    }
+  },
+  {
+    "id": "persona_26",
+    "description": "Parent of a 13-year-old girl recently diagnosed after years of being called lazy",
+    "facts": {
+      "child_name": "Sofia",
+      "child_age": "13",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["internalized shame", "academic underperformance despite intelligence", "procrastination", "executive function"],
+      "attempted_strategies": ["ADHD coach for Sofia", "reframing past failures", "school accommodations"],
+      "hardest_situations": ["Sofia believing she is fundamentally broken", "starting any assignment even with accommodations"],
+      "good_day_description": "Sofia says something positive about herself and turns in at least one late assignment"
+    }
+  },
+  {
+    "id": "persona_27",
+    "description": "Parent of a 7-year-old with ADHD and sensory processing disorder",
+    "facts": {
+      "child_name": "Oliver",
+      "child_age": "7",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["sensory meltdowns", "clothing sensitivities", "loud environments", "impulsivity in crowds"],
+      "attempted_strategies": ["OT for sensory integration", "seamless clothing", "noise-canceling headphones", "sensory breaks"],
+      "hardest_situations": ["birthday parties and crowded events", "getting dressed for school"],
+      "good_day_description": "He gets dressed without a meltdown and makes it through a school event"
+    }
+  },
+  {
+    "id": "persona_28",
+    "description": "Single father, working two jobs, 11-year-old son with ADHD, limited time for support strategies",
+    "facts": {
+      "child_name": "Carlos",
+      "child_age": "11",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "hyperactive-impulsive",
+      "challenge_areas": ["homework unsupervised after school", "impulsive decisions with friends", "poor sleep", "school conflicts"],
+      "attempted_strategies": ["after-school program", "weekend check-ins with teacher", "phone check-ins during work hours"],
+      "hardest_situations": ["Carlos home alone 3-4 hours before I get back", "school calling when I'm at work"],
+      "good_day_description": "Carlos does some homework before I get home and there's no incident report from school"
+    }
+  },
+  {
+    "id": "persona_29",
+    "description": "Parent of a 10-year-old with ADHD and autism spectrum disorder",
+    "facts": {
+      "child_name": "Jamie",
+      "child_age": "10",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["rigidity and transitions", "social communication", "sensory overload", "attention regulation"],
+      "attempted_strategies": ["ABA therapy", "social skills group", "visual routine boards", "predictable schedule"],
+      "hardest_situations": ["unexpected schedule changes", "unstructured social time at recess"],
+      "good_day_description": "Jamie handles one unexpected change without a shutdown and interacts with one peer"
+    }
+  },
+  {
+    "id": "persona_30",
+    "description": "Parent who is a teacher, knows the research but struggles at home with a 9-year-old",
+    "facts": {
+      "child_name": "Emma",
+      "child_age": "9",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["applying classroom strategies at home", "parenting vs teaching identity", "homework battles", "emotional dysregulation"],
+      "attempted_strategies": ["classroom-based reward systems", "natural consequences", "empathy-first approach"],
+      "hardest_situations": ["Emma refusing to respond to strategies that work for other kids", "losing patience as a parent even though I know better"],
+      "good_day_description": "Emma does homework without me raising my voice and we end the evening connected"
+    }
+  },
+  {
+    "id": "persona_31",
+    "description": "Foster parent of a 3-year-old with suspected ADHD and early developmental concerns, navigating an under-resourced system",
+    "facts": {
+      "child_name": "Darius",
+      "child_age": "3",
+      "diagnosis_status": "not diagnosed",
+      "adhd_subtype": null,
+      "challenge_areas": ["extreme impulsivity", "running away in public", "aggressive biting and hitting", "inconsistent sleep"],
+      "attempted_strategies": ["redirection", "simple visual cues", "calm physical presence during tantrums"],
+      "hardest_situations": ["getting Darius to stay in his crib at night", "visits with biological family that dysregulate him for days"],
+      "good_day_description": "He eats breakfast without throwing food, plays in the yard without bolting, and falls asleep before 9"
+    }
+  },
+  {
+    "id": "persona_32",
+    "description": "Mother with ADHD herself, newly diagnosed at 35, raising a 5-year-old showing the same signs",
+    "facts": {
+      "child_name": "Wren",
+      "child_age": "5",
+      "diagnosis_status": "evaluating",
+      "adhd_subtype": null,
+      "challenge_areas": ["circle time at preschool", "listening to multi-step instructions", "emotional meltdowns", "transitions between activities"],
+      "attempted_strategies": ["visual timer for transitions", "first-then boards", "movement breaks before focused tasks"],
+      "hardest_situations": ["mornings when my own ADHD is bad and hers is too", "getting both of us out the door without chaos"],
+      "good_day_description": "We both get dressed on time, she listens on the first ask at drop-off, and we have a calm morning"
+    }
+  },
+  {
+    "id": "persona_33",
+    "description": "Parent of a 12-year-old boy with ADHD and Tourette syndrome, struggling with social consequences of tics at school",
+    "facts": {
+      "child_name": "Wesley",
+      "child_age": "12",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["tic suppression stress", "peer teasing about tics", "homework focus", "impulsivity in class"],
+      "attempted_strategies": ["CBIT therapy for tics", "school counselor education sessions", "medication for ADHD managed separately from tics"],
+      "hardest_situations": ["tics increasing during stressful homework time", "other kids mimicking his tics at lunch"],
+      "good_day_description": "He gets through a full school day without being teased and finishes his reading assignment"
+    }
+  },
+  {
+    "id": "persona_34",
+    "description": "Rural family with no local specialists, 8-year-old daughter suspected ADHD, nearest pediatric psychiatrist is two hours away",
+    "facts": {
+      "child_name": "Hazel",
+      "child_age": "8",
+      "diagnosis_status": "suspected",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["daydreaming constantly", "losing track during class", "incomplete schoolwork", "forgetting chores"],
+      "attempted_strategies": ["talking to the family doctor", "consistent bedtime", "checking homework together each night"],
+      "hardest_situations": ["waiting six months for a telehealth evaluation slot", "teachers not taking concerns seriously without a diagnosis"],
+      "good_day_description": "She remembers to bring her folder home and finishes dinner chores without three reminders"
+    }
+  },
+  {
+    "id": "persona_35",
+    "description": "Parent of a 17-year-old with ADHD and comorbid depression, falling behind on college applications",
+    "facts": {
+      "child_name": "Nate",
+      "child_age": "17",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["motivation and anhedonia", "initiating tasks", "missed deadlines", "low self-worth"],
+      "attempted_strategies": ["combined medication for ADHD and depression", "weekly therapy", "body-doubling for homework"],
+      "hardest_situations": ["college application deadlines that feel impossible to him", "days when he won't get out of bed"],
+      "good_day_description": "He showers, eats something, and spends 30 minutes on any application task"
+    }
+  },
+  {
+    "id": "persona_36",
+    "description": "Parent in recovery from alcohol use disorder, raising an 11-year-old with ADHD while rebuilding stability",
+    "facts": {
+      "child_name": "Grace",
+      "child_age": "11",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["homework refusal", "emotional dysregulation", "trust in routines", "impulsivity"],
+      "attempted_strategies": ["family therapist familiar with recovery", "simple consistent daily schedule", "positive reinforcement"],
+      "hardest_situations": ["when my own recovery stress spills over and I lose patience", "Grace testing limits to see if I will stay calm"],
+      "good_day_description": "I stay regulated, she finishes one school task, and we eat dinner together without conflict"
+    }
+  },
+  {
+    "id": "persona_37",
+    "description": "Unschooling family with a 10-year-old whose ADHD hyperfocus works well for passion projects but makes balanced learning nearly impossible",
+    "facts": {
+      "child_name": "River",
+      "child_age": "10",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["engaging with topics outside current hyperfocus", "any structured reading time", "transitioning off building projects", "frustration tolerance"],
+      "attempted_strategies": ["interest-led curriculum", "tying math to building projects", "flow-based scheduling"],
+      "hardest_situations": ["River spending six hours on one project and refusing food or water", "anything involving writing"],
+      "good_day_description": "He tries one new topic with me, eats all three meals, and winds down before 10pm"
+    }
+  },
+  {
+    "id": "persona_38",
+    "description": "Parent of a 14-year-old competitive swimmer with ADHD, thriving in the pool but failing in the classroom",
+    "facts": {
+      "child_name": "Drew",
+      "child_age": "14",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "hyperactive-impulsive",
+      "challenge_areas": ["sustained attention outside sport", "homework after evening practice", "organization of schoolwork", "impulsive social decisions"],
+      "attempted_strategies": ["homework done at the pool between sets", "coach as motivational ally", "medication timed around practice"],
+      "hardest_situations": ["homework at 9pm after a two-hour swim meet", "maintaining eligibility with failing grades"],
+      "good_day_description": "Drew finishes one assignment before practice and one after, and goes to bed by 10:30"
+    }
+  },
+  {
+    "id": "persona_39",
+    "description": "Deeply religious family, resistant to medication, raising a 9-year-old boy with diagnosed combined ADHD",
+    "facts": {
+      "child_name": "Elijah",
+      "child_age": "9",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["sitting still during long church services", "homework focus", "impulsive behavior in Sunday school", "peer conflict"],
+      "attempted_strategies": ["prayer and faith-based discipline", "chore-based responsibility system", "physical activity after school"],
+      "hardest_situations": ["two-hour Sunday service where he can't move", "extended family saying he just needs more discipline"],
+      "good_day_description": "He sits through the service with one small fidget toy and doesn't get in trouble at Sunday school"
+    }
+  },
+  {
+    "id": "persona_40",
+    "description": "Low-income single mother, working overnight shifts, 7-year-old son with ADHD being raised partly by older teenage siblings",
+    "facts": {
+      "child_name": "Malik",
+      "child_age": "7",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "hyperactive-impulsive",
+      "challenge_areas": ["inconsistent supervision", "homework with no adult present", "sleep schedule without parent home at bedtime", "impulsive behavior at school"],
+      "attempted_strategies": ["older sibling bedtime routine", "school breakfast program", "free after-school program"],
+      "hardest_situations": ["mornings when no one is awake to get him to school", "school calling during my sleep hours"],
+      "good_day_description": "He gets on the bus on time, no behavior incident at school, and is asleep when I get home at 6am"
+    }
+  },
+  {
+    "id": "persona_41",
+    "description": "Parent of a mixed-race 12-year-old navigating racial identity and ADHD in a predominantly white school",
+    "facts": {
+      "child_name": "Jordan",
+      "child_age": "12",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["feeling misunderstood by teachers", "impulsivity perceived as defiance rather than ADHD", "identity and belonging", "homework consistency"],
+      "attempted_strategies": ["IEP with behavioral supports", "school social worker check-ins", "mentor from same background"],
+      "hardest_situations": ["teachers disciplining ADHD behavior more harshly than peers", "Jordan shutting down after feeling singled out"],
+      "good_day_description": "Jordan feels seen at school, has one good interaction with a teacher, and talks to me about his day"
+    }
+  },
+  {
+    "id": "persona_42",
+    "description": "Immigrant parent from West Africa, English as a second language, 8-year-old daughter newly diagnosed",
+    "facts": {
+      "child_name": "Amara",
+      "child_age": "8",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["homework in English at home", "daydreaming in class", "communication barriers with school staff", "extended family disbelief in ADHD"],
+      "attempted_strategies": ["bilingual homework help from church community", "visual schedule at home", "phone translation app for school meetings"],
+      "hardest_situations": ["school reports that are hard to understand without translation", "family saying ADHD does not exist in our culture"],
+      "good_day_description": "Amara finishes her reading worksheet and I understand the teacher's note without needing to call for help"
+    }
+  },
+  {
+    "id": "persona_43",
+    "description": "Parent of a highly introverted 10-year-old with ADHD whose inattention is invisible and often dismissed",
+    "facts": {
+      "child_name": "Sage",
+      "child_age": "10",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["invisible daydreaming that teachers miss", "intense fatigue after school from masking", "starting tasks alone", "advocating for herself"],
+      "attempted_strategies": ["quiet one-on-one check-ins rather than group strategies", "homework immediately after a rest period", "teacher briefing on quiet inattention signs"],
+      "hardest_situations": ["teachers not noticing she is lost because she doesn't act out", "after-school exhaustion making homework impossible"],
+      "good_day_description": "She tells me one thing she understood in class today and attempts one homework problem before shutdown"
+    }
+  },
+  {
+    "id": "persona_44",
+    "description": "Parent of an 18-year-old with ADHD starting community college, struggling to transition from parent-managed supports to self-management",
+    "facts": {
+      "child_name": "Tyler",
+      "child_age": "18",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["self-registering for disability services", "managing course deadlines without parental reminders", "medication self-management", "executive function in an unstructured environment"],
+      "attempted_strategies": ["disability services registration", "phone calendar system", "weekly parent check-in call"],
+      "hardest_situations": ["missing a professor's email about a dropped class", "choosing to skip disability services intake because it felt embarrassing"],
+      "good_day_description": "He attends both classes, takes his medication, and texts me back when I check in"
+    }
+  },
+  {
+    "id": "persona_45",
+    "description": "Parent of an 8-year-old with ADHD and a severe chronic sleep disorder, exhausted and at a loss",
+    "facts": {
+      "child_name": "Luna",
+      "child_age": "8",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["falling asleep before midnight", "waking multiple times at night", "daytime dysregulation from sleep deprivation", "meltdowns worse than peers due to exhaustion"],
+      "attempted_strategies": ["melatonin", "sleep hygiene routine", "blackout curtains", "pediatric sleep specialist consult"],
+      "hardest_situations": ["Luna still awake at 1am despite melatonin", "mornings after a bad night when everything falls apart"],
+      "good_day_description": "She is asleep by 10:30pm, wakes only once, and makes it through school without a crisis"
+    }
+  },
+  {
+    "id": "persona_46",
+    "description": "Parent whose 10-year-old was put on medication without their full consent by the other parent during a joint custody arrangement",
+    "facts": {
+      "child_name": "Caden",
+      "child_age": "10",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["inconsistent medication across two homes", "Caden's own confusion about his diagnosis", "co-parent conflict affecting Caden's stability", "school behavior"],
+      "attempted_strategies": ["consulting my own pediatrician for second opinion", "family law mediator for medical decisions", "consistent routine on my custody days"],
+      "hardest_situations": ["Caden coming back medicated when I didn't agree to it", "him asking me why he takes a pill at one house and not the other"],
+      "good_day_description": "Caden has a calm afternoon at my house, asks questions about his ADHD I can answer honestly, and sleeps well"
+    }
+  },
+  {
+    "id": "persona_47",
+    "description": "Parent of a 6-year-old with ADHD and auditory processing disorder, struggling to understand why strategies that should work do not",
+    "facts": {
+      "child_name": "Piper",
+      "child_age": "6",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "hyperactive-impulsive",
+      "challenge_areas": ["following verbal instructions in noisy settings", "phonics and early reading", "frustration when she mishears directions", "impulsivity combined with processing delay"],
+      "attempted_strategies": ["speech-language therapy", "FM system in the classroom", "visual instructions alongside verbal ones"],
+      "hardest_situations": ["gym class and cafeteria where background noise is overwhelming", "Piper acting out because she genuinely did not hear the instruction"],
+      "good_day_description": "Her teacher uses the FM system all day and Piper follows three directions correctly without a meltdown"
+    }
+  },
+  {
+    "id": "persona_48",
+    "description": "Highly organized, type-A parent whose structure and systems aren't working for a creative, scattered 9-year-old with ADHD",
+    "facts": {
+      "child_name": "Zara",
+      "child_age": "9",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["resisting all structured systems", "creative chaos vs organized household", "homework battles", "emotional escalation when pushed"],
+      "attempted_strategies": ["color-coded planner system", "detailed daily schedule on the fridge", "point-based reward chart"],
+      "hardest_situations": ["Zara dismantling every system within three days", "me feeling like I am failing because nothing sticks"],
+      "good_day_description": "She picks up her room without a fight, finishes one homework page, and we don't clash before bed"
+    }
+  },
+  {
+    "id": "persona_49",
+    "description": "Parent of an 11-year-old with ADHD and dyscalculia, falling dangerously behind in math despite high verbal ability",
+    "facts": {
+      "child_name": "Theo",
+      "child_age": "11",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "inattentive",
+      "challenge_areas": ["number sense and basic arithmetic", "multi-step math problems", "math anxiety and avoidance", "attention during math class"],
+      "attempted_strategies": ["math specialist tutor", "manipulatives and visual models", "calculator accommodations in IEP"],
+      "hardest_situations": ["timed math tests that trigger shutdown", "being in the same math class as peers who find it easy"],
+      "good_day_description": "He attempts the math worksheet with his tutor without crying and tells me one thing he understood"
+    }
+  },
+  {
+    "id": "persona_50",
+    "description": "Multigenerational household where grandparents undermine ADHD strategies, creating confusion for a 7-year-old",
+    "facts": {
+      "child_name": "Rosa",
+      "child_age": "7",
+      "diagnosis_status": "diagnosed",
+      "adhd_subtype": "combined",
+      "challenge_areas": ["inconsistent expectations between parents and grandparents", "grandparents giving screens and sweets as workarounds", "emotional dysregulation at transitions within the home", "bedtime"],
+      "attempted_strategies": ["family meeting about consistent rules", "simple three-rule household agreement", "visual schedule posted in kitchen"],
+      "hardest_situations": ["grandparents overriding screen limits when I am at work", "Rosa playing grandparents against parents during meltdowns"],
+      "good_day_description": "Everyone follows the same bedtime routine, Rosa gets to sleep by 8:30, and no one undermines the plan"
+    }
+  }
+]
