@@ -437,3 +437,58 @@ def test_avgdl_computed():
     # Requires knowledge JSON files to be present (standard test environment assumption)
     store = KnowledgeStore()
     assert store._avgdl > 0.0, "Expected avgdl > 0 with real knowledge docs loaded"
+
+
+# --- ColBERT collection schema tests ---
+
+from unittest.mock import AsyncMock, MagicMock, patch
+
+
+def make_mock_colbert():
+    """ColBERTIndex mock that returns 2-token 128-dim matrices."""
+    colbert = MagicMock()
+    colbert.embed_chunks.return_value = [[[0.1] * 128] * 2] * 60  # one per chunk
+    return colbert
+
+
+def make_mock_gemini():
+    """GeminiClient mock that returns 768-dim embeddings."""
+    gemini = MagicMock()
+    gemini.embed_batch = AsyncMock(return_value=[[0.1] * 768] * 60)
+    return gemini
+
+
+@pytest.mark.asyncio
+async def test_build_index_with_colbert_creates_multivector_collection():
+    from qdrant_client import QdrantClient
+    store = KnowledgeStore(collection_name="test_colbert")
+    store._client = QdrantClient(location=":memory:")
+
+    colbert = make_mock_colbert()
+    colbert.embed_chunks.return_value = [[[0.1] * 128] * 2] * len(store.chunks)
+    gemini = make_mock_gemini()
+    gemini.embed_batch = AsyncMock(return_value=[[0.1] * 768] * len(store.chunks))
+
+    await store.build_index(gemini, colbert_index=colbert)
+
+    info = store._client.get_collection("test_colbert")
+    vectors = info.config.params.vectors
+    assert "colbert" in vectors
+    assert vectors["colbert"].multivector_config is not None
+
+
+@pytest.mark.asyncio
+async def test_build_index_without_colbert_has_no_multivector():
+    from qdrant_client import QdrantClient
+    store = KnowledgeStore(collection_name="test_no_colbert")
+    store._client = QdrantClient(location=":memory:")
+
+    gemini = make_mock_gemini()
+    gemini.embed_batch = AsyncMock(return_value=[[0.1] * 768] * len(store.chunks))
+
+    await store.build_index(gemini)
+
+    info = store._client.get_collection("test_no_colbert")
+    vectors = info.config.params.vectors
+    # colbert vector should be absent when no colbert_index is provided
+    assert "colbert" not in vectors
