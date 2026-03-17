@@ -35,16 +35,23 @@ logger = logging.getLogger(__name__)
 class KnowledgeStore:
     # Manages the ADHD knowledge base with Qdrant vector storage
 
-    def __init__(self, knowledge_dir: Path | None = None):
+    def __init__(
+        self,
+        knowledge_dir: Path | None = None,
+        sparse_mode: str = "tfidf",
+        collection_name: str | None = None,
+    ):
         self.knowledge_dir = knowledge_dir or (
             Path(__file__).parent.parent / "knowledge"
         )
         self.documents: list[dict] = []
         self.chunks: list[dict] = []
         self._client: QdrantClient | None = None
-        self._collection = settings.QDRANT_COLLECTION
+        self._collection = collection_name or settings.QDRANT_COLLECTION
         self._indexed = False
         self._vocab: dict[str, int] = {}
+        self._avgdl: float = 0.0
+        self._sparse_mode = sparse_mode
 
         self._load_documents()
 
@@ -93,27 +100,64 @@ class KnowledgeStore:
     def _build_vocabulary(self):
         self._vocab = {}
         next_id = 0
+        total_tokens = 0
         for chunk in self.chunks:
-            for token in self._tokenize(chunk["text"]):
+            tokens = self._tokenize(chunk["text"])
+            total_tokens += len(tokens)
+            for token in tokens:
                 if token not in self._vocab:
                     self._vocab[token] = next_id
                     next_id += 1
+        self._avgdl = total_tokens / len(self.chunks) if self.chunks else 0.0
 
-    # Convert text to sparse vector using TF weights (Qdrant applies IDF server-side)
-    def _text_to_sparse(self, text: str) -> SparseVector:
+    def _text_to_sparse_doc(self, text: str) -> SparseVector:
+        """Sparse vector for indexing a document chunk.
+
+        TF-IDF mode: raw token count as value.
+        BM25 mode: saturated TF with k1=1.5, b=0.75 (Qdrant applies IDF server-side).
+        """
+        tokens = self._tokenize(text)
+        counts = Counter(tokens)
+        doc_len = len(tokens)
+        k1, b = 1.5, 0.75
+        avgdl = self._avgdl if self._avgdl > 0 else 1.0  # guard against division by zero
+
+        indices = []
+        values = []
+        for token, count in sorted(counts.items()):
+            if token not in self._vocab:
+                continue
+            indices.append(self._vocab[token])
+            if self._sparse_mode == "bm25":
+                tf_bm25 = count * (k1 + 1) / (count + k1 * (1 - b + b * doc_len / avgdl))
+                values.append(tf_bm25)
+            else:
+                values.append(float(count))
+
+        if not indices:
+            return SparseVector(indices=[0], values=[0.0])
+        return SparseVector(indices=indices, values=values)
+
+    def _text_to_sparse_query(self, text: str) -> SparseVector:
+        """Sparse vector for a query string.
+
+        Uses raw counts in both modes. BM25 saturation is near-identity for
+        query terms (typically appear once) and would apply avgdl against the
+        wrong length — raw counts are correct here.
+        """
         tokens = self._tokenize(text)
         counts = Counter(tokens)
 
         indices = []
         values = []
         for token, count in sorted(counts.items()):
-            if token in self._vocab:
-                indices.append(self._vocab[token])
-                values.append(float(count))
+            if token not in self._vocab:
+                continue
+            indices.append(self._vocab[token])
+            values.append(float(count))
 
         if not indices:
             return SparseVector(indices=[0], values=[0.0])
-
         return SparseVector(indices=indices, values=values)
 
     @staticmethod
@@ -160,7 +204,7 @@ class KnowledgeStore:
 
         points = []
         for i, (embedding, chunk) in enumerate(zip(raw_embeddings, self.chunks)):
-            sparse_vec = self._text_to_sparse(chunk["text"])
+            sparse_vec = self._text_to_sparse_doc(chunk["text"])
             points.append(PointStruct(
                 id=i,
                 vector={
@@ -251,7 +295,7 @@ class KnowledgeStore:
             return []
 
         qdrant_filter = self._build_filter(filters) if filters else None
-        sparse_vec = self._text_to_sparse(query_text)
+        sparse_vec = self._text_to_sparse_query(query_text)
         prefetch_limit = min(top_k * 3, len(self.chunks))
 
         results = self._client.query_points(

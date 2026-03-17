@@ -368,3 +368,72 @@ async def test_query_rewriter_passes_timeout():
     call_kwargs = mock_gemini.generate.call_args
     assert call_kwargs.kwargs.get("timeout") == settings.RAG_EMBED_TIMEOUT_S or \
            call_kwargs[1].get("timeout") == settings.RAG_EMBED_TIMEOUT_S
+
+
+# --- BM25 sparse encoding tests ---
+
+def _store_with_controlled_vocab(sparse_mode: str) -> KnowledgeStore:
+    """Return a KnowledgeStore with a hand-crafted vocab and avgdl for unit testing."""
+    store = KnowledgeStore(sparse_mode=sparse_mode)
+    # Override vocab so "hello" and "world" are always present at known indices
+    store._vocab = {"hello": 0, "world": 1, "foo": 2}
+    store._avgdl = 5.0  # pretend average doc length is 5 tokens
+    return store
+
+
+def test_tfidf_sparse_doc_uses_raw_counts():
+    store = _store_with_controlled_vocab("tfidf")
+    vec = store._text_to_sparse_doc("hello hello world")
+    hello_pos = vec.indices.index(0)  # index 0 = "hello"
+    assert vec.values[hello_pos] == 2.0
+
+
+def test_bm25_sparse_doc_saturates_tf():
+    store = _store_with_controlled_vocab("bm25")
+    # Single occurrence
+    vec1 = store._text_to_sparse_doc("hello world")
+    val1 = vec1.values[vec1.indices.index(0)]
+
+    # Ten occurrences — BM25 saturation should prevent 10x linear growth
+    vec10 = store._text_to_sparse_doc(" ".join(["hello"] * 10 + ["world"]))
+    val10 = vec10.values[vec10.indices.index(0)]
+
+    assert val10 < val1 * 10, "BM25 TF should saturate — not linear in count"
+    assert val10 > val1, "Higher count should still increase score"
+
+
+def test_bm25_sparse_doc_differs_from_tfidf():
+    tfidf_store = _store_with_controlled_vocab("tfidf")
+    bm25_store = _store_with_controlled_vocab("bm25")
+    text = "hello hello hello world"
+    tfidf_vec = tfidf_store._text_to_sparse_doc(text)
+    bm25_vec = bm25_store._text_to_sparse_doc(text)
+    tfidf_val = tfidf_vec.values[tfidf_vec.indices.index(0)]
+    bm25_val = bm25_vec.values[bm25_vec.indices.index(0)]
+    # BM25 should produce a different (saturated) value than raw TF=3
+    assert bm25_val != tfidf_val
+
+
+def test_query_sparse_uses_raw_counts_in_bm25_mode():
+    store = _store_with_controlled_vocab("bm25")
+    vec = store._text_to_sparse_query("hello hello world")
+    hello_pos = vec.indices.index(0)
+    # Query-side: raw count regardless of sparse_mode
+    assert vec.values[hello_pos] == 2.0
+
+
+def test_collection_name_override():
+    store = KnowledgeStore(collection_name="my_collection")
+    assert store._collection == "my_collection"
+
+
+def test_default_collection_name_uses_settings():
+    from app.config import settings
+    store = KnowledgeStore()
+    assert store._collection == settings.QDRANT_COLLECTION
+
+
+def test_avgdl_computed():
+    # Requires knowledge JSON files to be present (standard test environment assumption)
+    store = KnowledgeStore()
+    assert store._avgdl > 0.0, "Expected avgdl > 0 with real knowledge docs loaded"
