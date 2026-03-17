@@ -323,6 +323,7 @@ class KnowledgeStore:
         query_text: str,
         top_k: int = 10,
         filters: RetrievalFilters | None = None,
+        colbert_prefetch=None,
     ) -> list[tuple[int, float, dict]]:
         if not self._client or not self._indexed:
             return []
@@ -331,20 +332,16 @@ class KnowledgeStore:
         sparse_vec = self._text_to_sparse_query(query_text)
         prefetch_limit = min(top_k * 3, len(self.chunks))
 
+        prefetches = [
+            Prefetch(query=query_vector, using="dense", limit=prefetch_limit),
+            Prefetch(query=sparse_vec, using="sparse", limit=prefetch_limit),
+        ]
+        if colbert_prefetch is not None:
+            prefetches.append(colbert_prefetch)
+
         results = self._client.query_points(
             collection_name=self._collection,
-            prefetch=[
-                Prefetch(
-                    query=query_vector,
-                    using="dense",
-                    limit=prefetch_limit,
-                ),
-                Prefetch(
-                    query=sparse_vec,
-                    using="sparse",
-                    limit=prefetch_limit,
-                ),
-            ],
+            prefetch=prefetches,
             query=FusionQuery(fusion=Fusion.RRF),
             query_filter=qdrant_filter,
             limit=top_k,

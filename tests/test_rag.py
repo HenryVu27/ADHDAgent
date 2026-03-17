@@ -492,3 +492,22 @@ async def test_build_index_without_colbert_has_no_multivector():
     vectors = info.config.params.vectors
     # colbert vector should be absent when no colbert_index is provided
     assert "colbert" not in vectors
+
+
+# --- ColBERT prefetch in HybridRetriever ---
+
+def test_hybrid_retriever_accepts_colbert_index():
+    from app.rag.colbert_index import ColBERTIndex
+    from app.rag.retriever import HybridRetriever
+    colbert = MagicMock(spec=ColBERTIndex)
+    retriever = HybridRetriever(
+        knowledge_store=KnowledgeStore(),
+        gemini_client=None,
+        colbert_index=colbert,
+    )
+    assert retriever._colbert is colbert
+
+
+def test_hybrid_retriever_without_colbert_has_none():
+    retriever = HybridRetriever(knowledge_store=KnowledgeStore(), gemini_client=None)
+    assert retriever._colbert is None
