@@ -1,8 +1,14 @@
+from __future__ import annotations
+
 # Hybrid RAG Retriever
 # Qdrant dense+sparse with RRF fusion, query term tag boosting, and query rewriting.
 
 import logging
 from collections import defaultdict
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.rag.colbert_index import ColBERTIndex
 
 from app.config import settings
 from app.models.schemas import (
@@ -30,11 +36,13 @@ class HybridRetriever:
         gemini_client=None,
         query_rewriter: QueryRewriter | None = None,
         reranker: FastEmbedReranker | None = None,
+        colbert_index: ColBERTIndex | None = None,
     ):
         self._store = knowledge_store
         self._gemini = gemini_client
         self._rewriter = query_rewriter
         self._reranker = reranker
+        self._colbert = colbert_index
 
     # Full retrieval pipeline: rewrite -> hybrid search -> facets -> trim
     async def retrieve(
@@ -121,11 +129,21 @@ class HybridRetriever:
         # Qdrant hybrid: dense + sparse + RRF
         if self._store.has_sparse and self._gemini:
             query_vector = await self._gemini.embed(query, timeout=settings.RAG_EMBED_TIMEOUT_S)
+            prefetch_limit = min(top_k * 3, len(self._store.chunks))
+
+            colbert_prefetch = None
+            if self._colbert is not None:
+                import asyncio
+                colbert_prefetch = await asyncio.to_thread(
+                    self._colbert.make_prefetch, query, prefetch_limit
+                )
+
             hybrid_results = self._store.search_hybrid(
                 query_vector=query_vector,
                 query_text=query,
                 top_k=top_k,
                 filters=filters,
+                colbert_prefetch=colbert_prefetch,
             )
             if hybrid_results:
                 return self._build_results(hybrid_results, query_tags)

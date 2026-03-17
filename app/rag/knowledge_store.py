@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # Qdrant-based Knowledge Store
 # Loads JSON docs, chunks them, embeds with Gemini, stores in Qdrant for
 # hybrid search (dense + sparse vectors with server-side RRF fusion).
@@ -7,6 +9,10 @@ import logging
 import re
 from collections import Counter
 from pathlib import Path
+from typing import TYPE_CHECKING, Literal
+
+if TYPE_CHECKING:
+    from app.rag.colbert_index import ColBERTIndex
 
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
@@ -18,6 +24,8 @@ from qdrant_client.models import (
     MatchAny,
     MatchValue,
     Modifier,
+    MultiVectorComparator,
+    MultiVectorConfig,
     PayloadSchemaType,
     PointStruct,
     Prefetch,
@@ -35,16 +43,23 @@ logger = logging.getLogger(__name__)
 class KnowledgeStore:
     # Manages the ADHD knowledge base with Qdrant vector storage
 
-    def __init__(self, knowledge_dir: Path | None = None):
+    def __init__(
+        self,
+        knowledge_dir: Path | None = None,
+        sparse_mode: Literal["tfidf", "bm25"] = "tfidf",
+        collection_name: str | None = None,
+    ):
         self.knowledge_dir = knowledge_dir or (
             Path(__file__).parent.parent / "knowledge"
         )
         self.documents: list[dict] = []
         self.chunks: list[dict] = []
         self._client: QdrantClient | None = None
-        self._collection = settings.QDRANT_COLLECTION
+        self._collection = collection_name or settings.QDRANT_COLLECTION
         self._indexed = False
         self._vocab: dict[str, int] = {}
+        self._avgdl: float = 0.0
+        self._sparse_mode = sparse_mode
 
         self._load_documents()
 
@@ -93,27 +108,64 @@ class KnowledgeStore:
     def _build_vocabulary(self):
         self._vocab = {}
         next_id = 0
+        total_tokens = 0
         for chunk in self.chunks:
-            for token in self._tokenize(chunk["text"]):
+            tokens = self._tokenize(chunk["text"])
+            total_tokens += len(tokens)
+            for token in tokens:
                 if token not in self._vocab:
                     self._vocab[token] = next_id
                     next_id += 1
+        self._avgdl = total_tokens / len(self.chunks) if self.chunks else 0.0
 
-    # Convert text to sparse vector using TF weights (Qdrant applies IDF server-side)
-    def _text_to_sparse(self, text: str) -> SparseVector:
+    def _text_to_sparse_doc(self, text: str) -> SparseVector:
+        """Sparse vector for indexing a document chunk.
+
+        TF-IDF mode: raw token count as value.
+        BM25 mode: saturated TF with k1=1.5, b=0.75 (Qdrant applies IDF server-side).
+        """
+        tokens = self._tokenize(text)
+        counts = Counter(tokens)
+        doc_len = len(tokens)
+        k1, b = 1.5, 0.75
+        avgdl = self._avgdl if self._avgdl > 0 else 1.0  # guard against division by zero
+
+        indices = []
+        values = []
+        for token, count in sorted(counts.items()):
+            if token not in self._vocab:
+                continue
+            indices.append(self._vocab[token])
+            if self._sparse_mode == "bm25":
+                tf_bm25 = count * (k1 + 1) / (count + k1 * (1 - b + b * doc_len / avgdl))
+                values.append(tf_bm25)
+            else:
+                values.append(float(count))
+
+        if not indices:
+            return SparseVector(indices=[0], values=[0.0])
+        return SparseVector(indices=indices, values=values)
+
+    def _text_to_sparse_query(self, text: str) -> SparseVector:
+        """Sparse vector for a query string.
+
+        Uses raw counts in both modes. BM25 saturation is near-identity for
+        query terms (typically appear once) and would apply avgdl against the
+        wrong length — raw counts are correct here.
+        """
         tokens = self._tokenize(text)
         counts = Counter(tokens)
 
         indices = []
         values = []
         for token, count in sorted(counts.items()):
-            if token in self._vocab:
-                indices.append(self._vocab[token])
-                values.append(float(count))
+            if token not in self._vocab:
+                continue
+            indices.append(self._vocab[token])
+            values.append(float(count))
 
         if not indices:
             return SparseVector(indices=[0], values=[0.0])
-
         return SparseVector(indices=indices, values=values)
 
     @staticmethod
@@ -122,20 +174,21 @@ class KnowledgeStore:
 
     # Build Qdrant collection with dense (Gemini) + sparse (TF) vectors
     # Idempotent: skips rebuild if collection already has correct point count
-    async def build_index(self, gemini_client):
+    async def build_index(self, gemini_client, colbert_index: ColBERTIndex | None = None):
         if not self.chunks:
             logger.warning("No chunks to index")
             return
 
-        if settings.QDRANT_URL == ":memory:":
-            self._client = QdrantClient(location=":memory:")
-        else:
-            self._client = QdrantClient(
-                url=settings.QDRANT_URL,
-                api_key=settings.QDRANT_API_KEY or None,
-            )
+        if self._client is None:
+            if settings.QDRANT_URL == ":memory:":
+                self._client = QdrantClient(location=":memory:")
+            else:
+                self._client = QdrantClient(
+                    url=settings.QDRANT_URL,
+                    api_key=settings.QDRANT_API_KEY or None,
+                )
 
-        if self._collection_is_current():
+        if self._collection_is_current(colbert_index):
             self._indexed = True
             logger.info(
                 f"Collection '{self._collection}' already exists with "
@@ -148,25 +201,43 @@ class KnowledgeStore:
         raw_embeddings = await gemini_client.embed_batch(texts, timeout=settings.RAG_EMBED_TIMEOUT_S)
         dim = len(raw_embeddings[0])
 
+        vectors_cfg: dict = {
+            "dense": VectorParams(size=dim, distance=Distance.COSINE),
+        }
+        if colbert_index is not None:
+            vectors_cfg["colbert"] = VectorParams(
+                size=128,
+                distance=Distance.COSINE,
+                multivector_config=MultiVectorConfig(
+                    comparator=MultiVectorComparator.MAX_SIM,
+                ),
+            )
+
         self._client.recreate_collection(
             collection_name=self._collection,
-            vectors_config={
-                "dense": VectorParams(size=dim, distance=Distance.COSINE),
-            },
+            vectors_config=vectors_cfg,
             sparse_vectors_config={
                 "sparse": SparseVectorParams(modifier=Modifier.IDF),
             },
         )
 
+        colbert_matrices: list[list[list[float]]] | None = None
+        if colbert_index is not None:
+            import asyncio
+            colbert_matrices = await asyncio.to_thread(colbert_index.embed_chunks, self.chunks)
+
         points = []
         for i, (embedding, chunk) in enumerate(zip(raw_embeddings, self.chunks)):
-            sparse_vec = self._text_to_sparse(chunk["text"])
+            sparse_vec = self._text_to_sparse_doc(chunk["text"])
+            vector: dict = {
+                "dense": embedding,
+                "sparse": sparse_vec,
+            }
+            if colbert_matrices is not None:
+                vector["colbert"] = colbert_matrices[i]
             points.append(PointStruct(
                 id=i,
-                vector={
-                    "dense": embedding,
-                    "sparse": sparse_vec,
-                },
+                vector=vector,
                 payload={
                     "document_id": chunk["document_id"],
                     "document_name": chunk["document_name"],
@@ -189,11 +260,11 @@ class KnowledgeStore:
         self._indexed = True
         logger.info(
             f"Qdrant collection built: {len(points)} vectors, "
-            f"dim={dim}, vocab={len(self._vocab)}"
+            f"dim={dim}, vocab={len(self._vocab)}, colbert={'yes' if colbert_index else 'no'}"
         )
 
     # Check if collection exists with correct schema and point count
-    def _collection_is_current(self) -> bool:
+    def _collection_is_current(self, colbert_index=None) -> bool:
         try:
             collections = self._client.get_collections().collections
             exists = any(c.name == self._collection for c in collections)
@@ -211,6 +282,12 @@ class KnowledgeStore:
             if not sparse_config or "sparse" not in sparse_config:
                 logger.info(f"Collection '{self._collection}' missing sparse vectors — rebuilding")
                 return False
+
+            if colbert_index is not None:
+                vectors_config = info.config.params.vectors
+                if not isinstance(vectors_config, dict) or "colbert" not in vectors_config:
+                    logger.info("Collection missing ColBERT multi-vectors — rebuilding")
+                    return False
 
             if info.points_count == len(self.chunks):
                 return True
@@ -246,28 +323,25 @@ class KnowledgeStore:
         query_text: str,
         top_k: int = 10,
         filters: RetrievalFilters | None = None,
+        colbert_prefetch=None,
     ) -> list[tuple[int, float, dict]]:
         if not self._client or not self._indexed:
             return []
 
         qdrant_filter = self._build_filter(filters) if filters else None
-        sparse_vec = self._text_to_sparse(query_text)
+        sparse_vec = self._text_to_sparse_query(query_text)
         prefetch_limit = min(top_k * 3, len(self.chunks))
+
+        prefetches = [
+            Prefetch(query=query_vector, using="dense", limit=prefetch_limit),
+            Prefetch(query=sparse_vec, using="sparse", limit=prefetch_limit),
+        ]
+        if colbert_prefetch is not None:
+            prefetches.append(colbert_prefetch)
 
         results = self._client.query_points(
             collection_name=self._collection,
-            prefetch=[
-                Prefetch(
-                    query=query_vector,
-                    using="dense",
-                    limit=prefetch_limit,
-                ),
-                Prefetch(
-                    query=sparse_vec,
-                    using="sparse",
-                    limit=prefetch_limit,
-                ),
-            ],
+            prefetch=prefetches,
             query=FusionQuery(fusion=Fusion.RRF),
             query_filter=qdrant_filter,
             limit=top_k,
