@@ -22,7 +22,10 @@ export function ChatPage() {
   const [sessionId, setSessionId] = useState<string>(() => {
     return getActiveSessionId() || createSessionId()
   })
-  const { messages, isLoading, latestTrace, sendMessage, clearMessages, loadMessages } = useChat(sessionId)
+  const {
+    messages, isLoading, isStreaming, statusText, streamingContent,
+    latestTrace, typewriterResetRef, sendMessage, stopStreaming, clearMessages, loadMessages,
+  } = useChat(sessionId)
   const { session, refresh } = useSession(sessionId)
   const { getOnboarding } = useAuth()
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -101,6 +104,23 @@ export function ChatPage() {
     initialized.current = false
   }, [sessionId, clearMessages])
 
+  // Post-stream side effects: refresh session state and update stats
+  const wasStreamingRef = useRef(false)
+  useEffect(() => {
+    if (wasStreamingRef.current && !isStreaming) {
+      // Stream just completed — refresh session state and update stats
+      refresh()
+      const stats = getSessionStats()
+      updateSessionStats({
+        sessions: stats.sessions + 1,
+        strategies: (latestTrace?.retrieval_results?.length || 0) + stats.strategies,
+        streak: stats.streak || 1,
+      })
+      setShowChips(true)
+    }
+    wasStreamingRef.current = isStreaming
+  }, [isStreaming, latestTrace, refresh])
+
   const handleSend = useCallback(async (content: string) => {
     // Wait for any pending seed to complete so the agent has family context
     if (pendingSeed.current) {
@@ -108,18 +128,8 @@ export function ChatPage() {
       pendingSeed.current = null
     }
     setShowChips(false)
-    const data = await sendMessage(content)
-    if (data) {
-      await refresh()
-      const stats = getSessionStats()
-      updateSessionStats({
-        sessions: stats.sessions + 1,
-        strategies: (data.pipeline_trace.retrieval_results?.length || 0) + stats.strategies,
-        streak: stats.streak || 1,
-      })
-      setShowChips(true)
-    }
-  }, [sendMessage, refresh])
+    sendMessage(content)
+  }, [sendMessage])
 
   const handleChipSelect = useCallback((text: string) => {
     handleSend(text)
@@ -163,17 +173,24 @@ export function ChatPage() {
         </div>
 
         {/* Chat area */}
-        <ChatContainer messages={messages} isLoading={isLoading} />
+        <ChatContainer
+          messages={messages}
+          isLoading={isLoading}
+          isStreaming={isStreaming}
+          statusText={statusText}
+          streamingContent={streamingContent}
+          typewriterResetRef={typewriterResetRef}
+        />
 
         {/* Quick reply chips */}
         <QuickReplyChips
           phase={phase}
           onSelect={handleChipSelect}
-          visible={showChips && !isLoading}
+          visible={showChips && !isLoading && !isStreaming}
         />
 
         {/* Input */}
-        <ChatInput onSend={handleSend} isLoading={isLoading} />
+        <ChatInput onSend={handleSend} onStop={stopStreaming} isLoading={isLoading} isStreaming={isStreaming} />
       </Card>
     </div>
   )

@@ -1,20 +1,23 @@
 import { useState, useRef } from "react"
-import { Send } from "lucide-react"
+import { Send, Square } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
 interface Props {
   onSend: (message: string) => void
+  onStop: () => void
   isLoading: boolean
+  isStreaming: boolean
 }
 
-export function ChatInput({ onSend, isLoading }: Props) {
+export function ChatInput({ onSend, onStop, isLoading, isStreaming }: Props) {
   const [value, setValue] = useState("")
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const busy = isLoading || isStreaming
 
   const handleSend = () => {
     const trimmed = value.trim()
-    if (!trimmed || isLoading) return
+    if (!trimmed || busy) return
     onSend(trimmed)
     setValue("")
     textareaRef.current?.focus()
@@ -37,16 +40,28 @@ export function ChatInput({ onSend, isLoading }: Props) {
         placeholder="Share what's going on with your family..."
         className="min-h-[44px] max-h-32 resize-none"
         rows={1}
-        disabled={isLoading}
+        disabled={busy}
       />
-      <Button
-        onClick={handleSend}
-        disabled={!value.trim() || isLoading}
-        size="icon"
-        className="shrink-0"
-      >
-        <Send className="h-4 w-4" />
-      </Button>
+      {isStreaming ? (
+        <Button
+          onClick={onStop}
+          size="icon"
+          variant="outline"
+          className="shrink-0"
+          title="Stop generating"
+        >
+          <Square className="h-4 w-4" />
+        </Button>
+      ) : (
+        <Button
+          onClick={handleSend}
+          disabled={!value.trim() || isLoading}
+          size="icon"
+          className="shrink-0"
+        >
+          <Send className="h-4 w-4" />
+        </Button>
+      )}
     </div>
   )
 }
