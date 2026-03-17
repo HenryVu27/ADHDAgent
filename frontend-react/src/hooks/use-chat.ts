@@ -1,12 +1,20 @@
 import { useState, useCallback, useRef } from "react"
-import type { ChatMessage, PipelineTrace } from "@/types"
+import type { ChatMessage, PipelineTrace, StreamDoneEvent } from "@/types"
 import { api } from "@/lib/api"
 
 export function useChat(sessionId: string) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)       // waiting for first token
+  const [isStreaming, setIsStreaming] = useState(false)    // tokens arriving
+  const [statusText, setStatusText] = useState("")         // current pipeline stage label
+  const [streamingContent, setStreamingContent] = useState("") // drives typewriter display
   const [latestTrace, setLatestTrace] = useState<PipelineTrace | null>(null)
   const idCounter = useRef(0)
+  const abortRef = useRef<AbortController | null>(null)
+  // accumulatedRef: source of truth for token accumulation (avoids stale closure on done)
+  const accumulatedRef = useRef("")
+  // Exposed so StreamingBubble can call typewriter.reset() on replace events
+  const typewriterResetRef = useRef<((text: string) => void) | null>(null)
 
   const sendMessage = useCallback(async (content: string) => {
     const userMsg: ChatMessage = {
@@ -17,37 +25,107 @@ export function useChat(sessionId: string) {
     }
     setMessages(prev => [...prev, userMsg])
     setIsLoading(true)
+    setStreamingContent("")
+    setStatusText("")
+    accumulatedRef.current = ""
+
+    const controller = new AbortController()
+    abortRef.current = controller
+
+    // Local variable to detect first token without stale closure on isLoading state
+    let firstToken = true
 
     try {
-      const data = await api.chat({ message: content, session_id: sessionId })
+      for await (const event of api.chatStream(
+        { message: content, session_id: sessionId },
+        controller.signal,
+      )) {
+        if (event.type === "status") {
+          setStatusText(event.text)
+
+        } else if (event.type === "token") {
+          if (firstToken) {
+            firstToken = false
+            setIsLoading(false)
+            setIsStreaming(true)
+            setStatusText("")
+          }
+          accumulatedRef.current += event.text
+          setStreamingContent(prev => prev + event.text)
+
+        } else if (event.type === "replace") {
+          // Output gate replaced the streamed content — swap both the display ref and typewriter
+          accumulatedRef.current = event.text
+          setStreamingContent(event.text)
+          typewriterResetRef.current?.(event.text)
+
+        } else if (event.type === "done") {
+          _finalize(event)
+
+        } else if (event.type === "error") {
+          setMessages(prev => [...prev, {
+            id: `msg_${++idCounter.current}`,
+            role: "assistant",
+            content: "Something went wrong. Please try again.",
+            timestamp: new Date(),
+          }])
+          _clearStreamState()
+        }
+      }
+    } catch (err) {
+      if ((err as Error).name === "AbortError") {
+        // User cancelled — discard partial content, do not commit to messages
+        _clearStreamState()
+      } else {
+        setMessages(prev => [...prev, {
+          id: `msg_${++idCounter.current}`,
+          role: "assistant",
+          content: "Something went wrong. Please try again.",
+          timestamp: new Date(),
+        }])
+        _clearStreamState()
+      }
+    } finally {
+      abortRef.current = null
+    }
+
+    function _finalize(done: StreamDoneEvent) {
+      // On input-blocked path, response text comes in done.response (no tokens streamed).
+      // Otherwise, use accumulatedRef which has the real token content — NOT streamingContent
+      // state, which would be stale (captured at useCallback memoization time).
+      const finalContent = done.response ?? accumulatedRef.current
       const assistantMsg: ChatMessage = {
         id: `msg_${++idCounter.current}`,
         role: "assistant",
-        content: data.response,
+        content: finalContent,
         timestamp: new Date(),
-        agentUsed: data.agent_used,
-        pipelineTrace: data.pipeline_trace,
+        agentUsed: done.agent_used,
+        pipelineTrace: done.pipeline_trace ?? undefined,
       }
       setMessages(prev => [...prev, assistantMsg])
-      setLatestTrace(data.pipeline_trace)
-      return data
-    } catch (error) {
-      const errorMsg: ChatMessage = {
-        id: `msg_${++idCounter.current}`,
-        role: "assistant",
-        content: "Sorry, something went wrong. Please try again.",
-        timestamp: new Date(),
-      }
-      setMessages(prev => [...prev, errorMsg])
-      throw error
-    } finally {
-      setIsLoading(false)
+      if (done.pipeline_trace) setLatestTrace(done.pipeline_trace)
+      _clearStreamState()
     }
-  }, [sessionId])
+
+    function _clearStreamState() {
+      setIsLoading(false)
+      setIsStreaming(false)
+      setStatusText("")
+      setStreamingContent("")
+      accumulatedRef.current = ""
+    }
+  }, [sessionId])  // sessionId only — no state in deps (local vars + refs used instead)
+
+  const stopStreaming = useCallback(() => {
+    abortRef.current?.abort()
+  }, [])
 
   const clearMessages = useCallback(() => {
     setMessages([])
     setLatestTrace(null)
+    setStreamingContent("")
+    setStatusText("")
+    accumulatedRef.current = ""
     idCounter.current = 0
   }, [])
 
@@ -72,5 +150,17 @@ export function useChat(sessionId: string) {
     }
   }, [sessionId])
 
-  return { messages, isLoading, latestTrace, sendMessage, clearMessages, loadMessages }
+  return {
+    messages,
+    isLoading,
+    isStreaming,
+    statusText,
+    streamingContent,
+    latestTrace,
+    typewriterResetRef,
+    sendMessage,
+    stopStreaming,
+    clearMessages,
+    loadMessages,
+  }
 }
