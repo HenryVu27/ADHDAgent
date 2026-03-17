@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 
-@dataclass
+@dataclass(frozen=True)
 class PipelineConfig:
     name: str
     sparse_mode: Literal["tfidf", "bm25"]

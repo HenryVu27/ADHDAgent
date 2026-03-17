@@ -11,6 +11,9 @@ def test_pipeline_config_fields():
     )
     assert cfg.name == "test"
     assert cfg.sparse_mode == "tfidf"
+    assert cfg.use_reranker is False
+    assert cfg.use_colbert is False
+    assert cfg.use_query_rewriter is False
 
 
 def test_ablation_configs_count():
