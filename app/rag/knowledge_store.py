@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # Qdrant-based Knowledge Store
 # Loads JSON docs, chunks them, embeds with Gemini, stores in Qdrant for
 # hybrid search (dense + sparse vectors with server-side RRF fusion).
@@ -7,6 +9,7 @@ import logging
 import re
 from collections import Counter
 from pathlib import Path
+from typing import Literal
 
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
@@ -38,7 +41,7 @@ class KnowledgeStore:
     def __init__(
         self,
         knowledge_dir: Path | None = None,
-        sparse_mode: str = "tfidf",
+        sparse_mode: Literal["tfidf", "bm25"] = "tfidf",
         collection_name: str | None = None,
     ):
         self.knowledge_dir = knowledge_dir or (
