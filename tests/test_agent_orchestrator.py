@@ -1,13 +1,69 @@
 """Tests for AgentOrchestrator — session management and phase inference."""
 
+import asyncio
 import pytest
 from unittest.mock import AsyncMock
 
-from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.messages import AIMessage, AIMessageChunk, HumanMessage
 
 from app.agent.orchestrator import AgentOrchestrator
 from app.agent.session_store import create_in_memory_store
 from app.models.schemas import ConversationPhase, SeedSessionRequest, SessionSummary
+
+
+async def collect_stream(generator) -> list[tuple[str, dict]]:
+    """Drain a process_stream() generator into a list of (event_type, data) tuples."""
+    events = []
+    async for event_type, data in generator:
+        events.append((event_type, data))
+    return events
+
+
+def _make_streaming_mock_agent(response_text="I'm here to help."):
+    """Mock agent whose astream_events yields a minimal successful event sequence."""
+    from langchain_core.messages import AIMessageChunk
+    from unittest.mock import AsyncMock
+
+    async def mock_astream_events(*args, **kwargs):
+        # Signal pro_react_agent start
+        yield {
+            "event": "on_chain_start",
+            "name": "LangGraph",
+            "metadata": {
+                "langgraph_node": "pro_react_agent",
+                "langgraph_checkpoint_ns": "pro_react_agent:test",
+            },
+            "data": {},
+        }
+        # Stream response tokens
+        for word in response_text.split():
+            yield {
+                "event": "on_chat_model_stream",
+                "metadata": {
+                    "langgraph_node": "agent",
+                    "langgraph_checkpoint_ns": "pro_react_agent:test",
+                },
+                "data": {"chunk": AIMessageChunk(content=word + " ")},
+            }
+        # Top-level chain end with final state
+        yield {
+            "event": "on_chain_end",
+            "metadata": {"langgraph_node": "", "langgraph_checkpoint_ns": ""},
+            "data": {
+                "output": {
+                    "messages": [
+                        HumanMessage(content="test"),
+                        AIMessage(content=response_text),
+                    ],
+                    "input_blocked": False,
+                    "trace_steps": [],
+                }
+            },
+        }
+
+    agent = AsyncMock()
+    agent.astream_events = mock_astream_events
+    return agent
 
 
 class TestPhaseInference:
@@ -115,25 +171,24 @@ class TestHistoryExcludesSummarizedTurns:
 
     async def _make_orchestrator(self):
         store = await create_in_memory_store()
-        mock_agent = AsyncMock()
-        mock_agent.ainvoke.return_value = {
-            "messages": [
-                HumanMessage(content="new question"),
-                AIMessage(content="Here is my response."),
-            ],
-            "trace_steps": [],
-            "input_blocked": False,
-        }
-        orchestrator = AgentOrchestrator(
-            agent=mock_agent,
-            session_store=store,
-        )
-        return store, mock_agent, orchestrator
+        agent = _make_streaming_mock_agent()
+        # Wrap so we can inspect what was passed
+        original_fn = agent.astream_events
+        agent._last_call_input = None
+
+        async def capturing_astream_events(input_dict, *args, **kwargs):
+            agent._last_call_input = input_dict
+            async for event in original_fn(input_dict, *args, **kwargs):
+                yield event
+
+        agent.astream_events = capturing_astream_events
+        orchestrator = AgentOrchestrator(agent=agent, session_store=store)
+        return store, agent, orchestrator
 
     @pytest.mark.asyncio
     async def test_history_excludes_summarized_turns(self):
         """Messages from turns covered by the rolling summary should not be in history."""
-        store, mock_agent, orchestrator = await self._make_orchestrator()
+        store, agent, orchestrator = await self._make_orchestrator()
         sid = "summ-test"
 
         # Add messages for turns 1-8
@@ -149,15 +204,12 @@ class TestHistoryExcludesSummarizedTurns:
         )
         await store.commit()
 
-        # Call process — capture what the agent receives
-        result = await orchestrator.process("new question", sid)
+        await collect_stream(orchestrator.process_stream("new question", sid))
 
-        # The agent was invoked with messages — check the invoke call
-        call_args = mock_agent.ainvoke.call_args
-        messages_passed = call_args[0][0]["messages"]
+        messages_passed = agent._last_call_input["messages"]
+        contents = [m.content for m in messages_passed if hasattr(m, "content")]
 
         # Should NOT contain messages from turns 1-5
-        contents = [m.content for m in messages_passed if hasattr(m, "content")]
         for i in range(1, 6):
             assert f"user-msg-{i}" not in contents, f"Turn {i} should be excluded (covered by summary)"
             assert f"assistant-msg-{i}" not in contents, f"Turn {i} assistant should be excluded"
@@ -172,7 +224,7 @@ class TestHistoryExcludesSummarizedTurns:
     @pytest.mark.asyncio
     async def test_no_summary_includes_all_turns(self):
         """Without a summary, all messages appear in history."""
-        store, mock_agent, orchestrator = await self._make_orchestrator()
+        store, agent, orchestrator = await self._make_orchestrator()
         sid = "no-summ"
 
         for i in range(1, 4):
@@ -181,13 +233,201 @@ class TestHistoryExcludesSummarizedTurns:
             await store.add_message(sid, "assistant", f"assistant-msg-{i}", i)
         await store.commit()
 
-        result = await orchestrator.process("new question", sid)
+        await collect_stream(orchestrator.process_stream("new question", sid))
 
-        call_args = mock_agent.ainvoke.call_args
-        messages_passed = call_args[0][0]["messages"]
+        messages_passed = agent._last_call_input["messages"]
         contents = [m.content for m in messages_passed if hasattr(m, "content")]
 
         # All turns should be present
         for i in range(1, 4):
             assert f"user-msg-{i}" in contents, f"Turn {i} should be included"
         assert "new question" in contents
+
+
+class TestProcessStream:
+
+    async def _make(self, response_text="Hello from Ally."):
+        store = await create_in_memory_store()
+        agent = _make_streaming_mock_agent(response_text)
+        orchestrator = AgentOrchestrator(agent=agent, session_store=store)
+        return store, agent, orchestrator
+
+    @pytest.mark.asyncio
+    async def test_emits_status_then_tokens_then_done(self):
+        _, _, orchestrator = await self._make("Hello there!")
+        events = await collect_stream(orchestrator.process_stream("Hi", "s1"))
+
+        types = [e[0] for e in events]
+        assert "status" in types
+        assert "token" in types
+        assert types[-1] == "done"
+
+    @pytest.mark.asyncio
+    async def test_tokens_reconstruct_response(self):
+        response = "Great idea for your child."
+        _, _, orchestrator = await self._make(response)
+        events = await collect_stream(orchestrator.process_stream("Hi", "s2"))
+
+        tokens = "".join(d["text"] for t, d in events if t == "token")
+        assert tokens.strip() == response
+
+    @pytest.mark.asyncio
+    async def test_done_payload_has_required_fields(self):
+        _, _, orchestrator = await self._make()
+        events = await collect_stream(orchestrator.process_stream("Hi", "s3"))
+
+        done_event = next(d for t, d in events if t == "done")
+        assert done_event["session_id"] == "s3"
+        assert done_event["agent_used"] in ("react_agent", "flash_react_agent", "input_gate")
+        assert done_event["phase"] in ("intake", "strategy", "progress", "followup")
+        assert done_event["pipeline_trace"] is not None
+
+    @pytest.mark.asyncio
+    async def test_message_persisted_after_stream(self):
+        store, _, orchestrator = await self._make("Nice response.")
+        await collect_stream(orchestrator.process_stream("my question", "s4"))
+
+        msgs = await store.get_messages("s4")
+        roles = [m["role"] for m in msgs]
+        assert "user" in roles
+        assert "assistant" in roles
+
+    @pytest.mark.asyncio
+    async def test_timeout_yields_error_event(self):
+        from unittest.mock import AsyncMock
+        store = await create_in_memory_store()
+
+        async def slow_astream_events(*args, **kwargs):
+            await asyncio.sleep(60)
+            yield {}  # never reached
+
+        agent = AsyncMock()
+        agent.astream_events = slow_astream_events
+        orchestrator = AgentOrchestrator(agent=agent, session_store=store)
+
+        from app.config import settings
+        original = settings.CHAT_TIMEOUT_S
+        settings.CHAT_TIMEOUT_S = 0.01
+        try:
+            events = await collect_stream(orchestrator.process_stream("Hi", "timeout-s"))
+            types = [e[0] for e in events]
+            assert "error" in types
+            assert "done" not in types
+        finally:
+            settings.CHAT_TIMEOUT_S = original
+
+    @pytest.mark.asyncio
+    async def test_thinking_tokens_are_skipped(self):
+        """Gemini 2.5 Pro thinking content (type='thinking') must not appear in tokens."""
+        from langchain_core.messages import AIMessageChunk
+        from unittest.mock import AsyncMock
+
+        store = await create_in_memory_store()
+
+        async def thinking_astream_events(*args, **kwargs):
+            # Thinking chunk — should be filtered out
+            yield {
+                "event": "on_chat_model_stream",
+                "metadata": {
+                    "langgraph_node": "agent",
+                    "langgraph_checkpoint_ns": "pro_react_agent:x",
+                },
+                "data": {
+                    "chunk": AIMessageChunk(
+                        content=[{"type": "thinking", "thinking": "I am reasoning..."}]
+                    )
+                },
+            }
+            # Real response chunk
+            yield {
+                "event": "on_chat_model_stream",
+                "metadata": {
+                    "langgraph_node": "agent",
+                    "langgraph_checkpoint_ns": "pro_react_agent:x",
+                },
+                "data": {
+                    "chunk": AIMessageChunk(
+                        content=[{"type": "text", "text": "Real answer."}]
+                    )
+                },
+            }
+            yield {
+                "event": "on_chain_end",
+                "metadata": {"langgraph_node": "", "langgraph_checkpoint_ns": ""},
+                "data": {
+                    "output": {
+                        "messages": [
+                            HumanMessage(content="q"),
+                            AIMessage(content="Real answer."),
+                        ],
+                        "input_blocked": False,
+                        "trace_steps": [],
+                    }
+                },
+            }
+
+        agent = AsyncMock()
+        agent.astream_events = thinking_astream_events
+        orchestrator = AgentOrchestrator(agent=agent, session_store=store)
+        events = await collect_stream(orchestrator.process_stream("q", "think-s"))
+
+        token_texts = [d["text"] for t, d in events if t == "token"]
+        assert "I am reasoning..." not in "".join(token_texts)
+        assert "Real answer." in "".join(token_texts)
+
+    @pytest.mark.asyncio
+    async def test_tool_call_tokens_are_skipped(self):
+        """Tokens from tool-invocation steps (tool_call_chunks non-empty) must be filtered."""
+        from langchain_core.messages import AIMessageChunk
+        from langchain_core.messages.tool import ToolCallChunk
+        from unittest.mock import AsyncMock
+
+        store = await create_in_memory_store()
+
+        async def tool_call_astream_events(*args, **kwargs):
+            # Chunk with tool_call_chunks — should be skipped
+            yield {
+                "event": "on_chat_model_stream",
+                "metadata": {
+                    "langgraph_node": "agent",
+                    "langgraph_checkpoint_ns": "pro_react_agent:x",
+                },
+                "data": {
+                    "chunk": AIMessageChunk(
+                        content="",
+                        tool_call_chunks=[ToolCallChunk(name="search_knowledge_base", args='{"query": "test"}', id="call1", index=0)],
+                    )
+                },
+            }
+            # Real response chunk (no tool_call_chunks)
+            yield {
+                "event": "on_chat_model_stream",
+                "metadata": {
+                    "langgraph_node": "agent",
+                    "langgraph_checkpoint_ns": "pro_react_agent:x",
+                },
+                "data": {"chunk": AIMessageChunk(content="Final response.")},
+            }
+            yield {
+                "event": "on_chain_end",
+                "metadata": {"langgraph_node": "", "langgraph_checkpoint_ns": ""},
+                "data": {
+                    "output": {
+                        "messages": [
+                            HumanMessage(content="q"),
+                            AIMessage(content="Final response."),
+                        ],
+                        "input_blocked": False,
+                        "trace_steps": [],
+                    }
+                },
+            }
+
+        agent = AsyncMock()
+        agent.astream_events = tool_call_astream_events
+        orchestrator = AgentOrchestrator(agent=agent, session_store=store)
+        events = await collect_stream(orchestrator.process_stream("q", "tool-s"))
+
+        token_texts = [d["text"] for t, d in events if t == "token"]
+        # Tool-call chunk should not produce a token
+        assert all(t == "Final response." for t in token_texts)

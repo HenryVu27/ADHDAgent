@@ -1,5 +1,6 @@
 import { motion } from "framer-motion"
 import { Sprout, User } from "lucide-react"
+import { useTypewriter } from "@/hooks/use-typewriter"
 import type { ChatMessage } from "@/types"
 
 function formatMarkdown(text: string): string {
@@ -14,6 +15,46 @@ function formatMarkdown(text: string): string {
 
 interface Props {
   message: ChatMessage
+}
+
+interface StreamingBubbleProps {
+  content: string
+  typewriterResetRef: React.MutableRefObject<((text: string) => void) | null>
+}
+
+/**
+ * In-progress assistant bubble during SSE streaming.
+ * Uses useTypewriter to animate tokens at a smooth, human-readable pace.
+ * Exposes reset() via typewriterResetRef so use-chat can swap content
+ * when an output-gate replace event arrives.
+ */
+export function StreamingBubble({ content, typewriterResetRef }: StreamingBubbleProps) {
+  const { displayedText, reset } = useTypewriter(content)
+
+  // Keep typewriterResetRef in sync so use-chat.ts can call reset() on replace events.
+  if (typewriterResetRef.current !== reset) {
+    typewriterResetRef.current = reset
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className="flex gap-3"
+    >
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-coach">
+        <Sprout className="h-4 w-4 text-coach-foreground" />
+      </div>
+      <div className="max-w-[80%] rounded-2xl bg-card px-4 py-3 shadow-sm border border-border/30">
+        <div className="mb-1 text-xs font-medium text-coach">Ally</div>
+        <div
+          className="text-sm leading-relaxed [&_ul]:ml-4 [&_ul]:list-disc [&_ul]:space-y-1 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-semibold"
+          dangerouslySetInnerHTML={{ __html: formatMarkdown(displayedText) }}
+        />
+      </div>
+    </motion.div>
+  )
 }
 
 export function ChatBubble({ message }: Props) {

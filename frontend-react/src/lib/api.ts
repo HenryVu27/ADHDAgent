@@ -1,6 +1,6 @@
 import type {
   ChatRequest,
-  ChatResponse,
+  StreamEvent,
   SessionResponse,
   OutcomesResponse,
   KnowledgeDocument,
@@ -27,11 +27,56 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export const api = {
-  chat(data: ChatRequest): Promise<ChatResponse> {
-    return request("/chat", {
+  async *chatStream(
+    data: ChatRequest,
+    signal: AbortSignal,
+  ): AsyncGenerator<StreamEvent> {
+    const res = await fetch(`${BASE}/chat/stream`, {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
+      signal,
     })
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ detail: res.statusText }))
+      throw new Error(error.detail || `Request failed: ${res.status}`)
+    }
+
+    const reader = res.body!.getReader()
+    const decoder = new TextDecoder()
+    let buffer = ""
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+
+        // Split on SSE message boundaries (\n\n)
+        // Keep the trailing incomplete chunk in buffer
+        const blocks = buffer.split("\n\n")
+        buffer = blocks.pop() ?? ""
+
+        for (const block of blocks) {
+          if (!block.trim()) continue
+          let eventType = ""
+          let dataStr = ""
+          for (const line of block.split("\n")) {
+            if (line.startsWith("event: ")) eventType = line.slice(7).trim()
+            else if (line.startsWith("data: ")) dataStr = line.slice(6)
+          }
+          if (!eventType || !dataStr) continue
+          try {
+            const parsed = JSON.parse(dataStr)
+            yield { type: eventType, ...parsed } as StreamEvent
+          } catch {
+            // malformed JSON — skip
+          }
+        }
+      }
+    } finally {
+      reader.releaseLock()
+    }
   },
 
   seedSession(sessionId: string, onboarding: OnboardingData): Promise<{ status: string }> {
