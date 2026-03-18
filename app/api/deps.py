@@ -4,6 +4,7 @@ Replaces module-level globals with proper Depends() dependencies.
 All dependencies are stored on app.state during lifespan startup.
 """
 
+import aiosqlite
 from fastapi import HTTPException, Request
 
 from app.agent.orchestrator import AgentOrchestrator
@@ -38,3 +39,10 @@ def get_event_bus(request: Request):
 
 def get_analyzer(request: Request):
     return getattr(request.app.state, "analyzer", None)
+
+
+def get_db(request: Request) -> aiosqlite.Connection:
+    conn = getattr(request.app.state, "db_conn", None)
+    if not conn:
+        raise HTTPException(status_code=503, detail="Database not available")
+    return conn

@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
+from app.api.auth_routes import auth_router
 from app.api.middleware import APIKeyMiddleware
 from app.api.observability_routes import obs_router
 from app.api.rate_limit import limiter
@@ -22,6 +23,10 @@ logging.basicConfig(
     level=getattr(logging, settings.LOG_LEVEL),
     format="%(asctime)s %(name)s %(levelname)s %(message)s",
 )
+# Silence chatty third-party loggers that obscure app-level traces
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("google_genai").setLevel(logging.WARNING)
+logging.getLogger("google.generativeai").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
@@ -173,6 +178,7 @@ async def lifespan(app: FastAPI):
     app.state.session_store = session_store
     app.state.event_bus = event_bus
     app.state.analyzer = analyzer
+    app.state.db_conn = db_conn
 
     logger.info(
         "ADHDAgent ready (pro_model=%s, fast_model=%s, utility_model=%s, reranker=%s)",
@@ -210,6 +216,7 @@ app.add_middleware(
 
 app.include_router(router, prefix="/api")
 app.include_router(obs_router, prefix="/api")
+app.include_router(auth_router, prefix="/api")
 
 # Serve React build
 react_dist = Path(__file__).parent.parent / "frontend-react" / "dist"

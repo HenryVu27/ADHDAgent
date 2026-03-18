@@ -7,7 +7,17 @@ from starlette.responses import JSONResponse
 from app.config import settings
 
 # Paths that never require authentication
-_PUBLIC_PATHS = frozenset({"/api/health", "/docs", "/redoc", "/openapi.json"})
+_PUBLIC_PATHS = frozenset({
+    "/api/health",
+    "/api/auth/register",
+    "/api/auth/login",
+    "/api/auth/me",
+    "/api/knowledge/topics",
+    "/api/knowledge/documents",
+    "/docs",
+    "/redoc",
+    "/openapi.json",
+})
 
 
 class APIKeyMiddleware(BaseHTTPMiddleware):
