@@ -14,22 +14,11 @@ export function useChat(sessionId: string) {
   const abortRef = useRef<AbortController | null>(null)
   // accumulatedRef: source of truth for token accumulation (avoids stale closure on done)
   const accumulatedRef = useRef("")
-  // Exposed so StreamingBubble can call typewriter.reset() on replace events
+  // Exposed so ChatContainer can call typewriter.reset() on replace events
   const typewriterResetRef = useRef<((text: string) => void) | null>(null)
-  // Resolve function for the typewriter-complete Promise.
-  // Set when done arrives; called by the typewriter's onComplete callback.
-  const typewriterResolveRef = useRef<(() => void) | null>(null)
 
-  // Tracks whether the typewriter has already caught up (fires before done arrives on fast responses)
-  const typewriterDoneRef = useRef(false)
-
-  // Stable callback passed to StreamingContent → useTypewriter onComplete.
-  // When the typewriter finishes animating, resolve the pending done Promise.
-  const onStreamComplete = useCallback(() => {
-    typewriterDoneRef.current = true
-    typewriterResolveRef.current?.()
-    typewriterResolveRef.current = null
-  }, [])
+  // No-op callback for StreamingContent's onComplete — finalize is driven by done event now
+  const onStreamComplete = useCallback(() => {}, [])
 
   const sendMessage = useCallback(async (content: string) => {
     const userMsg: ChatMessage = {
@@ -43,7 +32,6 @@ export function useChat(sessionId: string) {
     setStreamingContent("")
     setStatusText("")
     accumulatedRef.current = ""
-    typewriterDoneRef.current = false
 
     const controller = new AbortController()
     abortRef.current = controller
@@ -80,17 +68,6 @@ export function useChat(sessionId: string) {
           typewriterResetRef.current?.(event.text)
 
         } else if (event.type === "done") {
-          if (!firstToken) {
-            // Always wait at least one frame so the streaming block renders
-            await new Promise(resolve => requestAnimationFrame(resolve))
-            if (!typewriterDoneRef.current) {
-              // Typewriter still animating — wait for it to finish
-              await new Promise<void>(resolve => {
-                typewriterResolveRef.current = resolve
-                setTimeout(resolve, 5000)
-              })
-            }
-          }
           _finalize(event)
 
         } else if (event.type === "error") {
@@ -117,7 +94,6 @@ export function useChat(sessionId: string) {
       }
     } finally {
       abortRef.current = null
-      typewriterResolveRef.current = null
     }
 
     function _finalize(done: StreamDoneEvent) {
