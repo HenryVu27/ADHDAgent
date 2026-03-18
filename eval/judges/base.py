@@ -6,7 +6,9 @@ Provides semaphore-based concurrency control and error handling.
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
+from pathlib import Path
 
 from eval.config import EVAL_JUDGE_MODEL
 from eval.generators.llm import GenClient
@@ -39,3 +41,20 @@ class JudgeBase:
             except Exception as e:
                 logger.warning("Judge call failed: %s", e)
                 return {}
+
+
+CONVERSATIONS_DIR = Path(__file__).parent.parent / "data" / "conversations"
+
+
+def load_conversations(directory: Path | None = None) -> list[dict]:
+    """Load all conversation JSON files from a directory."""
+    d = directory or CONVERSATIONS_DIR
+    if not d.exists():
+        return []
+    conversations = []
+    for f in sorted(d.glob("*.json")):
+        try:
+            conversations.append(json.loads(f.read_text()))
+        except (json.JSONDecodeError, OSError) as e:
+            logger.warning("Skipping %s: %s", f, e)
+    return conversations

@@ -1,8 +1,11 @@
 import asyncio
+import json
 import pytest
+import tempfile
+from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from eval.judges.base import JudgeBase
+from eval.judges.base import JudgeBase, load_conversations
 
 
 class ConcreteJudge(JudgeBase):
@@ -315,3 +318,26 @@ class TestPairwiseJudge:
         )
         assert result is not None
         assert result["winner"] == "tie"
+
+
+def test_load_conversations_from_dir(tmp_path):
+    conv = {
+        "conversation_id": "test_1",
+        "source": "synthetic",
+        "turns": [
+            {"turn": 1, "user_message": "Hi", "assistant_response": "Hello!", "tool_calls": [], "input_blocked": False}
+        ],
+        "metadata": {"recorded_at": "2026-03-18T00:00:00Z"},
+    }
+    (tmp_path / "test_1.json").write_text(json.dumps(conv))
+    (tmp_path / "test_2.json").write_text(json.dumps({**conv, "conversation_id": "test_2"}))
+    (tmp_path / "not_json.txt").write_text("ignored")
+
+    result = load_conversations(tmp_path)
+    assert len(result) == 2
+    assert result[0]["conversation_id"] in ("test_1", "test_2")
+
+
+def test_load_conversations_empty_dir(tmp_path):
+    result = load_conversations(tmp_path)
+    assert result == []
