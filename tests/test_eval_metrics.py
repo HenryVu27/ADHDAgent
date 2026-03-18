@@ -44,3 +44,61 @@ def test_aggregate_empty():
     result = aggregate_turn_scores([])
     assert result["n_turns"] == 0
     assert result["overall"] == 0.0
+
+
+from eval.metrics.tool_use import aggregate_tool_scores, compute_tool_f1
+
+
+def test_compute_tool_f1_perfect():
+    result = compute_tool_f1(
+        verdicts=[
+            {"name": "search_knowledge_base", "verdict": "appropriate"},
+            {"name": "update_family_profile", "verdict": "appropriate"},
+        ],
+        missed_tools=[]
+    )
+    assert result["precision"] == 1.0
+    assert result["recall"] == 1.0
+    assert result["f1"] == 1.0
+
+
+def test_compute_tool_f1_with_unnecessary():
+    result = compute_tool_f1(
+        verdicts=[
+            {"name": "search_knowledge_base", "verdict": "appropriate"},
+            {"name": "update_family_profile", "verdict": "unnecessary"},
+        ],
+        missed_tools=[]
+    )
+    assert result["precision"] == 0.5
+    assert result["recall"] == 1.0
+
+
+def test_compute_tool_f1_with_missed():
+    result = compute_tool_f1(
+        verdicts=[
+            {"name": "search_knowledge_base", "verdict": "appropriate"},
+        ],
+        missed_tools=["update_family_profile"]
+    )
+    assert result["precision"] == 1.0
+    assert result["recall"] == 0.5
+
+
+def test_compute_tool_f1_no_tools():
+    result = compute_tool_f1(verdicts=[], missed_tools=[])
+    assert result["precision"] == 1.0
+    assert result["recall"] == 1.0
+    assert result["f1"] == 1.0
+
+
+def test_aggregate_tool_scores():
+    turns = [
+        {"precision": 1.0, "recall": 0.5, "f1": 0.67, "argument_accuracy": 4, "result_utilization": 5, "by_tool": {}},
+        {"precision": 0.5, "recall": 1.0, "f1": 0.67, "argument_accuracy": 3, "result_utilization": 4, "by_tool": {}},
+    ]
+    result = aggregate_tool_scores(turns)
+    assert result["mean_precision"] == 0.75
+    assert result["mean_recall"] == 0.75
+    assert result["mean_argument_accuracy"] == 3.5
+    assert result["n_turns"] == 2
