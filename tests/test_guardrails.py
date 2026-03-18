@@ -428,3 +428,41 @@ class TestInputGateWithFastPath:
         assert result.fast_path_bypassed is False
         mock_gemini.generate.assert_called_once()
 
+
+class TestInputGateTraceDetail:
+    """Verify that input_gate_node produces the correct trace_step detail dict."""
+
+    @pytest.mark.asyncio
+    async def test_trace_includes_fast_path_fields_on_bypass(self):
+        """When fast path fires, trace detail must include fast_path_bypassed=True."""
+        import time
+        from unittest.mock import AsyncMock, MagicMock
+        from langchain_core.messages import HumanMessage
+        from app.guardrails.fast_path import SemanticFastPath
+        from app.models.schemas import InputCheckResult
+
+        fp = MagicMock(spec=SemanticFastPath)
+        fp.classify.return_value = InputCheckResult(
+            is_allowed=True, route="flash",
+            fast_path_bypassed=True, fast_path_score=0.93,
+        )
+        mock_gemini = AsyncMock()
+
+        from app.guardrails.validator import InputGate
+        gate = InputGate(gemini_client=mock_gemini, fast_path=fp)
+        result = await gate.check("hey")
+
+        assert result.fast_path_bypassed is True
+        assert result.fast_path_score == 0.93
+
+    @pytest.mark.asyncio
+    async def test_trace_fast_path_fields_false_on_gemini_path(self):
+        """When fast path does not fire, fast_path_bypassed must be False."""
+        from app.guardrails.validator import InputGate
+        mock_gemini = _make_mock_gemini({"crisis": False, "jailbreak": False, "complexity": "complex", "reasoning": ""})
+
+        gate = InputGate(gemini_client=mock_gemini, fast_path=None)
+        result = await gate.check("my son won't sleep")
+
+        assert result.fast_path_bypassed is False
+        assert result.fast_path_score is None

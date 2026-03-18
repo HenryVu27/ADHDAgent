@@ -97,6 +97,8 @@ def build_agent(
             "detail": {
                 "is_allowed": check.is_allowed,
                 "blocked_reason": check.blocked_reason,
+                "fast_path_bypassed": check.fast_path_bypassed,
+                "fast_path_score": check.fast_path_score,
             },
         }
 
