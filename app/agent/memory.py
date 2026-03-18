@@ -66,8 +66,8 @@ class MemoryManager:
         if goal_calls:
             tasks.append(self._create_goal_episode(session_id, turn, user_message, goal_calls))
 
-        # Emotional shift: infer emotion for every substantive message
-        if len(user_message.strip()) >= settings.FACT_EXTRACTION_MIN_LENGTH:
+        # Emotional shift: run for any non-empty user message (emotion can appear in short messages)
+        if user_message.strip():
             tasks.append(self._run_emotional_shift_check(session_id, turn, user_message))
 
         if not tasks:
@@ -366,13 +366,13 @@ Parent message:
             return
 
         if emotion in self._HIGH_INTENSITY_EMOTIONS:
-            summary = f"Parent expressed {emotion} emotional state at turn {turn}"
             outcome = "mixed"
         elif emotion in self._POSITIVE_EMOTIONS:
-            summary = f"Parent expressed {emotion} emotional state at turn {turn}"
             outcome = "positive"
         else:
-            return
+            outcome = "mixed"
+
+        summary = f"Parent expressed {emotion} emotional state at turn {turn}"
 
         episode = EpisodicMemory(
             event_type="emotional_shift",
@@ -452,12 +452,18 @@ Parent message:
             f"Recent conversation:\n{chr(10).join(context_lines)}" if context_lines else ""
         )
 
-        prompt = f"""Classify the PARENT's emotional state from this message. The parent is talking to a coach about their child with ADHD.
+        prompt = f"""Classify the PARENT's emotional state from this ADHD coaching conversation message.
 
-Focus on how the PARENT feels, not the child. Examples:
-- "My son is so frustrated with homework" — the child is frustrated, but the parent may be calm or concerned. Classify the PARENT.
-- "I'm at my wit's end" — the parent is frustrated.
-- "We tried the timer and it worked" — the parent is stating a fact, likely neutral.
+Choose the MOST fitting word. Default to neutral only when the message is purely factual with no emotional signal.
+
+frustrated — parent is annoyed, exhausted, at their limit ("I can't keep doing this", "nothing works")
+anxious — parent is worried or uncertain ("I'm scared about his future", "what if this doesn't help")
+overwhelmed — parent is stretched beyond capacity ("I have no idea where to start", "it's too much")
+hopeful — parent sees progress or possibility ("this might actually work", "I think we're getting there")
+positive — parent is happy or reporting clear success ("it worked great", "so much better this week")
+neutral — purely factual, no emotional tone ("he's 7", "we tried timers once")
+
+IMPORTANT: If the parent is describing a struggle, difficulty, or asking for help, that usually signals some level of frustration or anxiety — not neutral.
 
 {conversation_context}
 

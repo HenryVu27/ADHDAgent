@@ -521,6 +521,38 @@ class TestBroaderEpisodicEvents:
         episodes = await store.get_recent_episodes("s1")
         assert any(ep.event_type == "emotional_shift" for ep in episodes)
 
+    async def test_hopeful_emotion_creates_episode(self):
+        """A positive but mild emotion (hopeful) should also create an emotional_shift episode."""
+        store = await _make_store_with_messages(turn_count=3)
+        gemini = _make_gemini_mock(generate_return="hopeful")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        await mm.post_turn_tasks(
+            session_id="s1", turn=3,
+            user_message="We tried the timer today and Alex actually finished his homework!",
+            assistant_response="That is great to hear!",
+        )
+
+        episodes = await store.get_recent_episodes("s1")
+        assert any(ep.event_type == "emotional_shift" for ep in episodes)
+
+    async def test_any_non_neutral_emotion_creates_episode(self):
+        """positive emotion should create an episode (currently blocked by high-intensity gate)."""
+        store = await _make_store_with_messages(turn_count=2)
+        gemini = _make_gemini_mock(generate_return="positive")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        await mm.post_turn_tasks(
+            session_id="s1", turn=2,
+            user_message="Things are going really well this week.",
+            assistant_response="I'm glad to hear that.",
+        )
+
+        episodes = await store.get_recent_episodes("s1")
+        emotional = [ep for ep in episodes if ep.event_type == "emotional_shift"]
+        assert len(emotional) == 1
+        assert emotional[0].emotional_context == "positive"
+
     @pytest.mark.asyncio
     async def test_neutral_emotion_no_emotional_episode(self):
         """Neutral emotion should not create an emotional_shift episode."""
