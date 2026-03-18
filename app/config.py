@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     RAG_QUERY_CACHE_TTL_S: float = 300.0   # Embedding-based query cache TTL (seconds)
     RAG_QUERY_CACHE_MAX_SIZE: int = 50     # Max cached query embeddings
     RAG_QUERY_CACHE_SIMILARITY: float = 0.92  # Cosine similarity threshold for cache hit
+    RAG_OUTCOME_BOOST_POSITIVE: float = 0.10
+    RAG_OUTCOME_BOOST_NEGATIVE: float = -0.15
+    RAG_OUTCOME_BOOST_CAP: float = 0.30
+    RAG_OUTCOME_JACCARD_THRESHOLD: float = 0.3
 
     # Qdrant
     QDRANT_URL: str = ":memory:"
