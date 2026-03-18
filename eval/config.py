@@ -10,6 +10,7 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
 GENERATOR_MODEL: str = "gemini-2.5-flash"   # cheap model for dataset generation
 JUDGE_MODEL: str = "gemini-2.5-flash"       # quality filtering judge
+EVAL_JUDGE_MODEL: str = "gemini-2.5-pro"  # stronger model for response quality judging
 EMBEDDING_MODEL: str = "gemini-embedding-001"
 
 KNOWLEDGE_DIR = Path(__file__).parent.parent / "app" / "knowledge"
