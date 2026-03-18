@@ -10,21 +10,17 @@ import { useAuth } from "@/hooks/use-auth"
 export function SignInPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const { signIn } = useAuth()
+  const { signIn, isLoading } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
     try {
       await signIn(email, password)
       toast.success("Welcome back!")
       navigate("/dashboard")
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong")
-    } finally {
-      setIsLoading(false)
     }
   }
 
