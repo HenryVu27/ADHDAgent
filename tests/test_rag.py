@@ -648,7 +648,7 @@ class TestOutcomeBoost:
         ]
         outcomes = [Outcome(strategy_name="visual timer", signal="positive", turn=1)]
 
-        boosted = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
 
         timer_doc = next(r for r in boosted if "Timer" in r.document_name)
         reward_doc = next(r for r in boosted if "Reward" in r.document_name)
@@ -661,7 +661,7 @@ class TestOutcomeBoost:
         ]
         outcomes = [Outcome(strategy_name="reward chart", signal="negative", turn=1)]
 
-        boosted = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
 
         assert boosted[0].score == pytest.approx(0.70, abs=0.01)  # 0.85 - 0.15
 
@@ -671,7 +671,7 @@ class TestOutcomeBoost:
         ]
         outcomes = [Outcome(strategy_name="visual timer", signal="mixed", turn=1)]
 
-        boosted = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
 
         assert boosted[0].score == pytest.approx(0.80, abs=0.01)
 
@@ -685,7 +685,7 @@ class TestOutcomeBoost:
             for i in range(5)
         ]
 
-        boosted = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
 
         assert boosted[0].score == pytest.approx(1.10, abs=0.01)  # 0.80 + 0.30 (capped)
 
@@ -698,7 +698,7 @@ class TestOutcomeBoost:
             for i in range(5)
         ]
 
-        boosted = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
 
         assert boosted[0].score == pytest.approx(0.55, abs=0.01)  # 0.85 - 0.30 (capped)
 
@@ -708,7 +708,7 @@ class TestOutcomeBoost:
             _make_result("Reward Chart System", 0.85, ["rewards"]),
         ]
 
-        boosted = retriever_for_boost._apply_outcome_boost(candidates, [])
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, [])
 
         assert boosted[0].score == pytest.approx(0.85, abs=0.01)
         assert boosted[1].score == pytest.approx(0.80, abs=0.01)
@@ -719,7 +719,7 @@ class TestOutcomeBoost:
         ]
         outcomes = [Outcome(strategy_name="completely unrelated strategy", signal="positive", turn=1)]
 
-        boosted = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
 
         assert boosted[0].score == pytest.approx(0.80, abs=0.01)
 
@@ -733,12 +733,25 @@ class TestOutcomeBoost:
             Outcome(strategy_name="visual timer", signal="positive", turn=2),
         ]
 
-        boosted = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
 
         # Timer: 0.80 + 0.10 = 0.90, Reward: 0.90 - 0.15 = 0.75
         # Timer should now be first
         assert "Timer" in boosted[0].document_name
         assert "Reward" in boosted[1].document_name
+
+    def test_boost_returns_metadata(self, retriever_for_boost):
+        candidates = [
+            _make_result("Visual Timer Strategy", 0.80, ["timer"]),
+        ]
+        outcomes = [Outcome(strategy_name="visual timer", signal="positive", turn=1)]
+
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+
+        assert len(metadata) == 1
+        assert metadata[0]["strategy"] == "visual timer"
+        assert metadata[0]["document"] == "Visual Timer Strategy"
+        assert metadata[0]["boost"] == pytest.approx(0.10, abs=0.01)
 
 
 from app.models.schemas import SessionState, FamilyProfile

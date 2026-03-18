@@ -117,7 +117,12 @@ class HybridRetriever:
 
         # Step 3c: Outcome boost/penalty (personalization from family history)
         if state and state.outcomes:
-            candidates = self._apply_outcome_boost(candidates, state.outcomes)
+            candidates, boost_metadata = self._apply_outcome_boost(candidates, state.outcomes)
+            if boost_metadata and self._event_bus:
+                await self._event_bus.emit(
+                    "rag", "outcome_boost",
+                    detail={"boosts": boost_metadata},
+                )
 
         # Step 4: Compute facets
         facets = self._compute_facets(candidates)
@@ -238,17 +243,17 @@ class HybridRetriever:
         self,
         candidates: list[RetrievalResult],
         outcomes: list[Outcome],
-    ) -> list[RetrievalResult]:
+    ) -> tuple[list[RetrievalResult], list[dict]]:
         """Apply score boost/penalty based on family outcome history.
 
         Uses Jaccard token-overlap between outcome strategy names and
-        document name + tags. Returns re-sorted candidates with boost metadata.
+        document name + tags. Returns re-sorted candidates and boost metadata.
         """
         if not candidates:
-            return candidates
+            return candidates, []
         if not outcomes:
             candidates.sort(key=lambda r: r.score, reverse=True)
-            return candidates
+            return candidates, []
 
         threshold = settings.RAG_OUTCOME_JACCARD_THRESHOLD
         boost_pos = settings.RAG_OUTCOME_BOOST_POSITIVE
@@ -260,6 +265,8 @@ class HybridRetriever:
         for o in outcomes:
             tokens = set(re.sub(r'[^\w\s]', '', o.strategy_name.lower()).split())
             outcome_tokens.append((o, tokens))
+
+        boost_metadata: list[dict] = []
 
         for result in candidates:
             # Tokenize document name + tags
@@ -290,10 +297,15 @@ class HybridRetriever:
             total_boost = max(-cap, min(cap, total_boost))
             if total_boost != 0.0:
                 result.score += total_boost
+                boost_metadata.append({
+                    "strategy": next(o.strategy_name for o, _ in outcome_tokens if set(re.sub(r'[^\w\s]', '', o.strategy_name.lower()).split()) & doc_tokens),
+                    "document": result.document_name,
+                    "boost": total_boost,
+                })
 
         # Re-sort by adjusted score
         candidates.sort(key=lambda r: r.score, reverse=True)
-        return candidates
+        return candidates, boost_metadata
 
     # Keyword scoring when Qdrant is unavailable
     def _keyword_fallback(
