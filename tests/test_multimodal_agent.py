@@ -32,6 +32,28 @@ def test_extract_text_from_multipart_multiple_text():
     assert _extract_text(content) == "First second"
 
 
+def test_build_multipart_content():
+    """Test building multipart HumanMessage content from attachments."""
+    from app.agent.orchestrator import _build_multipart_content
+
+    attachments = [
+        {"gemini_file_uri": "uri://file1", "content_type": "image/jpeg"},
+        {"gemini_file_uri": "uri://file2", "content_type": "application/pdf"},
+    ]
+    content = _build_multipart_content("Look at these files", attachments)
+    assert isinstance(content, list)
+    assert content[0] == {"type": "text", "text": "Look at these files"}
+    assert content[1] == {"type": "media", "file_uri": "uri://file1", "mime_type": "image/jpeg"}
+    assert content[2] == {"type": "media", "file_uri": "uri://file2", "mime_type": "application/pdf"}
+
+
+def test_build_multipart_content_no_attachments():
+    """Without attachments, returns plain string."""
+    from app.agent.orchestrator import _build_multipart_content
+    content = _build_multipart_content("Hello", [])
+    assert content == "Hello"
+
+
 def test_estimate_chars_with_list_content():
     """_estimate_chars should count only text parts from multipart content."""
     from app.agent.hooks import _estimate_chars

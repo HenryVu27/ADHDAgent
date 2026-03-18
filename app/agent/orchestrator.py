@@ -35,6 +35,28 @@ def _extract_text(content) -> str:
     return str(content)
 
 
+def _build_multipart_content(message: str, attachments: list[dict]):
+    """Build HumanMessage content: plain string or multipart list with media parts.
+
+    Args:
+        message: The user's text message.
+        attachments: List of attachment dicts with gemini_file_uri and content_type.
+
+    Returns:
+        str if no attachments, or list of content parts if attachments present.
+    """
+    if not attachments:
+        return message
+    parts = [{"type": "text", "text": message}]
+    for att in attachments:
+        parts.append({
+            "type": "media",
+            "file_uri": att["gemini_file_uri"],
+            "mime_type": att["content_type"],
+        })
+    return parts
+
+
 # LangGraph's create_react_agent emits this exact string when remaining_steps < 2
 # and the model still wants to call tools (see chat_agent_executor.py line ~688).
 # We also catch variations in case the model echoes or rephrases it.
@@ -172,7 +194,7 @@ class AgentOrchestrator:
             await self._session_store._ensure_session(request.session_id, user_id=user_id)
         await self._session_store.seed_session(request)
 
-    async def process(self, message: str, session_id: str) -> StreamDonePayload:
+    async def process(self, message: str, session_id: str, attachment_ids: list[str] | None = None) -> StreamDonePayload:
         """Run the ReAct agent for a single parent message."""
         turn = await self._session_store.increment_turn(session_id)
         logger.info(
@@ -212,6 +234,12 @@ class AgentOrchestrator:
         context_utilization = unsummarized_chars / settings.CONTEXT_MAX_CHARS
         force_summary = context_utilization >= 0.8
 
+        # Resolve attachments to multipart content
+        attachments = []
+        if attachment_ids:
+            attachments = await self._session_store.get_attachments(attachment_ids)
+        message_content = _build_multipart_content(message, attachments)
+
         start = time.time()
         config = {
             "configurable": {"session_id": session_id},
@@ -221,7 +249,7 @@ class AgentOrchestrator:
         try:
             result = await self._agent.ainvoke(
                 {
-                    "messages": history_messages + [HumanMessage(content=message)],
+                    "messages": history_messages + [HumanMessage(content=message_content)],
                     "session_id": session_id,
                 },
                 config=config,
@@ -439,7 +467,7 @@ class AgentOrchestrator:
             session_id=session_id,
         )
 
-    async def process_stream(self, message: str, session_id: str, user_id: int | None = None):
+    async def process_stream(self, message: str, session_id: str, user_id: int | None = None, attachment_ids: list[str] | None = None):
         """Streaming version of process(). Yields (event_type, data) tuples.
 
         Event types:
@@ -485,13 +513,19 @@ class AgentOrchestrator:
         context_utilization = unsummarized_chars / settings.CONTEXT_MAX_CHARS
         force_summary = context_utilization >= 0.8
 
+        # Resolve attachments to multipart content
+        stream_attachments = []
+        if attachment_ids:
+            stream_attachments = await self._session_store.get_attachments(attachment_ids)
+        stream_message_content = _build_multipart_content(message, stream_attachments)
+
         start = time.time()
         config = {
             "configurable": {"session_id": session_id},
             "recursion_limit": settings.AGENT_MAX_TOOL_STEPS * 2 + 5,
         }
         input_data = {
-            "messages": history_messages + [HumanMessage(content=message)],
+            "messages": history_messages + [HumanMessage(content=stream_message_content)],
             "session_id": session_id,
         }
 

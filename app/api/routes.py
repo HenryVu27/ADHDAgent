@@ -111,6 +111,7 @@ async def chat_stream(
             message=body.message,
             session_id=body.session_id,
             user_id=current_user.id,
+            attachment_ids=body.attachment_ids or None,
         ):
             yield f"event: {event_type}\ndata: {json.dumps(data)}\n\n"
 
