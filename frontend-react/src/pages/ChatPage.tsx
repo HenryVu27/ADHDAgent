@@ -24,7 +24,7 @@ export function ChatPage() {
   })
   const {
     messages, isLoading, isStreaming, statusText, streamingContent,
-    latestTrace, typewriterResetRef, sendMessage, stopStreaming, clearMessages, loadMessages,
+    latestTrace, typewriterResetRef, onStreamComplete, sendMessage, stopStreaming, clearMessages, loadMessages, summaryText,
   } = useChat(sessionId)
   const { session, refresh } = useSession(sessionId)
   const { getOnboarding } = useAuth()
@@ -180,6 +180,8 @@ export function ChatPage() {
           statusText={statusText}
           streamingContent={streamingContent}
           typewriterResetRef={typewriterResetRef}
+          onStreamComplete={onStreamComplete}
+          summaryText={summaryText}
         />
 
         {/* Quick reply chips */}
