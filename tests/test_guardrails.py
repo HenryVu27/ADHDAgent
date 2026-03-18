@@ -275,24 +275,24 @@ class TestOutputGate:
         assert result.violation_type == "medication"
 
     @pytest.mark.asyncio
-    async def test_handles_malformed_response_fail_closed(self):
+    async def test_handles_malformed_response_fail_open(self):
+        """Output gate fails open on malformed response — allows response through."""
         from app.guardrails.validator import OutputGate
         mock = AsyncMock()
         mock.generate = AsyncMock(return_value="not valid json at all")
         gate = OutputGate(gemini_client=mock)
         result = await gate.check("Try a visual timer.")
-        assert result.is_valid is False
-        assert result.violation_type == "error"
+        assert result.is_valid is True  # fail-open: don't block the response
 
     @pytest.mark.asyncio
-    async def test_handles_gemini_error_fail_closed(self):
+    async def test_handles_gemini_error_fail_open(self):
+        """Output gate fails open on Gemini error — allows response through."""
         from app.guardrails.validator import OutputGate
         mock = AsyncMock()
         mock.generate = AsyncMock(side_effect=RuntimeError("API error"))
         gate = OutputGate(gemini_client=mock)
         result = await gate.check("Try a visual timer.")
-        assert result.is_valid is False
-        assert result.violation_type == "error"
+        assert result.is_valid is True  # fail-open: don't block the response
 
     @pytest.mark.asyncio
     async def test_allows_provider_redirect(self):
