@@ -176,5 +176,5 @@ pytest tests/test_e2e_conversations.py -v -m integration -s
 
 - `search_knowledge_base` returns structured output (metadata + full steps/key_points). Do not truncate document content.
 - Age filtering auto-applies from the family profile's `child_age`. The `_build_filter` in `knowledge_store.py` must always include `"all"` alongside the derived age range.
-- Reranker is enabled by default (`RAG_RERANK_ENABLED=true`). Uses FastEmbed local ONNX cross-encoder. When adding retrieval pipeline steps, insert between hybrid search and facet computation in `retriever.py`.
+- `RAG_RERANKER` controls the reranker: `"none"` | `"cross_encoder"` | `"colbert"`, default `"cross_encoder"`. Cross-encoder uses FastEmbed local ONNX (BAAI/bge-reranker-base); ColBERT uses precomputed multi-vectors in Qdrant. When adding retrieval pipeline steps, insert between hybrid search and facet computation in `retriever.py`.
 - Technical design rationale lives in `docs/rag_design_decisions.md`.

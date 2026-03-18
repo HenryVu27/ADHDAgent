@@ -14,11 +14,10 @@ class Settings(BaseSettings):
     # RAG
     RAG_TOP_K: int = 5
     RAG_USE_QUERY_REWRITE: bool = True
-    RAG_RERANK_ENABLED: bool = True
+    RAG_RERANKER: str = "cross_encoder"    # "none" | "cross_encoder" | "colbert"
     RAG_RERANK_CANDIDATES: int = 10
     RAG_RERANK_MODEL: str = "BAAI/bge-reranker-base"
     RAG_RELEVANCE_THRESHOLD: float = 0.0   # Cross-encoder score floor (bge-reranker-base: 0 = decision boundary)
-    RAG_COLBERT_ENABLED: bool = False          # consumed by main.py lifespan to build ColBERTIndex
     RAG_COLBERT_MODEL: str = "colbert-ir/colbertv2.0"
     RAG_EMBED_TIMEOUT_S: float = 30.0      # Timeout for embed/embed_batch API calls
 

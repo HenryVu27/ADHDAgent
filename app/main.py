@@ -41,7 +41,7 @@ async def lifespan(app: FastAPI):
 
     # 2. Optionally load ColBERT model (before index build — needed for embed_chunks)
     colbert = None
-    if settings.RAG_COLBERT_ENABLED:
+    if settings.RAG_RERANKER == "colbert":
         try:
             from app.rag.colbert_index import ColBERTIndex
             colbert = ColBERTIndex(settings.RAG_COLBERT_MODEL)
@@ -108,7 +108,7 @@ async def lifespan(app: FastAPI):
     query_rewriter = QueryRewriter(gemini_client=gemini)
 
     reranker = None
-    if settings.RAG_RERANK_ENABLED:
+    if settings.RAG_RERANKER == "cross_encoder":
         from app.rag.reranker import FastEmbedReranker
         reranker = FastEmbedReranker(model_name=settings.RAG_RERANK_MODEL)
         logger.info("FastEmbed reranker enabled (model=%s, candidates=%d)", settings.RAG_RERANK_MODEL, settings.RAG_RERANK_CANDIDATES)
@@ -175,11 +175,11 @@ async def lifespan(app: FastAPI):
     app.state.analyzer = analyzer
 
     logger.info(
-        "ADHDAgent ready (pro_model=%s, fast_model=%s, utility_model=%s, colbert=%s)",
+        "ADHDAgent ready (pro_model=%s, fast_model=%s, utility_model=%s, reranker=%s)",
         settings.GEMINI_AGENT_MODEL,
         settings.GEMINI_FAST_MODEL,
         settings.GEMINI_UTILITY_MODEL,
-        "enabled" if colbert else "disabled",
+        settings.RAG_RERANKER,
     )
     yield
     if hasattr(orchestrator, 'shutdown'):
