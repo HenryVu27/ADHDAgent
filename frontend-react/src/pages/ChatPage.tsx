@@ -19,7 +19,8 @@ function createSessionId() {
   const pad = (n: number, len = 2) => String(n).padStart(len, "0")
   const date = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}`
   const time = `${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`
-  return `session_${date}_${time}`
+  const ms = pad(now.getMilliseconds(), 3)
+  return `session_${date}_${time}_${ms}`
 }
 
 export function ChatPage() {

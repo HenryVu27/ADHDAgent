@@ -236,7 +236,8 @@ class TestEpisodicMemory:
         )
 
         episodes = await store.get_recent_episodes("s1")
-        assert len(episodes) == 0
+        outcome_eps = [ep for ep in episodes if ep.event_type == "outcome_reported"]
+        assert len(outcome_eps) == 0
 
     @pytest.mark.asyncio
     async def test_multiple_outcomes_create_multiple_episodes(self):
@@ -265,7 +266,8 @@ class TestEpisodicMemory:
         )
 
         episodes = await store.get_recent_episodes("s1")
-        assert len(episodes) == 2
+        outcome_episodes = [ep for ep in episodes if ep.event_type == "outcome_reported"]
+        assert len(outcome_episodes) == 2
 
 
 class TestEmotionInferenceLLM:
@@ -540,7 +542,7 @@ class TestBroaderEpisodicEvents:
         assert hopeful_eps[0].emotional_context == "hopeful"
 
     async def test_any_non_neutral_emotion_creates_episode(self):
-        """positive emotion should create an episode (currently blocked by high-intensity gate)."""
+        """Any non-neutral emotion should create an emotional_shift episode."""
         store = await _make_store_with_messages(turn_count=2)
         gemini = _make_gemini_mock(generate_return="positive")
         mm = MemoryManager(session_store=store, gemini_client=gemini)
