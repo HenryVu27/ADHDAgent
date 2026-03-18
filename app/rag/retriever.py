@@ -1,11 +1,18 @@
+from __future__ import annotations
+
 # Hybrid RAG Retriever
 # Qdrant dense+sparse with RRF fusion, query term tag boosting, and query rewriting.
 
+import asyncio
 import logging
 import time
 from collections import defaultdict
+from typing import TYPE_CHECKING
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from app.rag.colbert_index import ColBERTIndex
 
 from app.config import settings
 from app.models.schemas import (
@@ -42,11 +49,13 @@ class HybridRetriever:
         gemini_client=None,
         query_rewriter: QueryRewriter | None = None,
         reranker: FastEmbedReranker | None = None,
+        colbert_index: ColBERTIndex | None = None,
     ):
         self._store = knowledge_store
         self._gemini = gemini_client
         self._rewriter = query_rewriter
         self._reranker = reranker
+        self._colbert = colbert_index
         # Embedding-based query result cache: avoids redundant Qdrant searches
         # when the agent rephrases a query it already searched for.
         self._query_cache: list[tuple[list[float], list[RetrievalResult], float]] = []
@@ -80,6 +89,7 @@ class HybridRetriever:
             if rewritten != query:
                 rewritten_query = rewritten
                 search_query = rewritten
+                logger.info("[rag] rewrite: %.70s -> %.70s", query, search_query)
 
         # Step 2: Hybrid search (RRF + tag boosting)
         fetch_k = (settings.RAG_RERANK_CANDIDATES if self._reranker else top_k)
@@ -105,6 +115,12 @@ class HybridRetriever:
 
         # Step 5: Trim to top_k
         results = candidates[:top_k]
+
+        logger.info(
+            "[rag] %d results: %s",
+            len(results),
+            ", ".join(f"{r.document_name}({r.score:.2f})" for r in results),
+        )
 
         return RetrievalResponse(
             results=results,
@@ -145,11 +161,18 @@ class HybridRetriever:
                 logger.info("Query cache hit (%d cached results) for: %.60s", len(cached), query)
                 return cached[:top_k]
 
+            colbert_prefetch = None
+            if self._colbert is not None:
+                colbert_prefetch = await asyncio.to_thread(
+                    self._colbert.make_prefetch, query, top_k
+                )
+
             hybrid_results = self._store.search_hybrid(
                 query_vector=query_vector,
                 query_text=query,
                 top_k=top_k,
                 filters=filters,
+                colbert_prefetch=colbert_prefetch,
             )
             if hybrid_results:
                 results = self._build_results(hybrid_results, query_tags)
