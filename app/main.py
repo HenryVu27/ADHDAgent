@@ -44,9 +44,7 @@ async def lifespan(app: FastAPI):
     if settings.RAG_COLBERT_ENABLED:
         try:
             from app.rag.colbert_index import ColBERTIndex
-            logger.info("Loading ColBERT model %s (~500 MB first download)...", settings.RAG_COLBERT_MODEL)
             colbert = ColBERTIndex(settings.RAG_COLBERT_MODEL)
-            logger.info("ColBERT model loaded.")
         except Exception as e:
             logger.error("ColBERT model load failed — ColBERT disabled: %s", e)
             colbert = None
