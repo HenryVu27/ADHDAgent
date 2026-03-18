@@ -20,9 +20,13 @@ export function useChat(sessionId: string) {
   // Set when done arrives; called by the typewriter's onComplete callback.
   const typewriterResolveRef = useRef<(() => void) | null>(null)
 
-  // Stable callback passed to StreamingBubble → useTypewriter onComplete.
+  // Tracks whether the typewriter has already caught up (fires before done arrives on fast responses)
+  const typewriterDoneRef = useRef(false)
+
+  // Stable callback passed to StreamingContent → useTypewriter onComplete.
   // When the typewriter finishes animating, resolve the pending done Promise.
   const onStreamComplete = useCallback(() => {
+    typewriterDoneRef.current = true
     typewriterResolveRef.current?.()
     typewriterResolveRef.current = null
   }, [])
@@ -39,6 +43,7 @@ export function useChat(sessionId: string) {
     setStreamingContent("")
     setStatusText("")
     accumulatedRef.current = ""
+    typewriterDoneRef.current = false
 
     const controller = new AbortController()
     abortRef.current = controller
@@ -72,9 +77,9 @@ export function useChat(sessionId: string) {
           typewriterResetRef.current?.(event.text)
 
         } else if (event.type === "done") {
-          if (!firstToken) {
+          if (!firstToken && !typewriterDoneRef.current) {
             // Wait for the typewriter to finish animating before swapping
-            // StreamingBubble for the finalized ChatBubble.
+            // StreamingContent for the finalized ChatBubble.
             await new Promise<void>(resolve => {
               typewriterResolveRef.current = resolve
               // Safety timeout: don't hang forever if the callback never fires
