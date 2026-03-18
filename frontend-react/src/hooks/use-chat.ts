@@ -67,6 +67,9 @@ export function useChat(sessionId: string) {
             setIsLoading(false)
             setIsStreaming(true)
             setStatusText("")
+            // Yield to event loop so React renders the streaming block
+            // before processing subsequent tokens/done in the same SSE chunk
+            await new Promise(resolve => setTimeout(resolve, 0))
           }
           accumulatedRef.current += event.text
           setStreamingContent(prev => prev + event.text)
@@ -77,14 +80,16 @@ export function useChat(sessionId: string) {
           typewriterResetRef.current?.(event.text)
 
         } else if (event.type === "done") {
-          if (!firstToken && !typewriterDoneRef.current) {
-            // Wait for the typewriter to finish animating before swapping
-            // StreamingContent for the finalized ChatBubble.
-            await new Promise<void>(resolve => {
-              typewriterResolveRef.current = resolve
-              // Safety timeout: don't hang forever if the callback never fires
-              setTimeout(resolve, 5000)
-            })
+          if (!firstToken) {
+            // Always wait at least one frame so the streaming block renders
+            await new Promise(resolve => requestAnimationFrame(resolve))
+            if (!typewriterDoneRef.current) {
+              // Typewriter still animating — wait for it to finish
+              await new Promise<void>(resolve => {
+                typewriterResolveRef.current = resolve
+                setTimeout(resolve, 5000)
+              })
+            }
           }
           _finalize(event)
 
