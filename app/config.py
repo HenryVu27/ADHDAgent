@@ -36,10 +36,15 @@ class Settings(BaseSettings):
     RATE_LIMIT_ENABLED: bool = True
 
     # Agent
-    AGENT_MAX_TOOL_STEPS: int = 5
+    AGENT_MAX_TOOL_STEPS: int = 8
 
     # Guardrails
     GUARDRAILS_TIMEOUT_S: float = 10.0
+
+    # Semantic fast path
+    SEMANTIC_FAST_PATH_ENABLED: bool = True
+    SEMANTIC_FAST_PATH_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
+    SEMANTIC_FAST_PATH_THRESHOLD: float = 0.82
 
     # Context engineering
     CONTEXT_WINDOW_TURNS: int = 6
