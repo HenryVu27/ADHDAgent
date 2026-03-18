@@ -94,6 +94,11 @@ export interface StreamReplaceEvent {
   text: string
 }
 
+export interface StreamSummaryEvent {
+  type: "summary"
+  text: string
+}
+
 export interface StreamDoneEvent {
   type: "done"
   session_id: string
@@ -101,6 +106,7 @@ export interface StreamDoneEvent {
   phase: ConversationPhase
   pipeline_trace: PipelineTrace | null
   response: string | null  // only set on input-blocked path
+  summary: string | null
 }
 
 export interface StreamErrorEvent {
@@ -112,6 +118,7 @@ export type StreamEvent =
   | StreamStatusEvent
   | StreamTokenEvent
   | StreamReplaceEvent
+  | StreamSummaryEvent
   | StreamDoneEvent
   | StreamErrorEvent
 
@@ -151,6 +158,7 @@ export interface ChatMessage {
   timestamp: Date
   agentUsed?: string
   pipelineTrace?: PipelineTrace
+  summary?: string
 }
 
 export interface User {

@@ -245,6 +245,7 @@ class StreamDonePayload(BaseModel):
     phase: str                             # ConversationPhase value
     pipeline_trace: PipelineTrace | None = None
     response: str | None = None            # Only populated on input-blocked path
+    summary: str | None = None             # Contextual one-liner from parallel Flash call
 
 
 class SessionResponse(BaseModel):
