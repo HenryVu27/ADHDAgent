@@ -1,18 +1,20 @@
 import { useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Sprout } from "lucide-react"
-import { ChatBubble, StreamingBubble } from "./ChatBubble"
+import { ChatBubble, StreamingContent } from "./ChatBubble"
 import type { ChatMessage } from "@/types"
 
 const SCROLL_THRESHOLD = 120 // px from bottom before auto-scroll disengages
 
-interface Props {
+interface ChatContainerProps {
   messages: ChatMessage[]
   isLoading: boolean
   isStreaming: boolean
   statusText: string
+  summaryText: string
   streamingContent: string
   typewriterResetRef: React.MutableRefObject<((text: string) => void) | null>
+  onStreamComplete: () => void
 }
 
 export function ChatContainer({
@@ -20,9 +22,11 @@ export function ChatContainer({
   isLoading,
   isStreaming,
   statusText,
+  summaryText,
   streamingContent,
   typewriterResetRef,
-}: Props) {
+  onStreamComplete,
+}: ChatContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
@@ -64,8 +68,8 @@ export function ChatContainer({
         <ChatBubble key={msg.id} message={msg} />
       ))}
 
-      {/* Status line: shown while waiting for first token */}
-      {isLoading && statusText && (
+      {/* Loading state: summary + shimmer + contextual status */}
+      {isLoading && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -74,41 +78,58 @@ export function ChatContainer({
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-coach">
             <Sprout className="h-4 w-4 text-coach-foreground" />
           </div>
-          <div className="rounded-2xl bg-card px-4 py-3 shadow-sm border border-border/30">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-coach" />
-              <span className="text-sm text-muted-foreground">{statusText}</span>
+          <div className="px-1 py-1">
+            <div className="mb-1 text-xs font-medium text-coach">Ally</div>
+            {summaryText && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mb-2 text-xs text-muted-foreground"
+              >
+                {summaryText}
+              </motion.div>
+            )}
+            <div className="mb-2 h-1 w-32 overflow-hidden rounded-full bg-muted">
+              <div className="h-full w-1/2 animate-shimmer rounded-full bg-gradient-to-r from-transparent via-coach/30 to-transparent" />
             </div>
+            {statusText && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-xs text-muted-foreground"
+              >
+                {statusText}
+              </motion.div>
+            )}
           </div>
         </motion.div>
       )}
 
-      {/* Fallback dots while loading with no status yet */}
-      {isLoading && !statusText && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex gap-3"
-        >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-coach">
-            <Sprout className="h-4 w-4 text-coach-foreground" />
-          </div>
-          <div className="rounded-2xl bg-card px-4 py-3 shadow-sm border border-border/30">
-            <div className="flex items-center gap-1">
-              <span className="h-2 w-2 animate-bounce rounded-full bg-coach/40 [animation-delay:0ms]" />
-              <span className="h-2 w-2 animate-bounce rounded-full bg-coach/40 [animation-delay:150ms]" />
-              <span className="h-2 w-2 animate-bounce rounded-full bg-coach/40 [animation-delay:300ms]" />
-            </div>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Streaming bubble: typewriter animation */}
+      {/* Streaming: summary header + streaming response */}
       {isStreaming && (
-        <StreamingBubble
-          content={streamingContent}
-          typewriterResetRef={typewriterResetRef}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          className="flex gap-3"
+        >
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-coach">
+            <Sprout className="h-4 w-4 text-coach-foreground" />
+          </div>
+          <div className="max-w-[80%] px-1 py-1">
+            <div className="mb-1 text-xs font-medium text-coach">Ally</div>
+            {summaryText && (
+              <div className="mb-2 text-xs text-muted-foreground">
+                {summaryText}
+              </div>
+            )}
+            <StreamingContent
+              content={streamingContent}
+              typewriterResetRef={typewriterResetRef}
+              onComplete={onStreamComplete}
+            />
+          </div>
+        </motion.div>
       )}
 
       <div ref={bottomRef} />

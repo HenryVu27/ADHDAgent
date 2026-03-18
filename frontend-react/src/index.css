@@ -51,6 +51,7 @@
     --color-success-foreground: var(--success-foreground);
     --color-coach: var(--coach);
     --color-coach-foreground: var(--coach-foreground);
+    --animate-shimmer: shimmer 1.5s ease-in-out infinite;
 }
 
 :root {
@@ -142,4 +143,9 @@
     body {
         @apply bg-background text-foreground font-sans antialiased;
     }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
 }
