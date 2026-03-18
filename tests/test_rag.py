@@ -768,3 +768,26 @@ class TestOutcomeBoostInPipeline:
         penalized = next((r for r in boosted.results if r.document_name == top_doc_name), None)
         assert penalized is not None
         assert penalized.score < top_original_score
+
+
+from unittest.mock import AsyncMock
+
+
+class TestLatencyTracking:
+
+    @pytest.mark.asyncio
+    async def test_retrieve_emits_latency(self, knowledge_store):
+        event_bus = AsyncMock()
+        retriever = HybridRetriever(
+            knowledge_store=knowledge_store,
+            gemini_client=None,
+            event_bus=event_bus,
+        )
+
+        await retriever.retrieve("homework strategies")
+
+        # EventBus.emit signature: emit(category, event_type, ..., duration_ms=0.0, ...)
+        # Our call: emit("rag", "retrieve", duration_ms=..., detail=...)
+        calls = [c for c in event_bus.emit.call_args_list if len(c.args) > 1 and c.args[1] == "retrieve"]
+        assert len(calls) >= 1
+        assert calls[0].kwargs.get("duration_ms", 0) > 0

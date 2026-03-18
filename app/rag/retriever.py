@@ -52,12 +52,14 @@ class HybridRetriever:
         query_rewriter: QueryRewriter | None = None,
         reranker: FastEmbedReranker | None = None,
         colbert_index: ColBERTIndex | None = None,
+        event_bus=None,
     ):
         self._store = knowledge_store
         self._gemini = gemini_client
         self._rewriter = query_rewriter
         self._reranker = reranker
         self._colbert = colbert_index
+        self._event_bus = event_bus
         # Embedding-based query result cache: avoids redundant Qdrant searches
         # when the agent rephrases a query it already searched for.
         self._query_cache: list[tuple[list[float], list[RetrievalResult], float]] = []
@@ -71,6 +73,7 @@ class HybridRetriever:
         state: SessionState | None = None,
         skip_rewrite: bool = False,
     ) -> RetrievalResponse:
+        t0 = time.monotonic()
         top_k = top_k or settings.RAG_TOP_K
         rewritten_query = None
 
@@ -128,6 +131,13 @@ class HybridRetriever:
             ", ".join(f"{r.document_name}({r.score:.2f})" for r in results),
         )
 
+        duration_ms = (time.monotonic() - t0) * 1000
+        if self._event_bus:
+            await self._event_bus.emit(
+                "rag", "retrieve", duration_ms=duration_ms,
+                detail={"result_count": len(results), "rewritten": rewritten_query is not None},
+            )
+
         return RetrievalResponse(
             results=results,
             facets=facets,
@@ -154,6 +164,7 @@ class HybridRetriever:
         top_k: int,
         filters: RetrievalFilters | None = None,
     ) -> list[RetrievalResult]:
+        t0 = time.monotonic()
         # Use query terms for tag boosting
         query_tags = set(query.lower().split())
 
@@ -183,10 +194,21 @@ class HybridRetriever:
             if hybrid_results:
                 results = self._build_results(hybrid_results, query_tags)
                 self._cache_store(query_vector, results)
+                if self._event_bus:
+                    await self._event_bus.emit(
+                        "rag", "hybrid_search", duration_ms=(time.monotonic() - t0) * 1000,
+                        detail={"method": "hybrid", "result_count": len(results)},
+                    )
                 return results
 
         # Fallback: keyword scoring
-        return self._keyword_fallback(query, top_k)
+        fallback_results = self._keyword_fallback(query, top_k)
+        if self._event_bus:
+            await self._event_bus.emit(
+                "rag", "hybrid_search", duration_ms=(time.monotonic() - t0) * 1000,
+                detail={"method": "keyword", "result_count": len(fallback_results)},
+            )
+        return fallback_results
 
     # Build results from Qdrant output with tag boosting
     def _build_results(

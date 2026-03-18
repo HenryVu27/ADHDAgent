@@ -139,10 +139,16 @@ async def lifespan(app: FastAPI):
         logger.info("Using in-memory session store")
     query_rewriter = QueryRewriter(gemini_client=gemini)
 
+    # 6. Create event bus (with SQLite persistence when available)
+    #    Uses a separate connection to avoid contention with the session store.
+    from app.agent.event_bus import EventBus
+    event_bus = EventBus(buffer_size=settings.EVENT_BUFFER_SIZE, conn=db_conn)
+    logger.info("EventBus initialized (buffer_size=%d)", settings.EVENT_BUFFER_SIZE)
+
     reranker = None
     if settings.RAG_RERANKER == "cross_encoder":
         from app.rag.reranker import FastEmbedReranker
-        reranker = FastEmbedReranker(model_name=settings.RAG_RERANK_MODEL)
+        reranker = FastEmbedReranker(model_name=settings.RAG_RERANK_MODEL, event_bus=event_bus)
         logger.info("FastEmbed reranker enabled (model=%s, candidates=%d)", settings.RAG_RERANK_MODEL, settings.RAG_RERANK_CANDIDATES)
 
     retriever = HybridRetriever(
@@ -151,14 +157,9 @@ async def lifespan(app: FastAPI):
         query_rewriter=query_rewriter,
         reranker=reranker,
         colbert_index=colbert,
+        event_bus=event_bus,
     )
     tools = create_tools(retriever=retriever, session_store=session_store)
-
-    # 6. Create event bus (with SQLite persistence when available)
-    #    Uses a separate connection to avoid contention with the session store.
-    from app.agent.event_bus import EventBus
-    event_bus = EventBus(buffer_size=settings.EVENT_BUFFER_SIZE, conn=db_conn)
-    logger.info("EventBus initialized (buffer_size=%d)", settings.EVENT_BUFFER_SIZE)
 
     # 7. Create context preparation hook
     from app.agent.hooks import create_prepare_context
