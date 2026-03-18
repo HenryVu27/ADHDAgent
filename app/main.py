@@ -61,11 +61,17 @@ async def lifespan(app: FastAPI):
             threshold=settings.SEMANTIC_FAST_PATH_THRESHOLD,
         )
         fast_path.build_index()  # synchronous — blocks startup intentionally
-        logger.info(
-            "SemanticFastPath initialized (model=%s, threshold=%.2f)",
-            settings.SEMANTIC_FAST_PATH_MODEL,
-            settings.SEMANTIC_FAST_PATH_THRESHOLD,
-        )
+        if fast_path._index is None:
+            logger.warning(
+                "SemanticFastPath: index build failed — fast path disabled (Gemini gate will run for all messages)"
+            )
+            fast_path = None
+        else:
+            logger.info(
+                "SemanticFastPath initialized (model=%s, threshold=%.2f)",
+                settings.SEMANTIC_FAST_PATH_MODEL,
+                settings.SEMANTIC_FAST_PATH_THRESHOLD,
+            )
 
     input_gate = InputGate(gemini_client=gemini, fast_path=fast_path) if gemini else None
     output_gate = OutputGate(gemini_client=gemini) if gemini else None

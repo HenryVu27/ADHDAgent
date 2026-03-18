@@ -37,7 +37,6 @@ def _score_all(fp: SemanticFastPath, dataset: list[dict]) -> list[dict]:
         results.append({
             "message": item["message"],
             "label": item["label"],
-            "bypassed": result is not None,
             "score": result.fast_path_score if result is not None else None,
         })
     return results
