@@ -52,6 +52,9 @@ class AgentOrchestrator:
         """Generate a contextual one-line summary from the user's message via Flash."""
         if not self._gemini:
             return None
+        # Skip summary for short messages (greetings, acknowledgments)
+        if len(message.strip()) < 25:
+            return None
         try:
             prompt = (
                 "You are an ADHD parenting coach's internal narrator. "
@@ -67,12 +70,17 @@ class AgentOrchestrator:
             result = await self._gemini.generate(
                 prompt,
                 temperature=0.3,
-                max_output_tokens=60,
+                max_output_tokens=80,
                 timeout=5.0,
             )
-            # Take only the first line and clean up
+            # Take only the first line, trim to last complete word
             summary = result.strip().split("\n")[0].strip().rstrip(".")
-            return summary if summary else None
+            if not summary:
+                return None
+            # Safety: if output looks truncated (no space = single partial word), drop it
+            if " " not in summary:
+                return None
+            return summary
         except Exception:
             logger.debug("[agent] Summary generation failed — skipping")
             return None
