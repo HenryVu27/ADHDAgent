@@ -89,6 +89,13 @@ class Settings(BaseSettings):
     ANALYZER_ENABLED: bool = True
     EVENT_BUFFER_SIZE: int = 200
 
+    # File upload
+    UPLOAD_MAX_SIZE_BYTES: int = 10 * 1024 * 1024  # 10MB
+    UPLOAD_MAX_FILES_PER_MESSAGE: int = 3
+    UPLOAD_ALLOWED_TYPES: set[str] = {"image/jpeg", "image/png", "image/gif", "image/webp", "application/pdf"}
+    UPLOAD_THUMBNAIL_DIR: str = "data/thumbnails"
+    UPLOAD_RATE_LIMIT: str = "5/minute"
+
     @model_validator(mode="after")
     def _fill_model_defaults(self) -> "Settings":
         """GEMINI_UTILITY_MODEL defaults to GEMINI_MODEL (flash) when not set."""
