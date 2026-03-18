@@ -39,18 +39,31 @@ async def lifespan(app: FastAPI):
     else:
         logger.warning("No GEMINI_API_KEY — running in fallback mode (no LLM)")
 
-    # 2. Load knowledge store + build Qdrant index
+    # 2. Optionally load ColBERT model (before index build — needed for embed_chunks)
+    colbert = None
+    if settings.RAG_COLBERT_ENABLED:
+        try:
+            from app.rag.colbert_index import ColBERTIndex
+            logger.info("Loading ColBERT model %s (~500 MB first download)...", settings.RAG_COLBERT_MODEL)
+            colbert = ColBERTIndex(settings.RAG_COLBERT_MODEL)
+            logger.info("ColBERT model loaded.")
+        except Exception as e:
+            logger.error("ColBERT model load failed — ColBERT disabled: %s", e)
+            colbert = None
+
+    # 3. Load knowledge store + build Qdrant index
     from app.rag.knowledge_store import KnowledgeStore
     store = KnowledgeStore()
     if gemini:
         try:
-            await store.build_index(gemini)
-            logger.info("Qdrant hybrid index built (dense + sparse)")
+            await store.build_index(gemini, colbert_index=colbert)
+            colbert_note = " + colbert" if colbert else ""
+            logger.info("Qdrant hybrid index built (dense + sparse%s)", colbert_note)
         except Exception as e:
             logger.error(f"Qdrant index build failed: {e}")
     app.state.knowledge_base = store
 
-    # 3. Initialize guardrail gates
+    # 4. Initialize guardrail gates
     from app.guardrails.validator import InputGate, OutputGate
 
     fast_path = None
@@ -77,7 +90,7 @@ async def lifespan(app: FastAPI):
     output_gate = OutputGate(gemini_client=gemini) if gemini else None
     logger.info("Guardrail gates initialized (input + output)")
 
-    # 4. Create session store, retriever, tools
+    # 5. Create session store, retriever, tools
     from app.agent.tools import create_tools
     from app.rag.query_rewriter import QueryRewriter
     from app.rag.retriever import HybridRetriever
@@ -107,23 +120,24 @@ async def lifespan(app: FastAPI):
         gemini_client=gemini,
         query_rewriter=query_rewriter,
         reranker=reranker,
+        colbert_index=colbert,
     )
     tools = create_tools(retriever=retriever, session_store=session_store)
 
-    # 5. Create event bus (with SQLite persistence when available)
+    # 6. Create event bus (with SQLite persistence when available)
     #    Uses a separate connection to avoid contention with the session store.
     from app.agent.event_bus import EventBus
     event_bus = EventBus(buffer_size=settings.EVENT_BUFFER_SIZE, conn=db_conn)
     logger.info("EventBus initialized (buffer_size=%d)", settings.EVENT_BUFFER_SIZE)
 
-    # 6. Create context preparation hook
+    # 7. Create context preparation hook
     from app.agent.hooks import create_prepare_context
     prepare_context = create_prepare_context(
         session_store=session_store,
         event_bus=event_bus,
     )
 
-    # 7. Create memory manager (optional, requires Gemini)
+    # 8. Create memory manager (optional, requires Gemini)
     from app.agent.memory import MemoryManager
     memory_manager = MemoryManager(
         session_store=session_store, gemini_client=gemini, event_bus=event_bus,
@@ -131,14 +145,14 @@ async def lifespan(app: FastAPI):
     if memory_manager:
         logger.info("MemoryManager initialized (summary_interval=%d)", settings.SUMMARY_INTERVAL_TURNS)
 
-    # 8. Create conversation analyzer (optional, requires Gemini)
+    # 9. Create conversation analyzer (optional, requires Gemini)
     analyzer = None
     if settings.ANALYZER_ENABLED and gemini:
         from app.agent.analyzer import ConversationAnalyzer
         analyzer = ConversationAnalyzer(session_store=session_store, gemini_client=gemini)
         logger.info("ConversationAnalyzer initialized")
 
-    # 9. Build ReAct agent and orchestrator
+    # 10. Build ReAct agent and orchestrator
     from app.agent.graph import build_agent
     from app.agent.orchestrator import AgentOrchestrator
 
@@ -163,10 +177,11 @@ async def lifespan(app: FastAPI):
     app.state.analyzer = analyzer
 
     logger.info(
-        "ADHDAgent ready (pro_model=%s, fast_model=%s, utility_model=%s)",
+        "ADHDAgent ready (pro_model=%s, fast_model=%s, utility_model=%s, colbert=%s)",
         settings.GEMINI_AGENT_MODEL,
         settings.GEMINI_FAST_MODEL,
         settings.GEMINI_UTILITY_MODEL,
+        "enabled" if colbert else "disabled",
     )
     yield
     if hasattr(orchestrator, 'shutdown'):
