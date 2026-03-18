@@ -11,6 +11,7 @@ import type {
   SessionsResponse,
   MessagesResponse,
 } from "@/types"
+import { getToken, signOut } from "@/lib/auth"
 
 const BASE = "/api"
 
@@ -18,11 +19,25 @@ const BASE = "/api"
 // In production (built React served by FastAPI), use the normal relative path.
 const SSE_BASE = import.meta.env.DEV ? "http://localhost:8000/api" : "/api"
 
+function authHeaders(): Record<string, string> {
+  const token = getToken()
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders(),
+      ...(options?.headers as Record<string, string> | undefined),
+    },
     ...options,
   })
+  if (res.status === 401) {
+    signOut()
+    window.location.href = "/signin"
+    throw new Error("Session expired")
+  }
   if (!res.ok) {
     const error = await res.json().catch(() => ({ detail: res.statusText }))
     throw new Error(error.detail || `Request failed: ${res.status}`)
@@ -37,7 +52,10 @@ export const api = {
   ): AsyncGenerator<StreamEvent> {
     const res = await fetch(`${SSE_BASE}/chat/stream`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeaders(),
+      },
       body: JSON.stringify(data),
       signal,
     })

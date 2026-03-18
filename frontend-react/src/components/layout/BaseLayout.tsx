@@ -52,7 +52,7 @@ export function BaseLayout({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-3">
             {user && (
               <span className="hidden text-sm text-muted-foreground md:block">
-                {user.name}
+                {user.email}
               </span>
             )}
             <Button variant="ghost" size="sm" onClick={handleSignOut} className="gap-2">

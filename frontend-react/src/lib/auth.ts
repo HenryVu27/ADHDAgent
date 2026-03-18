@@ -1,74 +1,101 @@
-import type { User, OnboardingData } from "@/types"
+import type { User, OnboardingData, TokenResponse } from "@/types"
 
-const STORAGE_KEYS = {
-  users: "adhd_agent_users",
-  currentUser: "adhd_agent_current_user",
-  onboarding: "adhd_agent_onboarding",
-  sessions: "adhd_agent_sessions",
-} as const
+const TOKEN_KEY = "adhd_token"
+const USER_KEY = "adhd_user"
 
-function getUsers(): Record<string, User & { password: string }> {
-  const raw = localStorage.getItem(STORAGE_KEYS.users)
-  return raw ? JSON.parse(raw) : {}
+// ---------------------------------------------------------------------------
+// Token storage
+// ---------------------------------------------------------------------------
+
+export function getToken(): string | null {
+  return localStorage.getItem(TOKEN_KEY)
 }
 
-function saveUsers(users: Record<string, User & { password: string }>) {
-  localStorage.setItem(STORAGE_KEYS.users, JSON.stringify(users))
+function setToken(token: string): void {
+  localStorage.setItem(TOKEN_KEY, token)
 }
 
-export function signUp(name: string, email: string, password: string): User {
-  const users = getUsers()
-  if (users[email]) {
-    throw new Error("An account with this email already exists")
+function clearToken(): void {
+  localStorage.removeItem(TOKEN_KEY)
+}
+
+// ---------------------------------------------------------------------------
+// API helpers
+// ---------------------------------------------------------------------------
+
+async function authPost(path: string, body: object): Promise<TokenResponse> {
+  const res = await fetch(`/api/auth${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }))
+    throw new Error(err.detail || `Request failed: ${res.status}`)
   }
-  const user: User & { password: string } = {
-    name,
-    email,
-    password,
-    createdAt: new Date().toISOString(),
+  return res.json()
+}
+
+export async function getMe(): Promise<User | null> {
+  const token = getToken()
+  if (!token) return null
+  const res = await fetch("/api/auth/me", {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) {
+    clearToken()
+    return null
   }
-  users[email] = user
-  saveUsers(users)
-  setCurrentUser({ name, email, createdAt: user.createdAt })
-  return { name, email, createdAt: user.createdAt }
+  const data = await res.json()
+  return { id: data.id, email: data.email, createdAt: data.created_at }
 }
 
-export function signIn(email: string, password: string): User {
-  const users = getUsers()
-  const user = users[email]
-  if (!user || user.password !== password) {
-    throw new Error("Invalid email or password")
-  }
-  setCurrentUser({ name: user.name, email: user.email, createdAt: user.createdAt })
-  return { name: user.name, email: user.email, createdAt: user.createdAt }
+// ---------------------------------------------------------------------------
+// Auth actions
+// ---------------------------------------------------------------------------
+
+export async function signUp(email: string, password: string): Promise<User> {
+  const { access_token } = await authPost("/register", { email, password })
+  setToken(access_token)
+  const user = await getMe()
+  if (!user) throw new Error("Registration succeeded but could not fetch user")
+  localStorage.setItem(USER_KEY, JSON.stringify(user))
+  return user
 }
 
-export function signOut() {
-  localStorage.removeItem(STORAGE_KEYS.currentUser)
+export async function signIn(email: string, password: string): Promise<User> {
+  const { access_token } = await authPost("/login", { email, password })
+  setToken(access_token)
+  const user = await getMe()
+  if (!user) throw new Error("Login succeeded but could not fetch user")
+  localStorage.setItem(USER_KEY, JSON.stringify(user))
+  return user
 }
 
-export function getCurrentUser(): User | null {
-  const raw = localStorage.getItem(STORAGE_KEYS.currentUser)
+export function signOut(): void {
+  clearToken()
+  localStorage.removeItem(USER_KEY)
+}
+
+export function getCachedUser(): User | null {
+  const raw = localStorage.getItem(USER_KEY)
   return raw ? JSON.parse(raw) : null
 }
 
-function setCurrentUser(user: User) {
-  localStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(user))
-}
+// ---------------------------------------------------------------------------
+// Onboarding (still localStorage — no backend model for it yet)
+// ---------------------------------------------------------------------------
 
-export function saveOnboarding(data: OnboardingData) {
-  const user = getCurrentUser()
+export function saveOnboarding(data: OnboardingData): void {
+  const user = getCachedUser()
   if (!user) return
-  localStorage.setItem(
-    `${STORAGE_KEYS.onboarding}_${user.email}`,
-    JSON.stringify(data)
-  )
+  localStorage.setItem(`adhd_onboarding_${user.id}`, JSON.stringify(data))
 }
 
 export function getOnboarding(): OnboardingData | null {
-  const user = getCurrentUser()
+  const user = getCachedUser()
   if (!user) return null
-  const raw = localStorage.getItem(`${STORAGE_KEYS.onboarding}_${user.email}`)
+  const raw = localStorage.getItem(`adhd_onboarding_${user.id}`)
   return raw ? JSON.parse(raw) : null
 }
 
@@ -76,39 +103,42 @@ export function hasCompletedOnboarding(): boolean {
   return getOnboarding() !== null
 }
 
+// ---------------------------------------------------------------------------
+// Session stats (keyed by user.id — migrated from email-keyed storage)
+// ---------------------------------------------------------------------------
+
 export function getSessionStats() {
-  const user = getCurrentUser()
+  const user = getCachedUser()
   if (!user) return { sessions: 0, strategies: 0, streak: 0 }
-  const raw = localStorage.getItem(`${STORAGE_KEYS.sessions}_${user.email}`)
+  const raw = localStorage.getItem(`adhd_sessions_stats_${user.id}`)
   return raw ? JSON.parse(raw) : { sessions: 0, strategies: 0, streak: 0 }
 }
 
 export function updateSessionStats(updates: Partial<{ sessions: number; strategies: number; streak: number }>) {
-  const user = getCurrentUser()
+  const user = getCachedUser()
   if (!user) return
   const stats = getSessionStats()
-  const merged = { ...stats, ...updates }
-  localStorage.setItem(
-    `${STORAGE_KEYS.sessions}_${user.email}`,
-    JSON.stringify(merged)
-  )
+  localStorage.setItem(`adhd_sessions_stats_${user.id}`, JSON.stringify({ ...stats, ...updates }))
 }
 
-// Active session tracking — persists the current chat session ID per user
+// ---------------------------------------------------------------------------
+// Active session tracking (keyed by user.id)
+// ---------------------------------------------------------------------------
+
 export function getActiveSessionId(): string | null {
-  const user = getCurrentUser()
+  const user = getCachedUser()
   if (!user) return null
-  return localStorage.getItem(`${STORAGE_KEYS.sessions}_active_${user.email}`)
+  return localStorage.getItem(`adhd_sessions_active_${user.id}`)
 }
 
 export function setActiveSessionId(sessionId: string): void {
-  const user = getCurrentUser()
+  const user = getCachedUser()
   if (!user) return
-  localStorage.setItem(`${STORAGE_KEYS.sessions}_active_${user.email}`, sessionId)
+  localStorage.setItem(`adhd_sessions_active_${user.id}`, sessionId)
 }
 
 export function clearActiveSessionId(): void {
-  const user = getCurrentUser()
+  const user = getCachedUser()
   if (!user) return
-  localStorage.removeItem(`${STORAGE_KEYS.sessions}_active_${user.email}`)
+  localStorage.removeItem(`adhd_sessions_active_${user.id}`)
 }

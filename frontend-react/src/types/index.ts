@@ -109,6 +109,11 @@ export interface StreamDoneEvent {
   summary: string | null
 }
 
+export interface StreamSuggestionsEvent {
+  type: "suggestions"
+  suggestions: string[]
+}
+
 export interface StreamErrorEvent {
   type: "error"
   message: string
@@ -120,6 +125,7 @@ export type StreamEvent =
   | StreamReplaceEvent
   | StreamSummaryEvent
   | StreamDoneEvent
+  | StreamSuggestionsEvent
   | StreamErrorEvent
 
 export interface SessionResponse {
@@ -162,9 +168,14 @@ export interface ChatMessage {
 }
 
 export interface User {
-  name: string
+  id: number
   email: string
   createdAt: string
+}
+
+export interface TokenResponse {
+  access_token: string
+  token_type: string
 }
 
 export interface OnboardingData {

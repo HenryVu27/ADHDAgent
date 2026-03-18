@@ -22,6 +22,12 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
+function RequireAuth({ children }: { children: ReactNode }) {
+  const { isAuthenticated } = useAuth()
+  if (!isAuthenticated) return <Navigate to="/" replace />
+  return <>{children}</>
+}
+
 function AuthRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated, hasOnboarded } = useAuth()
   if (isAuthenticated && hasOnboarded) return <Navigate to="/dashboard" replace />
@@ -129,8 +135,15 @@ export function App() {
           }
         />
 
-        {/* Admin (no auth) */}
-        <Route path="/observability" element={<ObservabilityPage />} />
+        {/* Admin (auth required, no onboarding required) */}
+        <Route
+          path="/observability"
+          element={
+            <RequireAuth>
+              <ObservabilityPage />
+            </RequireAuth>
+          }
+        />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />

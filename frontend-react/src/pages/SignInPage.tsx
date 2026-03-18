@@ -14,11 +14,11 @@ export function SignInPage() {
   const { signIn } = useAuth()
   const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     try {
-      signIn(email, password)
+      await signIn(email, password)
       toast.success("Welcome back!")
       navigate("/dashboard")
     } catch (err) {

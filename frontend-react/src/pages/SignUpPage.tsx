@@ -8,24 +8,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useAuth } from "@/hooks/use-auth"
 
 export function SignUpPage() {
-  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const { signUp } = useAuth()
+  const { signUp, isLoading, error } = useAuth()
   const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
     try {
-      signUp(name, email, password)
+      await signUp(email, password)
       toast.success("Account created! Let's set up your family profile.")
       navigate("/onboarding")
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Something went wrong")
-    } finally {
-      setIsLoading(false)
+    } catch {
+      // error is available via useAuth().error; also show toast for visibility
+      toast.error(error ?? "Something went wrong")
     }
   }
 
@@ -37,16 +33,6 @@ export function SignUpPage() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              placeholder="Your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -63,11 +49,11 @@ export function SignUpPage() {
             <Input
               id="password"
               type="password"
-              placeholder="Create a password"
+              placeholder="Create a password (min. 8 characters)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength={6}
+              minLength={8}
             />
           </div>
           <Button type="submit" className="w-full" disabled={isLoading}>
