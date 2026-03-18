@@ -220,7 +220,7 @@ class TokenResponse(BaseModel):
 
 class AuthRequest(BaseModel):
     email: str
-    password: str
+    password: str = Field(min_length=8)
 
 
 class SeedSessionRequest(BaseModel):

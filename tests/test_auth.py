@@ -74,10 +74,10 @@ class TestAuthEndpoints:
         try:
             async with client:
                 await client.post("/api/auth/register", json={
-                    "email": "bob@test.com", "password": "pass"
+                    "email": "bob@test.com", "password": "password1"
                 })
                 resp = await client.post("/api/auth/register", json={
-                    "email": "bob@test.com", "password": "pass"
+                    "email": "bob@test.com", "password": "password1"
                 })
             assert resp.status_code == 400
         finally:
@@ -88,10 +88,10 @@ class TestAuthEndpoints:
         try:
             async with client:
                 await client.post("/api/auth/register", json={
-                    "email": "carol@test.com", "password": "mypass"
+                    "email": "carol@test.com", "password": "mypassword"
                 })
                 resp = await client.post("/api/auth/login", json={
-                    "email": "carol@test.com", "password": "mypass"
+                    "email": "carol@test.com", "password": "mypassword"
                 })
             assert resp.status_code == 200
             assert "access_token" in resp.json()
@@ -103,10 +103,10 @@ class TestAuthEndpoints:
         try:
             async with client:
                 await client.post("/api/auth/register", json={
-                    "email": "dave@test.com", "password": "correct"
+                    "email": "dave@test.com", "password": "correctpassword"
                 })
                 resp = await client.post("/api/auth/login", json={
-                    "email": "dave@test.com", "password": "wrong"
+                    "email": "dave@test.com", "password": "wrongpassword"
                 })
             assert resp.status_code == 401
         finally:
@@ -117,7 +117,7 @@ class TestAuthEndpoints:
         try:
             async with client:
                 reg = await client.post("/api/auth/register", json={
-                    "email": "eve@test.com", "password": "pass"
+                    "email": "eve@test.com", "password": "password1"
                 })
                 token = reg.json()["access_token"]
                 resp = await client.get("/api/auth/me", headers={

@@ -66,10 +66,10 @@ async def verify_password(conn: aiosqlite.Connection, email: str, password: str)
 @auth_router.post("/register", response_model=TokenResponse)
 async def register(body: AuthRequest, conn: aiosqlite.Connection = Depends(get_db)):
     """Create a new user account and return a JWT."""
-    existing = await fetch_user_by_email(conn, body.email)
-    if existing:
+    try:
+        user = await create_user(conn, body.email, body.password)
+    except aiosqlite.IntegrityError:
         raise HTTPException(status_code=400, detail="Email already registered")
-    user = await create_user(conn, body.email, body.password)
     return TokenResponse(access_token=create_token(user.id))
 
 
