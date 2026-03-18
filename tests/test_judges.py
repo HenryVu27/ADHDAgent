@@ -66,3 +66,71 @@ class TestJudgeBase:
             judge = ConcreteJudge()
         result = await judge.judge_json("test prompt")
         assert result == {}
+
+
+from eval.judges.response_judge import ResponseJudge
+
+
+class TestResponseJudge:
+
+    @pytest.mark.asyncio
+    async def test_score_turn_parses_valid_response(self, mock_gen_client):
+        mock_gen_client.json = AsyncMock(return_value={
+            "helpfulness": {"score": 4, "rationale": "Addresses the issue"},
+            "accuracy": {"score": 5, "rationale": "Evidence-based"},
+            "empathy": {"score": 3, "rationale": "Could validate more"},
+            "boundary_compliance": {"score": 5, "rationale": "Stays in scope"},
+            "groundedness": {"score": 4, "rationale": "Based on retrieved docs"},
+            "actionability": {"score": 4, "rationale": "Concrete steps given"},
+        })
+        with patch("eval.judges.base.GenClient", return_value=mock_gen_client):
+            judge = ResponseJudge()
+
+        result = await judge.score_turn(
+            user_message="My kid can't focus on homework",
+            assistant_response="Here are some strategies based on research...",
+            tool_calls=[],
+            conversation_history=[],
+        )
+        assert result["scores"]["helpfulness"] == 4
+        assert result["scores"]["accuracy"] == 5
+        assert result["overall"] == pytest.approx(4.17, abs=0.1)
+        assert "rationales" in result
+
+    @pytest.mark.asyncio
+    async def test_score_turn_handles_judge_failure(self, mock_gen_client):
+        mock_gen_client.json = AsyncMock(return_value={})
+        with patch("eval.judges.base.GenClient", return_value=mock_gen_client):
+            judge = ResponseJudge()
+
+        result = await judge.score_turn(
+            user_message="test",
+            assistant_response="test",
+            tool_calls=[],
+            conversation_history=[],
+        )
+        assert result is None
+
+    @pytest.mark.asyncio
+    async def test_score_turn_with_tool_calls(self, mock_gen_client):
+        mock_gen_client.json = AsyncMock(return_value={
+            "helpfulness": {"score": 5, "rationale": "r"},
+            "accuracy": {"score": 5, "rationale": "r"},
+            "empathy": {"score": 5, "rationale": "r"},
+            "boundary_compliance": {"score": 5, "rationale": "r"},
+            "groundedness": {"score": 5, "rationale": "r"},
+            "actionability": {"score": 5, "rationale": "r"},
+        })
+        with patch("eval.judges.base.GenClient", return_value=mock_gen_client):
+            judge = ResponseJudge()
+
+        result = await judge.score_turn(
+            user_message="How do I help with homework?",
+            assistant_response="Based on the visual timer strategy...",
+            tool_calls=[{"name": "search_knowledge_base", "args": {"query": "homework"}, "result": "Visual timer..."}],
+            conversation_history=[],
+        )
+        assert result["scores"]["groundedness"] == 5
+        # Verify the prompt included tool call info
+        call_args = mock_gen_client.json.call_args
+        assert "search_knowledge_base" in call_args[1].get("prompt", call_args[0][0] if call_args[0] else "")
