@@ -102,3 +102,28 @@ def test_aggregate_tool_scores():
     assert result["mean_recall"] == 0.75
     assert result["mean_argument_accuracy"] == 3.5
     assert result["n_turns"] == 2
+
+
+from eval.metrics.coherence import aggregate_coherence_scores, COHERENCE_DIMENSIONS
+
+
+def test_coherence_dimensions():
+    assert len(COHERENCE_DIMENSIONS) == 4
+    assert "progressive_profiling" in COHERENCE_DIMENSIONS
+
+
+def test_aggregate_coherence_scores():
+    conversations = [
+        {"progressive_profiling": 4, "repetition_avoidance": 5, "follow_up": 2, "topic_management": 4},
+        {"progressive_profiling": 3, "repetition_avoidance": 4, "follow_up": 4, "topic_management": 3},
+    ]
+    result = aggregate_coherence_scores(conversations)
+    assert result["n_conversations"] == 2
+    assert result["mean"]["progressive_profiling"] == 3.5
+    assert result["mean"]["follow_up"] == 3.0
+    assert "overall" in result
+
+
+def test_aggregate_coherence_empty():
+    result = aggregate_coherence_scores([])
+    assert result["n_conversations"] == 0

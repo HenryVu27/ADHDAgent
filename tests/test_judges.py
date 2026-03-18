@@ -216,3 +216,53 @@ class TestToolUseJudge:
         assert result is not None
         assert result["precision"] == 1.0
         assert result["recall"] == 1.0
+
+
+from eval.judges.coherence_judge import CoherenceJudge
+
+
+class TestCoherenceJudge:
+
+    @pytest.mark.asyncio
+    async def test_score_conversation(self, mock_gen_client):
+        mock_gen_client.json = AsyncMock(return_value={
+            "scores": {
+                "progressive_profiling": 4,
+                "repetition_avoidance": 5,
+                "follow_up": 2,
+                "topic_management": 4,
+            },
+            "rationale": {
+                "progressive_profiling": "Learned name and age by turn 3",
+                "follow_up": "Never checked back on timer strategy",
+            },
+            "notable_moments": [
+                {"turn": 4, "type": "missed_follow_up", "detail": "Timer recommended, no check-in"}
+            ],
+        })
+        with patch("eval.judges.base.GenClient", return_value=mock_gen_client):
+            judge = CoherenceJudge()
+
+        turns = [
+            {"turn": i, "user_message": f"msg {i}", "assistant_response": f"resp {i}", "tool_calls": []}
+            for i in range(1, 8)
+        ]
+
+        result = await judge.score_conversation(turns=turns, family_profile={})
+        assert result is not None
+        assert result["scores"]["follow_up"] == 2
+        assert result["overall"] == pytest.approx(3.75)
+        assert len(result["notable_moments"]) == 1
+
+    @pytest.mark.asyncio
+    async def test_skips_short_conversations(self, mock_gen_client):
+        with patch("eval.judges.base.GenClient", return_value=mock_gen_client):
+            judge = CoherenceJudge()
+
+        turns = [
+            {"turn": i, "user_message": f"msg {i}", "assistant_response": f"resp {i}", "tool_calls": []}
+            for i in range(1, 4)  # Only 3 turns
+        ]
+
+        result = await judge.score_conversation(turns=turns, family_profile={})
+        assert result is None
