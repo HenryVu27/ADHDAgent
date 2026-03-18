@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from "react"
-import type { ChatMessage, PipelineTrace, StreamDoneEvent } from "@/types"
+import type { Attachment, ChatMessage, PipelineTrace, StreamDoneEvent } from "@/types"
 import { api } from "@/lib/api"
 
 export function useChat(sessionId: string) {
@@ -20,12 +20,13 @@ export function useChat(sessionId: string) {
   // No-op callback for StreamingContent's onComplete — finalize is driven by done event now
   const onStreamComplete = useCallback(() => {}, [])
 
-  const sendMessage = useCallback(async (content: string) => {
+  const sendMessage = useCallback(async (content: string, attachments?: Attachment[]) => {
     const userMsg: ChatMessage = {
       id: `msg_${++idCounter.current}`,
       role: "user",
       content,
       timestamp: new Date(),
+      attachments,
     }
     setMessages(prev => [...prev, userMsg])
     setIsLoading(true)
@@ -40,7 +41,7 @@ export function useChat(sessionId: string) {
 
     try {
       for await (const event of api.chatStream(
-        { message: content, session_id: sessionId },
+        { message: content, session_id: sessionId, attachment_ids: attachments?.map(a => a.id) },
         controller.signal,
       )) {
         if (event.type === "summary") {

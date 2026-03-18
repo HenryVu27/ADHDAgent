@@ -12,7 +12,7 @@ import { useSession } from "@/hooks/use-session"
 import { useAuth } from "@/hooks/use-auth"
 import { getActiveSessionId, setActiveSessionId, updateSessionStats, getSessionStats } from "@/lib/auth"
 import { api } from "@/lib/api"
-import type { ConversationPhase } from "@/types"
+import type { Attachment, ConversationPhase } from "@/types"
 
 function createSessionId() {
   const now = new Date()
@@ -126,14 +126,14 @@ export function ChatPage() {
     wasStreamingRef.current = isStreaming
   }, [isStreaming, latestTrace, refresh])
 
-  const handleSend = useCallback(async (content: string) => {
+  const handleSend = useCallback(async (content: string, attachments?: Attachment[]) => {
     // Wait for any pending seed to complete so the agent has family context
     if (pendingSeed.current) {
       await pendingSeed.current
       pendingSeed.current = null
     }
     setShowChips(false)
-    sendMessage(content)
+    sendMessage(content, attachments)
   }, [sendMessage])
 
   const handleChipSelect = useCallback((text: string) => {
@@ -197,7 +197,7 @@ export function ChatPage() {
         />
 
         {/* Input */}
-        <ChatInput onSend={handleSend} onStop={stopStreaming} isLoading={isLoading} isStreaming={isStreaming} />
+        <ChatInput onSend={handleSend} onStop={stopStreaming} isLoading={isLoading} isStreaming={isStreaming} sessionId={sessionId} />
       </Card>
     </div>
   )
