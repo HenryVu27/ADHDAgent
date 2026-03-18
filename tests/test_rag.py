@@ -739,3 +739,32 @@ class TestOutcomeBoost:
         # Timer should now be first
         assert "Timer" in boosted[0].document_name
         assert "Reward" in boosted[1].document_name
+
+
+from app.models.schemas import SessionState, FamilyProfile
+
+
+class TestOutcomeBoostInPipeline:
+
+    @pytest.mark.asyncio
+    async def test_retrieve_applies_outcome_boost(self, knowledge_store):
+        """Outcome boost integrates into the full retrieve() pipeline."""
+        retriever = HybridRetriever(knowledge_store=knowledge_store, gemini_client=None)
+
+        # First retrieve without outcomes to get a baseline
+        baseline = await retriever.retrieve("homework timer strategies")
+        assert len(baseline.results) > 0, "Need keyword results for this test"
+
+        # Now retrieve with a negative outcome for the top result
+        top_doc_name = baseline.results[0].document_name
+        top_original_score = baseline.results[0].score
+        state = SessionState(
+            session_id="test",
+            outcomes=[Outcome(strategy_name=top_doc_name, signal="negative", turn=1)],
+        )
+        boosted = await retriever.retrieve("homework timer strategies", state=state)
+
+        # The penalized doc should have a lower score
+        penalized = next((r for r in boosted.results if r.document_name == top_doc_name), None)
+        assert penalized is not None
+        assert penalized.score < top_original_score

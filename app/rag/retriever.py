@@ -112,6 +112,10 @@ class HybridRetriever:
                 logger.info("Relevance threshold %.2f filtered %d -> %d results",
                             settings.RAG_RELEVANCE_THRESHOLD, pre_filter, len(candidates))
 
+        # Step 3c: Outcome boost/penalty (personalization from family history)
+        if state and state.outcomes:
+            candidates = self._apply_outcome_boost(candidates, state.outcomes)
+
         # Step 4: Compute facets
         facets = self._compute_facets(candidates)
 
