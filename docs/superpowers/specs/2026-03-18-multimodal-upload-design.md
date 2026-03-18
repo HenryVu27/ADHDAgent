@@ -62,7 +62,7 @@ Normal ReAct agent loop (agent sees file content natively)
 
 ## Storage
 
-### SQLite: `attachments` table (SCHEMA_V5)
+### SQLite: `attachments` table (SCHEMA_V6)
 
 ```sql
 CREATE TABLE attachments (
