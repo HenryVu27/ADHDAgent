@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 import time
 from collections import defaultdict
 from typing import TYPE_CHECKING
@@ -17,6 +18,7 @@ if TYPE_CHECKING:
 from app.config import settings
 from app.models.schemas import (
     FacetCounts,
+    Outcome,
     RetrievalFilters,
     RetrievalResponse,
     RetrievalResult,
@@ -205,6 +207,67 @@ class HybridRetriever:
 
         results.sort(key=lambda r: r.score, reverse=True)
         return results
+
+    def _apply_outcome_boost(
+        self,
+        candidates: list[RetrievalResult],
+        outcomes: list[Outcome],
+    ) -> list[RetrievalResult]:
+        """Apply score boost/penalty based on family outcome history.
+
+        Uses Jaccard token-overlap between outcome strategy names and
+        document name + tags. Returns re-sorted candidates with boost metadata.
+        """
+        if not candidates:
+            return candidates
+        if not outcomes:
+            candidates.sort(key=lambda r: r.score, reverse=True)
+            return candidates
+
+        threshold = settings.RAG_OUTCOME_JACCARD_THRESHOLD
+        boost_pos = settings.RAG_OUTCOME_BOOST_POSITIVE
+        boost_neg = settings.RAG_OUTCOME_BOOST_NEGATIVE
+        cap = settings.RAG_OUTCOME_BOOST_CAP
+
+        # Pre-tokenize all outcome strategy names
+        outcome_tokens = []
+        for o in outcomes:
+            tokens = set(re.sub(r'[^\w\s]', '', o.strategy_name.lower()).split())
+            outcome_tokens.append((o, tokens))
+
+        for result in candidates:
+            # Tokenize document name + tags
+            doc_text = result.document_name.lower()
+            for tag in result.tags:
+                doc_text += " " + tag.lower().replace("_", " ")
+            doc_tokens = set(re.sub(r'[^\w\s]', '', doc_text).split())
+
+            if not doc_tokens:
+                continue
+
+            total_boost = 0.0
+            for outcome, o_tokens in outcome_tokens:
+                if not o_tokens:
+                    continue
+                intersection = o_tokens & doc_tokens
+                union = o_tokens | doc_tokens
+                jaccard = len(intersection) / len(union) if union else 0.0
+
+                if jaccard >= threshold:
+                    if outcome.signal == "positive":
+                        total_boost += boost_pos
+                    elif outcome.signal == "negative":
+                        total_boost += boost_neg
+                    # "mixed" -> no change
+
+            # Cap the total boost
+            total_boost = max(-cap, min(cap, total_boost))
+            if total_boost != 0.0:
+                result.score += total_boost
+
+        # Re-sort by adjusted score
+        candidates.sort(key=lambda r: r.score, reverse=True)
+        return candidates
 
     # Keyword scoring when Qdrant is unavailable
     def _keyword_fallback(
