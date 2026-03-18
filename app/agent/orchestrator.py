@@ -52,9 +52,6 @@ class AgentOrchestrator:
         """Generate a contextual one-line summary from the user's message via Flash."""
         if not self._gemini:
             return None
-        # Skip summary for short messages (greetings, acknowledgments)
-        if len(message.strip()) < 25:
-            return None
         try:
             prompt = (
                 "You are an ADHD parenting coach's internal narrator. "
@@ -413,6 +410,14 @@ class AgentOrchestrator:
                     kind = event["event"]
                     metadata = event.get("metadata", {})
                     node = metadata.get("langgraph_node")
+
+                    # Detect route from input gate — skip summary for simple messages
+                    if kind == "on_chain_end" and node == "input_gate":
+                        gate_output = event.get("data", {}).get("output", {})
+                        if isinstance(gate_output, dict) and gate_output.get("route") == "flash":
+                            if not summary_sent:
+                                summary_task.cancel()
+                                summary_sent = True
 
                     # Tool invocation status updates — contextual
                     if kind == "on_tool_start":
