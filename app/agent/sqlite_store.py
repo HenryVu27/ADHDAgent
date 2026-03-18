@@ -81,11 +81,15 @@ class SQLiteSessionStore(SessionStoreBase):
         row = await cursor.fetchone()
         return row is not None
 
-    async def _ensure_session(self, session_id: str) -> None:
-        """Create session + profile rows if they don't exist."""
+    async def _ensure_session(self, session_id: str, user_id: int | None = None) -> None:
+        """Create session + profile rows if they don't exist.
+
+        user_id is only used on first creation (INSERT OR IGNORE is a no-op
+        if the session already exists, so internal callers can omit it).
+        """
         await self._conn.execute(
-            "INSERT OR IGNORE INTO sessions (session_id) VALUES (?)",
-            (session_id,),
+            "INSERT OR IGNORE INTO sessions (session_id, user_id) VALUES (?, ?)",
+            (session_id, user_id),
         )
         await self._conn.execute(
             "INSERT OR IGNORE INTO family_profiles (session_id) VALUES (?)",
@@ -672,11 +676,17 @@ class SQLiteSessionStore(SessionStoreBase):
         rows = await cursor.fetchall()
         return [TurnAnalysis.model_validate_json(r["analysis_json"]) for r in rows]
 
-    async def get_all_sessions(self) -> list[SessionListItem]:
-        """Return summary info for all sessions."""
-        cursor = await self._conn.execute(
-            "SELECT session_id, turn_count, phase, created_at, updated_at FROM sessions ORDER BY updated_at DESC",
-        )
+    async def get_all_sessions(self, user_id: int | None = None) -> list[SessionListItem]:
+        """Return summary info for sessions. Filters by user_id when provided."""
+        if user_id is not None:
+            cursor = await self._conn.execute(
+                "SELECT session_id, turn_count, phase, created_at, updated_at FROM sessions WHERE user_id = ? ORDER BY updated_at DESC",
+                (user_id,),
+            )
+        else:
+            cursor = await self._conn.execute(
+                "SELECT session_id, turn_count, phase, created_at, updated_at FROM sessions ORDER BY updated_at DESC",
+            )
         rows = await cursor.fetchall()
         return [
             SessionListItem(
@@ -689,16 +699,26 @@ class SQLiteSessionStore(SessionStoreBase):
             for r in rows
         ]
 
-    async def get_all_sessions_paginated(self, offset: int = 0, limit: int = 50) -> tuple[list[SessionListItem], int]:
-        """Return paginated sessions and total count."""
-        cursor = await self._conn.execute("SELECT COUNT(*) FROM sessions")
-        total_row = await cursor.fetchone()
-        total = total_row[0]
+    async def get_all_sessions_paginated(self, offset: int = 0, limit: int = 50, user_id: int | None = None) -> tuple[list[SessionListItem], int]:
+        """Return paginated sessions and total count. Filters by user_id when provided."""
+        if user_id is not None:
+            count_row = await (await self._conn.execute(
+                "SELECT COUNT(*) FROM sessions WHERE user_id = ?", (user_id,)
+            )).fetchone()
+            total = count_row[0]
+            cursor = await self._conn.execute(
+                "SELECT session_id, turn_count, phase, created_at, updated_at FROM sessions WHERE user_id = ? ORDER BY updated_at DESC LIMIT ? OFFSET ?",
+                (user_id, limit, offset),
+            )
+        else:
+            cursor = await self._conn.execute("SELECT COUNT(*) FROM sessions")
+            total_row = await cursor.fetchone()
+            total = total_row[0]
 
-        cursor = await self._conn.execute(
-            "SELECT session_id, turn_count, phase, created_at, updated_at FROM sessions ORDER BY updated_at DESC LIMIT ? OFFSET ?",
-            (limit, offset),
-        )
+            cursor = await self._conn.execute(
+                "SELECT session_id, turn_count, phase, created_at, updated_at FROM sessions ORDER BY updated_at DESC LIMIT ? OFFSET ?",
+                (limit, offset),
+            )
         rows = await cursor.fetchall()
         items = [
             SessionListItem(

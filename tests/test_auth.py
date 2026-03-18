@@ -129,3 +129,42 @@ class TestAuthEndpoints:
             assert "id" in data
         finally:
             await _cleanup(conn, app)
+
+
+class TestSessionIsolation:
+    async def test_list_sessions_only_returns_own_sessions(self):
+        """User A cannot see User B's sessions."""
+        from app.agent.sqlite_store import SQLiteSessionStore
+
+        conn = await aiosqlite.connect(":memory:")
+        conn.row_factory = aiosqlite.Row
+        await init_db_async(conn)
+
+        # Create two users
+        await conn.execute(
+            "INSERT INTO users (email, password_hash) VALUES (?, ?), (?, ?)",
+            ("a@t.com", "hash_a", "b@t.com", "hash_b"),
+        )
+        await conn.commit()
+        async with conn.execute("SELECT id FROM users WHERE email = 'a@t.com'") as cur:
+            user_a_id = (await cur.fetchone())["id"]
+        async with conn.execute("SELECT id FROM users WHERE email = 'b@t.com'") as cur:
+            user_b_id = (await cur.fetchone())["id"]
+
+        store = SQLiteSessionStore(conn)
+        # Create sessions for each user
+        await store._ensure_session("session-a", user_id=user_a_id)
+        await store._ensure_session("session-b", user_id=user_b_id)
+        await conn.commit()
+
+        # User A sees only their session
+        sessions_a, total_a = await store.get_all_sessions_paginated(user_id=user_a_id)
+        assert total_a == 1
+        assert sessions_a[0].session_id == "session-a"
+
+        # User B sees only their session
+        sessions_b, total_b = await store.get_all_sessions_paginated(user_id=user_b_id)
+        assert total_b == 1
+        assert sessions_b[0].session_id == "session-b"
+
+        await conn.close()

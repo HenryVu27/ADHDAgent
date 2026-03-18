@@ -151,12 +151,12 @@ class SessionStoreBase(ABC):
         """Return all turn analyses for a session."""
 
     @abstractmethod
-    async def get_all_sessions(self) -> list[SessionListItem]:
-        """Return summary info for all sessions."""
+    async def get_all_sessions(self, user_id: int | None = None) -> list[SessionListItem]:
+        """Return summary info for sessions. Filters by user_id when provided."""
 
     @abstractmethod
-    async def get_all_sessions_paginated(self, offset: int = 0, limit: int = 50) -> tuple[list[SessionListItem], int]:
-        """Return paginated sessions and total count."""
+    async def get_all_sessions_paginated(self, offset: int = 0, limit: int = 50, user_id: int | None = None) -> tuple[list[SessionListItem], int]:
+        """Return paginated sessions and total count. Filters by user_id when provided."""
 
     @abstractmethod
     async def get_messages_paginated(self, session_id: str, offset: int = 0, limit: int = 50) -> tuple[list[dict], int]:
