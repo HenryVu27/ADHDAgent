@@ -50,6 +50,24 @@ async def _check_session_owner(
         raise HTTPException(status_code=403, detail="Access denied")
 
 
+async def _assert_not_other_users_session(
+    session_id: str,
+    user_id: int,
+    conn: aiosqlite.Connection,
+) -> None:
+    """For create-or-access paths: only checks ownership if the session exists.
+
+    New sessions (row is None) are allowed through — they will be created
+    with the correct owner. Existing sessions owned by a different user get 403.
+    """
+    async with conn.execute(
+        "SELECT user_id FROM sessions WHERE session_id = ?", (session_id,)
+    ) as cur:
+        row = await cur.fetchone()
+    if row is not None and row["user_id"] != user_id:
+        raise HTTPException(status_code=403, detail="Access denied")
+
+
 @router.post("/chat/stream")
 @limiter.limit(lambda: settings.RATE_LIMIT_CHAT)
 async def chat_stream(
@@ -57,6 +75,7 @@ async def chat_stream(
     body: ChatRequest,
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
     current_user: UserRow = Depends(get_current_user),
+    conn: aiosqlite.Connection = Depends(get_db),
 ):
     """
     Streaming chat endpoint. Emits Server-Sent Events:
@@ -70,6 +89,8 @@ async def chat_stream(
     from the ReAct agent's final response in real time. See spec at
     docs/superpowers/specs/2026-03-13-streaming-design.md.
     """
+    await _assert_not_other_users_session(body.session_id, current_user.id, conn)
+
     async def event_generator():
         async for event_type, data in orchestrator.process_stream(
             message=body.message,
@@ -99,6 +120,7 @@ async def seed_session(
     conn: aiosqlite.Connection = Depends(get_db),
 ):
     """Pre-populate a session with onboarding data so the agent has family context from the start."""
+    await _assert_not_other_users_session(body.session_id, current_user.id, conn)
     await orchestrator.seed_session(body, user_id=current_user.id)
     return {"status": "ok", "session_id": body.session_id}
 
