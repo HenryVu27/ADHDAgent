@@ -93,6 +93,22 @@ class MemoryManager:
         if not messages:
             return
 
+        # Load episodes from this turn window for importance weighting
+        all_episodes = await self._store.get_episodes_with_ids(session_id, limit=50)
+        window_episodes = [
+            ep for _id, ep in all_episodes
+            if ep.turn_range_start >= start_turn and ep.turn_range_start <= current_turn
+        ]
+        key_events_block = ""
+        if window_episodes:
+            event_lines = []
+            for ep in window_episodes:
+                line = f"- [{ep.event_type}] {ep.summary}"
+                if ep.emotional_context:
+                    line += f" (mood: {ep.emotional_context})"
+                event_lines.append(line)
+            key_events_block = "\nKey events this window:\n" + "\n".join(event_lines)
+
         # Build conversation text for summarization
         conversation_text = "\n".join(
             f"{m['role'].upper()}: {m['content']}" for m in messages
@@ -129,7 +145,8 @@ Focus ONLY on what is NOT already captured in the structured family profile:
 Omit: demographic facts, strategy names, diagnosis details, and anything already in the previous summary.
 
 {f"Previous summary: {prior_summary}" if prior_summary else ""}
-
+{key_events_block}
+{f"Pay special attention to the key events above -- they represent important moments that should be preserved in the summary." if key_events_block else ""}
 New conversation to incorporate:
 {conversation_text}
 
