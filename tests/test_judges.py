@@ -266,3 +266,52 @@ class TestCoherenceJudge:
 
         result = await judge.score_conversation(turns=turns, family_profile={})
         assert result is None
+
+
+from eval.judges.pairwise_judge import PairwiseJudge
+
+
+class TestPairwiseJudge:
+
+    @pytest.mark.asyncio
+    async def test_compare_turn_consistent(self, mock_gen_client):
+        """When both orderings agree, use the result."""
+        mock_gen_client.json = AsyncMock(side_effect=[
+            # First call: A/B order
+            {"winner": "A", "confidence": "high", "rationale": "A is better",
+             "dimension_winners": {"helpfulness": "A", "empathy": "A"}},
+            # Second call: B/A order (A is now B)
+            {"winner": "B", "confidence": "high", "rationale": "B is better",
+             "dimension_winners": {"helpfulness": "B", "empathy": "B"}},
+        ])
+        with patch("eval.judges.base.GenClient", return_value=mock_gen_client):
+            judge = PairwiseJudge()
+
+        result = await judge.compare_turn(
+            user_message="How do I help?",
+            response_a="Strategy A response",
+            response_b="Strategy B response",
+        )
+        assert result is not None
+        assert result["winner"] == "A"  # Both agree A is better
+
+    @pytest.mark.asyncio
+    async def test_compare_turn_inconsistent_becomes_tie(self, mock_gen_client):
+        """When orderings disagree, it's a tie."""
+        mock_gen_client.json = AsyncMock(side_effect=[
+            {"winner": "A", "confidence": "medium", "rationale": "A is better",
+             "dimension_winners": {}},
+            # Second call: still says A (which is response_b now) — disagreement
+            {"winner": "A", "confidence": "medium", "rationale": "A is better",
+             "dimension_winners": {}},
+        ])
+        with patch("eval.judges.base.GenClient", return_value=mock_gen_client):
+            judge = PairwiseJudge()
+
+        result = await judge.compare_turn(
+            user_message="How do I help?",
+            response_a="Response A",
+            response_b="Response B",
+        )
+        assert result is not None
+        assert result["winner"] == "tie"

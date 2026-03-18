@@ -127,3 +127,43 @@ def test_aggregate_coherence_scores():
 def test_aggregate_coherence_empty():
     result = aggregate_coherence_scores([])
     assert result["n_conversations"] == 0
+
+
+from eval.metrics.pairwise import aggregate_pairwise, CONFIDENCE_WEIGHTS
+
+
+def test_confidence_weights():
+    assert CONFIDENCE_WEIGHTS["high"] == 1.0
+    assert CONFIDENCE_WEIGHTS["medium"] == pytest.approx(0.66, abs=0.01)
+    assert CONFIDENCE_WEIGHTS["low"] == pytest.approx(0.33, abs=0.01)
+
+
+def test_aggregate_pairwise_basic():
+    judgments = [
+        {"winner": "A", "confidence": "high"},
+        {"winner": "B", "confidence": "medium"},
+        {"winner": "A", "confidence": "high"},
+        {"winner": "tie", "confidence": "low"},
+    ]
+    result = aggregate_pairwise(judgments, variant_a="v1", variant_b="v2")
+    assert result["n_comparisons"] == 4
+    assert result["win_rate_a"] == 0.5  # 2/4
+    assert result["win_rate_b"] == 0.25  # 1/4
+    assert result["tie_rate"] == 0.25
+    # Weighted: A gets 2*1.0=2.0, B gets 1*0.66=0.66, tie gets 0.33
+    assert result["weighted_win_rate_a"] > result["weighted_win_rate_b"]
+
+
+def test_aggregate_pairwise_empty():
+    result = aggregate_pairwise([], "a", "b")
+    assert result["n_comparisons"] == 0
+
+
+def test_aggregate_pairwise_dimension_winners():
+    judgments = [
+        {"winner": "A", "confidence": "high", "dimension_winners": {"helpfulness": "A", "empathy": "B"}},
+        {"winner": "A", "confidence": "high", "dimension_winners": {"helpfulness": "A", "empathy": "A"}},
+    ]
+    result = aggregate_pairwise(judgments, "v1", "v2")
+    assert result["dimension_win_rates"]["helpfulness"]["A"] == 1.0
+    assert result["dimension_win_rates"]["empathy"]["A"] == 0.5
