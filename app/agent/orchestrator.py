@@ -67,7 +67,7 @@ class AgentOrchestrator:
             result = await self._gemini.generate(
                 prompt,
                 temperature=0.3,
-                max_output_tokens=80,
+                max_output_tokens=512,
                 timeout=5.0,
             )
             # Take only the first line, trim to last complete word
