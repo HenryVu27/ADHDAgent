@@ -183,9 +183,22 @@ def create_prepare_context(
             last_msg = conversation_messages[-1]
             if isinstance(last_msg, HumanMessage):
                 state_suffix = "\n\n" + state_block
-                original_content = last_msg.content if isinstance(last_msg.content, str) else str(last_msg.content)
+                if isinstance(last_msg.content, str):
+                    new_content = last_msg.content + state_suffix
+                elif isinstance(last_msg.content, list):
+                    # Multipart content: append state block to first text part
+                    new_content = list(last_msg.content)  # shallow copy
+                    for i, part in enumerate(new_content):
+                        if isinstance(part, dict) and part.get("type") == "text":
+                            new_content[i] = {**part, "text": part["text"] + state_suffix}
+                            break
+                    else:
+                        # No text part found -- prepend one
+                        new_content.insert(0, {"type": "text", "text": state_suffix})
+                else:
+                    new_content = str(last_msg.content) + state_suffix
                 conversation_messages = conversation_messages[:-1] + [
-                    HumanMessage(content=original_content + state_suffix)
+                    HumanMessage(content=new_content)
                 ]
 
         llm_messages = [SystemMessage(content=system_prompt)] + conversation_messages

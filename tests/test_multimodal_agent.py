@@ -30,3 +30,16 @@ def test_extract_text_from_multipart_multiple_text():
         {"type": "text", "text": "second"},
     ]
     assert _extract_text(content) == "First second"
+
+
+def test_estimate_chars_with_list_content():
+    """_estimate_chars should count only text parts from multipart content."""
+    from app.agent.hooks import _estimate_chars
+
+    content = [
+        {"type": "text", "text": "Look at this report card"},
+        {"type": "media", "file_uri": "uri://file", "mime_type": "application/pdf"},
+    ]
+    msg = HumanMessage(content=content)
+    chars = _estimate_chars([msg])
+    assert chars == len("Look at this report card")
