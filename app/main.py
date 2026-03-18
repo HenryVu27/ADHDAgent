@@ -104,6 +104,35 @@ async def lifespan(app: FastAPI):
         from app.db import get_async_connection, init_db_async
         db_conn = await get_async_connection(settings.SQLITE_DB_PATH)
         await init_db_async(db_conn)
+
+        # JWT secret validation (lazy imports — only needed in SQLite mode)
+        from app.api.auth_routes import create_user, fetch_user_by_email
+
+        if not settings.JWT_SECRET:
+            if settings.API_KEY:
+                raise RuntimeError(
+                    "JWT_SECRET must be set in production (API_KEY is configured)."
+                )
+            logger.warning(
+                "JWT_SECRET not set — using random per-process secret. "
+                "Tokens will not survive restarts. Set JWT_SECRET in .env for persistence."
+            )
+
+        # Seed default test user
+        if settings.DEFAULT_USER_EMAIL:
+            existing = await fetch_user_by_email(db_conn, settings.DEFAULT_USER_EMAIL)
+            if not existing:
+                await create_user(db_conn, settings.DEFAULT_USER_EMAIL, settings.DEFAULT_USER_PASSWORD)
+                logger.info("Default test user created: %s", settings.DEFAULT_USER_EMAIL)
+            # Assign orphan sessions (created before auth was added) to the default user
+            default_user = await fetch_user_by_email(db_conn, settings.DEFAULT_USER_EMAIL)
+            if default_user:
+                await db_conn.execute(
+                    "UPDATE sessions SET user_id = ? WHERE user_id IS NULL",
+                    (default_user.id,),
+                )
+                await db_conn.commit()
+
         session_store = SQLiteSessionStore(db_conn)
         logger.info("Using SQLite session store (path=%s)", settings.SQLITE_DB_PATH)
     else:
