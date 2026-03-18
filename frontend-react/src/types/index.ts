@@ -72,10 +72,32 @@ export interface PipelineTrace {
   agent_used: string
 }
 
+// Multimodal attachments
+export interface Attachment {
+  id: string
+  filename: string
+  content_type: string
+  thumbnail_url: string | null
+}
+
+export interface UploadResponse {
+  id: string
+  filename: string
+  content_type: string
+  thumbnail_url: string | null
+}
+
+export interface UploadBlockedResponse {
+  blocked: true
+  reason: string
+  response: string
+}
+
 // API Contracts
 export interface ChatRequest {
   message: string
   session_id: string
+  attachment_ids?: string[]
 }
 
 // SSE streaming events from POST /api/chat/stream
@@ -165,6 +187,7 @@ export interface ChatMessage {
   agentUsed?: string
   pipelineTrace?: PipelineTrace
   summary?: string
+  attachments?: Attachment[]
 }
 
 export interface User {

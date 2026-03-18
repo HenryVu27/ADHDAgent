@@ -10,6 +10,8 @@ import type {
   ObservabilityEvent,
   SessionsResponse,
   MessagesResponse,
+  UploadResponse,
+  UploadBlockedResponse,
 } from "@/types"
 import { getToken, signOut } from "@/lib/auth"
 
@@ -167,5 +169,34 @@ export const api = {
 
   analyzeSession(sessionId: string): Promise<{ status: string; turns_analyzed: number; total_flags: number }> {
     return request(`/observability/sessions/${sessionId}/analyze`, { method: "POST" })
+  },
+
+  async uploadFile(
+    file: File,
+    sessionId: string,
+  ): Promise<UploadResponse | UploadBlockedResponse> {
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("session_id", sessionId)
+
+    const res = await fetch(`${SSE_BASE}/upload`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: formData,
+    })
+    if (res.status === 401) {
+      signOut()
+      window.location.href = "/signin"
+      throw new Error("Session expired")
+    }
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ detail: res.statusText }))
+      throw new Error(error.detail || `Upload failed: ${res.status}`)
+    }
+    return res.json()
+  },
+
+  deleteSession(sessionId: string): Promise<{ status: string }> {
+    return request(`/session/${sessionId}`, { method: "DELETE" })
   },
 }
