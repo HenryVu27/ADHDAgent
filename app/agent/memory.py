@@ -361,7 +361,7 @@ Parent message:
         user_message: str,
         emotion: str,
     ) -> None:
-        """Create an episode for strongly negative emotions or positive breakthroughs."""
+        """Create an episode for any detected non-neutral emotional state."""
         if not emotion:
             return
 
@@ -370,6 +370,7 @@ Parent message:
         elif emotion in self._POSITIVE_EMOTIONS:
             outcome = "positive"
         else:
+            logger.warning("Uncategorized emotion '%s'; defaulting outcome to 'mixed'", emotion)
             outcome = "mixed"
 
         summary = f"Parent expressed {emotion} emotional state at turn {turn}"
@@ -393,7 +394,7 @@ Parent message:
         asyncio.create_task(self._link_episode(session_id, episode_id, episode))
 
     async def _run_emotional_shift_check(self, session_id: str, turn: int, user_message: str) -> None:
-        """Infer emotion and create episode if high-intensity or strongly positive."""
+        """Infer emotion and create an episode for any non-neutral emotional state."""
         emotion = await self._infer_emotion(session_id, user_message)
         await self._create_emotional_shift_episode(session_id, turn, user_message, emotion)
 

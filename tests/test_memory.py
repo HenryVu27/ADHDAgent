@@ -535,6 +535,9 @@ class TestBroaderEpisodicEvents:
 
         episodes = await store.get_recent_episodes("s1")
         assert any(ep.event_type == "emotional_shift" for ep in episodes)
+        hopeful_eps = [ep for ep in episodes if ep.event_type == "emotional_shift"]
+        assert len(hopeful_eps) == 1
+        assert hopeful_eps[0].emotional_context == "hopeful"
 
     async def test_any_non_neutral_emotion_creates_episode(self):
         """positive emotion should create an episode (currently blocked by high-intensity gate)."""
