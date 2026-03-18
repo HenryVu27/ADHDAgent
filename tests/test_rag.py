@@ -540,7 +540,7 @@ class TestKnowledgeStoreColbert:
         )
 
         call_kwargs = mock_client.query_points.call_args
-        prefetches = call_kwargs.kwargs.get("prefetch") or call_kwargs[1].get("prefetch")
+        prefetches = call_kwargs.kwargs["prefetch"]
         assert len(prefetches) == 3
         assert any(p.using == "colbert" for p in prefetches)
 
@@ -561,7 +561,7 @@ class TestKnowledgeStoreColbert:
         )
 
         call_kwargs = mock_client.query_points.call_args
-        prefetches = call_kwargs.kwargs.get("prefetch") or call_kwargs[1].get("prefetch")
+        prefetches = call_kwargs.kwargs["prefetch"]
         assert len(prefetches) == 2
         assert all(p.using != "colbert" for p in prefetches)
 
@@ -620,9 +620,7 @@ class TestHybridRetrieverColbert:
             with patch.object(store, "search_hybrid", return_value=[]) as mock_search:
                 await retriever.retrieve("homework strategies")
 
+        mock_search.assert_called_once()
         call_kwargs = mock_search.call_args
-        passed_prefetch = (
-            (call_kwargs.kwargs.get("colbert_prefetch") or call_kwargs[1].get("colbert_prefetch"))
-            if call_kwargs else None
-        )
+        passed_prefetch = call_kwargs.kwargs.get("colbert_prefetch")
         assert passed_prefetch is None
