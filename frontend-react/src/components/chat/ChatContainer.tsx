@@ -68,7 +68,7 @@ export function ChatContainer({
         <ChatBubble key={msg.id} message={msg} />
       ))}
 
-      {/* Loading state: summary + shimmer + contextual status */}
+      {/* Loading state: summary + contextual status */}
       {isLoading && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -80,27 +80,9 @@ export function ChatContainer({
           </div>
           <div className="px-1 py-1">
             <div className="mb-1 text-xs font-medium text-coach">Ally</div>
-            {summaryText && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mb-2 text-xs text-muted-foreground"
-              >
-                {summaryText}
-              </motion.div>
-            )}
-            <div className="mb-2 h-1 w-32 overflow-hidden rounded-full bg-muted">
-              <div className="h-full w-1/2 animate-shimmer rounded-full bg-gradient-to-r from-transparent via-coach/30 to-transparent" />
+            <div className="text-xs text-muted-foreground">
+              {summaryText || statusText || "Thinking..."}
             </div>
-            {statusText && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-xs text-muted-foreground"
-              >
-                {statusText}
-              </motion.div>
-            )}
           </div>
         </motion.div>
       )}
