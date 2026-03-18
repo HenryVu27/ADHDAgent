@@ -67,10 +67,11 @@ class AgentOrchestrator:
             result = await self._gemini.generate(
                 prompt,
                 temperature=0.3,
-                max_output_tokens=30,
+                max_output_tokens=60,
                 timeout=5.0,
             )
-            summary = result.strip().rstrip(".")
+            # Take only the first line and clean up
+            summary = result.strip().split("\n")[0].strip().rstrip(".")
             return summary if summary else None
         except Exception:
             logger.debug("[agent] Summary generation failed — skipping")
