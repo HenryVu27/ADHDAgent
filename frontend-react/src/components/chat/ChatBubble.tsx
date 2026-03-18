@@ -20,40 +20,28 @@ interface Props {
 interface StreamingBubbleProps {
   content: string
   typewriterResetRef: React.MutableRefObject<((text: string) => void) | null>
+  onComplete?: () => void
 }
 
 /**
- * In-progress assistant bubble during SSE streaming.
- * Uses useTypewriter to animate tokens at a smooth, human-readable pace.
- * Exposes reset() via typewriterResetRef so use-chat can swap content
- * when an output-gate replace event arrives.
+ * Content-only streaming component during SSE streaming.
+ * Uses useTypewriter for smooth character-by-character animation.
+ * onComplete fires when the typewriter catches up to all received content,
+ * signaling the done handler that it's safe to finalize.
+ * The avatar/wrapper is provided by ChatContainer.
  */
-export function StreamingBubble({ content, typewriterResetRef }: StreamingBubbleProps) {
-  const { displayedText, reset } = useTypewriter(content)
+export function StreamingContent({ content, typewriterResetRef, onComplete }: StreamingBubbleProps) {
+  const { displayedText, reset } = useTypewriter(content, onComplete)
 
-  // Keep typewriterResetRef in sync so use-chat.ts can call reset() on replace events.
   if (typewriterResetRef.current !== reset) {
     typewriterResetRef.current = reset
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
-      className="flex gap-3"
-    >
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-coach">
-        <Sprout className="h-4 w-4 text-coach-foreground" />
-      </div>
-      <div className="max-w-[80%] rounded-2xl bg-card px-4 py-3 shadow-sm border border-border/30">
-        <div className="mb-1 text-xs font-medium text-coach">Ally</div>
-        <div
-          className="text-sm leading-relaxed [&_ul]:ml-4 [&_ul]:list-disc [&_ul]:space-y-1 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-semibold"
-          dangerouslySetInnerHTML={{ __html: formatMarkdown(displayedText) }}
-        />
-      </div>
-    </motion.div>
+    <div
+      className="text-sm leading-relaxed [&_ul]:ml-4 [&_ul]:list-disc [&_ul]:space-y-1 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-semibold"
+      dangerouslySetInnerHTML={{ __html: formatMarkdown(displayedText) }}
+    />
   )
 }
 
@@ -79,14 +67,19 @@ export function ChatBubble({ message }: Props) {
         )}
       </div>
       <div
-        className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+        className={`max-w-[80%] ${
           isUser
-            ? "bg-primary text-primary-foreground"
-            : "bg-card shadow-sm border border-border/30"
+            ? "rounded-2xl px-4 py-3 bg-primary text-primary-foreground"
+            : "px-1 py-1"
         }`}
       >
         {!isUser && (
           <div className="mb-1 text-xs font-medium text-coach">Ally</div>
+        )}
+        {!isUser && message.summary && (
+          <div className="mb-2 text-xs text-muted-foreground">
+            {message.summary}
+          </div>
         )}
         <div
           className="text-sm leading-relaxed [&_ul]:ml-4 [&_ul]:list-disc [&_ul]:space-y-1 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-semibold"
