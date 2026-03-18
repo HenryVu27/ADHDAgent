@@ -297,12 +297,13 @@ class SQLiteSessionStore(SessionStoreBase):
                 (session_id,),
             )
             row = await cursor.fetchone()
-            await self._conn.execute(
+            cursor = await self._conn.execute(
                 "INSERT OR IGNORE INTO goals (session_id, description, created_turn) VALUES (?, ?, ?)",
                 (session_id, description, row["turn_count"]),
             )
-            await self._touch_updated(session_id)
-            logger.info("Goal added for session %s: %s", session_id, description)
+            if cursor.rowcount == 1:
+                await self._touch_updated(session_id)
+                logger.info("Goal added for session %s: %s", session_id, description)
         elif action == "complete" and description:
             await self._conn.execute(
                 "UPDATE goals SET status = 'completed' WHERE session_id = ? AND LOWER(description) = LOWER(?) AND status = 'active'",
