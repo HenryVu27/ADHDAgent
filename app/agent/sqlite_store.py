@@ -64,7 +64,7 @@ class SQLiteSessionStore(SessionStoreBase):
     async def delete_session(self, session_id: str) -> None:
         """Delete all data for a session (cascading). Commits internally."""
         for table in (
-            "tool_results", "turn_analyses", "traces", "episode_links", "episodes",
+            "attachments", "tool_results", "turn_analyses", "traces", "episode_links", "episodes",
             "session_summaries", "active_strategies", "outcomes", "goals", "messages",
             "family_profiles", "profile_changelog", "sessions",
         ):
@@ -787,3 +787,41 @@ class SQLiteSessionStore(SessionStoreBase):
         if row:
             return (row["created_at"] or "", row["updated_at"] or "")
         return ("", "")
+
+    async def save_attachment(
+        self,
+        session_id: str,
+        attachment_id: str,
+        gemini_file_name: str,
+        gemini_file_uri: str,
+        filename: str,
+        content_type: str,
+        size_bytes: int,
+        thumbnail_path: str | None = None,
+    ) -> None:
+        await self._conn.execute(
+            """INSERT INTO attachments
+               (id, session_id, gemini_file_name, gemini_file_uri, filename, content_type, size_bytes, thumbnail_path)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            (attachment_id, session_id, gemini_file_name, gemini_file_uri,
+             filename, content_type, size_bytes, thumbnail_path),
+        )
+
+    async def get_attachments(self, attachment_ids: list[str]) -> list[dict]:
+        if not attachment_ids:
+            return []
+        placeholders = ",".join("?" for _ in attachment_ids)
+        cursor = await self._conn.execute(
+            f"SELECT * FROM attachments WHERE id IN ({placeholders})",
+            attachment_ids,
+        )
+        rows = await cursor.fetchall()
+        return [dict(row) for row in rows]
+
+    async def get_attachments_by_session(self, session_id: str) -> list[dict]:
+        cursor = await self._conn.execute(
+            "SELECT * FROM attachments WHERE session_id = ?",
+            (session_id,),
+        )
+        rows = await cursor.fetchall()
+        return [dict(row) for row in rows]

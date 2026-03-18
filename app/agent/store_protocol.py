@@ -179,5 +179,27 @@ class SessionStoreBase(ABC):
         """Return (created_at, updated_at) for a session. Empty strings if unavailable."""
 
     @abstractmethod
+    async def save_attachment(
+        self,
+        session_id: str,
+        attachment_id: str,
+        gemini_file_name: str,
+        gemini_file_uri: str,
+        filename: str,
+        content_type: str,
+        size_bytes: int,
+        thumbnail_path: str | None = None,
+    ) -> None:
+        """Save file attachment metadata."""
+
+    @abstractmethod
+    async def get_attachments(self, attachment_ids: list[str]) -> list[dict]:
+        """Get attachment records by IDs. Returns list of dicts with all columns."""
+
+    @abstractmethod
+    async def get_attachments_by_session(self, session_id: str) -> list[dict]:
+        """Get all attachment records for a session."""
+
+    @abstractmethod
     async def commit(self) -> None:
         """Flush pending writes to durable storage."""
