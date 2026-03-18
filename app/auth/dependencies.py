@@ -8,18 +8,20 @@ from app.api.deps import get_db
 from app.auth.jwt import InvalidTokenError, decode_token
 from app.models.schemas import UserRow
 
-bearer = HTTPBearer()
+bearer = HTTPBearer(auto_error=False)
 
 
 async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(bearer),
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer),
     conn: aiosqlite.Connection = Depends(get_db),
 ) -> UserRow:
     """Decode Bearer JWT and return the authenticated user.
 
+    Raises 403 if no Authorization header is present.
     Raises 401 for invalid/expired tokens, 401 if user no longer exists.
-    Missing Authorization header returns 403 (HTTPBearer default).
     """
+    if credentials is None:
+        raise HTTPException(status_code=403, detail="Not authenticated")
     try:
         user_id = decode_token(credentials.credentials)
     except InvalidTokenError:

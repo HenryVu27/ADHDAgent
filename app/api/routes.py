@@ -11,12 +11,14 @@ Endpoints:
 
 import json
 
+import aiosqlite
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 
 from app.agent.orchestrator import AgentOrchestrator
-from app.api.deps import get_knowledge_base, get_orchestrator
+from app.api.deps import get_db, get_knowledge_base, get_orchestrator
 from app.api.rate_limit import limiter
+from app.auth.dependencies import get_current_user
 from app.config import settings
 from app.models.schemas import (
     ChatRequest,
@@ -25,10 +27,27 @@ from app.models.schemas import (
     SeedSessionRequest,
     SessionResponse,
     SessionsResponse,
+    UserRow,
 )
 from app.rag.knowledge_store import KnowledgeStore
 
 router = APIRouter()
+
+
+async def _check_session_owner(
+    session_id: str,
+    user_id: int,
+    conn: aiosqlite.Connection,
+) -> None:
+    """Raises 404 if session not found, 403 if owned by a different user."""
+    async with conn.execute(
+        "SELECT user_id FROM sessions WHERE session_id = ?", (session_id,)
+    ) as cur:
+        row = await cur.fetchone()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Session not found")
+    if row["user_id"] != user_id:
+        raise HTTPException(status_code=403, detail="Access denied")
 
 
 @router.post("/chat/stream")
@@ -37,6 +56,7 @@ async def chat_stream(
     request: Request,
     body: ChatRequest,
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+    current_user: UserRow = Depends(get_current_user),
 ):
     """
     Streaming chat endpoint. Emits Server-Sent Events:
@@ -54,6 +74,7 @@ async def chat_stream(
         async for event_type, data in orchestrator.process_stream(
             message=body.message,
             session_id=body.session_id,
+            user_id=current_user.id,
         ):
             yield f"event: {event_type}\ndata: {json.dumps(data)}\n\n"
 
@@ -74,9 +95,11 @@ async def seed_session(
     request: Request,
     body: SeedSessionRequest,
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+    current_user: UserRow = Depends(get_current_user),
+    conn: aiosqlite.Connection = Depends(get_db),
 ):
     """Pre-populate a session with onboarding data so the agent has family context from the start."""
-    await orchestrator.seed_session(body)
+    await orchestrator.seed_session(body, user_id=current_user.id)
     return {"status": "ok", "session_id": body.session_id}
 
 
@@ -84,12 +107,12 @@ async def seed_session(
 async def delete_session(
     session_id: str,
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+    current_user: UserRow = Depends(get_current_user),
+    conn: aiosqlite.Connection = Depends(get_db),
 ):
     """Delete all data for a session (right-to-erasure)."""
-    store = orchestrator.get_session_store()
-    if not await store.session_exists(session_id):
-        raise HTTPException(status_code=404, detail="Session not found")
-    await store.delete_session(session_id)
+    await _check_session_owner(session_id, current_user.id, conn)
+    await orchestrator.get_session_store().delete_session(session_id)
     return {"status": "deleted", "session_id": session_id}
 
 
@@ -97,11 +120,11 @@ async def delete_session(
 async def get_session(
     session_id: str,
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+    current_user: UserRow = Depends(get_current_user),
+    conn: aiosqlite.Connection = Depends(get_db),
 ):
     """Returns current conversation state for a session."""
-    store = orchestrator.get_session_store()
-    if not await store.session_exists(session_id):
-        raise HTTPException(status_code=404, detail="Session not found")
+    await _check_session_owner(session_id, current_user.id, conn)
 
     state = await orchestrator.get_session(session_id)
     phase = await orchestrator.infer_phase(session_id)
@@ -119,11 +142,11 @@ async def get_session(
 async def get_outcomes(
     session_id: str,
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+    current_user: UserRow = Depends(get_current_user),
+    conn: aiosqlite.Connection = Depends(get_db),
 ):
     """Returns outcome tracking data for a session."""
-    store = orchestrator.get_session_store()
-    if not await store.session_exists(session_id):
-        raise HTTPException(status_code=404, detail="Session not found")
+    await _check_session_owner(session_id, current_user.id, conn)
 
     state = await orchestrator.get_session(session_id)
     return OutcomesResponse(
@@ -138,11 +161,12 @@ async def get_outcomes(
 async def list_sessions(
     offset: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=200),
+    current_user: UserRow = Depends(get_current_user),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
 ):
     """Returns all sessions ordered by most recently updated."""
     store = orchestrator.get_session_store()
-    items, total = await store.get_all_sessions_paginated(offset=offset, limit=limit)
+    items, total = await store.get_all_sessions_paginated(offset=offset, limit=limit, user_id=current_user.id)
     return SessionsResponse(sessions=items, total=total, offset=offset, limit=limit)
 
 
@@ -152,12 +176,13 @@ async def get_session_messages(
     offset: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=200),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+    current_user: UserRow = Depends(get_current_user),
+    conn: aiosqlite.Connection = Depends(get_db),
 ):
     """Returns all messages for a session."""
-    store = orchestrator.get_session_store()
-    if not await store.session_exists(session_id):
-        raise HTTPException(status_code=404, detail="Session not found")
+    await _check_session_owner(session_id, current_user.id, conn)
 
+    store = orchestrator.get_session_store()
     messages, total = await store.get_messages_paginated(session_id, offset=offset, limit=limit)
     return MessagesResponse(session_id=session_id, messages=messages, total=total, offset=offset, limit=limit)
 

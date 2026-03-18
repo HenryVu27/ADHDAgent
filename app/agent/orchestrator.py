@@ -35,6 +35,32 @@ def _extract_text(content) -> str:
     return str(content)
 
 
+# LangGraph's create_react_agent emits this exact string when remaining_steps < 2
+# and the model still wants to call tools (see chat_agent_executor.py line ~688).
+# We also catch variations in case the model echoes or rephrases it.
+_DEGRADED_PATTERNS = (
+    "sorry, need more steps to process this request",  # exact LangGraph string
+    "need more steps",
+    "need additional steps",
+    "unable to complete",
+    "cannot complete",
+    "more steps to process",
+    "ran out of steps",
+    "processing limit",
+)
+
+
+def _is_degraded_response(text: str) -> bool:
+    """Return True if the response looks like an LLM 'gave up' message."""
+    if not text or not text.strip():
+        return True
+    lowered = text.strip().lower()
+    # Very short responses after tool calls are suspicious
+    if len(lowered) < 40:
+        return False  # Could be a legitimate brief reply like "You're welcome!"
+    return any(pattern in lowered for pattern in _DEGRADED_PATTERNS)
+
+
 class AgentOrchestrator:
     """Manages sessions and runs the compiled ReAct agent."""
 
@@ -82,6 +108,54 @@ class AgentOrchestrator:
             logger.debug("[agent] Summary generation failed — skipping")
             return None
 
+    async def _generate_suggestions(
+        self, user_message: str, assistant_response: str, session_id: str,
+    ) -> list[str]:
+        """Generate 0-3 contextual follow-up suggestions via Flash."""
+        if not self._gemini:
+            return []
+        try:
+            state = await self._session_store.get(session_id)
+            child_name = state.family_profile.child_name or "your child"
+
+            prompt = (
+                "You generate follow-up message suggestions for a parent chatting with "
+                "an ADHD parenting coach. Based on the conversation below, suggest 0 to 3 "
+                "short follow-up messages the parent might want to send next.\n\n"
+                "Rules:\n"
+                "- Each suggestion must be under 50 characters\n"
+                "- Write as the PARENT would speak (first person)\n"
+                "- Be specific to what was just discussed, not generic\n"
+                "- If the coach asked a question, suggest possible answers\n"
+                "- If the coach gave strategies, suggest reactions or follow-ups\n"
+                "- If the conversation feels complete or is just a greeting, return 0 suggestions\n"
+                "- Return ONLY a JSON array of strings, nothing else\n"
+                f"- The child's name is {child_name}\n\n"
+                f"Parent said: {user_message}\n\n"
+                f"Coach replied: {assistant_response[:500]}\n\n"
+                "JSON array:"
+            )
+            raw = await self._gemini.generate(
+                prompt,
+                temperature=0.7,
+                max_output_tokens=256,
+                timeout=5.0,
+            )
+            import json as _json
+            text = raw.strip()
+            if text.startswith("```"):
+                text = text.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
+            suggestions = _json.loads(text)
+            if not isinstance(suggestions, list):
+                return []
+            return [
+                s.strip() for s in suggestions
+                if isinstance(s, str) and s.strip() and len(s.strip()) <= 60
+            ][:3]
+        except Exception:
+            logger.debug("[agent] Suggestion generation failed — skipping")
+            return []
+
     async def get_session(self, session_id: str) -> SessionState:
         return await self._session_store.get(session_id)
 
@@ -93,7 +167,9 @@ class AgentOrchestrator:
         """Infer a phase label from session state."""
         return await self._infer_phase(session_id)
 
-    async def seed_session(self, request: SeedSessionRequest) -> None:
+    async def seed_session(self, request: SeedSessionRequest, user_id: int | None = None) -> None:
+        if user_id is not None:
+            await self._session_store._ensure_session(request.session_id, user_id=user_id)
         await self._session_store.seed_session(request)
 
     async def process(self, message: str, session_id: str) -> StreamDonePayload:
@@ -231,19 +307,53 @@ class AgentOrchestrator:
         new_messages = all_messages[last_human_idx + 1:] if last_human_idx >= 0 else []
 
         response_text = ""
+        all_ai_texts = []  # collect all non-tool AI message texts
         tool_calls_made = []
         for msg in new_messages:
             if isinstance(msg, AIMessage):
                 if msg.tool_calls:
                     tool_calls_made.extend(msg.tool_calls)
                 elif msg.content:
+                    text = _extract_text(msg.content)
+                    if text.strip():
+                        all_ai_texts.append(text.strip())
                     # Only non-tool-calling AI messages count as final response
-                    response_text = _extract_text(msg.content)
+                    response_text = text
 
         # Fallback if agent produced no final text response
         is_empty = not response_text.strip() if isinstance(response_text, str) else not response_text
-        if is_empty:
-            logger.warning("[agent] Empty response from agent — using static fallback")
+
+        # If the final message is empty or degraded but earlier messages had
+        # good content, combine them (agent hit step limit after initial response).
+        degraded = _is_degraded_response(response_text) if not is_empty else False
+
+        if (is_empty or degraded) and all_ai_texts:
+            # Filter out degraded texts from earlier messages too
+            good_texts = [t for t in all_ai_texts if not _is_degraded_response(t)]
+            if good_texts:
+                logger.warning("[agent] %s — using combined AI text",
+                               "Degraded final response" if degraded else "Empty final AIMessage")
+                response_text = "\n\n".join(good_texts)
+            else:
+                logger.warning("[agent] All AI messages degraded — using static fallback")
+                response_text = (
+                    "I want to make sure I give you the best help. "
+                    "Could you tell me a bit more about what you'd like to focus on?"
+                )
+        elif (
+            not is_empty
+            and not degraded
+            and len(all_ai_texts) > 1
+            and len(response_text.strip()) < 80
+        ):
+            # Final message suspiciously short while earlier ones had substance
+            combined = "\n\n".join(all_ai_texts[:-1])
+            if len(combined) > len(response_text.strip()) * 2:
+                logger.warning("[agent] Degraded final response — using combined AI text")
+                response_text = combined
+        elif is_empty or degraded:
+            logger.warning("[agent] %s — using static fallback",
+                           "Degraded response" if degraded else "Empty response from agent")
             response_text = (
                 "I want to make sure I give you the best help. "
                 "Could you tell me a bit more about what you'd like to focus on?"
@@ -329,7 +439,7 @@ class AgentOrchestrator:
             session_id=session_id,
         )
 
-    async def process_stream(self, message: str, session_id: str):
+    async def process_stream(self, message: str, session_id: str, user_id: int | None = None):
         """Streaming version of process(). Yields (event_type, data) tuples.
 
         Event types:
@@ -339,6 +449,8 @@ class AgentOrchestrator:
             done    {StreamDonePayload} — final payload with trace
             error   {"message": str}    — exception details
         """
+        if user_id is not None:
+            await self._session_store._ensure_session(session_id, user_id=user_id)
         turn = await self._session_store.increment_turn(session_id)
         logger.info(
             "[agent] === STREAM START === session=%s, turn=%d, message=%.80s",
@@ -393,6 +505,7 @@ class AgentOrchestrator:
 
             token_count = 0
             token_start = None
+            streamed_text = ""  # accumulate all streamed tokens for fallback
             async with asyncio.timeout(settings.CHAT_TIMEOUT_S):
                 async for event in self._agent.astream_events(
                     input_data, config=config, version="v2"
@@ -414,8 +527,11 @@ class AgentOrchestrator:
                     # Detect route from input gate — skip summary for simple messages
                     if kind == "on_chain_end" and node == "input_gate":
                         gate_output = event.get("data", {}).get("output", {})
-                        if isinstance(gate_output, dict) and gate_output.get("route") == "flash":
-                            if not summary_sent:
+                        if isinstance(gate_output, dict):
+                            route = gate_output.get("route", "pro")
+                            blocked = gate_output.get("input_blocked", False)
+                            logger.info("[gate] input: %s route=%s", "BLOCKED" if blocked else "pass", route)
+                            if route == "flash" and not summary_sent:
                                 summary_task.cancel()
                                 summary_sent = True
 
@@ -426,6 +542,7 @@ class AgentOrchestrator:
 
                         if tool_name == "search_knowledge_base":
                             query = tool_input.get("query", "strategies")
+                            logger.info("[agent] tool: search_knowledge_base(%.70s)", query)
                             status = f"Searching for '{query}'..."
                         elif tool_name == "get_document_details":
                             status = "Reading document details..."
@@ -434,16 +551,19 @@ class AgentOrchestrator:
                         elif tool_name == "update_family_profile":
                             fields = [k for k, v in tool_input.items()
                                       if v is not None and k != "config"]
+                            logger.info("[agent] tool: update_family_profile(%s)", ", ".join(fields))
                             if fields:
                                 status = f"Noting {', '.join(fields[:2])}..."
                             else:
                                 status = "Updating your profile..."
                         elif tool_name == "track_outcome":
                             strategy = tool_input.get("strategy_name", "a strategy")
+                            logger.info("[agent] tool: track_outcome(%s)", strategy)
                             status = f"Recording how {strategy} went..."
                         elif tool_name == "manage_goals":
                             action = tool_input.get("action", "managing")
                             desc = tool_input.get("description", "")
+                            logger.info("[agent] tool: manage_goals(action=%s, %.50s)", action, desc)
                             action_verb = {"add": "Adding", "complete": "Completing", "list": "Listing"}.get(action, action.capitalize() + "ing")
                             if desc:
                                 short_desc = desc[:40].rstrip()
@@ -451,21 +571,25 @@ class AgentOrchestrator:
                             else:
                                 status = "Reviewing goals..."
                         elif tool_name == "get_family_profile":
+                            logger.info("[agent] tool: get_family_profile")
                             status = "Reviewing your family's info..."
+                        elif tool_name == "search_web":
+                            query = tool_input.get("query", "")
+                            logger.info("[agent] tool: search_web(%.70s)", query)
+                            status = f"Searching the web for '{query[:50]}'..."
                         else:
+                            logger.info("[agent] tool: %s", tool_name)
                             status = "Working on it..."
                         yield ("status", {"text": status})
 
                     # Stream LLM tokens (text only, skip tool-call chunks)
                     elif kind == "on_chat_model_stream":
                         chunk = event.get("data", {}).get("chunk")
-                        # DEBUG: log every stream event
-                        logger.info(
-                            "[stream-debug] on_chat_model_stream node=%s content_type=%s content=%r tool_call_chunks=%r",
+                        # DEBUG: log every stream event (set LOG_LEVEL=DEBUG to see)
+                        logger.debug(
+                            "[stream-debug] on_chat_model_stream node=%s content_type=%s",
                             node,
                             type(chunk.content).__name__ if chunk and hasattr(chunk, "content") else "N/A",
-                            chunk.content[:200] if chunk and hasattr(chunk, "content") and isinstance(chunk.content, str) else (chunk.content[:3] if chunk and hasattr(chunk, "content") and isinstance(chunk.content, list) else "N/A"),
-                            getattr(chunk, "tool_call_chunks", None),
                         )
                         if (
                             chunk
@@ -508,14 +632,14 @@ class AgentOrchestrator:
                                         summary_sent = True
 
                                 token_count += 1
+                                streamed_text += text
                                 now = time.time()
                                 if token_start is None:
                                     token_start = now
-                                logger.info(
-                                    "[stream-debug] YIELDING token #%d at +%.0fms: %r",
+                                logger.debug(
+                                    "[stream-debug] token #%d at +%.0fms",
                                     token_count,
                                     (now - token_start) * 1000,
-                                    text[:80],
                                 )
                                 yield ("token", {"text": text})
 
@@ -532,21 +656,60 @@ class AgentOrchestrator:
         except TimeoutError:
             if not summary_task.done():
                 summary_task.cancel()
-            yield ("error", {"message": f"Response timed out after {settings.CHAT_TIMEOUT_S}s"})
+            total_ms = (time.time() - start) * 1000
+            if streamed_text.strip() and len(streamed_text.strip()) > 50:
+                logger.warning(
+                    "[agent] Timed out after %.0fms — using streamed text (%d chars)",
+                    total_ms, len(streamed_text),
+                )
+                response_text = streamed_text.strip()
+                await self._session_store.add_message(session_id, "user", message, turn)
+                await self._session_store.add_message(session_id, "assistant", response_text, turn)
+                await self._session_store.commit()
+                yield (
+                    "done",
+                    StreamDonePayload(
+                        response=response_text,
+                        agent_used="react_agent_partial",
+                        phase=await self._infer_phase(session_id),
+                        pipeline_trace=PipelineTrace(
+                            steps=[PipelineStep(name="react_agent", duration_ms=total_ms, detail={"error": "timeout"})],
+                            total_duration_ms=total_ms,
+                            agent_used="react_agent_partial",
+                        ),
+                        session_id=session_id,
+                        summary=None,
+                    ).model_dump(),
+                )
+            else:
+                yield ("error", {"message": f"Response timed out after {settings.CHAT_TIMEOUT_S}s"})
             return
 
         except Exception as e:
             if not summary_task.done():
                 summary_task.cancel()
             total_ms = (time.time() - start) * 1000
-            logger.warning(
-                "[agent] Stream failed (%s) — using static fallback",
-                type(e).__name__,
-            )
-            response_text = (
-                "I want to make sure I give you the best help. "
-                "Could you tell me a bit more about what you'd like to focus on?"
-            )
+
+            # If we already streamed meaningful content, use it instead of
+            # a generic fallback — the user saw it and it's better than nothing.
+            if streamed_text.strip() and len(streamed_text.strip()) > 50:
+                logger.warning(
+                    "[agent] Stream failed (%s) — using streamed text (%d chars) as response",
+                    type(e).__name__, len(streamed_text),
+                )
+                response_text = streamed_text.strip()
+                agent_label = "react_agent_partial"
+            else:
+                logger.warning(
+                    "[agent] Stream failed (%s) — using static fallback",
+                    type(e).__name__,
+                )
+                response_text = (
+                    "I want to make sure I give you the best help. "
+                    "Could you tell me a bit more about what you'd like to focus on?"
+                )
+                agent_label = "react_agent_fallback"
+
             await self._session_store.add_message(session_id, "user", message, turn)
             await self._session_store.add_message(
                 session_id, "assistant", response_text, turn
@@ -561,14 +724,16 @@ class AgentOrchestrator:
                     )
                 ],
                 total_duration_ms=total_ms,
-                agent_used="react_agent_fallback",
+                agent_used=agent_label,
             )
-            yield ("error", {"message": str(e)})
+            # Only send error event if we don't have streamed content to show
+            if agent_label == "react_agent_fallback":
+                yield ("error", {"message": str(e)})
             yield (
                 "done",
                 StreamDonePayload(
                     response=response_text,
-                    agent_used="react_agent_fallback",
+                    agent_used=agent_label,
                     phase=await self._infer_phase(session_id),
                     pipeline_trace=trace,
                     session_id=session_id,
@@ -664,9 +829,36 @@ class AgentOrchestrator:
             if isinstance(response_text, str)
             else not response_text
         )
-        if is_empty:
+
+        # Detect degraded responses and recover the best available content.
+        degraded = _is_degraded_response(response_text) if not is_empty else False
+
+        if (is_empty or degraded) and streamed_text.strip():
             logger.warning(
-                "[agent] Empty response from agent — using static fallback"
+                "[agent] %s — using streamed text (%d chars)",
+                "Degraded final response" if degraded else "Empty final AIMessage",
+                len(streamed_text),
+            )
+            response_text = streamed_text.strip()
+        elif (
+            not is_empty
+            and not degraded
+            and streamed_text.strip()
+            and len(response_text.strip()) < len(streamed_text.strip()) * 0.3
+            and len(streamed_text.strip()) > 100
+        ):
+            # The final message is drastically shorter than what was streamed
+            # (e.g., agent produced a good response, then tools ran, then a
+            # terse "sorry" message replaced it).  Keep the streamed version.
+            logger.warning(
+                "[agent] Degraded final response (%d chars) vs streamed (%d chars) — using streamed text",
+                len(response_text), len(streamed_text),
+            )
+            response_text = streamed_text.strip()
+        elif is_empty or degraded:
+            logger.warning(
+                "[agent] %s — using static fallback",
+                "Degraded response" if degraded else "Empty response from agent",
             )
             response_text = (
                 "I want to make sure I give you the best help. "
@@ -714,8 +906,8 @@ class AgentOrchestrator:
         )
 
         logger.info(
-            "[agent] === STREAM END === session=%s, tools=%d, duration=%.0fms",
-            session_id, len(tool_calls_made), total_ms,
+            "[agent] === STREAM END === session=%s, model=%s, tools=%d, duration=%.0fms",
+            session_id, enriched.model_tier if enriched else "?", len(tool_calls_made), total_ms,
         )
 
         # Small yield to flush token events to the client before sending done.
@@ -723,6 +915,11 @@ class AgentOrchestrator:
         # the frontend to batch them into a single React render (streaming bubble
         # never shown).
         await asyncio.sleep(0.05)
+
+        # Fire suggestion generation early so it runs during the flush
+        suggestions_task = asyncio.create_task(
+            self._generate_suggestions(message, response_text, session_id)
+        )
 
         yield (
             "done",
@@ -735,6 +932,16 @@ class AgentOrchestrator:
                 summary=summary_text,
             ).model_dump(),
         )
+
+        # Yield suggestions after done — short timeout so the stream closes quickly
+        try:
+            suggestions = await asyncio.wait_for(suggestions_task, timeout=6.0)
+        except (TimeoutError, asyncio.TimeoutError):
+            suggestions = []
+        except Exception:
+            suggestions = []
+        if suggestions:
+            yield ("suggestions", {"suggestions": suggestions})
 
         # Background tasks (fire after done so they don't block the response)
         if self._output_gate:
@@ -838,9 +1045,10 @@ class AgentOrchestrator:
         result.setdefault("trace_steps", []).append(trace_step)
 
         if not check.is_valid:
-            logger.info("Output gate triggered: %s", check.violation_type)
+            logger.info("[gate] output: BLOCKED type=%s (%.0fms)", check.violation_type, duration_ms)
             return SAFE_OUTPUT_FALLBACK, result
 
+        logger.info("[gate] output: pass (%.0fms)", duration_ms)
         return response_text, result
 
     async def _infer_phase(self, session_id: str) -> ConversationPhase:

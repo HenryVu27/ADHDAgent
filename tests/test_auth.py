@@ -200,3 +200,97 @@ class TestSessionIsolation:
         assert all(s.session_id != "sess-y" for s in sessions_x)
 
         await conn.close()
+
+
+class TestOwnershipEnforcement:
+    async def test_user_cannot_access_another_users_session(self):
+        """User A gets 403 when accessing User B's session."""
+        from app.agent.sqlite_store import SQLiteSessionStore
+        from app.api.deps import get_orchestrator, get_session_store
+        from app.agent.orchestrator import AgentOrchestrator
+
+        conn = await aiosqlite.connect(":memory:")
+        conn.row_factory = aiosqlite.Row
+        await init_db_async(conn)
+        app.dependency_overrides[get_db] = lambda: conn
+
+        session_store = SQLiteSessionStore(conn)
+        orchestrator = AgentOrchestrator(agent=None, session_store=session_store)
+        app.dependency_overrides[get_orchestrator] = lambda: orchestrator
+        app.dependency_overrides[get_session_store] = lambda: session_store
+
+        transport = ASGITransport(app=app)
+        try:
+            async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+                # Register two users
+                resp_a = await client.post("/api/auth/register", json={"email": "owner@t.com", "password": "ownerpass1"})
+                token_a = resp_a.json()["access_token"]
+                resp_b = await client.post("/api/auth/register", json={"email": "intruder@t.com", "password": "intruderpass1"})
+                token_b = resp_b.json()["access_token"]
+
+                # Seed a session for user A
+                await client.post("/api/session/seed", json={
+                    "session_id": "private-session",
+                    "child_name": "Alex",
+                    "goals": [],
+                }, headers={"Authorization": f"Bearer {token_a}"})
+
+                # User B tries to access User A's session
+                resp = await client.get(
+                    "/api/session/private-session",
+                    headers={"Authorization": f"Bearer {token_b}"},
+                )
+
+            assert resp.status_code == 403
+        finally:
+            await conn.close()
+            app.dependency_overrides.clear()
+
+    async def test_user_can_access_own_session(self):
+        """User gets 200 when accessing their own session."""
+        conn = await aiosqlite.connect(":memory:")
+        conn.row_factory = aiosqlite.Row
+        await init_db_async(conn)
+        app.dependency_overrides[get_db] = lambda: conn
+
+        from app.agent.sqlite_store import SQLiteSessionStore
+        from app.api.deps import get_orchestrator, get_session_store
+        from app.agent.orchestrator import AgentOrchestrator
+
+        # Use SQLiteSessionStore wired to the same conn so _check_session_owner
+        # can find the session in the sessions table.
+        session_store = SQLiteSessionStore(conn)
+        orchestrator = AgentOrchestrator(agent=None, session_store=session_store)
+        app.dependency_overrides[get_orchestrator] = lambda: orchestrator
+        app.dependency_overrides[get_session_store] = lambda: session_store
+
+        transport = ASGITransport(app=app)
+        try:
+            async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+                resp_reg = await client.post("/api/auth/register", json={"email": "self@t.com", "password": "selfpass123"})
+                token = resp_reg.json()["access_token"]
+
+                await client.post("/api/session/seed", json={
+                    "session_id": "my-session",
+                    "child_name": "Sam",
+                    "goals": [],
+                }, headers={"Authorization": f"Bearer {token}"})
+
+                resp = await client.get(
+                    "/api/session/my-session",
+                    headers={"Authorization": f"Bearer {token}"},
+                )
+
+            assert resp.status_code == 200
+        finally:
+            await conn.close()
+            app.dependency_overrides.clear()
+
+    async def test_protected_route_without_token_returns_403(self):
+        client, conn = await _make_auth_client()
+        try:
+            async with client:
+                resp = await client.get("/api/sessions")
+            assert resp.status_code == 403
+        finally:
+            await _cleanup(conn, app)
