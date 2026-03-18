@@ -7,6 +7,7 @@ export function useChat(sessionId: string) {
   const [isLoading, setIsLoading] = useState(false)       // waiting for first token
   const [isStreaming, setIsStreaming] = useState(false)    // tokens arriving
   const [statusText, setStatusText] = useState("")         // current pipeline stage label
+  const [summaryText, setSummaryText] = useState("")  // Contextual summary from parallel Flash call
   const [streamingContent, setStreamingContent] = useState("") // drives typewriter display
   const [latestTrace, setLatestTrace] = useState<PipelineTrace | null>(null)
   const idCounter = useRef(0)
@@ -15,6 +16,16 @@ export function useChat(sessionId: string) {
   const accumulatedRef = useRef("")
   // Exposed so StreamingBubble can call typewriter.reset() on replace events
   const typewriterResetRef = useRef<((text: string) => void) | null>(null)
+  // Resolve function for the typewriter-complete Promise.
+  // Set when done arrives; called by the typewriter's onComplete callback.
+  const typewriterResolveRef = useRef<(() => void) | null>(null)
+
+  // Stable callback passed to StreamingBubble → useTypewriter onComplete.
+  // When the typewriter finishes animating, resolve the pending done Promise.
+  const onStreamComplete = useCallback(() => {
+    typewriterResolveRef.current?.()
+    typewriterResolveRef.current = null
+  }, [])
 
   const sendMessage = useCallback(async (content: string) => {
     const userMsg: ChatMessage = {
@@ -32,7 +43,6 @@ export function useChat(sessionId: string) {
     const controller = new AbortController()
     abortRef.current = controller
 
-    // Local variable to detect first token without stale closure on isLoading state
     let firstToken = true
 
     try {
@@ -40,7 +50,10 @@ export function useChat(sessionId: string) {
         { message: content, session_id: sessionId },
         controller.signal,
       )) {
-        if (event.type === "status") {
+        if (event.type === "summary") {
+          setSummaryText(event.text)
+
+        } else if (event.type === "status") {
           setStatusText(event.text)
 
         } else if (event.type === "token") {
@@ -54,12 +67,20 @@ export function useChat(sessionId: string) {
           setStreamingContent(prev => prev + event.text)
 
         } else if (event.type === "replace") {
-          // Output gate replaced the streamed content — swap both the display ref and typewriter
           accumulatedRef.current = event.text
           setStreamingContent(event.text)
           typewriterResetRef.current?.(event.text)
 
         } else if (event.type === "done") {
+          if (!firstToken) {
+            // Wait for the typewriter to finish animating before swapping
+            // StreamingBubble for the finalized ChatBubble.
+            await new Promise<void>(resolve => {
+              typewriterResolveRef.current = resolve
+              // Safety timeout: don't hang forever if the callback never fires
+              setTimeout(resolve, 5000)
+            })
+          }
           _finalize(event)
 
         } else if (event.type === "error") {
@@ -74,7 +95,6 @@ export function useChat(sessionId: string) {
       }
     } catch (err) {
       if ((err as Error).name === "AbortError") {
-        // User cancelled — discard partial content, do not commit to messages
         _clearStreamState()
       } else {
         setMessages(prev => [...prev, {
@@ -87,12 +107,10 @@ export function useChat(sessionId: string) {
       }
     } finally {
       abortRef.current = null
+      typewriterResolveRef.current = null
     }
 
     function _finalize(done: StreamDoneEvent) {
-      // On input-blocked path, response text comes in done.response (no tokens streamed).
-      // Otherwise, use accumulatedRef which has the real token content — NOT streamingContent
-      // state, which would be stale (captured at useCallback memoization time).
       const finalContent = done.response ?? accumulatedRef.current
       const assistantMsg: ChatMessage = {
         id: `msg_${++idCounter.current}`,
@@ -101,6 +119,7 @@ export function useChat(sessionId: string) {
         timestamp: new Date(),
         agentUsed: done.agent_used,
         pipelineTrace: done.pipeline_trace ?? undefined,
+        summary: done.summary ?? undefined,
       }
       setMessages(prev => [...prev, assistantMsg])
       if (done.pipeline_trace) setLatestTrace(done.pipeline_trace)
@@ -112,6 +131,7 @@ export function useChat(sessionId: string) {
       setIsStreaming(false)
       setStatusText("")
       setStreamingContent("")
+      setSummaryText("")
       accumulatedRef.current = ""
     }
   }, [sessionId])  // sessionId only — no state in deps (local vars + refs used instead)
@@ -155,9 +175,11 @@ export function useChat(sessionId: string) {
     isLoading,
     isStreaming,
     statusText,
+    summaryText,
     streamingContent,
     latestTrace,
     typewriterResetRef,
+    onStreamComplete,
     sendMessage,
     stopStreaming,
     clearMessages,
