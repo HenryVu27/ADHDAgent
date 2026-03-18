@@ -13,10 +13,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.agent.store_protocol import SessionStoreBase
 from app.api.deps import get_analyzer, get_event_bus, get_session_store
+from app.auth.dependencies import get_current_user
 from app.models.schemas import (
     SessionDetailResponse,
     SessionListResponse,
     SessionOverview,
+    UserRow,
 )
 
 obs_router = APIRouter(prefix="/observability")
@@ -28,6 +30,7 @@ async def list_sessions(
     limit: int = Query(50, ge=1, le=200),
     session_store: SessionStoreBase = Depends(get_session_store),
     event_bus=Depends(get_event_bus),
+    current_user: UserRow = Depends(get_current_user),
 ):
     """List all sessions with overview stats."""
     # Collect session IDs from store and event bus
@@ -79,6 +82,7 @@ async def get_session_detail(
     session_id: str,
     session_store: SessionStoreBase = Depends(get_session_store),
     event_bus=Depends(get_event_bus),
+    current_user: UserRow = Depends(get_current_user),
 ):
     """Full session detail: messages, traces, analyses, events."""
     if not await session_store.session_exists(session_id):
@@ -104,6 +108,7 @@ async def get_session_events(
     category: str | None = Query(None),
     session_store: SessionStoreBase = Depends(get_session_store),
     event_bus=Depends(get_event_bus),
+    current_user: UserRow = Depends(get_current_user),
 ):
     """Filtered event log for a session."""
     if not await session_store.session_exists(session_id):
@@ -121,6 +126,7 @@ async def analyze_session(
     session_id: str,
     session_store: SessionStoreBase = Depends(get_session_store),
     analyzer=Depends(get_analyzer),
+    current_user: UserRow = Depends(get_current_user),
 ):
     """On-demand re-analysis of all turns in a session."""
     if not analyzer:

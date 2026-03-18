@@ -59,6 +59,11 @@ export const api = {
       body: JSON.stringify(data),
       signal,
     })
+    if (res.status === 401) {
+      signOut()
+      window.location.href = "/signin"
+      throw new Error("Session expired")
+    }
     if (!res.ok) {
       const error = await res.json().catch(() => ({ detail: res.statusText }))
       throw new Error(error.detail || `Request failed: ${res.status}`)
