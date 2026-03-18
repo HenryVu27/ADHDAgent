@@ -411,6 +411,45 @@ class TestErrorResilience:
         assert profile.child_name is None
 
 
+class TestLatencyTracking:
+
+    @pytest.mark.asyncio
+    async def test_summary_emits_duration_ms(self):
+        store = await _make_store_with_messages(turn_count=5)
+        gemini = _make_gemini_mock(generate_return="Summary of conversation.")
+        event_bus = AsyncMock()
+        mm = MemoryManager(session_store=store, gemini_client=gemini, event_bus=event_bus)
+
+        await mm._update_summary("s1", 5)
+
+        # Find the summary_updated emit call
+        summary_calls = [
+            c for c in event_bus.emit.call_args_list
+            if len(c.args) >= 2 and c.args[1] == "summary_updated"
+        ]
+        assert len(summary_calls) >= 1
+        call = summary_calls[0]
+        # duration_ms should be passed and positive
+        duration = call.kwargs.get("duration_ms", 0)
+        assert duration > 0
+
+    @pytest.mark.asyncio
+    async def test_emotion_inference_emits_duration_ms(self):
+        store = await _make_store_with_messages(turn_count=1)
+        gemini = _make_gemini_mock(generate_return="frustrated")
+        event_bus = AsyncMock()
+        mm = MemoryManager(session_store=store, gemini_client=gemini, event_bus=event_bus)
+
+        await mm._infer_emotion("s1", "I am so frustrated with my child's homework avoidance")
+
+        # Find the emotion_inferred emit call
+        emotion_calls = [
+            c for c in event_bus.emit.call_args_list
+            if len(c.args) >= 2 and c.args[1] == "emotion_inferred"
+        ]
+        assert len(emotion_calls) >= 1
+
+
 class TestConflictDetection:
 
     @pytest.mark.asyncio

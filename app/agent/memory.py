@@ -6,6 +6,7 @@ Runs after the response is sent to the parent. Non-blocking.
 
 import asyncio
 import logging
+import time
 
 from app.agent.store_protocol import SessionStoreBase
 from app.config import settings
@@ -82,6 +83,7 @@ class MemoryManager:
         """Generate a rolling summary covering turns since the last summary."""
         if not self._gemini:
             return
+        t0 = time.monotonic()
 
         # Determine which turns to summarize
         existing = await self._store.get_latest_summary(session_id)
@@ -142,7 +144,8 @@ Write a concise summary (2-4 sentences) focused on narrative and emotional conte
             )
             logger.info("Summary updated for session %s through turn %d", session_id, current_turn)
             if self._event_bus:
-                await self._event_bus.emit("memory", "summary_updated", session_id, current_turn)
+                await self._event_bus.emit("memory", "summary_updated", session_id, current_turn,
+                                           duration_ms=(time.monotonic() - t0) * 1000)
         except Exception as e:
             logger.error("Summary generation failed for session %s: %s", session_id, e)
             raise
@@ -151,6 +154,7 @@ Write a concise summary (2-4 sentences) focused on narrative and emotional conte
         """Extract structured facts from the user message and update the profile."""
         if not self._gemini:
             return
+        t0 = time.monotonic()
 
         # Include recent conversation history so pronouns can be resolved
         recent_messages = await self._store.get_messages(session_id, limit=6)
@@ -245,6 +249,7 @@ Parent message:
                     )
                     if self._event_bus:
                         await self._event_bus.emit("memory", "facts_extracted", session_id, turn,
+                                                   duration_ms=(time.monotonic() - t0) * 1000,
                                                    detail={"fields": list(filtered.keys())})
                     # Check for scalar corrections via changelog
                     scalar_fields = {"child_name", "child_age", "diagnosis_status", "adhd_subtype", "good_day_description"}
@@ -437,6 +442,7 @@ Parent message:
         """Classify the parent's emotional state using an LLM call with conversation context."""
         if not self._gemini:
             return ""
+        t0 = time.monotonic()
 
         valid_emotions = {"frustrated", "anxious", "positive", "overwhelmed", "hopeful", "neutral"}
 
@@ -478,6 +484,12 @@ Parent message: {user_message}"""
                 timeout=settings.MEMORY_TIMEOUT_S,
             )
             emotion = result.strip().lower()
+            if self._event_bus:
+                await self._event_bus.emit(
+                    "memory", "emotion_inferred", session_id, 0,
+                    duration_ms=(time.monotonic() - t0) * 1000,
+                    detail={"emotion": emotion},
+                )
             if emotion not in valid_emotions or emotion == "neutral":
                 return ""
             return emotion
