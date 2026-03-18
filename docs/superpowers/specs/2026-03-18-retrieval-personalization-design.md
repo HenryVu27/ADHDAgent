@@ -30,7 +30,7 @@ Instrument these operations with `time.monotonic()` before/after and pass the de
 | `FastEmbedReranker.rerank()` | `reranker.py` | No emit -- add one |
 | `MemoryManager._update_summary()` | `memory.py` | Has emit, missing `duration_ms` |
 | `MemoryManager._extract_facts()` | `memory.py` | Has emit, missing `duration_ms` |
-| `MemoryManager._infer_emotion()` | `memory.py` | No emit -- add one |
+| `MemoryManager._infer_emotion()` | `memory.py` | No direct emit -- add latency-only emit |
 
 ### Changes
 
@@ -49,7 +49,7 @@ Event categories and types:
 | `rag` | `rerank` | `reranker.py:rerank()` |
 | `memory` | `summary_updated` | `memory.py:_update_summary()` (existing, add duration) |
 | `memory` | `facts_extracted` | `memory.py:_extract_facts()` (existing, add duration) |
-| `memory` | `emotion_inferred` | `memory.py:_infer_emotion()` (new) |
+| `memory` | `emotion_inferred` | `memory.py:_infer_emotion()` (new, latency-only -- fires on every invocation including calls from `_create_episode` and `_create_goal_episode`; distinct from the existing `emotional_shift` event which only fires when an emotional shift episode is created) |
 
 ## 2. Personalized Retrieval (Outcome Boost)
 
@@ -82,11 +82,14 @@ Token-overlap via Jaccard similarity:
 1. Tokenize each `Outcome.strategy_name` into a lowercase word set (split on whitespace, strip punctuation)
 2. For each candidate `RetrievalResult`, tokenize `document_name` + all `tags` into a word set
 3. Compute Jaccard similarity: `|intersection| / |union|`
-4. If Jaccard >= threshold (default 0.3):
-   - `positive` outcome: apply `+0.10` boost
-   - `negative` outcome: apply `-0.15` penalty
-   - `mixed` outcome: no change
+4. If Jaccard >= threshold (default 0.3), read `outcome.signal` to determine boost:
+   - `signal == "positive"`: apply `+0.10` boost
+   - `signal == "negative"`: apply `-0.15` penalty
+   - `signal == "mixed"`: no change
 5. Multiple outcomes stack additively, capped at configurable max
+6. Re-sort candidates by adjusted score after all boosts are applied (needed because `candidates[:top_k]` in step 5 assumes sorted order)
+
+**Note:** The `Outcome` model field is `signal` (not `outcome`). The inline comment says `"positive" or "negative"` but `"mixed"` is also valid -- the `track_outcome` tool validates for all three values. When outcomes list is empty (new sessions), this step is a no-op.
 
 #### Configuration
 
@@ -115,16 +118,16 @@ Called from `retrieve()` after the relevance threshold filter, before facet comp
 
 #### Observability
 
-Emit an event when a boost is applied:
+`_apply_outcome_boost` is a sync method (no async needed for token overlap). It returns a list of boost metadata dicts alongside the adjusted candidates. The caller (`retrieve()`, which is async) emits a single summary event after the method returns:
 
 ```python
-await self._event_bus.emit(
-    "rag", "outcome_boost", session_id, 0,
-    detail={"strategy": outcome.strategy_name, "document": result.document_name, "boost": boost},
-)
+# In retrieve(), after calling _apply_outcome_boost:
+if boost_metadata and self._event_bus:
+    await self._event_bus.emit(
+        "rag", "outcome_boost", session_id="", turn=0,
+        detail={"boosts": boost_metadata},  # [{strategy, document, boost}, ...]
+    )
 ```
-
-Since `_apply_outcome_boost` is a sync method (no async needed for token overlap), the emit calls happen in `retrieve()` after the method returns, summarizing all boosts applied.
 
 ### Why token overlap, not embedding similarity
 
@@ -188,7 +191,10 @@ Episode linking at `memory.py:_link_episode` uses exact string match on `strateg
 
 ## Testing
 
-- Unit test for `_apply_outcome_boost`: verify boost/penalty applied correctly, cap respected, Jaccard threshold filtering works
-- Unit test for token overlap edge cases: empty outcomes, no matching documents, mixed outcomes
+- Unit test for `_apply_outcome_boost`: verify boost/penalty applied correctly, cap respected, Jaccard threshold filtering works, re-sort after boost
+- Unit test for token overlap edge cases: empty outcomes, no matching documents, mixed signal (no-op), new session (empty outcomes list)
 - Unit test for importance-weighted summary: verify episodes are injected into the prompt
+- Unit test for latency instrumentation: mock EventBus, call `retrieve()` / `rerank()` / `_update_summary()`, assert `emit` was called with `duration_ms > 0`
 - Existing tests should continue passing unchanged (outcome boost is additive, latency tracking is observability-only)
+
+Test files to create or modify: `tests/test_rag.py` (outcome boost + latency), `tests/test_memory.py` (summary episodes + latency)
