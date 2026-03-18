@@ -188,11 +188,24 @@ DELETE FROM goals WHERE id NOT IN (
 CREATE UNIQUE INDEX IF NOT EXISTS idx_goals_unique ON goals(session_id, description);
 """
 
+SCHEMA_V5 = """
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+ALTER TABLE sessions ADD COLUMN user_id INTEGER REFERENCES users(id);
+CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
+"""
+
 MIGRATIONS = {
     1: SCHEMA_V1,
     2: SCHEMA_V2,
     3: SCHEMA_V3,
     4: SCHEMA_V4,
+    5: SCHEMA_V5,
 }
 
 

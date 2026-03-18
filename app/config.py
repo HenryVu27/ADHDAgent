@@ -35,12 +35,20 @@ class Settings(BaseSettings):
     CHAT_TIMEOUT_S: float = 120.0
     API_KEY: str = ""           # Empty = dev mode (no auth)
     ADMIN_API_KEY: str = ""     # Empty = no admin gate
+
+    # JWT auth
+    JWT_SECRET: str = ""
+    JWT_EXPIRY_HOURS: int = 24
+    DEFAULT_USER_EMAIL: str = "test@test.com"
+    DEFAULT_USER_PASSWORD: str = "test1234"
     RATE_LIMIT_CHAT: str = "10/minute"
     RATE_LIMIT_DEFAULT: str = "60/minute"
     RATE_LIMIT_ENABLED: bool = True
 
     # Agent
-    AGENT_MAX_TOOL_STEPS: int = 5
+    AGENT_MAX_TOOL_STEPS: int = 8
+    WEB_SEARCH_ENABLED: bool = True
+    WEB_SEARCH_TIMEOUT_S: float = 15.0
 
     # Guardrails
     GUARDRAILS_TIMEOUT_S: float = 10.0

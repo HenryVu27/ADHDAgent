@@ -207,6 +207,22 @@ class PipelineTrace(BaseModel):
 
 # --- API Contracts ---
 
+class UserRow(BaseModel):
+    id: int
+    email: str
+    created_at: str
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class AuthRequest(BaseModel):
+    email: str
+    password: str
+
+
 class SeedSessionRequest(BaseModel):
     """Sent from the frontend after onboarding to pre-populate the session."""
     session_id: str
@@ -221,7 +237,7 @@ class SeedSessionRequest(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str = Field(..., min_length=1, max_length=5000)
-    session_id: str = "default"
+    session_id: str
 
     @field_validator("message")
     @classmethod
