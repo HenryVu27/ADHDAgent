@@ -161,10 +161,42 @@ class TestSessionIsolation:
         sessions_a, total_a = await store.get_all_sessions_paginated(user_id=user_a_id)
         assert total_a == 1
         assert sessions_a[0].session_id == "session-a"
+        assert all(s.session_id != "session-b" for s in sessions_a)
 
         # User B sees only their session
         sessions_b, total_b = await store.get_all_sessions_paginated(user_id=user_b_id)
         assert total_b == 1
         assert sessions_b[0].session_id == "session-b"
+        assert all(s.session_id != "session-a" for s in sessions_b)
+
+        await conn.close()
+
+    async def test_get_all_sessions_filters_by_user(self):
+        """get_all_sessions returns only the requesting user's sessions."""
+        from app.agent.sqlite_store import SQLiteSessionStore
+
+        conn = await aiosqlite.connect(":memory:")
+        conn.row_factory = aiosqlite.Row
+        await init_db_async(conn)
+
+        await conn.execute(
+            "INSERT INTO users (email, password_hash) VALUES (?, ?), (?, ?)",
+            ("x@t.com", "hash_x", "y@t.com", "hash_y"),
+        )
+        await conn.commit()
+        async with conn.execute("SELECT id FROM users WHERE email = 'x@t.com'") as cur:
+            user_x_id = (await cur.fetchone())["id"]
+        async with conn.execute("SELECT id FROM users WHERE email = 'y@t.com'") as cur:
+            user_y_id = (await cur.fetchone())["id"]
+
+        store = SQLiteSessionStore(conn)
+        await store._ensure_session("sess-x", user_id=user_x_id)
+        await store._ensure_session("sess-y", user_id=user_y_id)
+        await conn.commit()
+
+        sessions_x = await store.get_all_sessions(user_id=user_x_id)
+        assert len(sessions_x) == 1
+        assert sessions_x[0].session_id == "sess-x"
+        assert all(s.session_id != "sess-y" for s in sessions_x)
 
         await conn.close()
