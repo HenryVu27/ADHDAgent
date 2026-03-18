@@ -145,6 +145,7 @@ export function useChat(sessionId: string) {
     setLatestTrace(null)
     setStreamingContent("")
     setStatusText("")
+    setSummaryText("")
     accumulatedRef.current = ""
     idCounter.current = 0
   }, [])

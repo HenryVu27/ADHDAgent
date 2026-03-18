@@ -430,9 +430,10 @@ class AgentOrchestrator:
                         elif tool_name == "manage_goals":
                             action = tool_input.get("action", "managing")
                             desc = tool_input.get("description", "")
+                            action_verb = {"add": "Adding", "complete": "Completing", "list": "Listing"}.get(action, action.capitalize() + "ing")
                             if desc:
                                 short_desc = desc[:40].rstrip()
-                                status = f"{action.capitalize()}ing goal: {short_desc}..."
+                                status = f"{action_verb} goal: {short_desc}..."
                             else:
                                 status = "Reviewing goals..."
                         elif tool_name == "get_family_profile":
