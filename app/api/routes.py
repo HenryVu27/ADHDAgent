@@ -3,6 +3,8 @@ API routes for ADHDAgent.
 
 Endpoints:
 - POST /api/chat/stream — main pipeline (SSE)
+- POST /api/upload — file upload for multimodal attachments
+- GET  /api/attachments/{id}/thumbnail — serve attachment thumbnail
 - GET  /api/session/{id}  — session state
 - GET  /api/session/{id}/outcomes — outcome tracking
 - GET  /api/health      — health check
@@ -10,10 +12,13 @@ Endpoints:
 """
 
 import json
+import os
+import re
+import shutil
 
 import aiosqlite
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from fastapi.responses import StreamingResponse
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, UploadFile
+from fastapi.responses import FileResponse, StreamingResponse
 
 from app.agent.orchestrator import AgentOrchestrator
 from app.api.deps import get_db, get_knowledge_base, get_orchestrator
@@ -27,9 +32,19 @@ from app.models.schemas import (
     SeedSessionRequest,
     SessionResponse,
     SessionsResponse,
+    UploadBlockedResponse,
+    UploadResponse,
     UserRow,
 )
 from app.rag.knowledge_store import KnowledgeStore
+from app.services.file_upload import (
+    delete_gemini_file,
+    extract_text_from_file,
+    generate_attachment_id,
+    generate_thumbnail,
+    upload_to_gemini,
+    validate_magic_bytes,
+)
 
 router = APIRouter()
 
@@ -125,6 +140,110 @@ async def seed_session(
     return {"status": "ok", "session_id": body.session_id}
 
 
+@router.post("/upload")
+@limiter.limit(lambda: settings.UPLOAD_RATE_LIMIT)
+async def upload_file(
+    request: Request,
+    file: UploadFile = File(...),
+    session_id: str = Form(...),
+    orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+    current_user: UserRow = Depends(get_current_user),
+    conn: aiosqlite.Connection = Depends(get_db),
+):
+    """Upload a file for attachment to a chat message."""
+    # Validate session_id format (prevent path traversal in thumbnail dir)
+    if not re.match(r'^[a-zA-Z0-9_-]{1,128}$', session_id):
+        raise HTTPException(status_code=400, detail="Invalid session_id format")
+
+    await _assert_not_other_users_session(session_id, current_user.id, conn)
+
+    # Validate content type
+    if file.content_type not in settings.UPLOAD_ALLOWED_TYPES:
+        raise HTTPException(status_code=415, detail=f"Unsupported file type: {file.content_type}")
+
+    # Read file data
+    data = await file.read()
+
+    # Validate size
+    if len(data) > settings.UPLOAD_MAX_SIZE_BYTES:
+        raise HTTPException(status_code=413, detail="File too large")
+
+    # Validate magic bytes
+    if not validate_magic_bytes(data, file.content_type):
+        raise HTTPException(status_code=415, detail="File content does not match declared type")
+
+    # Upload to Gemini File API
+    try:
+        gemini_file_name, gemini_file_uri = await upload_to_gemini(
+            data, file.filename or "upload", file.content_type
+        )
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Gemini upload failed: {e}")
+
+    # Extract text and scan through input gate (fail-closed)
+    input_gate = getattr(request.app.state, "input_gate", None)
+    if input_gate:
+        try:
+            extracted_text = await extract_text_from_file(gemini_file_uri, file.content_type)
+            if extracted_text.strip():
+                check = await input_gate.check(extracted_text)
+                if not check.is_allowed:
+                    await delete_gemini_file(gemini_file_name)
+                    return UploadBlockedResponse(
+                        reason=check.blocked_reason or "content",
+                        response=check.override_response or "",
+                    )
+        except Exception as e:
+            # Fail closed: reject upload if extraction fails
+            await delete_gemini_file(gemini_file_name)
+            raise HTTPException(status_code=502, detail=f"File content scanning failed: {e}")
+
+    # Generate thumbnail (images only)
+    attachment_id = generate_attachment_id()
+    thumbnail_path = generate_thumbnail(data, file.content_type, session_id, attachment_id)
+
+    # Store metadata
+    store = orchestrator.get_session_store()
+    await store.save_attachment(
+        session_id=session_id,
+        attachment_id=attachment_id,
+        gemini_file_name=gemini_file_name,
+        gemini_file_uri=gemini_file_uri,
+        filename=file.filename or "upload",
+        content_type=file.content_type,
+        size_bytes=len(data),
+        thumbnail_path=thumbnail_path,
+    )
+    await store.commit()
+
+    thumbnail_url = f"/api/attachments/{attachment_id}/thumbnail" if thumbnail_path else None
+
+    return UploadResponse(
+        id=attachment_id,
+        filename=file.filename or "upload",
+        content_type=file.content_type,
+        thumbnail_url=thumbnail_url,
+    )
+
+
+@router.get("/attachments/{attachment_id}/thumbnail")
+async def get_thumbnail(
+    attachment_id: str,
+    orchestrator: AgentOrchestrator = Depends(get_orchestrator),
+):
+    """Serve a thumbnail image for an attachment."""
+    store = orchestrator.get_session_store()
+    attachments = await store.get_attachments([attachment_id])
+    if not attachments:
+        raise HTTPException(status_code=404, detail="Attachment not found")
+
+    thumb_path = attachments[0].get("thumbnail_path")
+    if not thumb_path or not os.path.exists(thumb_path):
+        raise HTTPException(status_code=404, detail="Thumbnail not found")
+
+    return FileResponse(thumb_path, media_type="image/webp")
+
+
 @router.delete("/session/{session_id}")
 async def delete_session(
     session_id: str,
@@ -134,7 +253,23 @@ async def delete_session(
 ):
     """Delete all data for a session (right-to-erasure)."""
     await _check_session_owner(session_id, current_user.id, conn)
-    await orchestrator.get_session_store().delete_session(session_id)
+
+    store = orchestrator.get_session_store()
+
+    # Clean up attachments: Gemini files + local thumbnails
+    attachments = await store.get_attachments_by_session(session_id)
+    for att in attachments:
+        if att.get("gemini_file_name"):
+            await delete_gemini_file(att["gemini_file_name"])
+        if att.get("thumbnail_path") and os.path.exists(att["thumbnail_path"]):
+            os.remove(att["thumbnail_path"])
+
+    # Delete thumbnail directory if empty
+    thumb_dir = os.path.join(settings.UPLOAD_THUMBNAIL_DIR, session_id)
+    if os.path.isdir(thumb_dir):
+        shutil.rmtree(thumb_dir, ignore_errors=True)
+
+    await store.delete_session(session_id)
     return {"status": "deleted", "session_id": session_id}
 
 
