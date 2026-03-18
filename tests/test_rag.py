@@ -511,3 +511,118 @@ def test_hybrid_retriever_accepts_colbert_index():
 def test_hybrid_retriever_without_colbert_has_none():
     retriever = HybridRetriever(knowledge_store=KnowledgeStore(), gemini_client=None)
     assert retriever._colbert is None
+
+
+class TestKnowledgeStoreColbert:
+    """Test that search_hybrid correctly includes/excludes ColBERT prefetch."""
+
+    def test_search_hybrid_with_colbert_prefetch_sends_three_prefetches(self):
+        """search_hybrid sends 3 Prefetch objects when colbert_prefetch is provided."""
+        from unittest.mock import MagicMock
+        from qdrant_client.models import Prefetch
+
+        store = KnowledgeStore()
+        store._indexed = True
+        mock_client = MagicMock()
+        mock_client.query_points.return_value.points = []
+        store._client = mock_client
+
+        fake_colbert_prefetch = Prefetch(
+            query=[[0.1] * 128, [0.2] * 128],
+            using="colbert",
+            limit=5,
+        )
+        store.search_hybrid(
+            query_vector=[0.1] * 768,
+            query_text="homework strategies",
+            top_k=5,
+            colbert_prefetch=fake_colbert_prefetch,
+        )
+
+        call_kwargs = mock_client.query_points.call_args
+        prefetches = call_kwargs.kwargs.get("prefetch") or call_kwargs[1].get("prefetch")
+        assert len(prefetches) == 3
+        assert any(p.using == "colbert" for p in prefetches)
+
+    def test_search_hybrid_without_colbert_prefetch_sends_two_prefetches(self):
+        """search_hybrid sends only dense + sparse when no colbert_prefetch."""
+        from unittest.mock import MagicMock
+
+        store = KnowledgeStore()
+        store._indexed = True
+        mock_client = MagicMock()
+        mock_client.query_points.return_value.points = []
+        store._client = mock_client
+
+        store.search_hybrid(
+            query_vector=[0.1] * 768,
+            query_text="homework strategies",
+            top_k=5,
+        )
+
+        call_kwargs = mock_client.query_points.call_args
+        prefetches = call_kwargs.kwargs.get("prefetch") or call_kwargs[1].get("prefetch")
+        assert len(prefetches) == 2
+        assert all(p.using != "colbert" for p in prefetches)
+
+
+class TestHybridRetrieverColbert:
+    """Integration tests for ColBERT prefetch in the full retrieval pipeline."""
+
+    @pytest.mark.asyncio
+    async def test_retriever_calls_make_prefetch_and_passes_to_search_hybrid(self):
+        """make_prefetch is called and its result passed to search_hybrid when colbert is set."""
+        from unittest.mock import AsyncMock, MagicMock, patch
+        from qdrant_client.models import Prefetch
+
+        fake_prefetch = Prefetch(query=[[0.1] * 128], using="colbert", limit=5)
+        mock_colbert = MagicMock()
+        mock_colbert.make_prefetch.return_value = fake_prefetch
+
+        store = KnowledgeStore()
+        mock_gemini = MagicMock()
+        mock_gemini.embed = AsyncMock(return_value=[0.1] * 768)
+
+        retriever = HybridRetriever(
+            knowledge_store=store,
+            gemini_client=mock_gemini,
+            colbert_index=mock_colbert,
+        )
+
+        with patch.object(type(store), "has_sparse", new_callable=lambda: property(lambda self: True)):
+            with patch.object(store, "search_hybrid", return_value=[]) as mock_search:
+                await retriever.retrieve("homework strategies")
+
+        mock_colbert.make_prefetch.assert_called_once()
+        call_kwargs = mock_search.call_args
+        passed_prefetch = (
+            call_kwargs.kwargs.get("colbert_prefetch")
+            or call_kwargs[1].get("colbert_prefetch")
+        )
+        assert passed_prefetch is fake_prefetch
+
+    @pytest.mark.asyncio
+    async def test_retriever_without_colbert_passes_none_prefetch(self):
+        """Without colbert_index, search_hybrid receives colbert_prefetch=None."""
+        from unittest.mock import AsyncMock, MagicMock, patch
+
+        store = KnowledgeStore()
+        mock_gemini = MagicMock()
+        mock_gemini.embed = AsyncMock(return_value=[0.1] * 768)
+
+        retriever = HybridRetriever(
+            knowledge_store=store,
+            gemini_client=mock_gemini,
+            colbert_index=None,
+        )
+
+        with patch.object(type(store), "has_sparse", new_callable=lambda: property(lambda self: True)):
+            with patch.object(store, "search_hybrid", return_value=[]) as mock_search:
+                await retriever.retrieve("homework strategies")
+
+        call_kwargs = mock_search.call_args
+        passed_prefetch = (
+            (call_kwargs.kwargs.get("colbert_prefetch") or call_kwargs[1].get("colbert_prefetch"))
+            if call_kwargs else None
+        )
+        assert passed_prefetch is None
