@@ -80,9 +80,9 @@ export function ChatContainer({
           </div>
           <div className="px-1 py-1">
             <div className="mb-1 text-xs font-medium text-coach">Ally</div>
-            <div className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground animate-pulse">
               {summaryText || statusText || "Thinking..."}
-            </div>
+            </p>
           </div>
         </motion.div>
       )}
