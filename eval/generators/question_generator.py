@@ -125,7 +125,7 @@ async def generate_question(
     source_doc_id. Returns None if generation fails or output is invalid.
     """
     prompt = _PROMPTS[question_type].format(statement=statement)
-    result = await llm.json(prompt, temperature=0.7, max_tokens=512)
+    result = await llm.json(prompt, temperature=0.7, max_tokens=2048)
 
     if not isinstance(result, dict) or "question" not in result:
         logger.warning("Question generator returned invalid output for type %s", question_type)

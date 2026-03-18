@@ -1,22 +1,21 @@
-"""Agent pipeline: input_gate -> prepare_context + ReAct agent -> output_gate.
+"""Agent pipeline: input_gate -> prepare_context + ReAct agent -> END.
 
-Builds a custom StateGraph that wraps create_react_agent with guardrail gate
-nodes. The ReAct agent's internal loop (reason -> tool -> reason -> respond)
-is unchanged — we add gate nodes around it.
+Builds a custom StateGraph that wraps create_react_agent with an input
+guardrail gate node. The output gate is run by the orchestrator AFTER
+the graph finishes so it doesn't block token streaming.
 """
 
 import logging
 import time
 
-from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage  # noqa: F401 — HumanMessage used in input_gate_node
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import END, StateGraph
 from langgraph.prebuilt import create_react_agent
 
-from app.agent.prompts import SAFE_OUTPUT_FALLBACK
 from app.agent.state import CoachingState
 from app.config import settings
-from app.guardrails.validator import InputGate, OutputGate
+from app.guardrails.validator import InputGate
 
 logger = logging.getLogger(__name__)
 
@@ -25,18 +24,22 @@ def build_agent(
     tools: list,
     prepare_context,
     input_gate: InputGate,
-    output_gate: OutputGate,
+    output_gate=None,  # kept for API compat; no longer wired into graph
 ):
-    """Build the full pipeline graph with guardrail gates.
+    """Build the pipeline graph with input gate + ReAct agent.
 
     Graph topology:
-        input_gate -> (blocked? -> END) | (allowed? -> react_agent -> output_gate -> END)
+        input_gate -> (blocked? -> END) | (allowed? -> react_agent -> END)
+
+    The output gate is intentionally excluded from the graph so that token
+    streaming via astream_events is not blocked by the output gate API call.
+    The orchestrator runs the output gate after the graph completes.
 
     Args:
         tools: List of LangChain tools the agent can call.
         prepare_context: Async function for context assembly (pre_model_hook).
         input_gate: InputGate instance for crisis + jailbreak classification.
-        output_gate: OutputGate instance for output scope classification.
+        output_gate: Unused (kept for backward compatibility).
 
     Returns:
         Compiled LangGraph.
@@ -114,58 +117,6 @@ def build_agent(
 
         return {"trace_steps": [trace_step], "route": check.route}
 
-    async def output_gate_node(state: CoachingState):
-        """Run output gate classifier on the agent's response."""
-        if output_gate is None:
-            return {}
-
-        messages = state["messages"]
-
-        # Find the last AI message (the agent's final response)
-        last_ai = None
-        for msg in reversed(messages):
-            if isinstance(msg, AIMessage) and msg.content and not getattr(msg, "tool_calls", None):
-                last_ai = msg
-                break
-
-        if not last_ai:
-            return {}
-
-        # Normalize content
-        response_text = last_ai.content
-        if not isinstance(response_text, str):
-            from app.agent.orchestrator import _extract_text
-            response_text = _extract_text(response_text)
-
-        start = time.time()
-        check = await output_gate.check(response_text)
-        duration_ms = (time.time() - start) * 1000
-
-        trace_step = {
-            "name": "output_gate",
-            "duration_ms": duration_ms,
-            "detail": {
-                "is_valid": check.is_valid,
-                "violation_type": check.violation_type,
-            },
-        }
-
-        if not check.is_valid:
-            logger.info("Output gate triggered: %s", check.violation_type)
-            safe_msg = AIMessage(content=SAFE_OUTPUT_FALLBACK)
-            # Replace the last non-tool AI message by position (not identity)
-            new_messages = list(messages)
-            for i in range(len(new_messages) - 1, -1, -1):
-                if isinstance(new_messages[i], AIMessage) and new_messages[i].content and not getattr(new_messages[i], "tool_calls", None):
-                    new_messages[i] = safe_msg
-                    break
-            return {
-                "messages": new_messages,
-                "trace_steps": [trace_step],
-            }
-
-        return {"trace_steps": [trace_step]}
-
     # Route after input gate: blocked -> END, simple -> flash, complex -> pro
     def route_after_input_gate(state: CoachingState):
         if state.get("input_blocked"):
@@ -174,13 +125,12 @@ def build_agent(
             return "flash_react_agent"
         return "pro_react_agent"
 
-    # Build the outer pipeline graph
+    # Build the outer pipeline graph (no output gate — handled by orchestrator)
     graph = StateGraph(CoachingState)
 
     graph.add_node("input_gate", input_gate_node)
     graph.add_node("pro_react_agent", pro_react_agent)
     graph.add_node("flash_react_agent", flash_react_agent)
-    graph.add_node("output_gate", output_gate_node)
 
     graph.set_entry_point("input_gate")
     graph.add_conditional_edges("input_gate", route_after_input_gate, {
@@ -188,9 +138,8 @@ def build_agent(
         "pro_react_agent": "pro_react_agent",
         "flash_react_agent": "flash_react_agent",
     })
-    graph.add_edge("pro_react_agent", "output_gate")
-    graph.add_edge("flash_react_agent", "output_gate")
-    graph.add_edge("output_gate", END)
+    graph.add_edge("pro_react_agent", END)
+    graph.add_edge("flash_react_agent", END)
 
     compiled = graph.compile()
 

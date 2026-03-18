@@ -9,7 +9,9 @@ logger = logging.getLogger(__name__)
 
 QUERY_REWRITE_PROMPT = """You are a search query optimizer for an ADHD parenting coach knowledge base.
 
-Given a parent's current message and recent conversation context, rewrite the query to be self-contained and optimized for retrieval. Resolve pronouns, add implicit context, and focus on the core information need.
+The knowledge base contains practical documents: behavioral strategies (step-by-step), parenting guidance, and factual summaries about ADHD. It does NOT contain neurobiological explanations or clinical mechanisms.
+
+Given a parent's current message and recent conversation context, rewrite the query to match how the knowledge base is organized.
 
 Current query:
 <query>
@@ -29,12 +31,16 @@ Rules:
 - Resolve pronouns (e.g., "he" -> the child's name or "my child")
 - Add relevant context from the conversation (e.g., child's age, specific challenge)
 - Strip emotional language — focus on the information need, not the parent's feelings
+- CRITICAL: For "why" questions, translate to the practical topic the parent needs. "Why can't my child X?" becomes a search for strategies/facts about X. The knowledge base has strategies and facts, not explanations of brain chemistry.
 - If the query is already self-contained, return it unchanged
 
 Examples:
 - Query: "What do I do when he won't stop?" | Context: discussing homework meltdowns, child age 8 -> "strategies for 8 year old ADHD homework meltdowns refusing to stop"
 - Query: "I'm SO frustrated, nothing works for bedtime" | Context: child age 6 -> "bedtime strategies ADHD 6 year old not working alternatives"
-- Query: "Does weather affect his emotions and focus?" | Context: child with ADHD -> "weather environmental factors ADHD child emotions focus attention\""""
+- Query: "Does weather affect his emotions and focus?" | Context: child with ADHD -> "weather environmental factors ADHD child emotions focus attention"
+- Query: "Why can't my child just do things without a reward?" | Context: child age 9 -> "ADHD motivation intrinsic vs extrinsic rewards goal setting strategies"
+- Query: "Why does it feel like his focus got so much worse in third grade?" | Context: child age 8 -> "executive function development ADHD school age academic demands"
+- Query: "Why won't she just sit still and listen?" | Context: child age 6, hyperactive-impulsive -> "ADHD hyperactivity impulse control strategies self-regulation 6 year old\""""
 
 
 class QueryRewriter:
@@ -54,7 +60,7 @@ class QueryRewriter:
             return query
 
         if not conversation_history:
-            return query
+            conversation_history = []
 
         try:
             recent_turns = conversation_history[-3:]
@@ -84,7 +90,7 @@ class QueryRewriter:
             )
 
             rewritten = await self._gemini.generate(
-                prompt, temperature=0.0, max_output_tokens=256,
+                prompt, temperature=0.0, max_output_tokens=1024,
                 timeout=settings.RAG_EMBED_TIMEOUT_S,
             )
             rewritten = rewritten.strip().strip('"').strip("'")

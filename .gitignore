@@ -26,3 +26,4 @@ learning/
 *.db-wal
 .worktrees/
 .worktrees/
+qdrant_data/

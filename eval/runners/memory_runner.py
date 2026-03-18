@@ -93,7 +93,7 @@ async def extract_facts_from_conversation(
             user_message=turn["content"],
         )
 
-        extracted = await llm.json(prompt, temperature=0.0, max_tokens=512)
+        extracted = await llm.json(prompt, temperature=0.0, max_tokens=4096)
         if isinstance(extracted, dict):
             for field, value in extracted.items():
                 if value:

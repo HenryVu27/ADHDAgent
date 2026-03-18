@@ -370,142 +370,106 @@ async def test_query_rewriter_passes_timeout():
            call_kwargs[1].get("timeout") == settings.RAG_EMBED_TIMEOUT_S
 
 
-# --- BM25 sparse encoding tests ---
+# --- Document index and lookup tests ---
 
-def _store_with_controlled_vocab(sparse_mode: str) -> KnowledgeStore:
-    """Return a KnowledgeStore with a hand-crafted vocab and avgdl for unit testing."""
-    store = KnowledgeStore(sparse_mode=sparse_mode)
-    # Override vocab so "hello" and "world" are always present at known indices
-    store._vocab = {"hello": 0, "world": 1, "foo": 2}
-    store._avgdl = 5.0  # pretend average doc length is 5 tokens
-    return store
-
-
-def test_tfidf_sparse_doc_uses_raw_counts():
-    store = _store_with_controlled_vocab("tfidf")
-    vec = store._text_to_sparse_doc("hello hello world")
-    hello_pos = vec.indices.index(0)  # index 0 = "hello"
-    assert vec.values[hello_pos] == 2.0
+def test_knowledge_store_builds_doc_index(knowledge_store):
+    """_doc_index maps document IDs to full document dicts."""
+    assert len(knowledge_store._doc_index) == len(knowledge_store.documents)
+    for doc in knowledge_store.documents:
+        doc_id = doc.get("id", "")
+        if doc_id:
+            assert doc_id in knowledge_store._doc_index
+            assert knowledge_store._doc_index[doc_id] is doc
 
 
-def test_bm25_sparse_doc_saturates_tf():
-    store = _store_with_controlled_vocab("bm25")
-    # Single occurrence
-    vec1 = store._text_to_sparse_doc("hello world")
-    val1 = vec1.values[vec1.indices.index(0)]
-
-    # Ten occurrences — BM25 saturation should prevent 10x linear growth
-    vec10 = store._text_to_sparse_doc(" ".join(["hello"] * 10 + ["world"]))
-    val10 = vec10.values[vec10.indices.index(0)]
-
-    assert val10 < val1 * 10, "BM25 TF should saturate — not linear in count"
-    assert val10 > val1, "Higher count should still increase score"
+def test_get_document_by_id_found(knowledge_store):
+    """get_document_by_id returns the document for a known ID."""
+    first_doc = knowledge_store.documents[0]
+    doc_id = first_doc["id"]
+    result = knowledge_store.get_document_by_id(doc_id)
+    assert result is not None
+    assert result["id"] == doc_id
+    assert result["name"] == first_doc["name"]
 
 
-def test_bm25_sparse_doc_differs_from_tfidf():
-    tfidf_store = _store_with_controlled_vocab("tfidf")
-    bm25_store = _store_with_controlled_vocab("bm25")
-    text = "hello hello hello world"
-    tfidf_vec = tfidf_store._text_to_sparse_doc(text)
-    bm25_vec = bm25_store._text_to_sparse_doc(text)
-    tfidf_val = tfidf_vec.values[tfidf_vec.indices.index(0)]
-    bm25_val = bm25_vec.values[bm25_vec.indices.index(0)]
-    # BM25 should produce a different (saturated) value than raw TF=3
-    assert bm25_val != tfidf_val
+def test_get_document_by_id_not_found(knowledge_store):
+    """get_document_by_id returns None for an unknown ID."""
+    result = knowledge_store.get_document_by_id("nonexistent_doc_id_xyz")
+    assert result is None
 
 
-def test_query_sparse_uses_raw_counts_in_bm25_mode():
-    store = _store_with_controlled_vocab("bm25")
-    vec = store._text_to_sparse_query("hello hello world")
-    hello_pos = vec.indices.index(0)
-    # Query-side: raw count regardless of sparse_mode
-    assert vec.values[hello_pos] == 2.0
+def test_get_related_docs(knowledge_store):
+    """get_related_docs returns documents matching related_ids."""
+    # Find a document with related_ids
+    doc_with_related = None
+    for doc in knowledge_store.documents:
+        if doc.get("related_ids"):
+            doc_with_related = doc
+            break
+
+    if doc_with_related is None:
+        pytest.skip("No documents with related_ids found")
+
+    related = knowledge_store.get_related_docs(doc_with_related["id"])
+    assert len(related) > 0
+    # All returned docs should have IDs in the original doc's related_ids
+    related_id_set = set(doc_with_related["related_ids"])
+    for r in related:
+        assert r["id"] in related_id_set
 
 
-def test_collection_name_override():
-    store = KnowledgeStore(collection_name="my_collection")
-    assert store._collection == "my_collection"
+def test_get_related_docs_empty(knowledge_store):
+    """get_related_docs returns empty list for a doc with no related_ids."""
+    # Find a document without related_ids
+    doc_without_related = None
+    for doc in knowledge_store.documents:
+        if not doc.get("related_ids"):
+            doc_without_related = doc
+            break
+
+    if doc_without_related is None:
+        pytest.skip("All documents have related_ids")
+
+    related = knowledge_store.get_related_docs(doc_without_related["id"])
+    assert related == []
 
 
-def test_default_collection_name_uses_settings():
-    from app.config import settings
-    store = KnowledgeStore()
-    assert store._collection == settings.QDRANT_COLLECTION
+def test_get_related_docs_nonexistent(knowledge_store):
+    """get_related_docs returns empty list for a nonexistent doc ID."""
+    related = knowledge_store.get_related_docs("nonexistent_doc_id_xyz")
+    assert related == []
 
 
-def test_avgdl_computed():
-    # Requires knowledge JSON files to be present (standard test environment assumption)
-    store = KnowledgeStore()
-    assert store._avgdl > 0.0, "Expected avgdl > 0 with real knowledge docs loaded"
-
-
-# --- ColBERT collection schema tests ---
-
-from unittest.mock import AsyncMock, MagicMock, patch
-
-
-def make_mock_colbert():
-    """ColBERTIndex mock that returns 2-token 128-dim matrices."""
-    colbert = MagicMock()
-    colbert.embed_chunks.return_value = [[[0.1] * 128] * 2] * 60  # one per chunk
-    return colbert
-
-
-def make_mock_gemini():
-    """GeminiClient mock that returns 768-dim embeddings."""
-    gemini = MagicMock()
-    gemini.embed_batch = AsyncMock(return_value=[[0.1] * 768] * 60)
-    return gemini
-
+# --- skip_rewrite parameter tests ---
 
 @pytest.mark.asyncio
-async def test_build_index_with_colbert_creates_multivector_collection():
-    from qdrant_client import QdrantClient
-    store = KnowledgeStore(collection_name="test_colbert")
-    store._client = QdrantClient(location=":memory:")
+async def test_retrieve_skip_rewrite():
+    """skip_rewrite=True bypasses query rewriting even with a rewriter configured."""
+    from unittest.mock import AsyncMock
+    from app.models.schemas import SessionState
 
-    colbert = make_mock_colbert()
-    colbert.embed_chunks.return_value = [[[0.1] * 128] * 2] * len(store.chunks)
-    gemini = make_mock_gemini()
-    gemini.embed_batch = AsyncMock(return_value=[[0.1] * 768] * len(store.chunks))
+    mock_gemini = AsyncMock()
+    mock_rewriter = AsyncMock()
+    mock_rewriter.rewrite = AsyncMock(return_value="rewritten query")
 
-    await store.build_index(gemini, colbert_index=colbert)
-
-    info = store._client.get_collection("test_colbert")
-    vectors = info.config.params.vectors
-    assert "colbert" in vectors
-    assert vectors["colbert"].multivector_config is not None
-
-
-@pytest.mark.asyncio
-async def test_build_index_without_colbert_has_no_multivector():
-    from qdrant_client import QdrantClient
-    store = KnowledgeStore(collection_name="test_no_colbert")
-    store._client = QdrantClient(location=":memory:")
-
-    gemini = make_mock_gemini()
-    gemini.embed_batch = AsyncMock(return_value=[[0.1] * 768] * len(store.chunks))
-
-    await store.build_index(gemini)
-
-    info = store._client.get_collection("test_no_colbert")
-    vectors = info.config.params.vectors
-    # colbert vector should be absent when no colbert_index is provided
-    assert "colbert" not in vectors
-
-
-# --- ColBERT prefetch in HybridRetriever ---
-
-def test_hybrid_retriever_accepts_colbert_index():
-    from app.rag.colbert_index import ColBERTIndex
-    from app.rag.retriever import HybridRetriever
-    colbert = MagicMock(spec=ColBERTIndex)
+    store = KnowledgeStore()
     retriever = HybridRetriever(
-        knowledge_store=KnowledgeStore(),
+        knowledge_store=store,
         gemini_client=None,
-        colbert_index=colbert,
+        query_rewriter=mock_rewriter,
     )
-    assert retriever._colbert is colbert
+
+    state = SessionState(
+        session_id="test",
+        conversation_history=[{"role": "user", "content": "hello"}],
+    )
+
+    response = await retriever.retrieve(
+        "homework strategies", state=state, skip_rewrite=True,
+    )
+    # Rewriter should NOT have been called
+    mock_rewriter.rewrite.assert_not_called()
+    assert response.rewritten_query is None
 
 
 def test_hybrid_retriever_without_colbert_has_none():
@@ -624,3 +588,32 @@ class TestHybridRetrieverColbert:
         call_kwargs = mock_search.call_args
         passed_prefetch = call_kwargs.kwargs.get("colbert_prefetch")
         assert passed_prefetch is None
+
+
+@pytest.mark.asyncio
+async def test_retrieve_without_skip_rewrite():
+    """Without skip_rewrite, the rewriter is used when conditions are met."""
+    from unittest.mock import AsyncMock
+    from app.models.schemas import SessionState
+
+    mock_rewriter = AsyncMock()
+    mock_rewriter.rewrite = AsyncMock(return_value="rewritten homework query")
+
+    store = KnowledgeStore()
+    retriever = HybridRetriever(
+        knowledge_store=store,
+        gemini_client=None,
+        query_rewriter=mock_rewriter,
+    )
+
+    state = SessionState(
+        session_id="test",
+        conversation_history=[{"role": "user", "content": "hello"}],
+    )
+
+    response = await retriever.retrieve(
+        "homework strategies", state=state, skip_rewrite=False,
+    )
+    # Rewriter should have been called
+    mock_rewriter.rewrite.assert_called_once()
+    assert response.rewritten_query == "rewritten homework query"

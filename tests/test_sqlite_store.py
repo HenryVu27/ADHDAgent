@@ -100,6 +100,66 @@ class TestSQLiteSessionStore:
         goals = await store.manage_goal("g1", "list")
         assert len(goals) == 2
 
+    async def test_manage_goal_add_idempotent(self):
+        """Adding the same goal twice produces exactly one row."""
+        store = await _make_store()
+        await store.manage_goal("s1", "add", "Improve bedtime routine")
+        await store.manage_goal("s1", "add", "Improve bedtime routine")
+        goals = await store.manage_goal("s1", "list")
+        matching = [g for g in goals if g.description == "Improve bedtime routine"]
+        assert len(matching) == 1
+
+    async def test_seed_session_goals_idempotent(self):
+        """Seeding the same goals twice produces exactly one row per goal."""
+        from app.models.schemas import SeedSessionRequest
+        store = await _make_store()
+        req = SeedSessionRequest(
+            session_id="seed-dedup",
+            child_name="Alex",
+            goals=["Less homework stress", "Calmer transitions"],
+        )
+        await store.seed_session(req)
+        await store.seed_session(req)
+        state = await store.get("seed-dedup")
+        descriptions = [g.description for g in state.goals]
+        assert descriptions.count("Less homework stress") == 1
+        assert descriptions.count("Calmer transitions") == 1
+
+    async def test_schema_v4_deduplicates_existing_rows(self):
+        """V4 migration cleans up pre-existing duplicate goal rows."""
+        import aiosqlite
+        from app.db import SCHEMA_V1, SCHEMA_V2, SCHEMA_V3, init_db_async
+
+        async with aiosqlite.connect(":memory:") as conn:
+            # Bootstrap schema up to V3 (no unique index yet) without using init_db_async,
+            # so we can insert duplicates before V4 runs.
+            await conn.executescript(SCHEMA_V1)
+            await conn.executescript(SCHEMA_V2)
+            await conn.executescript(SCHEMA_V3)
+            await conn.execute("INSERT OR REPLACE INTO schema_version (version) VALUES (3)")
+            # Insert a session so the FK constraint is satisfied
+            await conn.execute(
+                "INSERT INTO sessions (session_id) VALUES (?)", ("s1",)
+            )
+            # Insert duplicate goal rows as they would exist in a pre-V4 database
+            await conn.execute(
+                "INSERT INTO goals (session_id, description) VALUES (?, ?)",
+                ("s1", "Better mornings"),
+            )
+            await conn.execute(
+                "INSERT INTO goals (session_id, description) VALUES (?, ?)",
+                ("s1", "Better mornings"),
+            )
+            await conn.commit()
+            # Apply V4 via the normal migration path
+            await init_db_async(conn)
+            # Verify deduplication
+            async with conn.execute(
+                "SELECT COUNT(*) FROM goals WHERE session_id = 's1' AND description = 'Better mornings'"
+            ) as cur:
+                (count,) = await cur.fetchone()
+            assert count == 1
+
     async def test_seed_session(self):
         store = await _make_store()
         request = SeedSessionRequest(

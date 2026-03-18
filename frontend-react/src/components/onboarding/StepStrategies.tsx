@@ -6,7 +6,6 @@ const strategies = [
   { id: "visual_schedules", label: "Visual schedules" },
   { id: "timers", label: "Timers & countdowns" },
   { id: "reward_charts", label: "Reward/sticker charts" },
-  { id: "first_then", label: "First-Then boards" },
   { id: "calm_corner", label: "Calm-down corner" },
   { id: "specific_praise", label: "Specific praise" },
   { id: "chunking", label: "Breaking tasks into steps" },

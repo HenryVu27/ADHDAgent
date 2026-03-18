@@ -40,7 +40,7 @@ Score SELF_CONTAINED as true/false:
   true  = the question makes sense standalone, with no reference to "the document", "the above", "this text", etc.
   false = the question depends on context not available to the user
 
-Return JSON: {{"answerability": <1|2|3>, "self_contained": <true|false>, "reason": "one sentence"}}
+Return JSON with exactly these two fields: {{"answerability": <1|2|3>, "self_contained": <true|false>}}
 """
 
 
@@ -55,11 +55,11 @@ async def answerability_score(
         question=question["question"],
         reference_answer=question.get("reference_answer", ""),
     )
-    result = await llm.json(prompt, temperature=0.0, max_tokens=256)
+    result = await llm.json(prompt, temperature=0.0, max_tokens=2048)
     return {
         "answerability": int(result.get("answerability", 1)),
         "self_contained": bool(result.get("self_contained", False)),
-        "filter_reason": result.get("reason", ""),
+        "filter_reason": "",
     }
 
 

@@ -1,14 +1,11 @@
-from __future__ import annotations
-
 # Hybrid RAG Retriever
 # Qdrant dense+sparse with RRF fusion, query term tag boosting, and query rewriting.
 
 import logging
+import time
 from collections import defaultdict
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from app.rag.colbert_index import ColBERTIndex
+import numpy as np
 
 from app.config import settings
 from app.models.schemas import (
@@ -27,6 +24,15 @@ logger = logging.getLogger(__name__)
 TAG_BOOST = 0.15
 
 
+def _cosine_similarity(a: list[float], b: list[float]) -> float:
+    """Cosine similarity between two embedding vectors (numpy-accelerated)."""
+    va, vb = np.asarray(a), np.asarray(b)
+    norm_a, norm_b = np.linalg.norm(va), np.linalg.norm(vb)
+    if norm_a == 0 or norm_b == 0:
+        return 0.0
+    return float(np.dot(va, vb) / (norm_a * norm_b))
+
+
 class HybridRetriever:
     # Qdrant hybrid search with keyword fallback
 
@@ -36,13 +42,14 @@ class HybridRetriever:
         gemini_client=None,
         query_rewriter: QueryRewriter | None = None,
         reranker: FastEmbedReranker | None = None,
-        colbert_index: ColBERTIndex | None = None,
     ):
         self._store = knowledge_store
         self._gemini = gemini_client
         self._rewriter = query_rewriter
         self._reranker = reranker
-        self._colbert = colbert_index
+        # Embedding-based query result cache: avoids redundant Qdrant searches
+        # when the agent rephrases a query it already searched for.
+        self._query_cache: list[tuple[list[float], list[RetrievalResult], float]] = []
 
     # Full retrieval pipeline: rewrite -> hybrid search -> facets -> trim
     async def retrieve(
@@ -51,6 +58,7 @@ class HybridRetriever:
         top_k: int | None = None,
         filters: RetrievalFilters | None = None,
         state: SessionState | None = None,
+        skip_rewrite: bool = False,
     ) -> RetrievalResponse:
         top_k = top_k or settings.RAG_TOP_K
         rewritten_query = None
@@ -58,7 +66,8 @@ class HybridRetriever:
         # Step 1: Query rewriting
         search_query = query
         if (
-            self._rewriter
+            not skip_rewrite
+            and self._rewriter
             and state
             and settings.RAG_USE_QUERY_REWRITE
             and state.conversation_history
@@ -129,24 +138,23 @@ class HybridRetriever:
         # Qdrant hybrid: dense + sparse + RRF
         if self._store.has_sparse and self._gemini:
             query_vector = await self._gemini.embed(query, timeout=settings.RAG_EMBED_TIMEOUT_S)
-            prefetch_limit = min(top_k * 3, len(self._store.chunks))
 
-            colbert_prefetch = None
-            if self._colbert is not None:
-                import asyncio
-                colbert_prefetch = await asyncio.to_thread(
-                    self._colbert.make_prefetch, query, prefetch_limit
-                )
+            # Check embedding cache — return cached results for semantically similar queries
+            cached = self._cache_lookup(query_vector)
+            if cached is not None:
+                logger.info("Query cache hit (%d cached results) for: %.60s", len(cached), query)
+                return cached[:top_k]
 
             hybrid_results = self._store.search_hybrid(
                 query_vector=query_vector,
                 query_text=query,
                 top_k=top_k,
                 filters=filters,
-                colbert_prefetch=colbert_prefetch,
             )
             if hybrid_results:
-                return self._build_results(hybrid_results, query_tags)
+                results = self._build_results(hybrid_results, query_tags)
+                self._cache_store(query_vector, results)
+                return results
 
         # Fallback: keyword scoring
         return self._keyword_fallback(query, top_k)
@@ -217,6 +225,50 @@ class HybridRetriever:
             citations=chunk.get("citations", []),
             full_doc=chunk.get("full_doc", {}),
         )
+
+    # --- Embedding-based query cache ---
+
+    def _cache_lookup(self, query_vector: list[float]) -> list[RetrievalResult] | None:
+        """Return cached results if a semantically similar query was recently searched.
+
+        Cached vectors are pre-normalized, so similarity is a single dot product.
+        """
+        now = time.time()
+        ttl = settings.RAG_QUERY_CACHE_TTL_S
+        threshold = settings.RAG_QUERY_CACHE_SIMILARITY
+
+        # Evict expired entries
+        self._query_cache = [
+            entry for entry in self._query_cache if now - entry[2] < ttl
+        ]
+        if not self._query_cache:
+            return None
+
+        # Normalize query vector once, then dot-product against cached normals
+        qv = np.asarray(query_vector)
+        qn = np.linalg.norm(qv)
+        if qn == 0:
+            return None
+        qv_norm = qv / qn
+
+        for cached_norm, cached_results, _ts in self._query_cache:
+            sim = float(np.dot(qv_norm, cached_norm))
+            if sim >= threshold:
+                return cached_results
+        return None
+
+    def _cache_store(self, query_vector: list[float], results: list[RetrievalResult]) -> None:
+        """Cache pre-normalized query embedding and its results."""
+        v = np.asarray(query_vector)
+        norm = np.linalg.norm(v)
+        if norm == 0:
+            return
+        self._query_cache.append((v / norm, results, time.time()))
+        max_size = settings.RAG_QUERY_CACHE_MAX_SIZE
+        if len(self._query_cache) > max_size:
+            self._query_cache = self._query_cache[-max_size:]
+
+    # --- Facets ---
 
     # Aggregate facet counts over retrieval results
     @staticmethod

@@ -298,7 +298,7 @@ class SQLiteSessionStore(SessionStoreBase):
             )
             row = await cursor.fetchone()
             await self._conn.execute(
-                "INSERT INTO goals (session_id, description, created_turn) VALUES (?, ?, ?)",
+                "INSERT OR IGNORE INTO goals (session_id, description, created_turn) VALUES (?, ?, ?)",
                 (session_id, description, row["turn_count"]),
             )
             await self._touch_updated(session_id)
@@ -376,7 +376,7 @@ class SQLiteSessionStore(SessionStoreBase):
 
         for goal_text in request.goals:
             await self._conn.execute(
-                "INSERT INTO goals (session_id, description) VALUES (?, ?)",
+                "INSERT OR IGNORE INTO goals (session_id, description) VALUES (?, ?)",
                 (request.session_id, goal_text),
             )
 

@@ -122,7 +122,7 @@ async def generate_conversation(
             persona_facts_formatted=persona_facts_formatted,
             conversation_text=conv_text,
         )
-        critic_result = await llm.json(critic_prompt, temperature=0.0, max_tokens=1500)
+        critic_result = await llm.json(critic_prompt, temperature=0.0, max_tokens=4096)
 
         is_valid = critic_result.get("valid", False)
         if not is_valid:

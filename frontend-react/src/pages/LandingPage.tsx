@@ -183,9 +183,8 @@ export function LandingPage() {
         <div className="mx-auto flex max-w-4xl items-center justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Sprout className="h-4 w-4 text-coach" />
-            <span>FirstThen</span>
           </div>
-          <span>A FirstThen prototype</span>
+          <span></span>
         </div>
       </footer>
     </div>

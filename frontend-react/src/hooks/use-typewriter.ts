@@ -12,30 +12,40 @@ interface TypewriterControls {
 /**
  * Adaptive typewriter for streaming LLM responses.
  *
- * Problem: LLM tokens arrive in irregular bursts (1–50+ chars). Rendering
- * each chunk directly produces stuttery text.
- *
- * Solution: Decouple receipt from display via requestAnimationFrame:
- *   - fullRef (ref, not state) accumulates received tokens without re-renders
- *   - rAF loop advances shownRef at STEP_NORMAL chars/frame (≈720 chars/sec)
+ * Decouples token receipt from display via requestAnimationFrame:
+ *   - fullRef accumulates received tokens without re-renders
+ *   - rAF loop advances shownRef at STEP_NORMAL chars/frame (~720 chars/sec)
  *   - When buffer is CATCHUP_THRESHOLD+ chars ahead, step = ceil(behind/10)
- *   - React state only updates every BATCH_THRESHOLD chars, keeping markdown
- *     parsing at ~20fps instead of 60fps (avoids layout thrash)
+ *   - React state only updates every BATCH_THRESHOLD chars (~20fps)
  *
- * reset(newText): used by use-chat when a replace event arrives (output gate
- * replaced the streamed response). Resets fullRef and shownRef to the new text
- * and restarts the rAF loop.
+ * onComplete: called once when the animation catches up to the full text
+ * (shownRef >= fullRef.length and fullRef is non-empty). Used by the done
+ * handler to delay finalization until the typewriter finishes.
  */
-export function useTypewriter(fullText: string): TypewriterControls {
+export function useTypewriter(
+  fullText: string,
+  onComplete?: () => void,
+): TypewriterControls {
   const fullRef = useRef("")
   const shownRef = useRef(0)
   const lastRenderedRef = useRef(0)
   const rafRef = useRef<number | null>(null)
   const [displayedText, setDisplayedText] = useState("")
+  const onCompleteRef = useRef(onComplete)
+  const firedCompleteRef = useRef(false)
+
+  // Keep callback ref fresh without re-creating tick
+  useEffect(() => {
+    onCompleteRef.current = onComplete
+  }, [onComplete])
 
   // Keep fullRef in sync with incoming fullText
   useEffect(() => {
     fullRef.current = fullText
+    // New text arrived — animation is no longer complete
+    if (fullText.length > shownRef.current) {
+      firedCompleteRef.current = false
+    }
     scheduleFrame()
   }, [fullText]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -50,7 +60,13 @@ export function useTypewriter(fullText: string): TypewriterControls {
     const full = fullRef.current
     const shown = shownRef.current
 
-    if (shown >= full.length) return
+    if (shown >= full.length) {
+      if (full.length > 0 && !firedCompleteRef.current) {
+        firedCompleteRef.current = true
+        onCompleteRef.current?.()
+      }
+      return
+    }
 
     const behind = full.length - shown
     const step = behind > CATCHUP_THRESHOLD ? Math.ceil(behind / 10) : STEP_NORMAL
@@ -64,6 +80,9 @@ export function useTypewriter(fullText: string): TypewriterControls {
 
     if (shownRef.current < full.length) {
       rafRef.current = requestAnimationFrame(tick)
+    } else if (!firedCompleteRef.current) {
+      firedCompleteRef.current = true
+      onCompleteRef.current?.()
     }
   }, [])
 
@@ -75,6 +94,7 @@ export function useTypewriter(fullText: string): TypewriterControls {
     fullRef.current = newText
     shownRef.current = 0
     lastRenderedRef.current = 0
+    firedCompleteRef.current = false
     setDisplayedText("")
     scheduleFrame()
   }, [scheduleFrame])

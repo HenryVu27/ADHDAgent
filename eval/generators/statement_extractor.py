@@ -44,7 +44,14 @@ async def extract_statements(
         text=chunk["text"],
         n=n,
     )
-    result = await llm.json(prompt, temperature=0.3, max_tokens=1024)
+    result = await llm.json(prompt, temperature=0.3, max_tokens=2048)
+
+    # Model sometimes wraps the array: {"statements": [...]} or {"items": [...]}
+    if isinstance(result, dict):
+        for key in ("statements", "items", "facts", "extractions"):
+            if isinstance(result.get(key), list):
+                result = result[key]
+                break
 
     if isinstance(result, list):
         statements = [s for s in result if isinstance(s, str) and len(s.strip()) > 20]

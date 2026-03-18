@@ -29,7 +29,6 @@ export function BaseLayout({ children }: { children: ReactNode }) {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-coach">
               <Sprout className="h-5 w-5 text-coach-foreground" />
             </div>
-            <span className="text-lg font-semibold tracking-tight">FirstThen</span>
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex">

@@ -1,5 +1,5 @@
 import { useState, useRef } from "react"
-import { Send, Square } from "lucide-react"
+import { ArrowUp, Square } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
@@ -31,7 +31,7 @@ export function ChatInput({ onSend, onStop, isLoading, isStreaming }: Props) {
   }
 
   return (
-    <div className="flex items-end gap-2 border-t border-border/50 bg-background p-4">
+    <div className="flex items-center gap-2 border-t border-border/50 bg-background p-4">
       <Textarea
         ref={textareaRef}
         value={value}
@@ -59,7 +59,7 @@ export function ChatInput({ onSend, onStop, isLoading, isStreaming }: Props) {
           size="icon"
           className="shrink-0"
         >
-          <Send className="h-4 w-4" />
+          <ArrowUp className="h-4 w-4" />
         </Button>
       )}
     </div>

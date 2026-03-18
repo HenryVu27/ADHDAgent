@@ -29,7 +29,6 @@ export function OnboardingPage() {
         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-coach shadow-md">
           <Sprout className="h-6 w-6 text-coach-foreground" />
         </div>
-        <span className="text-2xl font-semibold tracking-tight">FirstThen</span>
       </div>
       <OnboardingWizard onComplete={handleComplete} />
     </div>

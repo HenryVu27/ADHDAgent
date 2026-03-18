@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     RAG_RELEVANCE_THRESHOLD: float = 0.0   # Cross-encoder score floor (bge-reranker-base: 0 = decision boundary)
     RAG_COLBERT_MODEL: str = "colbert-ir/colbertv2.0"
     RAG_EMBED_TIMEOUT_S: float = 30.0      # Timeout for embed/embed_batch API calls
+    RAG_QUERY_CACHE_TTL_S: float = 300.0   # Embedding-based query cache TTL (seconds)
+    RAG_QUERY_CACHE_MAX_SIZE: int = 50     # Max cached query embeddings
+    RAG_QUERY_CACHE_SIMILARITY: float = 0.92  # Cosine similarity threshold for cache hit
 
     # Qdrant
     QDRANT_URL: str = ":memory:"
@@ -59,7 +62,7 @@ class Settings(BaseSettings):
     GEMINI_UTILITY_MODEL: str = ""
 
     # Thinking mode budget (tokens) for the agent model
-    GEMINI_THINKING_BUDGET: int = 8192
+    GEMINI_THINKING_BUDGET: int = 2048
 
     # Fast model for simple messages (defaults to utility/flash model)
     GEMINI_FAST_MODEL: str = ""

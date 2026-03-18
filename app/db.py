@@ -180,10 +180,19 @@ CREATE INDEX IF NOT EXISTS idx_episode_links_session ON episode_links(session_id
 CREATE INDEX IF NOT EXISTS idx_episode_links_source ON episode_links(source_id);
 """
 
+SCHEMA_V4 = """
+DELETE FROM goals WHERE id NOT IN (
+    SELECT MIN(id) FROM goals GROUP BY session_id, description
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_goals_unique ON goals(session_id, description);
+"""
+
 MIGRATIONS = {
     1: SCHEMA_V1,
     2: SCHEMA_V2,
     3: SCHEMA_V3,
+    4: SCHEMA_V4,
 }
 
 

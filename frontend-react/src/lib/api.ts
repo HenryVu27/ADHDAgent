@@ -14,6 +14,10 @@ import type {
 
 const BASE = "/api"
 
+// SSE streaming must bypass the Vite dev proxy to avoid response buffering.
+// In production (built React served by FastAPI), use the normal relative path.
+const SSE_BASE = import.meta.env.DEV ? "http://localhost:8000/api" : "/api"
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     headers: { "Content-Type": "application/json" },
@@ -31,7 +35,7 @@ export const api = {
     data: ChatRequest,
     signal: AbortSignal,
   ): AsyncGenerator<StreamEvent> {
-    const res = await fetch(`${BASE}/chat/stream`, {
+    const res = await fetch(`${SSE_BASE}/chat/stream`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
