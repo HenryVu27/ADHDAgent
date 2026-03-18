@@ -43,7 +43,7 @@ class Settings(BaseSettings):
 
     # Semantic fast path
     SEMANTIC_FAST_PATH_ENABLED: bool = True
-    SEMANTIC_FAST_PATH_MODEL: str = "all-MiniLM-L6-v2"
+    SEMANTIC_FAST_PATH_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
     SEMANTIC_FAST_PATH_THRESHOLD: float = 0.82
 
     # Context engineering
