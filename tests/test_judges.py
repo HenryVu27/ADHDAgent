@@ -134,3 +134,85 @@ class TestResponseJudge:
         # Verify the prompt included tool call info
         call_args = mock_gen_client.json.call_args
         assert "search_knowledge_base" in call_args[1].get("prompt", call_args[0][0] if call_args[0] else "")
+
+
+from eval.judges.tool_use_judge import ToolUseJudge, run_heuristics
+
+
+class TestToolUseHeuristics:
+
+    def test_unused_result_detected(self):
+        flags = run_heuristics(
+            user_message="How do I help with homework?",
+            assistant_response="That sounds tough. Tell me more.",
+            tool_calls=[{"name": "search_knowledge_base", "args": {"query": "homework"}, "result": "Visual timer strategy: use a timer to break homework into 10-min chunks"}],
+        )
+        assert any(f["type"] == "low_result_utilization" for f in flags)
+
+    def test_no_flags_when_result_used(self):
+        flags = run_heuristics(
+            user_message="How do I help with homework?",
+            assistant_response="A great approach is the visual timer strategy: break homework into 10-minute chunks.",
+            tool_calls=[{"name": "search_knowledge_base", "args": {"query": "homework"}, "result": "Visual timer strategy: use a timer to break homework into 10-min chunks"}],
+        )
+        assert not any(f["type"] == "low_result_utilization" for f in flags)
+
+    def test_missed_search_detected(self):
+        flags = run_heuristics(
+            user_message="My kid has terrible meltdowns during homework every single evening",
+            assistant_response="That sounds challenging.",
+            tool_calls=[],
+        )
+        assert any(f["type"] == "likely_missed_search" for f in flags)
+
+    def test_no_missed_search_for_greetings(self):
+        flags = run_heuristics(
+            user_message="Hi there!",
+            assistant_response="Hello! How can I help?",
+            tool_calls=[],
+        )
+        assert not any(f["type"] == "likely_missed_search" for f in flags)
+
+
+class TestToolUseJudge:
+
+    @pytest.mark.asyncio
+    async def test_evaluate_turn(self, mock_gen_client):
+        mock_gen_client.json = AsyncMock(return_value={
+            "tool_verdicts": [
+                {"name": "search_knowledge_base", "verdict": "appropriate", "argument_quality": 4, "result_utilization": 5}
+            ],
+            "missed_tools": [],
+        })
+        with patch("eval.judges.base.GenClient", return_value=mock_gen_client):
+            judge = ToolUseJudge()
+
+        result = await judge.evaluate_turn(
+            user_message="How do I help with homework?",
+            assistant_response="Based on the visual timer strategy...",
+            tool_calls=[{"name": "search_knowledge_base", "args": {"query": "homework"}, "result": "Visual timer..."}],
+            conversation_history=[],
+        )
+        assert result is not None
+        assert result["precision"] == 1.0
+        assert result["recall"] == 1.0
+        assert result["argument_accuracy"] == 4
+
+    @pytest.mark.asyncio
+    async def test_evaluate_turn_no_tools(self, mock_gen_client):
+        mock_gen_client.json = AsyncMock(return_value={
+            "tool_verdicts": [],
+            "missed_tools": [],
+        })
+        with patch("eval.judges.base.GenClient", return_value=mock_gen_client):
+            judge = ToolUseJudge()
+
+        result = await judge.evaluate_turn(
+            user_message="Hi!",
+            assistant_response="Hello!",
+            tool_calls=[],
+            conversation_history=[],
+        )
+        assert result is not None
+        assert result["precision"] == 1.0
+        assert result["recall"] == 1.0
