@@ -38,6 +38,17 @@ class TestSchemas:
         assert r.is_allowed is True
         assert r.blocked_reason is None
 
+    def test_input_check_result_fast_path_defaults(self):
+        r = InputCheckResult(is_allowed=True)
+        assert r.fast_path_bypassed is False
+        assert r.fast_path_score is None
+
+    def test_input_check_result_fast_path_populated(self):
+        r = InputCheckResult(is_allowed=True, fast_path_bypassed=True, fast_path_score=0.91, route="flash")
+        assert r.fast_path_bypassed is True
+        assert r.fast_path_score == 0.91
+        assert r.route == "flash"
+
     def test_output_check_result_unchanged(self):
         r = OutputCheckResult(is_valid=True)
         assert r.is_valid is True

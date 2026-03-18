@@ -27,6 +27,8 @@ class InputCheckResult(BaseModel):
     override_response: str | None = None  # Pre-built response for crisis/OOS
     duration_ms: float = 0.0
     route: str = "pro"  # "pro" (default/safe) or "flash" (simple messages)
+    fast_path_bypassed: bool = False
+    fast_path_score: float | None = None
 
 
 class OutputCheckResult(BaseModel):
