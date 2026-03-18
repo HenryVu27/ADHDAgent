@@ -130,14 +130,33 @@ def _parse_json(raw, model_cls):
 
 
 class InputGate:
-    """Classifies user messages for crisis and jailbreak via single structured Gemini call."""
+    """Classifies user messages for crisis and jailbreak via single structured Gemini call.
 
-    def __init__(self, gemini_client):
+    If a SemanticFastPath is provided, clearly benign messages bypass the Gemini
+    call entirely and are returned immediately with route="flash".
+    """
+
+    def __init__(self, gemini_client, fast_path=None):
         self._client = gemini_client
         self._timeout_s = settings.GUARDRAILS_TIMEOUT_S
+        self._fast_path = fast_path  # SemanticFastPath | None
 
     async def check(self, user_message: str) -> InputCheckResult:
         start = time.time()
+
+        # Tier 0: local semantic fast path — skips Gemini for clearly benign messages
+        if self._fast_path is not None:
+            fp_result = self._fast_path.classify(user_message)
+            if fp_result is not None:
+                fp_result.duration_ms = (time.time() - start) * 1000
+                logger.debug(
+                    "Input gate: fast-path bypass (score=%.4f, %.0fms)",
+                    fp_result.fast_path_score or 0.0,
+                    fp_result.duration_ms,
+                )
+                return fp_result
+
+        # Tier 1: Gemini Flash classification (crisis + jailbreak + complexity routing)
         try:
             prompt = INPUT_GATE_PROMPT.format(user_message=user_message)
             raw = await asyncio.wait_for(

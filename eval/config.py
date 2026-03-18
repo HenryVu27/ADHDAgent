@@ -18,6 +18,7 @@ RESULTS_DIR = DATA_DIR / "results"
 
 GOLDEN_RETRIEVAL_PATH = DATA_DIR / "golden_retrieval.json"
 GOLDEN_MEMORY_PATH = DATA_DIR / "golden_memory.json"
+GOLDEN_INPUT_GATE_PATH = DATA_DIR / "golden_input_gate.json"
 
 # Quality filtering thresholds
 ANSWERABILITY_MIN_SCORE: int = 2        # 1-3 scale; discard if below this

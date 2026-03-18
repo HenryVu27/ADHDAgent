@@ -63,7 +63,7 @@ BENIGN_EXAMPLES = [
 ### `app/config.py` (modified)
 
 ```python
-SEMANTIC_FAST_PATH_MODEL: str = "all-MiniLM-L6-v2"   # bundled in fastembed, no new dependency
+SEMANTIC_FAST_PATH_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"   # bundled in fastembed, no new dependency
 SEMANTIC_FAST_PATH_THRESHOLD: float = 0.82
 SEMANTIC_FAST_PATH_ENABLED: bool = True
 ```

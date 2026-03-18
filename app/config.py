@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     RATE_LIMIT_ENABLED: bool = True
 
     # Agent
-    AGENT_MAX_TOOL_STEPS: int = 8
+    AGENT_MAX_TOOL_STEPS: int = 5
 
     # Guardrails
     GUARDRAILS_TIMEOUT_S: float = 10.0
