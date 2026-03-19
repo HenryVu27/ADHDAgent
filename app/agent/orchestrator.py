@@ -258,6 +258,61 @@ class AgentOrchestrator:
 
         return history_messages, force_summary
 
+    async def _handle_input_blocked(
+        self,
+        session_id: str,
+        turn: int,
+        message: str,
+        result: dict,
+        total_ms: float,
+        attachment_ids: list[str] | None,
+    ) -> StreamDonePayload:
+        """Handle an input-gate block: persist, trace, and return payload."""
+        response_text = result.get("block_response", "")
+        blocked_reason = ""
+        for step in result.get("trace_steps", []):
+            if step.get("name") == "input_gate":
+                blocked_reason = step.get("detail", {}).get("blocked_reason", "")
+
+        await self._session_store.add_message(
+            session_id, "user", message, turn,
+            blocked=True, blocked_reason=blocked_reason,
+            attachment_ids=attachment_ids,
+        )
+        await self._session_store.add_message(
+            session_id, "assistant", response_text, turn,
+            blocked=True, blocked_reason=blocked_reason,
+        )
+
+        trace = self._build_trace(result, total_ms)
+        enriched = EnrichedTrace(
+            session_id=session_id,
+            turn=turn,
+            timestamp=datetime.now(timezone.utc).isoformat(),
+            pipeline_steps=[PipelineStep(**s) for s in result.get("trace_steps", [])],
+            total_duration_ms=total_ms,
+            input_blocked=True,
+            blocked_reason=blocked_reason,
+            agent_used="input_gate",
+        )
+        await self._session_store.save_trace(session_id, enriched)
+        await self._session_store.commit()
+
+        if self._event_bus:
+            await self._event_bus.emit(
+                "agent", "turn_blocked", session_id, turn, total_ms,
+                detail={"reason": blocked_reason},
+            )
+
+        logger.info("[agent] === BLOCKED === session=%s, reason=input_gate", session_id)
+        return StreamDonePayload(
+            response=response_text,
+            agent_used="input_gate",
+            phase=await self._infer_phase(session_id),
+            pipeline_trace=trace,
+            session_id=session_id,
+        )
+
     async def process(self, message: str, session_id: str, attachment_ids: list[str] | None = None) -> StreamDonePayload:
         """Run the ReAct agent for a single parent message."""
         turn = await self._session_store.increment_turn(session_id)
@@ -311,49 +366,9 @@ class AgentOrchestrator:
 
         total_ms = (time.time() - start) * 1000
 
-        # Check if input was blocked
         if result.get("input_blocked"):
-            response_text = result.get("block_response", "")
-            # Record blocked turn
-            blocked_reason = ""
-            for step in result.get("trace_steps", []):
-                if step.get("name") == "input_gate":
-                    blocked_reason = step.get("detail", {}).get("blocked_reason", "")
-            await self._session_store.add_message(
-                session_id, "user", message, turn,
-                blocked=True, blocked_reason=blocked_reason,
-                attachment_ids=attachment_ids,
-            )
-            await self._session_store.add_message(
-                session_id, "assistant", response_text, turn,
-                blocked=True, blocked_reason=blocked_reason,
-            )
-            trace = self._build_trace(result, total_ms)
-
-            # Persist enriched trace for blocked turns
-            enriched = EnrichedTrace(
-                session_id=session_id,
-                turn=turn,
-                timestamp=datetime.now(timezone.utc).isoformat(),
-                pipeline_steps=[PipelineStep(**s) for s in result.get("trace_steps", [])],
-                total_duration_ms=total_ms,
-                input_blocked=True,
-                blocked_reason=blocked_reason,
-                agent_used="input_gate",
-            )
-            await self._session_store.save_trace(session_id, enriched)
-            await self._session_store.commit()
-
-            if self._event_bus:
-                await self._event_bus.emit("agent", "turn_blocked", session_id, turn, total_ms, detail={"reason": blocked_reason})
-
-            logger.info("[agent] === BLOCKED === session=%s, reason=input_gate", session_id)
-            return StreamDonePayload(
-                response=response_text,
-                agent_used="input_gate",
-                phase=await self._infer_phase(session_id),
-                pipeline_trace=trace,
-                session_id=session_id,
+            return await self._handle_input_blocked(
+                session_id, turn, message, result, total_ms, attachment_ids,
             )
 
         # Extract the final AI response from NEW messages only (skip history).
@@ -793,59 +808,10 @@ class AgentOrchestrator:
 
         # --- Input blocked ---
         if result.get("input_blocked"):
-            response_text = result.get("block_response", "")
-            blocked_reason = ""
-            for step in result.get("trace_steps", []):
-                if step.get("name") == "input_gate":
-                    blocked_reason = step.get("detail", {}).get(
-                        "blocked_reason", ""
-                    )
-            await self._session_store.add_message(
-                session_id, "user", message, turn,
-                blocked=True, blocked_reason=blocked_reason,
-                attachment_ids=attachment_ids,
+            payload = await self._handle_input_blocked(
+                session_id, turn, message, result, total_ms, attachment_ids,
             )
-            await self._session_store.add_message(
-                session_id, "assistant", response_text, turn,
-                blocked=True, blocked_reason=blocked_reason,
-            )
-            trace = self._build_trace(result, total_ms)
-            enriched = EnrichedTrace(
-                session_id=session_id,
-                turn=turn,
-                timestamp=datetime.now(timezone.utc).isoformat(),
-                pipeline_steps=[
-                    PipelineStep(**s) for s in result.get("trace_steps", [])
-                ],
-                total_duration_ms=total_ms,
-                input_blocked=True,
-                blocked_reason=blocked_reason,
-                agent_used="input_gate",
-            )
-            await self._session_store.save_trace(session_id, enriched)
-            await self._session_store.commit()
-
-            if self._event_bus:
-                await self._event_bus.emit(
-                    "agent", "turn_blocked", session_id, turn, total_ms,
-                    detail={"reason": blocked_reason},
-                )
-
-            logger.info(
-                "[agent] === BLOCKED === session=%s, reason=input_gate",
-                session_id,
-            )
-            yield (
-                "done",
-                StreamDonePayload(
-                    response=response_text,
-                    agent_used="input_gate",
-                    phase=await self._infer_phase(session_id),
-                    pipeline_trace=trace,
-                    session_id=session_id,
-                    summary=None,
-                ).model_dump(),
-            )
+            yield ("done", payload.model_dump())
             return
 
         # --- Normal response processing ---
