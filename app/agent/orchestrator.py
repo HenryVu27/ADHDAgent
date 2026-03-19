@@ -194,6 +194,70 @@ class AgentOrchestrator:
             await self._session_store._ensure_session(request.session_id, user_id=user_id)
         await self._session_store.seed_session(request)
 
+    async def _build_history(
+        self,
+        session_id: str,
+        message: str,
+        attachment_ids: list[str] | None,
+    ) -> tuple[list, bool]:
+        """Build conversation history messages for agent input.
+
+        Returns (messages_list, force_summary) where messages_list ends with the
+        current user's HumanMessage and force_summary indicates context pressure.
+        """
+        from app.config import settings
+
+        stored_messages = await self._session_store.get_messages(session_id)
+        latest_summary = await self._session_store.get_latest_summary(session_id)
+        summary_through_turn = latest_summary.covers_through_turn if latest_summary else 0
+
+        history_att_ids: list[str] = []
+        history_entries_with_atts: dict[int, list[str]] = {}
+        history_messages = []
+        unsummarized_chars = 0
+        filtered_entries = []
+
+        for entry in stored_messages:
+            if entry.get("blocked"):
+                continue
+            msg_turn = entry.get("turn", 0)
+            if summary_through_turn > 0 and msg_turn <= summary_through_turn:
+                continue
+            filtered_entries.append(entry)
+
+        for idx, entry in enumerate(filtered_entries):
+            if entry["role"] == "user":
+                att_ids = entry.get("attachment_ids", [])
+                if att_ids:
+                    history_att_ids.extend(att_ids)
+                    history_entries_with_atts[idx] = att_ids
+                history_messages.append(HumanMessage(content=entry["content"]))
+            elif entry["role"] == "assistant":
+                history_messages.append(AIMessage(content=entry["content"]))
+            unsummarized_chars += len(entry.get("content", ""))
+
+        if history_att_ids:
+            all_hist_atts = await self._session_store.get_attachments(history_att_ids)
+            att_by_id = {a["id"]: a for a in all_hist_atts}
+            for idx, att_ids in history_entries_with_atts.items():
+                atts = [att_by_id[aid] for aid in att_ids if aid in att_by_id]
+                if atts:
+                    history_messages[idx] = HumanMessage(
+                        content=_build_multipart_content(
+                            history_messages[idx].content, atts,
+                        )
+                    )
+
+        force_summary = (unsummarized_chars / settings.CONTEXT_MAX_CHARS) >= 0.8
+
+        attachments = []
+        if attachment_ids:
+            attachments = await self._session_store.get_attachments(attachment_ids)
+        message_content = _build_multipart_content(message, attachments)
+        history_messages.append(HumanMessage(content=message_content))
+
+        return history_messages, force_summary
+
     async def process(self, message: str, session_id: str, attachment_ids: list[str] | None = None) -> StreamDonePayload:
         """Run the ReAct agent for a single parent message."""
         turn = await self._session_store.increment_turn(session_id)
@@ -207,38 +271,9 @@ class AgentOrchestrator:
 
         from app.config import settings
 
-        # Build full message list from conversation history so the agent
-        # has multi-turn context (previous turns were stored but never passed back).
-        stored_messages = await self._session_store.get_messages(session_id)
-
-        # Skip messages already captured by the rolling summary
-        latest_summary = await self._session_store.get_latest_summary(session_id)
-        summary_through_turn = latest_summary.covers_through_turn if latest_summary else 0
-
-        history_messages = []
-        unsummarized_chars = 0
-        for entry in stored_messages:
-            if entry.get("blocked"):
-                continue  # Skip blocked turns
-            # Skip messages from turns already covered by the rolling summary
-            msg_turn = entry.get("turn", 0)
-            if summary_through_turn > 0 and msg_turn <= summary_through_turn:
-                continue
-            if entry["role"] == "user":
-                history_messages.append(HumanMessage(content=entry["content"]))
-            elif entry["role"] == "assistant":
-                history_messages.append(AIMessage(content=entry["content"]))
-            unsummarized_chars += len(entry.get("content", ""))
-
-        # Trigger summary if unsummarized history is filling the context budget
-        context_utilization = unsummarized_chars / settings.CONTEXT_MAX_CHARS
-        force_summary = context_utilization >= 0.8
-
-        # Resolve attachments to multipart content
-        attachments = []
-        if attachment_ids:
-            attachments = await self._session_store.get_attachments(attachment_ids)
-        message_content = _build_multipart_content(message, attachments)
+        messages, force_summary = await self._build_history(
+            session_id, message, attachment_ids,
+        )
 
         start = time.time()
         config = {
@@ -248,10 +283,7 @@ class AgentOrchestrator:
 
         try:
             result = await self._agent.ainvoke(
-                {
-                    "messages": history_messages + [HumanMessage(content=message_content)],
-                    "session_id": session_id,
-                },
+                {"messages": messages, "session_id": session_id},
                 config=config,
             )
         except Exception as e:
@@ -261,7 +293,7 @@ class AgentOrchestrator:
                 "I want to make sure I give you the best help. "
                 "Could you tell me a bit more about what you'd like to focus on?"
             )
-            await self._session_store.add_message(session_id, "user", message, turn)
+            await self._session_store.add_message(session_id, "user", message, turn, attachment_ids=attachment_ids)
             await self._session_store.add_message(session_id, "assistant", response_text, turn)
             await self._session_store.commit()
             trace = PipelineTrace(
@@ -290,6 +322,7 @@ class AgentOrchestrator:
             await self._session_store.add_message(
                 session_id, "user", message, turn,
                 blocked=True, blocked_reason=blocked_reason,
+                attachment_ids=attachment_ids,
             )
             await self._session_store.add_message(
                 session_id, "assistant", response_text, turn,
@@ -392,7 +425,7 @@ class AgentOrchestrator:
 
         # Record turn in conversation history
         tool_summary = self._build_tool_calls_summary(tool_calls_made)
-        await self._session_store.add_message(session_id, "user", message, turn)
+        await self._session_store.add_message(session_id, "user", message, turn, attachment_ids=attachment_ids)
         await self._session_store.add_message(session_id, "assistant", response_text, turn, tool_calls_summary=tool_summary)
 
         # Persist tool results for cross-turn evidence
@@ -491,33 +524,9 @@ class AgentOrchestrator:
 
         from app.config import settings
 
-        # Build history messages (same as process)
-        stored_messages = await self._session_store.get_messages(session_id)
-        latest_summary = await self._session_store.get_latest_summary(session_id)
-        summary_through_turn = latest_summary.covers_through_turn if latest_summary else 0
-
-        history_messages = []
-        unsummarized_chars = 0
-        for entry in stored_messages:
-            if entry.get("blocked"):
-                continue
-            msg_turn = entry.get("turn", 0)
-            if summary_through_turn > 0 and msg_turn <= summary_through_turn:
-                continue
-            if entry["role"] == "user":
-                history_messages.append(HumanMessage(content=entry["content"]))
-            elif entry["role"] == "assistant":
-                history_messages.append(AIMessage(content=entry["content"]))
-            unsummarized_chars += len(entry.get("content", ""))
-
-        context_utilization = unsummarized_chars / settings.CONTEXT_MAX_CHARS
-        force_summary = context_utilization >= 0.8
-
-        # Resolve attachments to multipart content
-        stream_attachments = []
-        if attachment_ids:
-            stream_attachments = await self._session_store.get_attachments(attachment_ids)
-        stream_message_content = _build_multipart_content(message, stream_attachments)
+        messages, force_summary = await self._build_history(
+            session_id, message, attachment_ids,
+        )
 
         start = time.time()
         config = {
@@ -525,7 +534,7 @@ class AgentOrchestrator:
             "recursion_limit": settings.AGENT_MAX_TOOL_STEPS * 2 + 5,
         }
         input_data = {
-            "messages": history_messages + [HumanMessage(content=stream_message_content)],
+            "messages": messages,
             "session_id": session_id,
         }
 
@@ -697,7 +706,7 @@ class AgentOrchestrator:
                     total_ms, len(streamed_text),
                 )
                 response_text = streamed_text.strip()
-                await self._session_store.add_message(session_id, "user", message, turn)
+                await self._session_store.add_message(session_id, "user", message, turn, attachment_ids=attachment_ids)
                 await self._session_store.add_message(session_id, "assistant", response_text, turn)
                 await self._session_store.commit()
                 yield (
@@ -744,7 +753,7 @@ class AgentOrchestrator:
                 )
                 agent_label = "react_agent_fallback"
 
-            await self._session_store.add_message(session_id, "user", message, turn)
+            await self._session_store.add_message(session_id, "user", message, turn, attachment_ids=attachment_ids)
             await self._session_store.add_message(
                 session_id, "assistant", response_text, turn
             )
@@ -794,6 +803,7 @@ class AgentOrchestrator:
             await self._session_store.add_message(
                 session_id, "user", message, turn,
                 blocked=True, blocked_reason=blocked_reason,
+                attachment_ids=attachment_ids,
             )
             await self._session_store.add_message(
                 session_id, "assistant", response_text, turn,
@@ -901,7 +911,7 @@ class AgentOrchestrator:
 
         # Store messages and traces
         tool_summary = self._build_tool_calls_summary(tool_calls_made)
-        await self._session_store.add_message(session_id, "user", message, turn)
+        await self._session_store.add_message(session_id, "user", message, turn, attachment_ids=attachment_ids)
         await self._session_store.add_message(
             session_id, "assistant", response_text, turn,
             tool_calls_summary=tool_summary,

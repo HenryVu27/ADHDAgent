@@ -431,3 +431,105 @@ class TestProcessStream:
         token_texts = [d["text"] for t, d in events if t == "token"]
         # Tool-call chunk should not produce a token
         assert all(t == "Final response." for t in token_texts)
+
+
+class TestBuildHistory:
+
+    @pytest.mark.asyncio
+    async def test_build_history_basic(self):
+        """_build_history returns messages and force_summary flag."""
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        sid = "hist-basic"
+        await store.increment_turn(sid)
+        await store.add_message(sid, "user", "hello", 1)
+        await store.add_message(sid, "assistant", "hi there", 1)
+        await store.commit()
+
+        messages, force_summary = await orchestrator._build_history(
+            session_id=sid,
+            message="new question",
+            attachment_ids=None,
+        )
+        contents = [m.content for m in messages]
+        assert "hello" in contents
+        assert "hi there" in contents
+        assert "new question" in contents
+        assert force_summary is False
+
+    @pytest.mark.asyncio
+    async def test_build_history_excludes_summarized(self):
+        """Turns covered by summary are excluded from history."""
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        sid = "hist-summ"
+        for i in range(1, 6):
+            await store.increment_turn(sid)
+            await store.add_message(sid, "user", f"msg-{i}", i)
+            await store.add_message(sid, "assistant", f"reply-{i}", i)
+        await store.save_summary(
+            sid,
+            SessionSummary(summary="Summary.", covers_through_turn=3),
+        )
+        await store.commit()
+
+        messages, _ = await orchestrator._build_history(
+            session_id=sid, message="new", attachment_ids=None,
+        )
+        contents = [m.content for m in messages]
+        assert "msg-1" not in contents
+        assert "msg-3" not in contents
+        assert "msg-4" in contents
+        assert "msg-5" in contents
+        assert "new" in contents
+
+    @pytest.mark.asyncio
+    async def test_build_history_resolves_attachments(self):
+        """Current message attachments are resolved into multipart content."""
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        sid = "hist-att"
+
+        # Ensure session exists (increment_turn creates it)
+        await store.increment_turn(sid)
+
+        att_id = "att-123"
+        await store.save_attachment(
+            sid,
+            attachment_id=att_id,
+            gemini_file_name="files/abc",
+            gemini_file_uri="https://generativelanguage.googleapis.com/v1beta/files/abc",
+            filename="screenshot.png",
+            content_type="image/png",
+            size_bytes=1024,
+        )
+        await store.commit()
+
+        messages, _ = await orchestrator._build_history(
+            session_id=sid, message="look at this", attachment_ids=[att_id],
+        )
+        last_msg = messages[-1]
+        assert isinstance(last_msg.content, list)
+        assert any(p.get("type") == "text" for p in last_msg.content)
+        assert any(p.get("type") == "media" for p in last_msg.content)
+
+    @pytest.mark.asyncio
+    async def test_build_history_skips_blocked(self):
+        """Blocked messages are excluded from history."""
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        sid = "hist-blocked"
+        await store.increment_turn(sid)
+        await store.add_message(sid, "user", "bad msg", 1, blocked=True, blocked_reason="crisis")
+        await store.add_message(sid, "assistant", "blocked reply", 1, blocked=True, blocked_reason="crisis")
+        await store.increment_turn(sid)
+        await store.add_message(sid, "user", "good msg", 2)
+        await store.add_message(sid, "assistant", "good reply", 2)
+        await store.commit()
+
+        messages, _ = await orchestrator._build_history(
+            session_id=sid, message="new", attachment_ids=None,
+        )
+        contents = [m.content for m in messages]
+        assert "bad msg" not in contents
+        assert "good msg" in contents
