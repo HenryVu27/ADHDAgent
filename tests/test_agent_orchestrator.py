@@ -682,3 +682,42 @@ class TestPersistTurn:
         )
         recent = await store.get_recent_tool_results(sid, limit=5)
         assert len(recent) >= 1
+
+
+class TestFireBackgroundTasks:
+
+    @pytest.mark.asyncio
+    async def test_fires_memory_and_analyzer(self):
+        from unittest.mock import AsyncMock
+        store = await create_in_memory_store()
+        memory = AsyncMock()
+        memory.post_turn_tasks = AsyncMock()
+        analyzer = AsyncMock()
+        analyzer.analyze_turn = AsyncMock()
+        event_bus = AsyncMock()
+        event_bus.emit = AsyncMock()
+
+        orchestrator = AgentOrchestrator(
+            agent=None, session_store=store,
+            memory_manager=memory, analyzer=analyzer, event_bus=event_bus,
+        )
+
+        from app.models.schemas import EnrichedTrace
+        enriched = EnrichedTrace(
+            session_id="bg-test", turn=1,
+            timestamp="2026-01-01T00:00:00Z",
+            pipeline_steps=[], total_duration_ms=100.0,
+        )
+
+        await orchestrator._fire_background_tasks(
+            session_id="bg-test", turn=1,
+            message="hello", response_text="hi",
+            tool_calls_made=[], enriched=enriched,
+            force_summary=False, total_ms=100.0,
+        )
+        # Let background tasks complete
+        await orchestrator.shutdown(timeout=2.0)
+
+        memory.post_turn_tasks.assert_called_once()
+        analyzer.analyze_turn.assert_called_once()
+        event_bus.emit.assert_called_once()

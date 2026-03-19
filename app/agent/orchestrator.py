@@ -436,40 +436,12 @@ class AgentOrchestrator:
             new_messages, tool_calls_made, result, total_ms, attachment_ids,
         )
 
-        # Fire background memory tasks (non-blocking)
-        if self._memory:
-            self._track_task(
-                self._memory.post_turn_tasks(
-                    session_id=session_id,
-                    turn=turn,
-                    user_message=message,
-                    assistant_response=response_text,
-                    tool_calls=[tc for tc in tool_calls_made],
-                    force_summary=force_summary,
-                ),
-                "memory",
-            )
-
-        # Fire background analyzer (non-blocking)
-        if self._analyzer:
-            self._track_task(
-                self._analyzer.analyze_turn(
-                    session_id=session_id,
-                    turn=turn,
-                    user_message=message,
-                    assistant_response=response_text,
-                    enriched_trace=enriched,
-                ),
-                "analyzer",
-            )
-
         trace = self._build_trace(result, total_ms, tool_calls_made)
 
-        if self._event_bus:
-            await self._event_bus.emit(
-                "agent", "turn_end", session_id, turn, total_ms,
-                detail={"tools": len(tool_calls_made), "model_tier": enriched.model_tier},
-            )
+        await self._fire_background_tasks(
+            session_id, turn, message, response_text,
+            tool_calls_made, enriched, force_summary, total_ms,
+        )
 
         logger.info(
             "[agent] === END === session=%s, tools=%d, duration=%.0fms",
@@ -855,6 +827,23 @@ class AgentOrchestrator:
                 self._run_output_gate_background(session_id, turn, response_text),
                 "output_gate",
             )
+        await self._fire_background_tasks(
+            session_id, turn, message, response_text,
+            tool_calls_made, enriched, force_summary, total_ms,
+        )
+
+    async def _fire_background_tasks(
+        self,
+        session_id: str,
+        turn: int,
+        message: str,
+        response_text: str,
+        tool_calls_made: list[dict],
+        enriched: EnrichedTrace,
+        force_summary: bool,
+        total_ms: float,
+    ) -> None:
+        """Fire non-blocking memory, analyzer, and event_bus tasks."""
         if self._memory:
             self._track_task(
                 self._memory.post_turn_tasks(
@@ -878,7 +867,6 @@ class AgentOrchestrator:
                 ),
                 "analyzer",
             )
-
         if self._event_bus:
             await self._event_bus.emit(
                 "agent", "turn_end", session_id, turn, total_ms,
