@@ -90,8 +90,10 @@ def build_agent(
         if not latest_human:
             return {}
 
+        from app.agent.orchestrator import _extract_text
         start = time.time()
-        check = await input_gate.check(latest_human.content)
+        user_text = _extract_text(latest_human.content)
+        check = await input_gate.check(user_text)
         duration_ms = (time.time() - start) * 1000
 
         trace_step = {

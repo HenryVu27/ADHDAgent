@@ -238,6 +238,7 @@ class SeedSessionRequest(BaseModel):
 class ChatRequest(BaseModel):
     message: str = Field(..., min_length=1, max_length=5000)
     session_id: str
+    attachment_ids: list[str] = Field(default_factory=list, max_length=3)
 
     @field_validator("message")
     @classmethod
@@ -253,6 +254,26 @@ class ChatRequest(BaseModel):
         if not re.match(r'^[a-zA-Z0-9_-]{1,128}$', v):
             raise ValueError("session_id must be 1-128 alphanumeric, underscore, or hyphen characters")
         return v
+
+
+class Attachment(BaseModel):
+    id: str
+    filename: str
+    content_type: str
+    thumbnail_url: str | None = None
+
+
+class UploadResponse(BaseModel):
+    id: str
+    filename: str
+    content_type: str
+    thumbnail_url: str | None = None
+
+
+class UploadBlockedResponse(BaseModel):
+    blocked: bool = True
+    reason: str  # "crisis" | "jailbreak"
+    response: str
 
 
 class StreamDonePayload(BaseModel):

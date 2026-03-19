@@ -200,12 +200,29 @@ ALTER TABLE sessions ADD COLUMN user_id INTEGER REFERENCES users(id);
 CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
 """
 
+SCHEMA_V6 = """
+CREATE TABLE IF NOT EXISTS attachments (
+    id TEXT PRIMARY KEY,
+    session_id TEXT NOT NULL REFERENCES sessions(session_id),
+    gemini_file_name TEXT NOT NULL,
+    gemini_file_uri TEXT NOT NULL,
+    filename TEXT NOT NULL,
+    content_type TEXT NOT NULL,
+    size_bytes INTEGER NOT NULL,
+    thumbnail_path TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_attachments_session ON attachments(session_id);
+"""
+
 MIGRATIONS = {
     1: SCHEMA_V1,
     2: SCHEMA_V2,
     3: SCHEMA_V3,
     4: SCHEMA_V4,
     5: SCHEMA_V5,
+    6: SCHEMA_V6,
 }
 
 

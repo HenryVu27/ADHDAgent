@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { Sprout, User } from "lucide-react"
+import { Sprout, User, FileText } from "lucide-react"
 import { useTypewriter } from "@/hooks/use-typewriter"
 import type { ChatMessage } from "@/types"
 
@@ -79,6 +79,26 @@ export function ChatBubble({ message }: Props) {
         {!isUser && message.summary && (
           <div className="mb-2 text-xs text-muted-foreground">
             {message.summary}
+          </div>
+        )}
+        {message.attachments && message.attachments.length > 0 && (
+          <div className="mb-2 flex flex-wrap gap-2">
+            {message.attachments.map(att => (
+              <div key={att.id} className="flex items-center gap-1.5 rounded border border-border/50 px-2 py-1 text-xs">
+                {att.content_type.startsWith("image/") && att.thumbnail_url ? (
+                  <a href={att.thumbnail_url} target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={att.thumbnail_url}
+                      alt={att.filename}
+                      className="h-10 w-10 rounded object-cover cursor-pointer hover:opacity-80"
+                    />
+                  </a>
+                ) : (
+                  <FileText className="h-4 w-4" />
+                )}
+                <span className="max-w-[100px] truncate text-xs">{att.filename}</span>
+              </div>
+            ))}
           </div>
         )}
         <div

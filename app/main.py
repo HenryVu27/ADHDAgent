@@ -88,6 +88,7 @@ async def build_dependencies() -> dict:
 
     input_gate = InputGate(gemini_client=gemini, fast_path=fast_path) if gemini else None
     output_gate = OutputGate(gemini_client=gemini) if gemini else None
+    app.state.input_gate = input_gate
     logger.info("Guardrail gates initialized (input + output)")
 
     # 5. Create session store, retriever, tools
