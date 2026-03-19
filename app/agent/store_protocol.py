@@ -74,6 +74,7 @@ class SessionStoreBase(ABC):
         blocked: bool = False,
         blocked_reason: str = "",
         tool_calls_summary: str = "",
+        attachment_ids: list[str] | None = None,
     ) -> None:
         """Persist a single message (user or assistant). Blocked turns included."""
 

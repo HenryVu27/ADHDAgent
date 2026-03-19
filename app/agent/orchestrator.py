@@ -313,6 +313,50 @@ class AgentOrchestrator:
             session_id=session_id,
         )
 
+    async def _persist_turn(
+        self,
+        session_id: str,
+        turn: int,
+        message: str,
+        response_text: str,
+        new_messages: list,
+        tool_calls_made: list[dict],
+        result: dict,
+        total_ms: float,
+        attachment_ids: list[str] | None,
+    ) -> EnrichedTrace:
+        """Persist messages, tool results, and trace for a completed turn."""
+        tool_summary = self._build_tool_calls_summary(tool_calls_made)
+        await self._session_store.add_message(
+            session_id, "user", message, turn, attachment_ids=attachment_ids,
+        )
+        await self._session_store.add_message(
+            session_id, "assistant", response_text, turn,
+            tool_calls_summary=tool_summary,
+        )
+
+        for msg in new_messages:
+            if isinstance(msg, ToolMessage):
+                tc_name = ""
+                tc_query = ""
+                for tc in tool_calls_made:
+                    if tc.get("id") == msg.tool_call_id:
+                        tc_name = tc.get("name", "")
+                        tc_query = str(tc.get("args", {}).get("query", ""))
+                        break
+                if tc_name in ("search_knowledge_base", "get_document_details"):
+                    result_text = msg.content if isinstance(msg.content, str) else str(msg.content)
+                    await self._session_store.save_tool_result(
+                        session_id, tc_name, tc_query, result_text, turn,
+                    )
+
+        enriched = self._build_enriched_trace(
+            session_id, turn, result, new_messages, tool_calls_made, total_ms,
+        )
+        await self._session_store.save_trace(session_id, enriched)
+        await self._session_store.commit()
+        return enriched
+
     async def process(self, message: str, session_id: str, attachment_ids: list[str] | None = None) -> StreamDonePayload:
         """Run the ReAct agent for a single parent message."""
         turn = await self._session_store.increment_turn(session_id)
@@ -387,31 +431,10 @@ class AgentOrchestrator:
         # Run output gate (outside graph to avoid blocking streaming)
         response_text, result = await self._run_output_gate(response_text, result)
 
-        # Record turn in conversation history
-        tool_summary = self._build_tool_calls_summary(tool_calls_made)
-        await self._session_store.add_message(session_id, "user", message, turn, attachment_ids=attachment_ids)
-        await self._session_store.add_message(session_id, "assistant", response_text, turn, tool_calls_summary=tool_summary)
-
-        # Persist tool results for cross-turn evidence
-        for msg in new_messages:
-            if isinstance(msg, ToolMessage):
-                tc_name = ""
-                tc_query = ""
-                for tc in tool_calls_made:
-                    if tc.get("id") == msg.tool_call_id:
-                        tc_name = tc.get("name", "")
-                        tc_query = str(tc.get("args", {}).get("query", ""))
-                        break
-                if tc_name in ("search_knowledge_base", "get_document_details"):
-                    result_text = msg.content if isinstance(msg.content, str) else str(msg.content)
-                    await self._session_store.save_tool_result(session_id, tc_name, tc_query, result_text, turn)
-
-        # Build and persist enriched trace
-        enriched = self._build_enriched_trace(
-            session_id, turn, result, new_messages, tool_calls_made, total_ms,
+        enriched = await self._persist_turn(
+            session_id, turn, message, response_text,
+            new_messages, tool_calls_made, result, total_ms, attachment_ids,
         )
-        await self._session_store.save_trace(session_id, enriched)
-        await self._session_store.commit()
 
         # Fire background memory tasks (non-blocking)
         if self._memory:
@@ -776,38 +799,10 @@ class AgentOrchestrator:
 
         response_text, tool_calls_made = self._extract_response(new_messages, streamed_text=streamed_text)
 
-        # Store messages and traces
-        tool_summary = self._build_tool_calls_summary(tool_calls_made)
-        await self._session_store.add_message(session_id, "user", message, turn, attachment_ids=attachment_ids)
-        await self._session_store.add_message(
-            session_id, "assistant", response_text, turn,
-            tool_calls_summary=tool_summary,
+        enriched = await self._persist_turn(
+            session_id, turn, message, response_text,
+            new_messages, tool_calls_made, result, total_ms, attachment_ids,
         )
-
-        for msg in new_messages:
-            if isinstance(msg, ToolMessage):
-                tc_name = ""
-                tc_query = ""
-                for tc in tool_calls_made:
-                    if tc.get("id") == msg.tool_call_id:
-                        tc_name = tc.get("name", "")
-                        tc_query = str(tc.get("args", {}).get("query", ""))
-                        break
-                if tc_name in ("search_knowledge_base", "get_document_details"):
-                    result_text = (
-                        msg.content
-                        if isinstance(msg.content, str)
-                        else str(msg.content)
-                    )
-                    await self._session_store.save_tool_result(
-                        session_id, tc_name, tc_query, result_text, turn
-                    )
-
-        enriched = self._build_enriched_trace(
-            session_id, turn, result, new_messages, tool_calls_made, total_ms,
-        )
-        await self._session_store.save_trace(session_id, enriched)
-        await self._session_store.commit()
 
         trace = self._build_trace(result, total_ms, tool_calls_made)
 

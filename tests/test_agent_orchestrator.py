@@ -635,3 +635,50 @@ class TestBuildHistory:
         contents = [m.content for m in messages]
         assert "bad msg" not in contents
         assert "good msg" in contents
+
+
+class TestPersistTurn:
+
+    @pytest.mark.asyncio
+    async def test_persists_user_and_assistant_messages(self):
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        sid = "persist-test"
+        await store.increment_turn(sid)
+
+        result = {"trace_steps": [], "route": "pro"}
+        enriched = await orchestrator._persist_turn(
+            session_id=sid, turn=1,
+            message="my question", response_text="my answer",
+            new_messages=[], tool_calls_made=[], result=result,
+            total_ms=200.0, attachment_ids=None,
+        )
+        msgs = await store.get_messages(sid)
+        assert len(msgs) == 2
+        assert msgs[0]["role"] == "user"
+        assert msgs[0]["content"] == "my question"
+        assert msgs[1]["role"] == "assistant"
+        assert msgs[1]["content"] == "my answer"
+        assert enriched is not None
+        assert enriched.session_id == sid
+
+    @pytest.mark.asyncio
+    async def test_saves_tool_results(self):
+        from langchain_core.messages import ToolMessage
+        store = await create_in_memory_store()
+        orchestrator = AgentOrchestrator(agent=None, session_store=store)
+        sid = "persist-tools"
+        await store.increment_turn(sid)
+
+        tool_calls = [{"name": "search_knowledge_base", "args": {"query": "homework"}, "id": "tc1"}]
+        new_messages = [ToolMessage(content="search results here", tool_call_id="tc1")]
+        result = {"trace_steps": [], "route": "pro"}
+
+        await orchestrator._persist_turn(
+            session_id=sid, turn=1,
+            message="help", response_text="answer",
+            new_messages=new_messages, tool_calls_made=tool_calls,
+            result=result, total_ms=150.0, attachment_ids=None,
+        )
+        recent = await store.get_recent_tool_results(sid, limit=5)
+        assert len(recent) >= 1

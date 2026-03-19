@@ -418,6 +418,7 @@ class SQLiteSessionStore(SessionStoreBase):
         blocked: bool = False,
         blocked_reason: str = "",
         tool_calls_summary: str = "",
+        attachment_ids: list[str] | None = None,
     ) -> None:
         """Persist a single message."""
         await self._ensure_session(session_id)
