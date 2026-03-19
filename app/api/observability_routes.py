@@ -12,14 +12,18 @@ import asyncio
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.agent.store_protocol import SessionStoreBase
-from app.api.deps import get_analyzer, get_event_bus, get_session_store
+from app.api.deps import get_analyzer, get_eval_db, get_event_bus, get_session_store
 from app.auth.dependencies import get_current_user
 from app.models.schemas import (
+    EvalListResponse,
+    EvalRunDetail,
+    EvalRunSummary,
     SessionDetailResponse,
     SessionListResponse,
     SessionOverview,
     UserRow,
 )
+from eval.db import get_eval_run, list_eval_runs
 
 obs_router = APIRouter(prefix="/observability")
 
@@ -176,3 +180,56 @@ async def analyze_session(
         "turns_analyzed": len(tasks),
         "total_flags": sum(len(a.flags) for a in analyses),
     }
+
+
+@obs_router.get("/evals", response_model=EvalListResponse)
+async def list_evals(
+    eval_type: str | None = Query(None),
+    offset: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    eval_db=Depends(get_eval_db),
+):
+    """List eval runs, optionally filtered by eval_type."""
+    if eval_db is None:
+        return EvalListResponse()
+    runs = await list_eval_runs(eval_db, eval_type=eval_type, offset=offset, limit=limit)
+    # Get total count for pagination (list_eval_runs returns paginated results)
+    all_runs = await list_eval_runs(eval_db, eval_type=eval_type, offset=0, limit=10000)
+    return EvalListResponse(
+        runs=[EvalRunSummary(**r) for r in runs],
+        total=len(all_runs),
+        offset=offset,
+        limit=limit,
+    )
+
+
+@obs_router.get("/evals/compare")
+async def compare_eval_runs(
+    run_a: str = Query(...),
+    run_b: str = Query(...),
+    eval_db=Depends(get_eval_db),
+):
+    """Compare two eval runs side-by-side."""
+    if eval_db is None:
+        raise HTTPException(status_code=503, detail="Eval database not available")
+    a = await get_eval_run(eval_db, run_a)
+    b = await get_eval_run(eval_db, run_b)
+    if not a:
+        raise HTTPException(status_code=404, detail=f"Run {run_a} not found")
+    if not b:
+        raise HTTPException(status_code=404, detail=f"Run {run_b} not found")
+    return {"run_a": a, "run_b": b}
+
+
+@obs_router.get("/evals/{run_id}", response_model=EvalRunDetail)
+async def get_eval_detail(
+    run_id: str,
+    eval_db=Depends(get_eval_db),
+):
+    """Full detail for a single eval run."""
+    if eval_db is None:
+        raise HTTPException(status_code=503, detail="Eval database not available")
+    run = await get_eval_run(eval_db, run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="Eval run not found")
+    return EvalRunDetail(**run)

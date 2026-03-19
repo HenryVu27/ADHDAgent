@@ -46,3 +46,8 @@ def get_db(request: Request) -> aiosqlite.Connection:
     if not conn:
         raise HTTPException(status_code=503, detail="Database not available")
     return conn
+
+
+def get_eval_db(request: Request):
+    """Return eval database connection (None if no eval runs yet)."""
+    return getattr(request.app.state, "eval_db", None)
