@@ -14,6 +14,17 @@ class PipelineConfig:
     use_query_rewriter: bool
 
 
+@dataclass(frozen=True)
+class PipelineVariant(PipelineConfig):
+    """Full pipeline config for end-to-end comparison.
+    Inherits RAG knobs from PipelineConfig. Adds agent-level knobs.
+    """
+    model: str = "gemini-2.5-pro"
+    system_prompt_version: str = "default"
+    thinking_budget: int = 8000
+    temperature: float = 0.0
+
+
 # Each config varies exactly one axis from baseline.
 # 'full' combines all axes and serves as a best-possible reference.
 ABLATION_CONFIGS: list[PipelineConfig] = [

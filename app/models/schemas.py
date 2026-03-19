@@ -387,3 +387,31 @@ class MessagesResponse(BaseModel):
     total: int = 0
     offset: int = 0
     limit: int = 50
+
+
+# --- Eval Results ---
+
+class EvalRunSummary(BaseModel):
+    run_id: str
+    eval_type: str
+    pipeline_variant: str = "default"
+    created_at: str
+    summary: dict = Field(default_factory=dict)
+    metadata: dict = Field(default_factory=dict)
+
+
+class EvalRunDetail(BaseModel):
+    run_id: str
+    eval_type: str
+    pipeline_variant: str = "default"
+    created_at: str
+    summary: dict = Field(default_factory=dict)
+    detail: list[dict] = Field(default_factory=list)
+    metadata: dict = Field(default_factory=dict)
+
+
+class EvalListResponse(BaseModel):
+    runs: list[EvalRunSummary] = Field(default_factory=list)
+    total: int = 0
+    offset: int = 0
+    limit: int = 50
