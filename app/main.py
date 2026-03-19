@@ -30,10 +30,8 @@ logging.getLogger("google.generativeai").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Application startup and shutdown."""
-    logger.info("Starting ADHDAgent...")
+async def build_dependencies() -> dict:
+    """Wire all app dependencies. Used by lifespan() and eval recorder."""
 
     # 1. Init Gemini client (None if no API key)
     gemini = None
@@ -64,7 +62,6 @@ async def lifespan(app: FastAPI):
             logger.info("Qdrant hybrid index built (dense + sparse%s)", colbert_note)
         except Exception as e:
             logger.error(f"Qdrant index build failed: {e}")
-    app.state.knowledge_base = store
 
     # 4. Initialize guardrail gates
     from app.guardrails.validator import InputGate, OutputGate
@@ -201,11 +198,6 @@ async def lifespan(app: FastAPI):
         output_gate=output_gate,
         gemini_client=gemini,
     )
-    app.state.orchestrator = orchestrator
-    app.state.session_store = session_store
-    app.state.event_bus = event_bus
-    app.state.analyzer = analyzer
-    app.state.db_conn = db_conn
 
     logger.info(
         "ADHDAgent ready (pro_model=%s, fast_model=%s, utility_model=%s, reranker=%s)",
@@ -214,11 +206,44 @@ async def lifespan(app: FastAPI):
         settings.GEMINI_UTILITY_MODEL,
         settings.RAG_RERANKER,
     )
+
+    return {
+        "orchestrator": orchestrator,
+        "session_store": session_store,
+        "event_bus": event_bus,
+        "analyzer": analyzer,
+        "db_conn": db_conn,
+        "knowledge_base": store,
+    }
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application startup and shutdown."""
+    logger.info("Starting ADHDAgent...")
+
+    deps = await build_dependencies()
+    for key, value in deps.items():
+        setattr(app.state, key, value)
+
+    # Eval DB (optional — only if eval.db already exists)
+    try:
+        from eval.db import EVAL_DB_PATH, get_eval_connection
+        if EVAL_DB_PATH.exists():
+            app.state.eval_db = await get_eval_connection()
+        else:
+            app.state.eval_db = None
+    except Exception:
+        app.state.eval_db = None
+
     yield
-    if hasattr(orchestrator, 'shutdown'):
-        await orchestrator.shutdown()
-    if db_conn:
-        await db_conn.close()
+
+    if hasattr(deps["orchestrator"], 'shutdown'):
+        await deps["orchestrator"].shutdown()
+    if deps.get("db_conn"):
+        await deps["db_conn"].close()
+    if getattr(app.state, "eval_db", None):
+        await app.state.eval_db.close()
     logger.info("ADHDAgent shutting down")
 
 
