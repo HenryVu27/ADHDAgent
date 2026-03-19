@@ -382,58 +382,7 @@ class AgentOrchestrator:
                 break
         new_messages = all_messages[last_human_idx + 1:] if last_human_idx >= 0 else []
 
-        response_text = ""
-        all_ai_texts = []  # collect all non-tool AI message texts
-        tool_calls_made = []
-        for msg in new_messages:
-            if isinstance(msg, AIMessage):
-                if msg.tool_calls:
-                    tool_calls_made.extend(msg.tool_calls)
-                elif msg.content:
-                    text = _extract_text(msg.content)
-                    if text.strip():
-                        all_ai_texts.append(text.strip())
-                    # Only non-tool-calling AI messages count as final response
-                    response_text = text
-
-        # Fallback if agent produced no final text response
-        is_empty = not response_text.strip() if isinstance(response_text, str) else not response_text
-
-        # If the final message is empty or degraded but earlier messages had
-        # good content, combine them (agent hit step limit after initial response).
-        degraded = _is_degraded_response(response_text) if not is_empty else False
-
-        if (is_empty or degraded) and all_ai_texts:
-            # Filter out degraded texts from earlier messages too
-            good_texts = [t for t in all_ai_texts if not _is_degraded_response(t)]
-            if good_texts:
-                logger.warning("[agent] %s — using combined AI text",
-                               "Degraded final response" if degraded else "Empty final AIMessage")
-                response_text = "\n\n".join(good_texts)
-            else:
-                logger.warning("[agent] All AI messages degraded — using static fallback")
-                response_text = (
-                    "I want to make sure I give you the best help. "
-                    "Could you tell me a bit more about what you'd like to focus on?"
-                )
-        elif (
-            not is_empty
-            and not degraded
-            and len(all_ai_texts) > 1
-            and len(response_text.strip()) < 80
-        ):
-            # Final message suspiciously short while earlier ones had substance
-            combined = "\n\n".join(all_ai_texts[:-1])
-            if len(combined) > len(response_text.strip()) * 2:
-                logger.warning("[agent] Degraded final response — using combined AI text")
-                response_text = combined
-        elif is_empty or degraded:
-            logger.warning("[agent] %s — using static fallback",
-                           "Degraded response" if degraded else "Empty response from agent")
-            response_text = (
-                "I want to make sure I give you the best help. "
-                "Could you tell me a bit more about what you'd like to focus on?"
-            )
+        response_text, tool_calls_made = self._extract_response(new_messages)
 
         # Run output gate (outside graph to avoid blocking streaming)
         response_text, result = await self._run_output_gate(response_text, result)
@@ -825,55 +774,7 @@ class AgentOrchestrator:
             all_messages[last_human_idx + 1:] if last_human_idx >= 0 else []
         )
 
-        response_text = ""
-        tool_calls_made = []
-        for msg in new_messages:
-            if isinstance(msg, AIMessage):
-                if msg.tool_calls:
-                    tool_calls_made.extend(msg.tool_calls)
-                elif msg.content:
-                    response_text = _extract_text(msg.content)
-
-        is_empty = (
-            not response_text.strip()
-            if isinstance(response_text, str)
-            else not response_text
-        )
-
-        # Detect degraded responses and recover the best available content.
-        degraded = _is_degraded_response(response_text) if not is_empty else False
-
-        if (is_empty or degraded) and streamed_text.strip():
-            logger.warning(
-                "[agent] %s — using streamed text (%d chars)",
-                "Degraded final response" if degraded else "Empty final AIMessage",
-                len(streamed_text),
-            )
-            response_text = streamed_text.strip()
-        elif (
-            not is_empty
-            and not degraded
-            and streamed_text.strip()
-            and len(response_text.strip()) < len(streamed_text.strip()) * 0.3
-            and len(streamed_text.strip()) > 100
-        ):
-            # The final message is drastically shorter than what was streamed
-            # (e.g., agent produced a good response, then tools ran, then a
-            # terse "sorry" message replaced it).  Keep the streamed version.
-            logger.warning(
-                "[agent] Degraded final response (%d chars) vs streamed (%d chars) — using streamed text",
-                len(response_text), len(streamed_text),
-            )
-            response_text = streamed_text.strip()
-        elif is_empty or degraded:
-            logger.warning(
-                "[agent] %s — using static fallback",
-                "Degraded response" if degraded else "Empty response from agent",
-            )
-            response_text = (
-                "I want to make sure I give you the best help. "
-                "Could you tell me a bit more about what you'd like to focus on?"
-            )
+        response_text, tool_calls_made = self._extract_response(new_messages, streamed_text=streamed_text)
 
         # Store messages and traces
         tool_summary = self._build_tool_calls_summary(tool_calls_made)
@@ -1084,6 +985,92 @@ class AgentOrchestrator:
             return ConversationPhase.strategy
 
         return ConversationPhase.intake
+
+    @staticmethod
+    def _extract_response(
+        new_messages: list,
+        streamed_text: str | None = None,
+    ) -> tuple[str, list[dict]]:
+        """Extract final response text and tool calls from agent output messages.
+
+        Args:
+            new_messages: Messages produced after the user's HumanMessage.
+            streamed_text: Accumulated streamed tokens (streaming path only).
+
+        Returns:
+            (response_text, tool_calls_made)
+        """
+        response_text = ""
+        all_ai_texts: list[str] = []
+        tool_calls_made: list[dict] = []
+
+        for msg in new_messages:
+            if isinstance(msg, AIMessage):
+                if msg.tool_calls:
+                    tool_calls_made.extend(msg.tool_calls)
+                elif msg.content:
+                    text = _extract_text(msg.content)
+                    if text.strip():
+                        all_ai_texts.append(text.strip())
+                    response_text = text
+
+        is_empty = not response_text.strip() if isinstance(response_text, str) else not response_text
+        degraded = _is_degraded_response(response_text) if not is_empty else False
+
+        # Recovery priority:
+        # 1. streamed_text (if available and substantial -- streaming path)
+        # 2. all_ai_texts (earlier good AI messages -- both paths)
+        # 3. static fallback
+        if is_empty or degraded:
+            if streamed_text and streamed_text.strip():
+                logger.warning(
+                    "[agent] %s — using streamed text (%d chars)",
+                    "Degraded final response" if degraded else "Empty final AIMessage",
+                    len(streamed_text),
+                )
+                response_text = streamed_text.strip()
+            else:
+                good_texts = [t for t in all_ai_texts if not _is_degraded_response(t)]
+                if good_texts:
+                    logger.warning(
+                        "[agent] %s — using combined AI text",
+                        "Degraded final response" if degraded else "Empty final AIMessage",
+                    )
+                    response_text = "\n\n".join(good_texts)
+                else:
+                    logger.warning(
+                        "[agent] %s — using static fallback",
+                        "Degraded response" if degraded else "Empty response from agent",
+                    )
+                    response_text = (
+                        "I want to make sure I give you the best help. "
+                        "Could you tell me a bit more about what you'd like to focus on?"
+                    )
+        elif (
+            not is_empty
+            and not degraded
+            and streamed_text
+            and streamed_text.strip()
+            and len(response_text.strip()) < len(streamed_text.strip()) * 0.3
+            and len(streamed_text.strip()) > 100
+        ):
+            logger.warning(
+                "[agent] Degraded final response (%d chars) vs streamed (%d chars) — using streamed text",
+                len(response_text), len(streamed_text),
+            )
+            response_text = streamed_text.strip()
+        elif (
+            not is_empty
+            and not degraded
+            and len(all_ai_texts) > 1
+            and len(response_text.strip()) < 80
+        ):
+            combined = "\n\n".join(all_ai_texts[:-1])
+            if len(combined) > len(response_text.strip()) * 2:
+                logger.warning("[agent] Degraded final response — using combined AI text")
+                response_text = combined
+
+        return response_text, tool_calls_made
 
     @staticmethod
     def _build_tool_calls_summary(tool_calls: list[dict]) -> str:

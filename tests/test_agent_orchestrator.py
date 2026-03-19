@@ -479,6 +479,62 @@ class TestHandleInputBlocked:
         assert msgs[1]["blocked"] is True
 
 
+class TestExtractResponse:
+
+    def test_normal_response(self):
+        msgs = [AIMessage(content="Here is my answer.")]
+        text, tools = AgentOrchestrator._extract_response(msgs)
+        assert text == "Here is my answer."
+        assert tools == []
+
+    def test_with_tool_calls(self):
+        ai_with_tools = AIMessage(content="", tool_calls=[{"name": "search", "args": {}, "id": "c1"}])
+        ai_final = AIMessage(content="Found it.")
+        msgs = [ai_with_tools, ai_final]
+        text, tools = AgentOrchestrator._extract_response(msgs)
+        assert text == "Found it."
+        assert len(tools) == 1
+        assert tools[0]["name"] == "search"
+
+    def test_empty_response_uses_streamed_text(self):
+        msgs = [AIMessage(content="")]
+        text, _ = AgentOrchestrator._extract_response(msgs, streamed_text="Good streamed answer.")
+        assert text == "Good streamed answer."
+
+    def test_empty_response_no_streamed_uses_fallback(self):
+        msgs = [AIMessage(content="")]
+        text, _ = AgentOrchestrator._extract_response(msgs)
+        assert "tell me a bit more" in text.lower()
+
+    def test_degraded_response_recovered_from_earlier_ai(self):
+        """If final AI message is degraded but earlier ones had substance, combine them."""
+        msgs = [
+            AIMessage(content="Here is a detailed strategy for homework time with visual timers and breaks."),
+            AIMessage(content="", tool_calls=[{"name": "search", "args": {}, "id": "c1"}]),
+            AIMessage(content="Sorry, I need more steps to process this request."),
+        ]
+        text, _ = AgentOrchestrator._extract_response(msgs)
+        assert "visual timers" in text
+
+    def test_degraded_response_prefers_streamed_text(self):
+        """In streaming, streamed_text takes priority over all_ai_texts."""
+        msgs = [AIMessage(content="Sorry, I need more steps to process this request.")]
+        text, _ = AgentOrchestrator._extract_response(
+            msgs, streamed_text="A perfectly good streamed response with details.",
+        )
+        assert "perfectly good" in text
+
+    def test_streaming_empty_streamed_falls_back_to_ai_texts(self):
+        """Streaming path: if streamed_text is empty, fall back to all_ai_texts."""
+        msgs = [
+            AIMessage(content="Here is a great strategy with visual timers and structured breaks."),
+            AIMessage(content="", tool_calls=[{"name": "search", "args": {}, "id": "c1"}]),
+            AIMessage(content="Sorry, I need more steps to process this request."),
+        ]
+        text, _ = AgentOrchestrator._extract_response(msgs, streamed_text="")
+        assert "visual timers" in text
+
+
 class TestBuildHistory:
 
     @pytest.mark.asyncio
