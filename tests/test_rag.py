@@ -617,3 +617,190 @@ async def test_retrieve_without_skip_rewrite():
     # Rewriter should have been called
     mock_rewriter.rewrite.assert_called_once()
     assert response.rewritten_query == "rewritten homework query"
+
+
+# --- Outcome boost tests ---
+
+from app.models.schemas import Outcome
+
+
+def _make_result(name: str, score: float, tags: list[str] | None = None) -> RetrievalResult:
+    """Helper to create a minimal RetrievalResult for testing."""
+    return RetrievalResult(
+        document_id=name.lower().replace(" ", "_"),
+        document_name=name,
+        content=f"Content for {name}",
+        score=score,
+        tags=tags or [],
+    )
+
+
+class TestOutcomeBoost:
+
+    @pytest.fixture
+    def retriever_for_boost(self, knowledge_store):
+        return HybridRetriever(knowledge_store=knowledge_store, gemini_client=None)
+
+    def test_positive_outcome_boosts_matching_doc(self, retriever_for_boost):
+        candidates = [
+            _make_result("Visual Timer Strategy", 0.80, ["timer", "homework"]),
+            _make_result("Reward Chart System", 0.85, ["rewards", "motivation"]),
+        ]
+        outcomes = [Outcome(strategy_name="visual timer", signal="positive", turn=1)]
+
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+
+        timer_doc = next(r for r in boosted if "Timer" in r.document_name)
+        reward_doc = next(r for r in boosted if "Reward" in r.document_name)
+        assert timer_doc.score == pytest.approx(0.90, abs=0.01)  # 0.80 + 0.10
+        assert reward_doc.score == pytest.approx(0.85, abs=0.01)  # unchanged
+
+    def test_negative_outcome_penalizes_matching_doc(self, retriever_for_boost):
+        candidates = [
+            _make_result("Reward Chart System", 0.85, ["rewards", "motivation"]),
+        ]
+        outcomes = [Outcome(strategy_name="reward chart", signal="negative", turn=1)]
+
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+
+        assert boosted[0].score == pytest.approx(0.70, abs=0.01)  # 0.85 - 0.15
+
+    def test_mixed_outcome_no_change(self, retriever_for_boost):
+        candidates = [
+            _make_result("Visual Timer Strategy", 0.80, ["timer"]),
+        ]
+        outcomes = [Outcome(strategy_name="visual timer", signal="mixed", turn=1)]
+
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+
+        assert boosted[0].score == pytest.approx(0.80, abs=0.01)
+
+    def test_boost_capped_at_max(self, retriever_for_boost):
+        candidates = [
+            _make_result("Visual Timer Strategy", 0.80, ["timer"]),
+        ]
+        # 5 positive outcomes would be 5 * 0.10 = 0.50 uncapped, but cap is 0.30
+        outcomes = [
+            Outcome(strategy_name="visual timer", signal="positive", turn=i)
+            for i in range(5)
+        ]
+
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+
+        assert boosted[0].score == pytest.approx(1.10, abs=0.01)  # 0.80 + 0.30 (capped)
+
+    def test_penalty_capped_at_negative_max(self, retriever_for_boost):
+        candidates = [
+            _make_result("Reward Chart System", 0.85, ["rewards"]),
+        ]
+        outcomes = [
+            Outcome(strategy_name="reward chart", signal="negative", turn=i)
+            for i in range(5)
+        ]
+
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+
+        assert boosted[0].score == pytest.approx(0.55, abs=0.01)  # 0.85 - 0.30 (capped)
+
+    def test_empty_outcomes_is_noop(self, retriever_for_boost):
+        candidates = [
+            _make_result("Visual Timer Strategy", 0.80, ["timer"]),
+            _make_result("Reward Chart System", 0.85, ["rewards"]),
+        ]
+
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, [])
+
+        assert boosted[0].score == pytest.approx(0.85, abs=0.01)
+        assert boosted[1].score == pytest.approx(0.80, abs=0.01)
+
+    def test_no_matching_outcome_is_noop(self, retriever_for_boost):
+        candidates = [
+            _make_result("Visual Timer Strategy", 0.80, ["timer"]),
+        ]
+        outcomes = [Outcome(strategy_name="completely unrelated strategy", signal="positive", turn=1)]
+
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+
+        assert boosted[0].score == pytest.approx(0.80, abs=0.01)
+
+    def test_results_resorted_after_boost(self, retriever_for_boost):
+        candidates = [
+            _make_result("Reward Chart System", 0.90, ["rewards"]),
+            _make_result("Visual Timer Strategy", 0.80, ["timer"]),
+        ]
+        outcomes = [
+            Outcome(strategy_name="reward chart", signal="negative", turn=1),
+            Outcome(strategy_name="visual timer", signal="positive", turn=2),
+        ]
+
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+
+        # Timer: 0.80 + 0.10 = 0.90, Reward: 0.90 - 0.15 = 0.75
+        # Timer should now be first
+        assert "Timer" in boosted[0].document_name
+        assert "Reward" in boosted[1].document_name
+
+    def test_boost_returns_metadata(self, retriever_for_boost):
+        candidates = [
+            _make_result("Visual Timer Strategy", 0.80, ["timer"]),
+        ]
+        outcomes = [Outcome(strategy_name="visual timer", signal="positive", turn=1)]
+
+        boosted, metadata = retriever_for_boost._apply_outcome_boost(candidates, outcomes)
+
+        assert len(metadata) == 1
+        assert metadata[0]["strategy"] == "visual timer"
+        assert metadata[0]["document"] == "Visual Timer Strategy"
+        assert metadata[0]["boost"] == pytest.approx(0.10, abs=0.01)
+
+
+from app.models.schemas import SessionState, FamilyProfile
+
+
+class TestOutcomeBoostInPipeline:
+
+    @pytest.mark.asyncio
+    async def test_retrieve_applies_outcome_boost(self, knowledge_store):
+        """Outcome boost integrates into the full retrieve() pipeline."""
+        retriever = HybridRetriever(knowledge_store=knowledge_store, gemini_client=None)
+
+        # First retrieve without outcomes to get a baseline
+        baseline = await retriever.retrieve("homework timer strategies")
+        assert len(baseline.results) > 0, "Need keyword results for this test"
+
+        # Now retrieve with a negative outcome for the top result
+        top_doc_name = baseline.results[0].document_name
+        top_original_score = baseline.results[0].score
+        state = SessionState(
+            session_id="test",
+            outcomes=[Outcome(strategy_name=top_doc_name, signal="negative", turn=1)],
+        )
+        boosted = await retriever.retrieve("homework timer strategies", state=state)
+
+        # The penalized doc should have a lower score
+        penalized = next((r for r in boosted.results if r.document_name == top_doc_name), None)
+        assert penalized is not None
+        assert penalized.score < top_original_score
+
+
+from unittest.mock import AsyncMock
+
+
+class TestLatencyTracking:
+
+    @pytest.mark.asyncio
+    async def test_retrieve_emits_latency(self, knowledge_store):
+        event_bus = AsyncMock()
+        retriever = HybridRetriever(
+            knowledge_store=knowledge_store,
+            gemini_client=None,
+            event_bus=event_bus,
+        )
+
+        await retriever.retrieve("homework strategies")
+
+        # EventBus.emit signature: emit(category, event_type, ..., duration_ms=0.0, ...)
+        # Our call: emit("rag", "retrieve", duration_ms=..., detail=...)
+        calls = [c for c in event_bus.emit.call_args_list if len(c.args) > 1 and c.args[1] == "retrieve"]
+        assert len(calls) >= 1
+        assert calls[0].kwargs.get("duration_ms", 0) > 0

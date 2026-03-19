@@ -411,6 +411,77 @@ class TestErrorResilience:
         assert profile.child_name is None
 
 
+class TestLatencyTracking:
+
+    @pytest.mark.asyncio
+    async def test_summary_emits_duration_ms(self):
+        store = await _make_store_with_messages(turn_count=5)
+        gemini = _make_gemini_mock(generate_return="Summary of conversation.")
+        event_bus = AsyncMock()
+        mm = MemoryManager(session_store=store, gemini_client=gemini, event_bus=event_bus)
+
+        await mm._update_summary("s1", 5)
+
+        # Find the summary_updated emit call
+        summary_calls = [
+            c for c in event_bus.emit.call_args_list
+            if len(c.args) >= 2 and c.args[1] == "summary_updated"
+        ]
+        assert len(summary_calls) >= 1
+        call = summary_calls[0]
+        # duration_ms should be passed and positive
+        duration = call.kwargs.get("duration_ms", 0)
+        assert duration > 0
+
+    @pytest.mark.asyncio
+    async def test_emotion_inference_emits_duration_ms(self):
+        store = await _make_store_with_messages(turn_count=1)
+        gemini = _make_gemini_mock(generate_return="frustrated")
+        event_bus = AsyncMock()
+        mm = MemoryManager(session_store=store, gemini_client=gemini, event_bus=event_bus)
+
+        await mm._infer_emotion("s1", "I am so frustrated with my child's homework avoidance")
+
+        # Find the emotion_inferred emit call
+        emotion_calls = [
+            c for c in event_bus.emit.call_args_list
+            if len(c.args) >= 2 and c.args[1] == "emotion_inferred"
+        ]
+        assert len(emotion_calls) >= 1
+
+
+class TestImportanceWeightedSummary:
+
+    @pytest.mark.asyncio
+    async def test_summary_prompt_includes_episodes(self):
+        """Episodes from the current window are injected into the summary prompt."""
+        store = await _make_store_with_messages(turn_count=5)
+
+        # Add an episode in the turn window
+        episode = EpisodicMemory(
+            event_type="outcome_reported",
+            summary="Parent reported positive outcome for 'visual timer'",
+            outcome="positive",
+            strategies_involved=["visual timer"],
+            emotional_context="hopeful",
+            turn_range_start=3,
+            turn_range_end=3,
+        )
+        await store.add_episode("s1", episode)
+
+        gemini = _make_gemini_mock(generate_return="Summary with key events.")
+        mm = MemoryManager(session_store=store, gemini_client=gemini)
+
+        await mm._update_summary("s1", 5)
+
+        # The generate call should include the episode in the prompt
+        call_args = gemini.generate.call_args
+        prompt = call_args.args[0] if call_args.args else call_args.kwargs.get("prompt", "")
+        assert "Key events this window" in prompt
+        assert "outcome_reported" in prompt
+        assert "visual timer" in prompt
+
+
 class TestConflictDetection:
 
     @pytest.mark.asyncio

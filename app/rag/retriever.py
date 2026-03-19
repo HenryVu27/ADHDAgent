@@ -1,15 +1,24 @@
+from __future__ import annotations
+
 # Hybrid RAG Retriever
 # Qdrant dense+sparse with RRF fusion, query term tag boosting, and query rewriting.
 
+import asyncio
 import logging
+import re
 import time
 from collections import defaultdict
+from typing import TYPE_CHECKING
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from app.rag.colbert_index import ColBERTIndex
 
 from app.config import settings
 from app.models.schemas import (
     FacetCounts,
+    Outcome,
     RetrievalFilters,
     RetrievalResponse,
     RetrievalResult,
@@ -42,11 +51,15 @@ class HybridRetriever:
         gemini_client=None,
         query_rewriter: QueryRewriter | None = None,
         reranker: FastEmbedReranker | None = None,
+        colbert_index: ColBERTIndex | None = None,
+        event_bus=None,
     ):
         self._store = knowledge_store
         self._gemini = gemini_client
         self._rewriter = query_rewriter
         self._reranker = reranker
+        self._colbert = colbert_index
+        self._event_bus = event_bus
         # Embedding-based query result cache: avoids redundant Qdrant searches
         # when the agent rephrases a query it already searched for.
         self._query_cache: list[tuple[list[float], list[RetrievalResult], float]] = []
@@ -60,6 +73,7 @@ class HybridRetriever:
         state: SessionState | None = None,
         skip_rewrite: bool = False,
     ) -> RetrievalResponse:
+        t0 = time.monotonic()
         top_k = top_k or settings.RAG_TOP_K
         rewritten_query = None
 
@@ -80,6 +94,7 @@ class HybridRetriever:
             if rewritten != query:
                 rewritten_query = rewritten
                 search_query = rewritten
+                logger.info("[rag] rewrite: %.70s -> %.70s", query, search_query)
 
         # Step 2: Hybrid search (RRF + tag boosting)
         fetch_k = (settings.RAG_RERANK_CANDIDATES if self._reranker else top_k)
@@ -100,11 +115,33 @@ class HybridRetriever:
                 logger.info("Relevance threshold %.2f filtered %d -> %d results",
                             settings.RAG_RELEVANCE_THRESHOLD, pre_filter, len(candidates))
 
+        # Step 3c: Outcome boost/penalty (personalization from family history)
+        if state and state.outcomes:
+            candidates, boost_metadata = self._apply_outcome_boost(candidates, state.outcomes)
+            if boost_metadata and self._event_bus:
+                await self._event_bus.emit(
+                    "rag", "outcome_boost",
+                    detail={"boosts": boost_metadata},
+                )
+
         # Step 4: Compute facets
         facets = self._compute_facets(candidates)
 
         # Step 5: Trim to top_k
         results = candidates[:top_k]
+
+        logger.info(
+            "[rag] %d results: %s",
+            len(results),
+            ", ".join(f"{r.document_name}({r.score:.2f})" for r in results),
+        )
+
+        duration_ms = (time.monotonic() - t0) * 1000
+        if self._event_bus:
+            await self._event_bus.emit(
+                "rag", "retrieve", duration_ms=duration_ms,
+                detail={"result_count": len(results), "rewritten": rewritten_query is not None},
+            )
 
         return RetrievalResponse(
             results=results,
@@ -132,6 +169,7 @@ class HybridRetriever:
         top_k: int,
         filters: RetrievalFilters | None = None,
     ) -> list[RetrievalResult]:
+        t0 = time.monotonic()
         # Use query terms for tag boosting
         query_tags = set(query.lower().split())
 
@@ -145,19 +183,37 @@ class HybridRetriever:
                 logger.info("Query cache hit (%d cached results) for: %.60s", len(cached), query)
                 return cached[:top_k]
 
+            colbert_prefetch = None
+            if self._colbert is not None:
+                colbert_prefetch = await asyncio.to_thread(
+                    self._colbert.make_prefetch, query, top_k
+                )
+
             hybrid_results = self._store.search_hybrid(
                 query_vector=query_vector,
                 query_text=query,
                 top_k=top_k,
                 filters=filters,
+                colbert_prefetch=colbert_prefetch,
             )
             if hybrid_results:
                 results = self._build_results(hybrid_results, query_tags)
                 self._cache_store(query_vector, results)
+                if self._event_bus:
+                    await self._event_bus.emit(
+                        "rag", "hybrid_search", duration_ms=(time.monotonic() - t0) * 1000,
+                        detail={"method": "hybrid", "result_count": len(results)},
+                    )
                 return results
 
         # Fallback: keyword scoring
-        return self._keyword_fallback(query, top_k)
+        fallback_results = self._keyword_fallback(query, top_k)
+        if self._event_bus:
+            await self._event_bus.emit(
+                "rag", "hybrid_search", duration_ms=(time.monotonic() - t0) * 1000,
+                detail={"method": "keyword", "result_count": len(fallback_results)},
+            )
+        return fallback_results
 
     # Build results from Qdrant output with tag boosting
     def _build_results(
@@ -182,6 +238,74 @@ class HybridRetriever:
 
         results.sort(key=lambda r: r.score, reverse=True)
         return results
+
+    def _apply_outcome_boost(
+        self,
+        candidates: list[RetrievalResult],
+        outcomes: list[Outcome],
+    ) -> tuple[list[RetrievalResult], list[dict]]:
+        """Apply score boost/penalty based on family outcome history.
+
+        Uses Jaccard token-overlap between outcome strategy names and
+        document name + tags. Returns re-sorted candidates and boost metadata.
+        """
+        if not candidates:
+            return candidates, []
+        if not outcomes:
+            candidates.sort(key=lambda r: r.score, reverse=True)
+            return candidates, []
+
+        threshold = settings.RAG_OUTCOME_JACCARD_THRESHOLD
+        boost_pos = settings.RAG_OUTCOME_BOOST_POSITIVE
+        boost_neg = settings.RAG_OUTCOME_BOOST_NEGATIVE
+        cap = settings.RAG_OUTCOME_BOOST_CAP
+
+        # Pre-tokenize all outcome strategy names
+        outcome_tokens = []
+        for o in outcomes:
+            tokens = set(re.sub(r'[^\w\s]', '', o.strategy_name.lower()).split())
+            outcome_tokens.append((o, tokens))
+
+        boost_metadata: list[dict] = []
+
+        for result in candidates:
+            # Tokenize document name + tags
+            doc_text = result.document_name.lower()
+            for tag in result.tags:
+                doc_text += " " + tag.lower().replace("_", " ")
+            doc_tokens = set(re.sub(r'[^\w\s]', '', doc_text).split())
+
+            if not doc_tokens:
+                continue
+
+            total_boost = 0.0
+            for outcome, o_tokens in outcome_tokens:
+                if not o_tokens:
+                    continue
+                intersection = o_tokens & doc_tokens
+                union = o_tokens | doc_tokens
+                jaccard = len(intersection) / len(union) if union else 0.0
+
+                if jaccard >= threshold:
+                    if outcome.signal == "positive":
+                        total_boost += boost_pos
+                    elif outcome.signal == "negative":
+                        total_boost += boost_neg
+                    # "mixed" -> no change
+
+            # Cap the total boost
+            total_boost = max(-cap, min(cap, total_boost))
+            if total_boost != 0.0:
+                result.score += total_boost
+                boost_metadata.append({
+                    "strategy": next(o.strategy_name for o, _ in outcome_tokens if set(re.sub(r'[^\w\s]', '', o.strategy_name.lower()).split()) & doc_tokens),
+                    "document": result.document_name,
+                    "boost": total_boost,
+                })
+
+        # Re-sort by adjusted score
+        candidates.sort(key=lambda r: r.score, reverse=True)
+        return candidates, boost_metadata
 
     # Keyword scoring when Qdrant is unavailable
     def _keyword_fallback(
