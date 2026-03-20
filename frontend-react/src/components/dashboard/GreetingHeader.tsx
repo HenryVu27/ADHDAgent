@@ -9,7 +9,7 @@ function getGreeting(): string {
 
 export function GreetingHeader() {
   const { user, getOnboarding } = useAuth()
-  const firstName = user?.name.split(" ")[0] ?? "there"
+  const firstName = user?.name?.split(" ")[0] ?? "there"
   const onboarding = getOnboarding()
   const childName = onboarding?.childName
 

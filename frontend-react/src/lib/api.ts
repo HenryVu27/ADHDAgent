@@ -108,11 +108,12 @@ export const api = {
     }
   },
 
-  seedSession(sessionId: string, onboarding: OnboardingData): Promise<{ status: string }> {
+  seedSession(sessionId: string, onboarding: OnboardingData, parentName?: string): Promise<{ status: string }> {
     return request("/session/seed", {
       method: "POST",
       body: JSON.stringify({
         session_id: sessionId,
+        parent_name: parentName ?? "",
         child_name: onboarding.childName,
         child_age: onboarding.childAge,
         diagnosis_status: onboarding.diagnosisStatus,

@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useAuth } from "@/hooks/use-auth"
 
 export function SignUpPage() {
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const { signUp, isLoading, error } = useAuth()
@@ -16,7 +17,7 @@ export function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await signUp(email, password)
+      await signUp(email, password, name)
       toast.success("Account created! Let's set up your family profile.")
       navigate("/onboarding")
     } catch {
@@ -33,6 +34,17 @@ export function SignUpPage() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Your name</Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="Your first and last name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input

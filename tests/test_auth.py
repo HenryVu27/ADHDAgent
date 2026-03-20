@@ -60,7 +60,7 @@ class TestAuthEndpoints:
         try:
             async with client:
                 resp = await client.post("/api/auth/register", json={
-                    "email": "alice@test.com", "password": "secret123"
+                    "email": "alice@test.com", "password": "secret123", "name": "Alice Smith"
                 })
             assert resp.status_code == 200
             data = resp.json()
@@ -117,7 +117,7 @@ class TestAuthEndpoints:
         try:
             async with client:
                 reg = await client.post("/api/auth/register", json={
-                    "email": "eve@test.com", "password": "password1"
+                    "email": "eve@test.com", "password": "password1", "name": "Eve Torres"
                 })
                 token = reg.json()["access_token"]
                 resp = await client.get("/api/auth/me", headers={
@@ -126,7 +126,24 @@ class TestAuthEndpoints:
             assert resp.status_code == 200
             data = resp.json()
             assert data["email"] == "eve@test.com"
+            assert data["name"] == "Eve Torres"
             assert "id" in data
+        finally:
+            await _cleanup(conn, app)
+
+    async def test_register_without_name_defaults_to_null(self):
+        client, conn = await _make_auth_client()
+        try:
+            async with client:
+                reg = await client.post("/api/auth/register", json={
+                    "email": "noname@test.com", "password": "password1"
+                })
+                token = reg.json()["access_token"]
+                resp = await client.get("/api/auth/me", headers={
+                    "Authorization": f"Bearer {token}"
+                })
+            assert resp.status_code == 200
+            assert resp.json()["name"] is None
         finally:
             await _cleanup(conn, app)
 

@@ -20,43 +20,43 @@ _pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 async def fetch_user_by_email(conn: aiosqlite.Connection, email: str) -> UserRow | None:
     async with conn.execute(
-        "SELECT id, email, created_at FROM users WHERE email = ?", (email,)
+        "SELECT id, email, name, created_at FROM users WHERE email = ?", (email,)
     ) as cur:
         row = await cur.fetchone()
     if not row:
         return None
-    return UserRow(id=row["id"], email=row["email"], created_at=row["created_at"])
+    return UserRow(id=row["id"], email=row["email"], name=row["name"], created_at=row["created_at"])
 
 
 async def fetch_user_by_id(conn: aiosqlite.Connection, user_id: int) -> UserRow | None:
     async with conn.execute(
-        "SELECT id, email, created_at FROM users WHERE id = ?", (user_id,)
+        "SELECT id, email, name, created_at FROM users WHERE id = ?", (user_id,)
     ) as cur:
         row = await cur.fetchone()
     if not row:
         return None
-    return UserRow(id=row["id"], email=row["email"], created_at=row["created_at"])
+    return UserRow(id=row["id"], email=row["email"], name=row["name"], created_at=row["created_at"])
 
 
-async def create_user(conn: aiosqlite.Connection, email: str, password: str) -> UserRow:
+async def create_user(conn: aiosqlite.Connection, email: str, password: str, name: str | None = None) -> UserRow:
     password_hash = _pwd.hash(password)
     async with conn.execute(
-        "INSERT INTO users (email, password_hash) VALUES (?, ?) RETURNING id, email, created_at",
-        (email, password_hash),
+        "INSERT INTO users (email, password_hash, name) VALUES (?, ?, ?) RETURNING id, email, name, created_at",
+        (email, password_hash, name),
     ) as cur:
         row = await cur.fetchone()
     await conn.commit()
-    return UserRow(id=row["id"], email=row["email"], created_at=row["created_at"])
+    return UserRow(id=row["id"], email=row["email"], name=row["name"], created_at=row["created_at"])
 
 
 async def verify_password(conn: aiosqlite.Connection, email: str, password: str) -> UserRow | None:
     async with conn.execute(
-        "SELECT id, email, password_hash, created_at FROM users WHERE email = ?", (email,)
+        "SELECT id, email, name, password_hash, created_at FROM users WHERE email = ?", (email,)
     ) as cur:
         row = await cur.fetchone()
     if not row or not _pwd.verify(password, row["password_hash"]):
         return None
-    return UserRow(id=row["id"], email=row["email"], created_at=row["created_at"])
+    return UserRow(id=row["id"], email=row["email"], name=row["name"], created_at=row["created_at"])
 
 
 # ---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ async def verify_password(conn: aiosqlite.Connection, email: str, password: str)
 async def register(body: AuthRequest, conn: aiosqlite.Connection = Depends(get_db)):
     """Create a new user account and return a JWT."""
     try:
-        user = await create_user(conn, body.email, body.password)
+        user = await create_user(conn, body.email, body.password, body.name)
     except aiosqlite.IntegrityError:
         raise HTTPException(status_code=400, detail="Email already registered")
     return TokenResponse(access_token=create_token(user.id))

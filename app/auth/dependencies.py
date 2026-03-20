@@ -28,11 +28,11 @@ async def get_current_user(
         raise HTTPException(status_code=401, detail="Invalid or expired token")
 
     async with conn.execute(
-        "SELECT id, email, created_at FROM users WHERE id = ?", (user_id,)
+        "SELECT id, email, name, created_at FROM users WHERE id = ?", (user_id,)
     ) as cur:
         row = await cur.fetchone()
 
     if not row:
         raise HTTPException(status_code=401, detail="User not found")
 
-    return UserRow(id=row["id"], email=row["email"], created_at=row["created_at"])
+    return UserRow(id=row["id"], email=row["email"], name=row["name"], created_at=row["created_at"])

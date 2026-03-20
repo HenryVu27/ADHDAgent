@@ -28,6 +28,7 @@ from app.models.schemas import (
     SessionSummary,
     StoredToolResult,
     TurnAnalysis,
+    UserSummary,
 )
 
 logger = logging.getLogger(__name__)
@@ -37,13 +38,13 @@ class SQLiteSessionStore(SessionStoreBase):
     """Async SQLite implementation of the session store."""
 
     _VALID_PROFILE_FIELDS = frozenset({
-        "child_name", "child_age", "diagnosis_status", "adhd_subtype",
+        "parent_name", "child_name", "child_age", "diagnosis_status", "adhd_subtype",
         "challenge_areas", "attempted_strategies",
         "good_day_description", "hardest_situations",
     })
 
     _SCALAR_PROFILE_FIELDS = frozenset({
-        "child_name", "child_age", "diagnosis_status",
+        "parent_name", "child_name", "child_age", "diagnosis_status",
         "adhd_subtype", "good_day_description",
     })
 
@@ -86,15 +87,45 @@ class SQLiteSessionStore(SessionStoreBase):
 
         user_id is only used on first creation (INSERT OR IGNORE is a no-op
         if the session already exists, so internal callers can omit it).
+        For known users, seeds the session profile from the user-level profile.
         """
-        await self._conn.execute(
+        cursor = await self._conn.execute(
             "INSERT OR IGNORE INTO sessions (session_id, user_id) VALUES (?, ?)",
             (session_id, user_id),
         )
+        is_new = cursor.rowcount == 1
+
         await self._conn.execute(
             "INSERT OR IGNORE INTO family_profiles (session_id) VALUES (?)",
             (session_id,),
         )
+
+        # Seed session profile from user-level profile for returning users
+        if is_new and user_id is not None:
+            up_cursor = await self._conn.execute(
+                "SELECT * FROM user_profiles WHERE user_id = ?",
+                (user_id,),
+            )
+            up_row = await up_cursor.fetchone()
+            if up_row:
+                await self._conn.execute(
+                    "UPDATE family_profiles SET parent_name=?, child_name=?, child_age=?, diagnosis_status=?, "
+                    "adhd_subtype=?, challenge_areas=?, attempted_strategies=?, "
+                    "good_day_description=?, hardest_situations=? WHERE session_id=?",
+                    (
+                        up_row["parent_name"],
+                        up_row["child_name"],
+                        up_row["child_age"],
+                        up_row["diagnosis_status"],
+                        up_row["adhd_subtype"],
+                        up_row["challenge_areas"],
+                        up_row["attempted_strategies"],
+                        up_row["good_day_description"],
+                        up_row["hardest_situations"],
+                        session_id,
+                    ),
+                )
+                logger.info("Session %s seeded from user profile (user_id=%d)", session_id, user_id)
 
     async def get(self, session_id: str) -> SessionState:
         """Materialize a SessionState from DB rows.
@@ -119,6 +150,7 @@ class SQLiteSessionStore(SessionStoreBase):
         )
         prof_row = await cursor.fetchone()
         profile = FamilyProfile(
+            parent_name=prof_row["parent_name"],
             child_name=prof_row["child_name"],
             child_age=prof_row["child_age"],
             diagnosis_status=prof_row["diagnosis_status"],
@@ -237,6 +269,43 @@ class SQLiteSessionStore(SessionStoreBase):
 
         await self._touch_updated(session_id)
 
+        # Write-through to user-level profile
+        uid_cursor = await self._conn.execute(
+            "SELECT user_id FROM sessions WHERE session_id = ?",
+            (session_id,),
+        )
+        uid_row = await uid_cursor.fetchone()
+        if uid_row and uid_row["user_id"] is not None:
+            uid = uid_row["user_id"]
+            # Ensure user_profiles row exists
+            await self._conn.execute(
+                "INSERT OR IGNORE INTO user_profiles (user_id) VALUES (?)",
+                (uid,),
+            )
+            for field, value in kwargs.items():
+                if value is None:
+                    continue
+                if field in ("challenge_areas", "attempted_strategies", "hardest_situations"):
+                    up_cur = await self._conn.execute(
+                        f"SELECT {field} FROM user_profiles WHERE user_id = ?",
+                        (uid,),
+                    )
+                    up_val = await up_cur.fetchone()
+                    current = json.loads(up_val[field])
+                    if isinstance(value, list):
+                        merged = list(dict.fromkeys(current + value))
+                    else:
+                        merged = list(dict.fromkeys(current + [value]))
+                    await self._conn.execute(
+                        f"UPDATE user_profiles SET {field} = ?, updated_at = datetime('now') WHERE user_id = ?",
+                        (json.dumps(merged), uid),
+                    )
+                else:
+                    await self._conn.execute(
+                        f"UPDATE user_profiles SET {field} = ?, updated_at = datetime('now') WHERE user_id = ?",
+                        (value, uid),
+                    )
+
         logger.info("Profile updated for session %s: %s", session_id, kwargs)
         # Re-read profile
         cursor = await self._conn.execute(
@@ -338,6 +407,8 @@ class SQLiteSessionStore(SessionStoreBase):
 
         list_fields = ("challenge_areas", "attempted_strategies", "hardest_situations")
         updates = {}
+        if request.parent_name:
+            updates["parent_name"] = request.parent_name
         if request.child_name:
             updates["child_name"] = request.child_name
         if request.child_age:
@@ -826,3 +897,121 @@ class SQLiteSessionStore(SessionStoreBase):
         )
         rows = await cursor.fetchall()
         return [dict(row) for row in rows]
+
+    # --- Cross-session (user-level) methods ---
+
+    async def get_user_profile(self, user_id: int) -> FamilyProfile | None:
+        """Return the user-level profile, or None if no row exists."""
+        cursor = await self._conn.execute(
+            "SELECT * FROM user_profiles WHERE user_id = ?",
+            (user_id,),
+        )
+        row = await cursor.fetchone()
+        if not row:
+            return None
+        return FamilyProfile(
+            parent_name=row["parent_name"],
+            child_name=row["child_name"],
+            child_age=row["child_age"],
+            diagnosis_status=row["diagnosis_status"],
+            adhd_subtype=row["adhd_subtype"],
+            challenge_areas=json.loads(row["challenge_areas"]),
+            attempted_strategies=json.loads(row["attempted_strategies"]),
+            good_day_description=row["good_day_description"],
+            hardest_situations=json.loads(row["hardest_situations"]),
+        )
+
+    async def update_user_profile(self, user_id: int, **kwargs) -> FamilyProfile:
+        """Create or update the user-level profile. No commit."""
+        await self._conn.execute(
+            "INSERT OR IGNORE INTO user_profiles (user_id) VALUES (?)",
+            (user_id,),
+        )
+        for field, value in kwargs.items():
+            if field not in self._VALID_PROFILE_FIELDS or value is None:
+                continue
+            if field in ("challenge_areas", "attempted_strategies", "hardest_situations"):
+                cur = await self._conn.execute(
+                    f"SELECT {field} FROM user_profiles WHERE user_id = ?",
+                    (user_id,),
+                )
+                r = await cur.fetchone()
+                current = json.loads(r[field])
+                if isinstance(value, list):
+                    merged = list(dict.fromkeys(current + value))
+                else:
+                    merged = list(dict.fromkeys(current + [value]))
+                await self._conn.execute(
+                    f"UPDATE user_profiles SET {field} = ?, updated_at = datetime('now') WHERE user_id = ?",
+                    (json.dumps(merged), user_id),
+                )
+            else:
+                await self._conn.execute(
+                    f"UPDATE user_profiles SET {field} = ?, updated_at = datetime('now') WHERE user_id = ?",
+                    (value, user_id),
+                )
+        # Re-read and return
+        return await self.get_user_profile(user_id)  # type: ignore[return-value]
+
+    async def get_user_summary(self, user_id: int) -> UserSummary | None:
+        """Return the most recent longitudinal summary, or None."""
+        cursor = await self._conn.execute(
+            "SELECT summary, covers_through_session FROM user_summaries WHERE user_id = ? ORDER BY id DESC LIMIT 1",
+            (user_id,),
+        )
+        row = await cursor.fetchone()
+        if not row:
+            return None
+        return UserSummary(
+            summary=row["summary"],
+            covers_through_session=row["covers_through_session"],
+        )
+
+    async def save_user_summary(self, user_id: int, summary: UserSummary) -> None:
+        """Persist a longitudinal user summary. No commit."""
+        await self._conn.execute(
+            "INSERT INTO user_summaries (user_id, summary, covers_through_session) VALUES (?, ?, ?)",
+            (user_id, summary.summary, summary.covers_through_session),
+        )
+
+    async def get_user_episodes(self, user_id: int, limit: int = 5) -> list[EpisodicMemory]:
+        """Return recent episodes across all sessions for this user."""
+        cursor = await self._conn.execute(
+            "SELECT e.event_type, e.summary, e.outcome, e.strategies_involved, "
+            "e.emotional_context, e.turn_range_start, e.turn_range_end "
+            "FROM episodes e JOIN sessions s ON e.session_id = s.session_id "
+            "WHERE s.user_id = ? ORDER BY e.id DESC LIMIT ?",
+            (user_id, limit),
+        )
+        rows = await cursor.fetchall()
+        return [
+            EpisodicMemory(
+                event_type=r["event_type"],
+                summary=r["summary"],
+                outcome=r["outcome"],
+                strategies_involved=json.loads(r["strategies_involved"]),
+                emotional_context=r["emotional_context"],
+                turn_range_start=r["turn_range_start"],
+                turn_range_end=r["turn_range_end"],
+            )
+            for r in reversed(rows)
+        ]
+
+    async def get_user_outcomes(self, user_id: int, limit: int = 5) -> list[Outcome]:
+        """Return recent outcomes across all sessions for this user."""
+        cursor = await self._conn.execute(
+            "SELECT o.strategy_name, o.signal, o.detail, o.turn "
+            "FROM outcomes o JOIN sessions s ON o.session_id = s.session_id "
+            "WHERE s.user_id = ? ORDER BY o.id DESC LIMIT ?",
+            (user_id, limit),
+        )
+        rows = await cursor.fetchall()
+        return [
+            Outcome(
+                strategy_name=r["strategy_name"],
+                signal=r["signal"],
+                detail=r["detail"],
+                turn=r["turn"],
+            )
+            for r in reversed(rows)
+        ]

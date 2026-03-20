@@ -194,6 +194,27 @@ class AgentOrchestrator:
             await self._session_store._ensure_session(request.session_id, user_id=user_id)
         await self._session_store.seed_session(request)
 
+        # Write-through seed data to user-level profile
+        if user_id is not None:
+            seed_kwargs: dict = {}
+            if request.parent_name:
+                seed_kwargs["parent_name"] = request.parent_name
+            if request.child_name:
+                seed_kwargs["child_name"] = request.child_name
+            if request.child_age:
+                seed_kwargs["child_age"] = request.child_age
+            if request.diagnosis_status:
+                seed_kwargs["diagnosis_status"] = request.diagnosis_status
+            if request.adhd_subtype:
+                seed_kwargs["adhd_subtype"] = request.adhd_subtype
+            if request.challenges:
+                seed_kwargs["challenge_areas"] = request.challenges
+            if request.tried_strategies:
+                seed_kwargs["attempted_strategies"] = request.tried_strategies
+            if seed_kwargs:
+                await self._session_store.update_user_profile(user_id, **seed_kwargs)
+                await self._session_store.commit()
+
     async def _build_history(
         self,
         session_id: str,
@@ -477,6 +498,16 @@ class AgentOrchestrator:
             session_id, turn, message,
         )
 
+        # Trigger longitudinal summary for returning users on first turn
+        if turn == 1 and user_id is not None and self._memory:
+            user_sessions = await self._session_store.get_all_sessions(user_id=user_id)
+            previous = [s for s in user_sessions if s.session_id != session_id]
+            if previous:
+                self._track_task(
+                    self._memory.end_of_session_tasks(user_id, previous[0].session_id),
+                    "longitudinal_summary",
+                )
+
         if self._event_bus:
             await self._event_bus.emit("agent", "turn_start", session_id, turn,
                                        detail={"message_preview": message[:80]})
@@ -495,6 +526,7 @@ class AgentOrchestrator:
         input_data = {
             "messages": messages,
             "session_id": session_id,
+            "user_id": user_id,
         }
 
         result = None
