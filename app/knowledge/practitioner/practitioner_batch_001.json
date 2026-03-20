@@ -102,7 +102,9 @@
     ],
     "key_points": [],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pract_category-parenting-adhd-kids-behavior-discipline"
+    ]
   },
   {
     "id": "pract_category-parenting-adhd-kids-food-nutrition",
@@ -177,7 +179,9 @@
     ],
     "key_points": [],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pract_category-parenting-adhd-kids-school-learning-download-school-learning-page-2"
+    ]
   },
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-organization",
@@ -278,7 +282,9 @@
     ],
     "key_points": [],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W2395538860"
+    ]
   },
   {
     "id": "pract_category-parenting-adhd-kids-webinar-parents",
@@ -310,7 +316,9 @@
     ],
     "key_points": [],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pract_category-parenting-adhd-kids-download-parents"
+    ]
   },
   {
     "id": "pract_category-parenting-adhd-kids-positive-parenting",
@@ -450,7 +458,9 @@
     ],
     "key_points": [],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pract_category-parenting-adhd-kids-school-learning"
+    ]
   },
   {
     "id": "pract_category-parenting-adhd-kids-positive-parenting-talking-about-adhd",
@@ -490,7 +500,7 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-for-teachers",
     "name": "Classroom Strategies for Teachers of Students with ADHD or LD",
-    "description": "Classroom Strategies for Teachers of Students with ADHD or LD\nSchool & Learning\nWhen emotions run high, use these teacher-tested strategies \u2014 cool-down zones, emotional chec",
+    "description": "Classroom Strategies for Teachers of Students with ADHD or LD\nSchool & Learning\nWhen emotions run high, use these teacher-tested strategies — cool-down zones, emotional chec",
     "document_type": "strategy",
     "tags": [
       "adhd",
@@ -519,12 +529,15 @@
     ],
     "key_points": [],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ589586",
+      "eric_EJ570175"
+    ]
   },
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-learning-challenges",
     "name": "Learning Disabilities Common in Kids with ADHD",
-    "description": "Learning Disabilities Common in Kids with ADHD\nSchool & Learning\nFor high schoolers who view independent or summer reading as a miserable chore \u2014 whether because of...",
+    "description": "Learning Disabilities Common in Kids with ADHD\nSchool & Learning\nFor high schoolers who view independent or summer reading as a miserable chore — whether because of...",
     "document_type": "strategy",
     "tags": [
       "adhd",
@@ -625,7 +638,7 @@
   {
     "id": "pract_category-parenting-adhd-kids-positive-parenting-self-esteem",
     "name": "How to Build Confidence & Self-Esteem in Kids with ADHD",
-    "description": "How to Build Confidence & Self-Esteem in Kids with ADHD\nPositive Parenting\n\u201cWhether we\u2019re neurodiverse or neurotypical, truly understanding the positive benefits of diversit",
+    "description": "How to Build Confidence & Self-Esteem in Kids with ADHD\nPositive Parenting\n“Whether we’re neurodiverse or neurotypical, truly understanding the positive benefits of diversit",
     "document_type": "strategy",
     "tags": [
       "adhd",
@@ -692,8 +705,8 @@
   },
   {
     "id": "pract_category-parenting-adhd-kids-difficult-child-page-2",
-    "name": "Parenting the Difficult Child: Extreme ADHD Behavior Problems \u2014 and Solutions",
-    "description": "Parenting the Difficult Child: Extreme ADHD Behavior Problems \u2014 and Solutions\nA child with ADHD who is also oppositional and defiant may refuse to take his ADHD medication....",
+    "name": "Parenting the Difficult Child: Extreme ADHD Behavior Problems — and Solutions",
+    "description": "Parenting the Difficult Child: Extreme ADHD Behavior Problems — and Solutions\nA child with ADHD who is also oppositional and defiant may refuse to take his ADHD medication....",
     "document_type": "strategy",
     "tags": [
       "adhd",
@@ -716,43 +729,6 @@
       }
     ],
     "steps": [
-      "Parenting a Child with ADHD",
-      "Living with Adult ADHD",
-      "School and Learning Digest",
-      "Treatment Digest",
-      "ADDitude for Women"
-    ],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pract_category-parenting-adhd-kids-friendships-activities",
-    "name": "How to Make Friends: ADHD Social Skills & Activities",
-    "description": "How to Make Friends: ADHD Social Skills & Activities\nFamily Travel & Holidays\nFriends at School\nSports & Activities",
-    "document_type": "strategy",
-    "tags": [
-      "adhd",
-      "family",
-      "school",
-      "social_skills"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "expert_consensus",
-    "source": "ADDitude",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "ADDitude",
-        "detail": "https://www.additudemag.com/category/parenting-adhd-kids/friendships-activities/"
-      }
-    ],
-    "steps": [
-      "Family Travel & Holidays",
-      "Friends at School",
-      "Sports & Activities",
       "Parenting a Child with ADHD",
       "Living with Adult ADHD",
       "School and Learning Digest",
@@ -799,45 +775,9 @@
     "related_ids": []
   },
   {
-    "id": "pract_category-parenting-adhd-kids-school-learning-ieps-504-plans",
-    "name": "504 Plans & IEPs: School Accommodations for Kids with ADHD",
-    "description": "504 Plans & IEPs: School Accommodations for Kids with ADHD\nSchool & Learning\n\u201cFederal law requires states, districts, and schools to provide students with and without...",
-    "document_type": "strategy",
-    "tags": [
-      "adhd",
-      "school",
-      "iep",
-      "504_plan",
-      "accommodation"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "expert_consensus",
-    "source": "ADDitude",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "ADDitude",
-        "detail": "https://www.additudemag.com/category/parenting-adhd-kids/school-learning/ieps-504-plans/"
-      }
-    ],
-    "steps": [
-      "School & Learning",
-      "Parenting a Child with ADHD",
-      "Living with Adult ADHD",
-      "School and Learning Digest",
-      "Treatment Digest",
-      "ADDitude for Women"
-    ],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pract_category-parenting-adhd-kids-positive-parenting-add-moms",
     "name": "ADHD Mom & Dad Support: Life Strategies for Women w/ Attention Deficit",
-    "description": "ADHD Mom & Dad Support: Life Strategies for Women w/ Attention Deficit\nPositive Parenting\n\u201cAdults make mistakes. Actually, adults make whopper mistakes compared to most kids",
+    "description": "ADHD Mom & Dad Support: Life Strategies for Women w/ Attention Deficit\nPositive Parenting\n“Adults make mistakes. Actually, adults make whopper mistakes compared to most kids",
     "document_type": "strategy",
     "tags": [
       "adhd",
@@ -942,12 +882,16 @@
     ],
     "key_points": [],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pract_category-parenting-adhd-kids-behavior-discipline-meltdowns-anger",
+      "oalex_W107429677",
+      "pract_category-parenting-adhd-kids-page-3"
+    ]
   },
   {
     "id": "pract_category-parenting-adhd-kids-organizing-your-child",
     "name": "Organization Skills for Kids with ADHD: Chores, Time Management",
-    "description": "Organization Skills for Kids with ADHD: Chores, Time Management\nChores & Cleaning Up\n\u201cChildren with ADHD can learn how to prioritize with brain dumps, deadline",
+    "description": "Organization Skills for Kids with ADHD: Chores, Time Management\nChores & Cleaning Up\n“Children with ADHD can learn how to prioritize with brain dumps, deadline",
     "document_type": "strategy",
     "tags": [
       "adhd",
@@ -1085,7 +1029,7 @@
   {
     "id": "pract_category-parenting-adhd-kids-behavior-discipline-meltdowns-anger",
     "name": "ADHD Anger & Meltdowns: Behavior Help for Parents",
-    "description": "ADHD Anger & Meltdowns: Behavior Help for Parents\nBehavior & Discipline\nAll toddlers throw tantrums. But if your child\u2019s extreme meltdowns come out of nowhere, that could be",
+    "description": "ADHD Anger & Meltdowns: Behavior Help for Parents\nBehavior & Discipline\nAll toddlers throw tantrums. But if your child’s extreme meltdowns come out of nowhere, that could be",
     "document_type": "strategy",
     "tags": [
       "adhd",
@@ -1114,7 +1058,9 @@
     ],
     "key_points": [],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pract_category-parenting-adhd-kids-behavior-discipline"
+    ]
   },
   {
     "id": "pract_category-parenting-adhd-kids-download-parents",
@@ -1149,7 +1095,9 @@
     ],
     "key_points": [],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pract_category-parenting-adhd-kids-webinar-parents"
+    ]
   },
   {
     "id": "pract_category-parenting-adhd-kids-teens-young-adults-dear-teen-parenting-coach",

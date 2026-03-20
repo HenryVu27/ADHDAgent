@@ -42,7 +42,10 @@
       "We suggest that the assessment and treatment of children with AS should involve detailed assessment, possible concomitant treatment for comorbid anxiety and depression, and parental education about the effect of parental emotional states on children."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_24753534",
+      "eric_ED550333"
+    ]
   },
   {
     "id": "eric_EJ966519",
@@ -61,7 +64,7 @@
       "novels"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -462,7 +465,13 @@
       "The purpose of this paper is to provide background information about the prevalence of ADHD on college campuses, its impact on affected students, and to introduce a cognitive behavior therapy approach for college students with ADHD."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ486128",
+      "eric_EJ750025",
+      "oalex_W283048097",
+      "eric_ED643826",
+      "eric_EJ580716"
+    ]
   },
   {
     "id": "eric_EJ1183136",
@@ -522,8 +531,8 @@
   },
   {
     "id": "eric_EJ1107023",
-    "name": "Promoting Language and Executive Function in Educational Settings: The Dre\u017eancic Method",
-    "description": "Research Findings: This study aims to evaluate the efficacy of linguistic training based on the use of the Dre\u017eancic method in educational settings. It is hypothesized that characteristics of this met",
+    "name": "Promoting Language and Executive Function in Educational Settings: The Drežancic Method",
+    "description": "Research Findings: This study aims to evaluate the efficacy of linguistic training based on the use of the Drežancic method in educational settings. It is hypothesized that characteristics of this met",
     "document_type": "guidance",
     "tags": [
       "executive_function",
@@ -568,10 +577,10 @@
     ],
     "steps": [],
     "key_points": [
-      "Research Findings: This study aims to evaluate the efficacy of linguistic training based on the use of the Dre\u017eancic method in educational settings.",
+      "Research Findings: This study aims to evaluate the efficacy of linguistic training based on the use of the Drežancic method in educational settings.",
       "It is hypothesized that characteristics of this method, based on the typical stages of linguistic and cognitive development, could influence both language competence and executive function (EF).",
-      "A pretest-posttest treatment design with a control group was used to evaluate the efficacy of the method (preintervention baseline and posttraining after 6\u00a0months).",
-      "A total of 41 children (ranging in age from 26 to 31\u00a0months) with a vocabulary size score lower than the 50th percentile were recruited to participate in the study and were assigned to 2 groups: an experimental group that received training or a control group that participated in normal day care center activities.",
+      "A pretest-posttest treatment design with a control group was used to evaluate the efficacy of the method (preintervention baseline and posttraining after 6 months).",
+      "A total of 41 children (ranging in age from 26 to 31 months) with a vocabulary size score lower than the 50th percentile were recruited to participate in the study and were assigned to 2 groups: an experimental group that received training or a control group that participated in normal day care center activities.",
       "The results revealed that the training had an effect: The experimental group produced a greater variety of words and more complete sentences; moreover, the linguistic training appeared to positively affect EF processes.",
       "Practice or Policy: The results highlight the efficacy of a training, applicable to educational contexts, for typically developing populations.",
       "Furthermore, the confirmation of a rich interaction between language and EF even at an early age has important implications for clinical work."
@@ -606,7 +615,7 @@
       "performance_tests"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -668,12 +677,14 @@
     "steps": [],
     "key_points": [
       "This study evaluated whether a theory-based intervention in physical education (PE) designed to train self-control may positively impact children's quick-temperedness and disruptiveness and whether changes in executive functions (EFs) may be a correlate or antecedent of such effects.",
-      "One hundred and sixteen children aged 8-9\u00a0years participated in a 2-year intervention and completed three assessments at baseline, 6- and 18-month follow-ups in quick-temperedness and disruptiveness, hot and cool EFs.",
+      "One hundred and sixteen children aged 8-9 years participated in a 2-year intervention and completed three assessments at baseline, 6- and 18-month follow-ups in quick-temperedness and disruptiveness, hot and cool EFs.",
       "After the intervention, children in the intervention group showed lower quick-temperedness and disruptiveness and improvement in hot EF.",
       "Changes over the intervention period were moderately associated and showed marginal evidence of causal ordering, suggesting that designed PE may benefit self-control through a possible linkage to hot EF improvement."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W3200917447"
+    ]
   },
   {
     "id": "eric_EJ872907",
@@ -904,7 +915,7 @@
       "adolescents"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -1340,7 +1351,9 @@
       "Further research is needed to understand the factors impacting a delayed ASD diagnosis and an earlier ADHD diagnosis when the two conditions co-occur."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ896646"
+    ]
   },
   {
     "id": "eric_EJ662773",
@@ -1560,7 +1573,7 @@
       "EEG data were obtained from the ENIGMA-EEG consortium, including resting-state EEG spectral power measurements from 7,983 subjects.",
       "ADHD genome-wide association study summary statistics were derived from 225,534 individuals, alongside data for six additional psychiatric disorders from the Psychiatric Genomics Consortium.",
       "Mendelian Randomization analysis was used to test for causal relationships in both directions between EEG activity and ADHD.",
-      "Results: We identified a significant unidirectional causal relationship, with genetic variants influencing resting alpha-band EEG activity conferring risk for ADHD (odds ratio = 0.89, 95% confidence interval [0.82, 0.96], p = 1.52 \u00d7 10[superscript -3]).",
+      "Results: We identified a significant unidirectional causal relationship, with genetic variants influencing resting alpha-band EEG activity conferring risk for ADHD (odds ratio = 0.89, 95% confidence interval [0.82, 0.96], p = 1.52 × 10[superscript -3]).",
       "No evidence was found for reverse causation from ADHD liability to alpha EEG power band activity (odds ratio = 1.07, 95% confidence interval [0.88, 1.30], p = 0.52).",
       "Conclusions: Our findings provide genetic evidence that reduced resting-state alpha power is not merely correlated with ADHD but may causally predispose individuals to developing the disorder.",
       "This supports previous observational studies linking lower alpha activity to ADHD and establishes a causal pathway from altered EEG activity to ADHD risk, with important implications for understanding ADHD pathophysiology and potential biomarker development."
@@ -1613,7 +1626,9 @@
       "What remains to be determined is whether language and executive function impairments are co-morbid conditions or causally linked."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ1005620"
+    ]
   },
   {
     "id": "eric_EJ1313300",
@@ -1938,7 +1953,9 @@
       "Regular features include: (1) Parenting Corner: Home &amp; School Checklist; (2) Visit Us; (3) Upcoming ADHD (Attention Deficit Hyperactivity Disorder) Workshops &amp; Support Groups; and (4) LDA Minnesota Partners &amp; Community Sites."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED513827"
+    ]
   },
   {
     "id": "eric_ED445427",
@@ -2344,7 +2361,13 @@
       "This article examines a structured counseling approach based on the trauma model, and concludes with a discussion on the usefulness and limitations of this approach in regard to children with ADHD."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W2209005905",
+      "oalex_W1552214514",
+      "eric_ED514772",
+      "pm_41661012",
+      "eric_EJ899107"
+    ]
   },
   {
     "id": "eric_EJ695962",
@@ -2401,7 +2424,7 @@
       "metabolism"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -2417,7 +2440,7 @@
       "A large number of youngsters with autism spectrum disorders (ASD) display comorbid attention deficit/hyperactivity disorder (ADHD) symptoms.",
       "However, previous studies are not conclusive whether psychophysiological correlates, like cardiac reactivity, are different for ASD with comorbid ADHD (ASD+) compared to ADHD.",
       "Therefore, the current study investigated (dis)similarities in cardiac reactivity and attention task performance.",
-      "In a clinical sample, adolescents diagnosed with ASD+ (n\u00a0=\u00a020) versus ADHD (n\u00a0=\u00a036) and stimulant medication use (56%) were compared during a baseline with eyes closed and task performance.",
+      "In a clinical sample, adolescents diagnosed with ASD+ (n = 20) versus ADHD (n = 36) and stimulant medication use (56%) were compared during a baseline with eyes closed and task performance.",
       "Results for cardiac reactivity were similar for both diagnostic groups.",
       "Stimulant-medicated adolescents showed decreased adaptation of LF/HF ratio and faster reaction times than stimulant-free adolescents.",
       "The current study underlines the psychophysiological overlap of ADHD symptoms in adolescents with ASD+ and adolescents with ADHD."
@@ -2611,7 +2634,7 @@
       "behavior_problems"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -2674,7 +2697,9 @@
       "(Author/CR)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED392175"
+    ]
   },
   {
     "id": "eric_ED510820",
@@ -2821,7 +2846,9 @@
       "The findings call for teacher educators to develop better education programmes to support both pre-service and in-service teachers in undertaking the challenging task of teaching students with ADHD."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ1137112"
+    ]
   },
   {
     "id": "eric_EJ985065",
@@ -2959,16 +2986,22 @@
       "Background: Students with attention/deficit hyperactivity disorder (ADHD) continue to languish behind their peers with regard to academic achievement and education attainment.",
       "School engagement is potentially modifiable, and targeting engagement may be a means to improve education outcomes.",
       "Aims: To investigate school engagement for students with ADHD during the crucial high school transition period and to identify factors associated with low school engagement.",
-      "Sample: Participants are adolescents (12-15\u00a0years) in the first and third year of high school with diagnosed ADHD (n\u00a0=\u00a0130).",
+      "Sample: Participants are adolescents (12-15 years) in the first and third year of high school with diagnosed ADHD (n = 130).",
       "Participants were recruited from 21 paediatric practices.",
       "Methods: Cross-sectional study assessing school engagement.",
       "Data were collected through direct assessment and child, parent, and teacher surveys.",
       "School engagement is measured as student attitudes to school (cognitive and emotional) and suspension rates (behavioural).",
       "Multivariable regression analyses examined student, family, and school factors affecting engagement.",
-      "Results: In comparison with state data, students with ADHD in the first year of high school were less motivated (p\u00a0&lt;\u00a00.01) and less connected to peers (p\u00a0&lt;\u00a00.01)."
+      "Results: In comparison with state data, students with ADHD in the first year of high school were less motivated (p &lt; 0.01) and less connected to peers (p &lt; 0.01)."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W2121359568",
+      "eric_EJ1142196",
+      "oalex_W4302565443",
+      "oalex_W2136088403",
+      "pm_40029292"
+    ]
   },
   {
     "id": "eric_EJ826531",
@@ -3003,7 +3036,13 @@
       "Both groups showed reliable \"but\" equal degrees of interference on both tasks, suggesting that children with ADHD do not differ from normal controls in their ability to control interference in either modality."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W2474276184",
+      "eric_EJ882160",
+      "eric_EJ806962",
+      "eric_EJ598796",
+      "eric_EJ335920"
+    ]
   },
   {
     "id": "eric_EJ794292",
@@ -3089,7 +3128,7 @@
       "Autobiographical memory (AM) is a socially-relevant cognitive skill.",
       "Little is known regarding AM during early childhood in ASD.",
       "Parent-child reminiscing conversations predict AM in non-ASD populations but have rarely been examined in autism.",
-      "To address this gap, 17 preschool-aged children (ages 4-6\u00a0years) with ASD and 21 children without ASD matched on age, sex, and expressive language completed assessments of AM, executive functioning, self-related variables, and a parent-child reminiscing task.",
+      "To address this gap, 17 preschool-aged children (ages 4-6 years) with ASD and 21 children without ASD matched on age, sex, and expressive language completed assessments of AM, executive functioning, self-related variables, and a parent-child reminiscing task.",
       "Children with ASD had less specific AM, which related to theory of mind, self-concept, and working memory.",
       "AM specificity also related to child observed autism traits.",
       "Mothers of children with ASD made more closed-ended and off-topic utterances during reminiscing, although only maternal open-ended elaborations predicted better AM in ASD."
@@ -3141,7 +3180,9 @@
       "(Contains 49 references.)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ896646"
+    ]
   },
   {
     "id": "eric_EJ150243",
@@ -3194,7 +3235,7 @@
       "adolescents"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -3413,7 +3454,7 @@
       "health_programs"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -3456,7 +3497,7 @@
       "outcomes_of_treatment"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -3650,53 +3691,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_EJ944868",
-    "name": "Immediate-Release Methylphenidate for ADHD in Children with Comorbid Chronic Multiple Tic Disorder",
-    "description": "Objective: To examine the safety and efficacy of immediate-release methylphenidate (MPH-IR) for the treatment of attention-deficit/hyperactivity disorder (ADHD) in children (ages 6-12 years) with Tour",
-    "document_type": "guidance",
-    "tags": [
-      "neurological_impairments",
-      "attention_deficit_hyperactivity_disorder",
-      "anxiety_disorders",
-      "rating_scales",
-      "patients",
-      "severity",
-      "safety",
-      "drug_therapy",
-      "children",
-      "observation",
-      "outcomes_of_treatment",
-      "teacher_attitudes",
-      "physicians",
-      "parent_attitudes"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ944868"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Objective: To examine the safety and efficacy of immediate-release methylphenidate (MPH-IR) for the treatment of attention-deficit/hyperactivity disorder (ADHD) in children (ages 6-12 years) with Tourette's syndrome (96%) or chronic motor tic disorder (4%).",
-      "Method: Two cohorts of prepubertal children (N = 71) received placebo and three doses of MPH (0.1, 0.3, and 0.5 mg/kg) twice daily for 2 weeks each, under double-blind conditions as part of their involvement in a long-term observation study (1989-2004).",
-      "Treatment effects were assessed with an extensive battery of parent-, teacher-, child-, and physician-completed rating scales and laboratory tasks.",
-      "Results: MPH-IR effectively suppressed ADHD, oppositional defiant disorder, and peer aggression behaviors.",
-      "There was no evidence that MPH-IR altered the overall severity of tic disorder or obsessive-compulsive disorder behaviors.",
-      "Teacher ratings indicated that MPH-IR therapy decreased tic frequency and severity.",
-      "Conclusions: MPH-IR appears to be a safe and effective short-term treatment for ADHD in the majority of children with chronic tic disorder; nevertheless, the possibility of tic exacerbation in susceptible individuals warrants careful monitoring of all patients.",
-      "(Contains 4 tables.)"
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ940082",
     "name": "Testing the Interactive Effect of Parent and Child ADHD on Parenting in Mothers and Fathers: A Further Test of the Similarity-Fit Hypothesis",
     "description": "Mother and child ADHD symptoms both have a negative effect on parenting. Little is known about how these characteristics interact. In a recent paper, we reported two studies that suggested that matern",
@@ -3743,7 +3737,7 @@
     "id": "eric_EJ744427",
     "name": "Effectiveness of a Computer-Facilitated, Interactive Social Skills Training Program for Boys with Attention Deficit Hyperactivity Disorder",
     "description": "Children with attention deficit hyperactivity disorder (ADHD) are at significant risk for a variety of comorbid conditions, including social skills deficits. Although interventions addressing various",
-    "document_type": "strategy",
+    "document_type": "guidance",
     "tags": [
       "children",
       "attention_deficit_disorders",
@@ -3784,7 +3778,9 @@
       "Follow-up data at 3 and 6 week intervals indicated that participants maintained their gains over time."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W4386405440"
+    ]
   },
   {
     "id": "eric_EJ939908",
@@ -3912,7 +3908,13 @@
       "(JDD)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ957554",
+      "eric_EJ650524",
+      "pm_30556686",
+      "eric_EJ416547",
+      "pm_11291014"
+    ]
   },
   {
     "id": "eric_EJ746949",
@@ -3977,7 +3979,7 @@
       "predictor_variables"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -4118,7 +4120,7 @@
     "key_points": [
       "Autism spectrum disorder (ASD) and attention deficit hyperactivity disorder (ADHD) are highly heritable neurodevelopmental disorders that frequently co-occur.",
       "Both rare and common genetic variants are important for ASD and ADHD risk but their combined contribution to clinical heterogeneity is unclear.",
-      "In a sample of 39 ASD and/or ADHD families we estimated the overall variance explained by known rare copy number variants (CNVs) and polygenic risk score (PRS) from common variants to be\u00a010% in comorbid ASD/ADHD, 4% in ASD and 2% in ADHD.",
+      "In a sample of 39 ASD and/or ADHD families we estimated the overall variance explained by known rare copy number variants (CNVs) and polygenic risk score (PRS) from common variants to be 10% in comorbid ASD/ADHD, 4% in ASD and 2% in ADHD.",
       "We show that burden of large, rare CNVs and PRS is significantly higher in adult ASD and/or ADHD patients with sustained need for specialist care compared to their unaffected relatives, while affected relatives fall in-between the two."
     ],
     "contraindications": [],
@@ -4285,7 +4287,9 @@
       "(CL)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ826531"
+    ]
   },
   {
     "id": "eric_ED554816",
@@ -4386,7 +4390,7 @@
     "id": "eric_EJ1380712",
     "name": "Embedding Executive Function Training into Early Literacy Instruction for Dual Language Learners: A Pilot Study",
     "description": "Purpose: Early literacy skills are key indicators of future reading development for young dual language learners (DLLs). Additionally, emerging evidence indicates that young children's executive funct",
-    "document_type": "strategy",
+    "document_type": "guidance",
     "tags": [
       "preschool_children",
       "second_language_learning",
@@ -4582,7 +4586,7 @@
       "identification"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -4607,7 +4611,10 @@
       "Findings showed adolescents with ADHD who were best friends in childhood sought adults with ADHD for friendships when they became adults."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W4291003813",
+      "eric_ED461959"
+    ]
   },
   {
     "id": "eric_EJ709237",
@@ -4732,7 +4739,9 @@
       "\"An ADHD Primer\" is intended for students enrolled in teacher-certification programs, graduate students enrolled in research and applied training programs, educators, counselors, nurses, psychologists, parents, and individuals with ADHD."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W1600587176"
+    ]
   },
   {
     "id": "eric_EJ926385",
@@ -4754,7 +4763,7 @@
       "dietetics"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -5218,7 +5227,13 @@
       "Teacher report of ADHD symptoms, math achievement by students, and objective classroom observations for their first wave were analyzed."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W4240814935",
+      "oalex_W2137945092",
+      "pm_37491674",
+      "pm_38261550",
+      "pm_39431479"
+    ]
   },
   {
     "id": "eric_EJ843671",
@@ -5394,7 +5409,13 @@
       "The findings highlight the need for parents and teachers to develop awareness and involvement in childrens friendship relationships."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_34827515",
+      "oalex_W1544196159",
+      "oalex_W2023303756",
+      "eric_EJ827503",
+      "eric_EJ626943"
+    ]
   },
   {
     "id": "eric_EJ598796",
@@ -5431,7 +5452,12 @@
       "(Author/GCP)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ882160",
+      "eric_EJ697205",
+      "eric_EJ806962",
+      "eric_EJ826531"
+    ]
   },
   {
     "id": "eric_EJ900171",
@@ -5458,7 +5484,7 @@
       "health_behavior"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -5519,7 +5545,7 @@
       "Addressing the complex homework and organization problems faced by students with attention-deficit/hyperactivity disorder (ADHD) must be balanced with ensuring that interventions are feasible to implement.",
       "The Homework, Organization, and Planning Skills (HOPS) intervention was developed to be a brief intervention implemented in typical school settings with minimal training/support required for school clinicians.",
       "Given this, it is critical to explore how clinician adherence and competency relate to student outcomes.",
-      "Participants included 107 adolescents with ADHD (&quot;M&quot;age = 11.95,\u00a0SD = 1.04; 69% male; 57% on ADHD medication) who participated in the HOPS intervention.",
+      "Participants included 107 adolescents with ADHD (&quot;M&quot;age = 11.95, SD = 1.04; 69% male; 57% on ADHD medication) who participated in the HOPS intervention.",
       "Path analyses examined the relation between clinician adherence (fidelity to session content, session length) and competency (e.g., empathic, enthusiastic, calm, collaborative), controlling for baseline scores of the outcome measure and other relevant therapeutic processes (parent and adolescent engagement, working alliance).",
       "Clinician fidelity and competency were inversely related, such that highly competent clinicians had lower fidelity to the HOPS content.",
       "Importantly, clinician competency was a significant predictor of fewer parent-reported adolescent organizational problems and a higher percentage of assignments turned in post-HOPS, whereas clinician fidelity was unrelated to treatment outcomes.",
@@ -5623,7 +5649,10 @@
       "We present this system as an important contributor to the comorbidity of ADHD with other developmental disorders, especially language disorder."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED321457",
+      "eric_EJ470760"
+    ]
   },
   {
     "id": "eric_EJ869760",
@@ -6005,7 +6034,7 @@
   {
     "id": "eric_EJ1305606",
     "name": "Contribution of Executive Functions to Learning Sequential Actions in Young Children",
-    "description": "This study examined whether executive functions impact how flexibly children represent task context in performing repeated sequential actions. Japanese children in Experiments 1 (N\u00a0=\u00a052; 3-6\u00a0years) an",
+    "description": "This study examined whether executive functions impact how flexibly children represent task context in performing repeated sequential actions. Japanese children in Experiments 1 (N = 52; 3-6 years) an",
     "document_type": "guidance",
     "tags": [
       "executive_function",
@@ -6033,7 +6062,7 @@
     "steps": [],
     "key_points": [
       "This study examined whether executive functions impact how flexibly children represent task context in performing repeated sequential actions.",
-      "Japanese children in Experiments 1 (N\u00a0=\u00a052; 3-6\u00a0years) and 2 (N\u00a0=\u00a050, 4-6\u00a0years) performed sequential actions repeatedly; one group received reminders.",
+      "Japanese children in Experiments 1 (N = 52; 3-6 years) and 2 (N = 50, 4-6 years) performed sequential actions repeatedly; one group received reminders.",
       "Experiment 1 indicated that reminders promote flexible changes in contextual representations.",
       "Experiment 2 observed such effects in younger children and showed executive functions were associated with the flexible representation of task context.",
       "Reminders did not perfectly compensate for the role of executive functions but wiped out individual differences in executive functions that contribute to children's acquisition of routines.",
@@ -6097,7 +6126,8 @@
       "responses"
     ],
     "age_range": [
-      "all"
+      "preschool",
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -6436,12 +6466,12 @@
     "steps": [],
     "key_points": [
       "Objective: The association between perceived stress (PS) and ADHD symptoms in adulthood is well established, yet the underlying mechanisms remain unclear.",
-      "This study employed a genetically informative design to investigate the roles of gene-environment (GE) correlation and gene-environment interaction (G\u00d7E) in explaining this association.",
-      "Three G\u00d7E interaction models were considered: the diathesis-stress model, the bioecological model, and the differential sensitivity model.",
-      "Method: In total, 1,270 twins (mean age: 23.3\u00b12.4years) participated in an online survey, which included ADHD symptoms and PS scales.",
+      "This study employed a genetically informative design to investigate the roles of gene-environment (GE) correlation and gene-environment interaction (G×E) in explaining this association.",
+      "Three G×E interaction models were considered: the diathesis-stress model, the bioecological model, and the differential sensitivity model.",
+      "Method: In total, 1,270 twins (mean age: 23.3±2.4years) participated in an online survey, which included ADHD symptoms and PS scales.",
       "The PS scale measured stress across five categories: Friendship Stress (FS), Family Conflicts (FC), Financial Difficulties (FD), Academic Stress (AS), and Future Career Concerns (FCC).",
       "Results: Bivariate Cholesky modelfitting analyses revealed significant genetic correlations between ADHD symptoms and all five PS categories, indicating a pervasive influence of GE correlations on these associations.",
-      "Further bivariate G\u00d7E model-fitting analyses showed that G\u00d7E interaction effects were not significant for FS or FC but were significant for FD, AS, and FCC.",
+      "Further bivariate G×E model-fitting analyses showed that G×E interaction effects were not significant for FS or FC but were significant for FD, AS, and FCC.",
       "Specifically, the relationship between FD and ADHD symptoms aligned with the differential sensitivity model, where genetic variance was heightened at extreme levels of FD.",
       "The association between AS and ADHD symptoms followed the bioecological model, characterized by increased shared environmental variance at higher stress levels.",
       "Finally, the association between FCC and ADHD symptoms was consistent with the diathesis-stress model, where genetic influences amplified with increasing stress levels."
@@ -6541,7 +6571,9 @@
       "(Contains 1 table.)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_40426805"
+    ]
   },
   {
     "id": "eric_EJ852488",
@@ -6659,7 +6691,8 @@
       "intervention"
     ],
     "age_range": [
-      "all"
+      "adolescent",
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -6842,7 +6875,7 @@
     "id": "eric_EJ806943",
     "name": "Training Raters to Assess Adult ADHD: Reliability of Ratings",
     "description": "The standardization of ADHD ratings in adults is important given their differing symptom presentation. The authors investigated the agreement and reliability of rater standardization in a large-scale",
-    "document_type": "strategy",
+    "document_type": "guidance",
     "tags": [
       "interrater_reliability",
       "rating_scales",
@@ -6974,7 +7007,9 @@
       "Children with ADHD who have elevated externalizing behaviors and who are struggling academically should be tested for possible co-occurring DLD."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W4401565244"
+    ]
   },
   {
     "id": "eric_EJ1348329",
@@ -7066,7 +7101,9 @@
       "These findings suggest that certain behaviors can be identified before the age of 3 by trained observers and that this identification that make a future ADHD diagnosis and/or school difficulties more likely."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W2121359568"
+    ]
   },
   {
     "id": "eric_EJ696909",
@@ -7102,7 +7139,9 @@
       "The implications for addressing responsiveness and over-reactivity as components of parent-mediated behavioral treatments for ADHD are considered.KEY WORDS: ADHD; oppositional behavior; mother-child interactions; responsiveness."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ755983"
+    ]
   },
   {
     "id": "eric_EJ860629",
@@ -7301,50 +7340,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_EJ821276",
-    "name": "Adjustment to College in Students with ADHD",
-    "description": "Objective: To examine college adjustment in students reporting an ADHD diagnosis and the effect of medication treatment on students' adjustment. Method: 1,648 first-semester freshmen attending a publi",
-    "document_type": "guidance",
-    "tags": [
-      "personality_traits",
-      "private_colleges",
-      "attention_deficit_hyperactivity_disorder",
-      "depression",
-      "student_adjustment",
-      "college_freshmen",
-      "drug_therapy",
-      "student_surveys",
-      "symptoms",
-      "correlation",
-      "academic_achievement"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ821276"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Objective: To examine college adjustment in students reporting an ADHD diagnosis and the effect of medication treatment on students' adjustment.",
-      "Method: 1,648 first-semester freshmen attending a public and a private university completed a Web-based survey to examine their adjustment to college.",
-      "Results: Compared with 200 randomly selected control students, 68 students with ADHD reported more academic concerns and depressive symptoms.",
-      "This was explained by higher rates of inattentive symptoms among students with ADHD and was unrelated to hyperactive-impulsive symptoms.",
-      "Among students with ADHD, medication treatment was not related to better adjustment or diminished ADHD symptoms.",
-      "The contribution of inattention to academic concerns and depressive symptoms remained significant when controlling for personality traits.",
-      "Conclusion: Students with ADHD experience greater academic performance concerns and depressive symptoms during the transition to college.",
-      "Medication treatment did not appear to diminish ADHD symptoms nor enhance students' adjustment."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ568350",
     "name": "Parenting Styles and Adolescents' Learning Strategies in the Urban Community.",
     "description": "Examines the relationship between perceived parenting styles and urban adolescents' learning and studying strategies. Results revealed that those adolescents who perceived their parents as being autho",
@@ -7365,7 +7360,7 @@
       "urban_culture"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -7384,7 +7379,9 @@
       "(MKA)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ622631"
+    ]
   },
   {
     "id": "eric_EJ1341734",
@@ -7557,7 +7554,7 @@
       "secondary_school_students"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -7604,7 +7601,7 @@
       "gender_differences"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -7618,7 +7615,7 @@
     "steps": [],
     "key_points": [
       "Girls and boys might differ in autistic symptoms and associated cognitive difficulties such as executive function (EF).",
-      "We investigated sex differences in the relationship between parent rated EF and autistic symptoms in 116 children and adolescents (25 girls) aged 5-19\u00a0years with an intelligence quotient above 70 and an autism spectrum disorder (ASD) diagnosis.",
+      "We investigated sex differences in the relationship between parent rated EF and autistic symptoms in 116 children and adolescents (25 girls) aged 5-19 years with an intelligence quotient above 70 and an autism spectrum disorder (ASD) diagnosis.",
       "They were rated with the behavior rating inventory of executive function (BRIEF) and the autism diagnostic interview revised (ADI-R).",
       "We found a positive association between EF and the ADI-R domains of reciprocal social interaction (p &lt; 0.001) and communication (p = 0.001) in girls, while these relationships were small and non-significant in boys.",
       "Our results provide a greater understanding of the sex-specific characteristics of children and adolescents with ASD."
@@ -7772,7 +7769,7 @@
   },
   {
     "id": "eric_EJ1058405",
-    "name": "Institutional Care and Iron Deficiency Increase ADHD Symptomology and Lower IQ 2.5-5\u00a0Years Post-Adoption",
+    "name": "Institutional Care and Iron Deficiency Increase ADHD Symptomology and Lower IQ 2.5-5 Years Post-Adoption",
     "description": "Increased ADHD symptomology and lower IQ have been reported in internationally adopted (IA) children compared to non-adopted peers (Hostinar, Stellern, Schaefer, Carlson &amp; Gunnar, 2012; Kreppner,",
     "document_type": "guidance",
     "tags": [
@@ -7808,14 +7805,14 @@
     "key_points": [
       "Increased ADHD symptomology and lower IQ have been reported in internationally adopted (IA) children compared to non-adopted peers (Hostinar, Stellern, Schaefer, Carlson &amp; Gunnar, 2012; Kreppner, O'Connor &amp; Rutter, 2001).",
       "However, it is unclear whether these outcomes are due to institutional deprivation specifically or to co-occurring micronutrient deficiencies that disrupt brain development (Fuglestad, Rao &amp; Georgieff, 2008b).",
-      "In this study, IA children were compared to children raised in their biological families to examine differences in ADHD symptomology and IQ 2.5-5\u00a0years post-adoption and to assess the contributions of iron deficiency (ID) and duration of deprivation to these cognitive outcomes.",
-      "ADHD symptoms (parent- and experimenter-reported) and IQ were evaluated in 88 IA (M = 62.1\u00a0months, SD = 2.4) and 35 non-adopted children (M = 61.4\u00a0months, SD = 1.6).",
-      "IA children were assessed 29-64\u00a0months post-adoption (M = 41.9\u00a0months, SD = 10.2).",
+      "In this study, IA children were compared to children raised in their biological families to examine differences in ADHD symptomology and IQ 2.5-5 years post-adoption and to assess the contributions of iron deficiency (ID) and duration of deprivation to these cognitive outcomes.",
+      "ADHD symptoms (parent- and experimenter-reported) and IQ were evaluated in 88 IA (M = 62.1 months, SD = 2.4) and 35 non-adopted children (M = 61.4 months, SD = 1.6).",
+      "IA children were assessed 29-64 months post-adoption (M = 41.9 months, SD = 10.2).",
       "ID was assessed during the initial post-adoption medical visit in 69 children, and children were classified into four groups by iron status, ranging from normal to ID anemia (most severe).",
       "IA children had greater ADHD symptomology, p &lt; 0.01, and lower IQ, p = 0.001, than non-adopted children.",
       "Within the IA group, children with more severe ID at adoption had greater ADHD symptomology, r(69) = 0.40, p = 0.001, and lower IQ, r(68) = -0.28, p &lt; 0.05.",
       "Duration of institutional care was positively correlated with ADHD symptoms, r(86) = 0.28, p &lt; 0.01, but not IQ, r(85) = -0.08, p = 0.52.",
-      "Longitudinal results indicate improvement in IQ from 12\u00a0months post-adoption to age 5 for children with greater ID severity at adoption and longer duration of institutional care but no improvement in ADHD symptoms."
+      "Longitudinal results indicate improvement in IQ from 12 months post-adoption to age 5 for children with greater ID severity at adoption and longer duration of institutional care but no improvement in ADHD symptoms."
     ],
     "contraindications": [],
     "related_ids": []
@@ -8033,7 +8030,7 @@
   {
     "id": "eric_EJ1088199",
     "name": "Attention Problems in Very Preterm Children from Childhood to Adulthood: The Bavarian Longitudinal Study",
-    "description": "Background: Very preterm (VP; gestational age &lt;32\u00a0weeks) and very low birth weight (VLBW; &lt;1500 grams) is related to attention problems in childhood and adulthood. The stability of these problem",
+    "description": "Background: Very preterm (VP; gestational age &lt;32 weeks) and very low birth weight (VLBW; &lt;1500 grams) is related to attention problems in childhood and adulthood. The stability of these problem",
     "document_type": "guidance",
     "tags": [
       "premature_infants",
@@ -8066,10 +8063,10 @@
     ],
     "steps": [],
     "key_points": [
-      "Background: Very preterm (VP; gestational age &lt;32\u00a0weeks) and very low birth weight (VLBW; &lt;1500 grams) is related to attention problems in childhood and adulthood.",
+      "Background: Very preterm (VP; gestational age &lt;32 weeks) and very low birth weight (VLBW; &lt;1500 grams) is related to attention problems in childhood and adulthood.",
       "The stability of these problems into adulthood is not known.",
       "Methods: The Bavarian Longitudinal Study is a prospective cohort study that followed 260 VP/VLBW and 229 term-born individuals from birth to adulthood.",
-      "Data on attention were collected at 6, 8, and 26\u00a0years of age, using parent reports, expert behavior observations, and clinical ADHD diagnoses.",
+      "Data on attention were collected at 6, 8, and 26 years of age, using parent reports, expert behavior observations, and clinical ADHD diagnoses.",
       "Results: At each assessment, VP/VLBW individuals had significantly more attention problems, shorter attention span, and were more frequently diagnosed with ADHD than term-born comparisons.",
       "In both VP/VLBW and term-born individuals, overall, attention span increased and attention problems decreased from childhood to adulthood.",
       "Attention problems and attention span were more stable over time for VP/VLBW than term-born individuals.",
@@ -8129,7 +8126,9 @@
       "A majority of teachers indicated that they had received training."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ1137112"
+    ]
   },
   {
     "id": "eric_EJ1429406",
@@ -8185,7 +8184,7 @@
     "id": "eric_EJ1308130",
     "name": "Comprehensive Meta-Analysis of Attention-Deficit/Hyperactivity Disorder Psychosocial Treatments Investigated within between Group Studies",
     "description": "Interventions for attention-deficit/hyperactivity disorder (ADHD) include positive behavior supports (e.g., parent training, school-based contingency management, behavioral peer interventions), traini",
-    "document_type": "strategy",
+    "document_type": "guidance",
     "tags": [
       "attention_deficit_hyperactivity_disorder",
       "intervention",
@@ -8350,55 +8349,11 @@
       "Language problems are also common in ADHD, with accumulating evidence of pragmatic language difficulties.",
       "Pragmatic deficits are associated with social impairment in several neurodevelopmental disorders.",
       "This study systematically examined pragmatic language functioning in children with ADHD and whether social impairment in ADHD is mediated by pragmatic deficits.",
-      "Method: Sixty-three children (28 ADHD; 35 typically developing), ages 7-11\u00a0years, underwent a comprehensive assessment of pragmatic language, including parent ratings, standardized tests, and a narrative task.",
+      "Method: Sixty-three children (28 ADHD; 35 typically developing), ages 7-11 years, underwent a comprehensive assessment of pragmatic language, including parent ratings, standardized tests, and a narrative task.",
       "Parents also rated children&apos;s social skills on the Social Skills Improvement System.",
       "Results: Children with ADHD had poorer pragmatic language skills relative to peers across all measures, even after controlling for general language abilities.",
       "Furthermore, pragmatic abilities as measured by parent ratings, mediated the relation between ADHD and social skills.",
       "Conclusions: Pragmatic language skills are impaired in many children with ADHD and may partially account for high rates of social impairment."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "eric_EJ806914",
-    "name": "ADHD in College Students",
-    "description": "Objective: According to the American Psychiatric Association, 3% to 7% of the school-age population has ADHD and many children continue to display significant symptoms throughout adolescences and adul",
-    "document_type": "guidance",
-    "tags": [
-      "college_students",
-      "attention_deficit_disorders",
-      "psychology",
-      "hyperactivity",
-      "symptoms",
-      "incidence",
-      "young_adults",
-      "neurological_impairments",
-      "psychological_patterns",
-      "high_risk_students",
-      "research_needs",
-      "academic_achievement"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ806914"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Objective: According to the American Psychiatric Association, 3% to 7% of the school-age population has ADHD and many children continue to display significant symptoms throughout adolescences and adulthood.",
-      "Relative to the childhood literature, less is known about ADHD in adults, especially college students with ADHD.",
-      "The principle purpose of this review articles is to summarize the major research findings concerning ADHD in the college student population with regard to prevalence of symptoms, neuropsychological and psychological functioning.",
-      "Overall, findings suggest that college students with ADHD are at greater risk for academic and psychological difficulties, and they perform similar to non-ADHD controls on many neuropsychological tasks.",
-      "These findings are preliminary, however, and are tempered by the small number of studies that have been conducted as well as the methodological limitations of these studies.",
-      "Conclusion: Future research using larger sample sizes, rigorous assessment criteria, and a longitudinal design is needed to better understand the psychological, academic, and neuropsychological functioning of college students with ADHD.",
-      "Studies are also needed to elucidate the effects of pharmacological and nonpharmacological effects of treatment on the functioning of college students with this disorder."
     ],
     "contraindications": [],
     "related_ids": []
@@ -8491,7 +8446,9 @@
       "(Contains 2 tables.)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ491100"
+    ]
   },
   {
     "id": "eric_EJ1402243",
@@ -8525,7 +8482,7 @@
     "key_points": [
       "Executive functions (EFs) play a crucial role in academic performance.",
       "In the present study, we aimed to improve EFs through a group-based cognitive training.",
-      "Thirty-three typically developing children (age mean: 58.80 \u00b1 7.04 months) were recruited in a random clinical trial design in two intervention (n = 18) and active control (n = 15) groups.",
+      "Thirty-three typically developing children (age mean: 58.80 ± 7.04 months) were recruited in a random clinical trial design in two intervention (n = 18) and active control (n = 15) groups.",
       "Emoji selection, shifting attention, day/night Stroop, Corsi block tapping tasks, and behavioral rating inventory of executive function (BRIEF) were used for assessment in three baseline, post-intervention, and 3-month follow-up sessions.",
       "The intervention group received Class-based Cognitive Remediation (COREN) and the active control group participated in a storytelling class, both in 12 sessions.",
       "The result suggests improvement in sustained attention, cognitive flexibility, inhibitory control, and working memory in intervention group.",
@@ -8621,7 +8578,11 @@
       "(Author/CR)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_40959688",
+      "eric_ED392175",
+      "eric_EJ470763"
+    ]
   },
   {
     "id": "eric_EJ1250139",
@@ -8662,7 +8623,7 @@
       "We addressed three related questions: (a) Do behavioral ratings of EF and EC represent the same self-regulation construct?",
       "(b) Is this self-regulation construct explained by a common executive attention factor as measured by performance on cognitive tasks?",
       "and (c) Does the executive attention factor explain additional variance in attention deficit hyperactivity disorder (ADHD) problems to behavioral ratings of self-regulation?",
-      "Measures of performance on complex span, general intelligence, and response inhibition tasks were obtained from 136 preadolescent children (M\u00a0=\u00a011\u00a0years, 10\u00a0months, SD\u00a0=\u00a08\u00a0months), along with self- and parent-reported EC, and parent-reported EF, and ADHD problems.",
+      "Measures of performance on complex span, general intelligence, and response inhibition tasks were obtained from 136 preadolescent children (M = 11 years, 10 months, SD = 8 months), along with self- and parent-reported EC, and parent-reported EF, and ADHD problems.",
       "Results from structural equation modeling demonstrated that behavioral ratings of EF and EC measured the same self-regulation construct.",
       "Cognitive tasks measured a common executive attention factor that significantly explained 30% of the variance in behavioral ratings of self-regulation.",
       "Executive attention failed to significantly explain additional variance in ADHD problems beyond that explained by behavioral ratings of self-regulation."
@@ -9128,7 +9089,7 @@
       "time_on_task"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -9147,7 +9108,10 @@
       "(Author/MKA)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_15846741",
+      "pm_41362977"
+    ]
   },
   {
     "id": "eric_ED416593",
@@ -9553,7 +9517,9 @@
       "Additionally, factors such as executive functions, medication use, and study strategies also influence the academic performance of these students."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ1159500"
+    ]
   },
   {
     "id": "eric_EJ1208481",
@@ -9738,7 +9704,7 @@
       "psychoeducational_methods"
     ],
     "age_range": [
-      "all"
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -9761,51 +9727,6 @@
       "Both groups had numerical reductions in direct and indirect costs while on atomoxetine treatment during the extension phase.",
       "The atomoxetine medication costs were offset by the reductions in direct nonmedical and indirect costs.",
       "Conclusions: These data provide preliminary evidence that atomoxetine together with parental psycho education reduces nonmedication costs associated with ADHD in Sweden."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "eric_EJ818707",
-    "name": "Early Histories of School-Aged Children with Attention-Deficit/Hyperactivity Disorder",
-    "description": "In a prospective study of developmental outcomes in relation to early-life otitis media, behavioral, cognitive, and language measures were administered to a large, diverse sample of children at 2, 3,",
-    "document_type": "guidance",
-    "tags": [
-      "check_lists",
-      "diseases",
-      "hyperactivity",
-      "attention_deficit_disorders",
-      "child_behavior",
-      "receptive_language",
-      "measures",
-      "language_skills",
-      "cognitive_ability",
-      "scores",
-      "preschool_children",
-      "children",
-      "toddlers",
-      "young_children"
-    ],
-    "age_range": [
-      "preschool",
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ818707"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "In a prospective study of developmental outcomes in relation to early-life otitis media, behavioral, cognitive, and language measures were administered to a large, diverse sample of children at 2, 3, 4, 6, and 9-11 years of age (N = 741).",
-      "At 9-11 years of age, 9% of the children were categorized as having attention-deficit/hyperactivity disorder (ADHD) based on parent report.",
-      "Compared to the non-ADHD group, the ADHD group had higher (i.e., less favorable) scores on parent and teacher versions of the Child Behavior Checklist at all ages.",
-      "Children in the ADHD group also had lower scores on cognitive and receptive language measures in preschool.",
-      "The findings support the concept that ADHD is a cognitive as well as a behavioral disorder."
     ],
     "contraindications": [],
     "related_ids": []
@@ -10107,7 +10028,9 @@
       "(Author/NB)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W2407590463"
+    ]
   },
   {
     "id": "eric_EJ1353400",
@@ -10277,10 +10200,10 @@
     "key_points": [
       "This study provides the first analyses connecting individual differences in infant attention to reading achievement through the development of executive functioning (EF) in infancy and early childhood.",
       "Five-month-old infants observed a video, and peak look duration and shift rate were video coded and assessed.",
-      "At 10\u00a0months, as well as 3, 4, and 6\u00a0years, children completed age-appropriate EF tasks (A-not-B task, hand game, forward digit span, backwards digit span, and number Stroop).",
+      "At 10 months, as well as 3, 4, and 6 years, children completed age-appropriate EF tasks (A-not-B task, hand game, forward digit span, backwards digit span, and number Stroop).",
       "Children also completed a standardized reading assessment and a measure of verbal intelligence (IQ) at age 6.",
-      "Path analyses on 157 participants showed that infant attention had a direct statistical predictive effect on EF at 10\u00a0months, with EF showing a continuous pattern of development from 10\u00a0months to 6\u00a0years.",
-      "EF and verbal IQ at 6\u00a0years had a direct effect on reading achievement.",
+      "Path analyses on 157 participants showed that infant attention had a direct statistical predictive effect on EF at 10 months, with EF showing a continuous pattern of development from 10 months to 6 years.",
+      "EF and verbal IQ at 6 years had a direct effect on reading achievement.",
       "Furthermore, EF at all time points mediated the relation between 5-month attention and reading achievement.",
       "These findings may inform reading interventions by suggesting earlier intervention time points and specific cognitive processes (i.e.",
       "5-month attention)."
@@ -10345,7 +10268,7 @@
       "gender_differences"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -10495,7 +10418,9 @@
       "The key findings were that participants identified positive teacher-student relationship and structured classrooms as beneficial for students with ADHD."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED652986"
+    ]
   },
   {
     "id": "eric_EJ985028",
@@ -10785,7 +10710,9 @@
       "These results were interpreted as affirming a series of predictions from the working memory model of ADHD (Rapport et al., 2001)."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ729092"
+    ]
   },
   {
     "id": "eric_EJ689808",
@@ -10846,7 +10773,7 @@
       "comparative_analysis"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -10871,7 +10798,13 @@
       "Conclusions: To date, the most consistent findings in the neuroimaging literature of ADHD are deficits in neural activity within fronto-striatal and fronto-parietal circuits."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_27810669",
+      "eric_EJ1278745",
+      "oalex_W2111356744",
+      "pm_39121711",
+      "pm_39661381"
+    ]
   },
   {
     "id": "eric_EJ786173",
@@ -10952,7 +10885,9 @@
       "The study found that teachers were innovative in developing effective support strategies to support Grade 1 learners living with ADHD in their classrooms."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W3109940656"
+    ]
   },
   {
     "id": "eric_EJ828759",
@@ -10981,7 +10916,7 @@
       "elementary_school_students"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -11062,7 +10997,7 @@
       "foreign_countries"
     ],
     "age_range": [
-      "all"
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -11109,7 +11044,7 @@
       "token_economy"
     ],
     "age_range": [
-      "all"
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -11246,7 +11181,8 @@
       "aggression"
     ],
     "age_range": [
-      "all"
+      "adolescent",
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -11388,12 +11324,12 @@
     "steps": [],
     "key_points": [
       "This study aimed to explore the potential mediating role of sleep quality in the effect of physical activity (PA) intervention for improving executive functions (EFs) in children with attention-deficit hyperactivity disorder (ADHD).",
-      "Participants aged 6 to 12\u00a0years old with a formal ADHD diagnosis were recruited from a local hospital.",
-      "A total of 80 eligible children with ADHD were randomized to an intervention group for 12 consecutive weeks of PA training (three times per week, 60\u00a0min per session) (n = 40; Mage = 8.37, 75% boys) or a wait-list control group (n = 40; Mage = 8.29, 80% boys).",
+      "Participants aged 6 to 12 years old with a formal ADHD diagnosis were recruited from a local hospital.",
+      "A total of 80 eligible children with ADHD were randomized to an intervention group for 12 consecutive weeks of PA training (three times per week, 60 min per session) (n = 40; Mage = 8.37, 75% boys) or a wait-list control group (n = 40; Mage = 8.29, 80% boys).",
       "Three core EFs (inhibitory control, working memory, and cognitive flexibility) were assessed by neurocognitive tasks, and sleep quality was measured by the Chinese version of the Pittsburgh Sleep Quality Index.",
       "The bootstrapping method was used to test PA intervention effects on EFs and on potential variables of sleep quality after intervention and to test whether there were indirect effects of the intervention on EFs via mediators of sleep.",
-      "The results showed that the PA intervention had a direct effect on sleep latency reduction ([beta] = -\u00a00.26, 95%CI -\u00a00.47 to -\u00a00.06) and cognitive flexibility improvement (decrease in completion time) ([beta] = -\u00a00.30, 95%CI -\u00a00.50 to -\u00a00.09).",
-      "Furthermore, change in sleep latency significantly mediated the effects of PA intervention on cognitive flexibility ([beta] = -\u00a00.084, 95%CI -\u00a00.252 to -\u00a00.001).",
+      "The results showed that the PA intervention had a direct effect on sleep latency reduction ([beta] = - 0.26, 95%CI - 0.47 to - 0.06) and cognitive flexibility improvement (decrease in completion time) ([beta] = - 0.30, 95%CI - 0.50 to - 0.09).",
+      "Furthermore, change in sleep latency significantly mediated the effects of PA intervention on cognitive flexibility ([beta] = - 0.084, 95%CI - 0.252 to - 0.001).",
       "The findings suggest that sleep latency could be a crucial behavioral mediator of PA intervention in improving cognitive flexibility among children with ADHD."
     ],
     "contraindications": [],
@@ -11545,7 +11481,8 @@
       "psychological_patterns"
     ],
     "age_range": [
-      "all"
+      "adolescent",
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -11567,7 +11504,9 @@
       "The AAP recommends that pediatricians educate families about good sleep practices and behavioral interventions."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_30871585"
+    ]
   },
   {
     "id": "eric_EJ796470",
@@ -11605,7 +11544,9 @@
       "The sluggish and inhibited performance of the ADHD/I group challenges the idea that it is a subtype of ADHD."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pmc_PMC12935713"
+    ]
   },
   {
     "id": "eric_ED569260",
@@ -11908,7 +11849,9 @@
       "(Author/CR)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED602306"
+    ]
   },
   {
     "id": "eric_EJ1103538",
@@ -11929,7 +11872,7 @@
       "effect_size"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -11999,7 +11942,9 @@
       "Conclusions: We documented opposite G x E interactions in RD and ADHD-I in the same overall twin sample, but the explanation for this apparent paradox remains unclear."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ827035"
+    ]
   },
   {
     "id": "eric_EJ1036847",
@@ -12291,7 +12236,7 @@
   },
   {
     "id": "eric_EJ1280702",
-    "name": "Improving Self-Regulation and Executive Functioning Skills in Primary School Children in a Remote Australian Aboriginal Community: A Pilot Study of the Alert Program\u00ae",
+    "name": "Improving Self-Regulation and Executive Functioning Skills in Primary School Children in a Remote Australian Aboriginal Community: A Pilot Study of the Alert Program®",
     "description": "Self-regulation and executive functioning impairments are common in children with fetal alcohol spectrum disorder. Given the high rates of fetal alcohol spectrum disorder identified amongst children l",
     "document_type": "guidance",
     "tags": [
@@ -12327,12 +12272,12 @@
     "steps": [],
     "key_points": [
       "Self-regulation and executive functioning impairments are common in children with fetal alcohol spectrum disorder.",
-      "Given the high rates of fetal alcohol spectrum disorder identified amongst children living in the remote Fitzroy Valley region of Western Australia, the Alert Program\u00ae was identified as a culturally safe intervention for use in local primary schools.",
-      "Researchers collaborated with Aboriginal Elders, community members, and staff from a Fitzroy Valley primary school to trial the Alert Program\u00ae.",
-      "Teachers were trained to deliver eight Alert Program\u00ae lessons to children in class.",
+      "Given the high rates of fetal alcohol spectrum disorder identified amongst children living in the remote Fitzroy Valley region of Western Australia, the Alert Program® was identified as a culturally safe intervention for use in local primary schools.",
+      "Researchers collaborated with Aboriginal Elders, community members, and staff from a Fitzroy Valley primary school to trial the Alert Program®.",
+      "Teachers were trained to deliver eight Alert Program® lessons to children in class.",
       "Self-regulation and executive functioning were measured using teacher and parent/caregiver questionnaires three times.",
       "Data were analyzed using repeated-measures ANOVA.",
-      "Teacher-led delivery of the Alert Program\u00ae was feasible in a region with high fetal alcohol spectrum disorder rates.",
+      "Teacher-led delivery of the Alert Program® was feasible in a region with high fetal alcohol spectrum disorder rates.",
       "As measured by teacher and parent/caregiver ratings, this curriculum may improve the self-regulation and executive functioning of children for some outcomes and provide sustained effects for some children.",
       "This community partnered pilot research, evaluated a school-based program to reduce the behavioral impact of fetal alcohol spectrum disorder, and informed design of a larger trial across eight Aboriginal community schools."
     ],
@@ -12385,7 +12330,10 @@
       "Current findings highlight the need to recruit multidimensional and multidisciplinary screening procedures to assess for potential emerging autism spectrum disorder hallmarks in children and adolescents diagnosed or presenting with attention-deficit/hyperactivity disorder symptoms."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ851952",
+      "eric_EJ862673"
+    ]
   },
   {
     "id": "eric_EJ1335855",
@@ -12660,7 +12608,13 @@
       "(Author/DB)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W2002883969",
+      "pm_30556686",
+      "eric_EJ416547",
+      "eric_ED592799",
+      "pm_11291014"
+    ]
   },
   {
     "id": "eric_EJ1356497",
@@ -12729,7 +12683,7 @@
       "correlation"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -12971,7 +12925,7 @@
     "key_points": [
       "High rates of attention deficit/hyperactivity disorder (ADHD) comorbidity have been described in autism spectrum disorder (ASD).",
       "This study searched for predictors at toddlerhood of the severity of ADHD symptoms at adolescence.",
-      "The study included 65 participants, (mean age = 13:8\u00a0year), diagnosed with ASD at toddlerhood.",
+      "The study included 65 participants, (mean age = 13:8 year), diagnosed with ASD at toddlerhood.",
       "Participants underwent a comprehensive assessment of cognitive ability, adaptive skills and autism severity at toddlerhood and adolescence.",
       "More severe restricted and repetitive behaviors (RRB) in toddlerhood predicted the severity of Inattention symptoms.",
       "In addition, more severe RRB and lower adaptive skills in the toddler years significantly predicted the severity of Hyperactivity/Impulsivity symptoms.",
@@ -13182,7 +13136,7 @@
       "recreational_activities"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -13363,7 +13317,7 @@
       "telecommunications"
     ],
     "age_range": [
-      "all"
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -13505,7 +13459,13 @@
       "(Contains19 references and 2 figures.)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W1544196159",
+      "eric_EJ823114",
+      "eric_EJ488810",
+      "eric_EJ486028",
+      "eric_ED400672"
+    ]
   },
   {
     "id": "eric_EJ1090675",
@@ -13913,7 +13873,10 @@
       "Whereas comparison children's recall of factual and causal information increased over time in both viewing conditions, children with ADHD showed no developmental improvement in recall of factual information in the toys-present condition and no improvement in recall of causal relations in either viewing condition."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED396222",
+      "pm_39990169"
+    ]
   },
   {
     "id": "eric_EJ589534",
@@ -13949,7 +13912,9 @@
       "(DB)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ567164"
+    ]
   },
   {
     "id": "eric_EJ1166678",
@@ -14018,7 +13983,7 @@
       "health_behavior"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -14178,8 +14143,8 @@
   },
   {
     "id": "eric_EJ1228754",
-    "name": "Measuring and Predicting Individual Differences in Executive Functions at 14\u00a0Months: A Longitudinal Study",
-    "description": "This study of 195 (108 boys) children seen twice during infancy (Time 1: 4.12\u00a0months; Time 2: 14.42\u00a0months) aimed to investigate the associations between and infant predictors of executive function (E",
+    "name": "Measuring and Predicting Individual Differences in Executive Functions at 14 Months: A Longitudinal Study",
+    "description": "This study of 195 (108 boys) children seen twice during infancy (Time 1: 4.12 months; Time 2: 14.42 months) aimed to investigate the associations between and infant predictors of executive function (E",
     "document_type": "guidance",
     "tags": [
       "predictive_measurement",
@@ -14206,10 +14171,10 @@
     ],
     "steps": [],
     "key_points": [
-      "This study of 195 (108 boys) children seen twice during infancy (Time 1: 4.12\u00a0months; Time 2: 14.42\u00a0months) aimed to investigate the associations between and infant predictors of executive function (EF) at 14\u00a0months.",
-      "Infants showed high levels of compliance with the EF tasks at 14\u00a0months.",
+      "This study of 195 (108 boys) children seen twice during infancy (Time 1: 4.12 months; Time 2: 14.42 months) aimed to investigate the associations between and infant predictors of executive function (EF) at 14 months.",
+      "Infants showed high levels of compliance with the EF tasks at 14 months.",
       "There was little evidence of cohesion among EF tasks but simple response inhibition was related to performance on two other EF tasks.",
-      "Infant attention (but not parent-rated temperament) at 4\u00a0months predicted performance on two of the four EF tasks at 14\u00a0months.",
+      "Infant attention (but not parent-rated temperament) at 4 months predicted performance on two of the four EF tasks at 14 months.",
       "Results suggest that EF skills build on simpler component skills such as attention and response inhibition."
     ],
     "contraindications": [],
@@ -14253,7 +14218,13 @@
       "(Author/CR)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W1987418967",
+      "pm_36907194",
+      "oalex_W1978029420",
+      "oalex_W2121359568",
+      "eric_EJ485078"
+    ]
   },
   {
     "id": "eric_ED604400",
@@ -14379,11 +14350,16 @@
       "In the present study, the aim was to assess knowledge and misperceptions about ADHD among schoolteachers in Mumbai.",
       "A total of 106 teachers from 12 English-medium schools completed the Knowledge of Attention Deficit Disorders Scale and a demographic questionnaire.",
       "Overall, the teachers lacked adequate knowledge of ADHD, with only 49% of the responses being correct.",
-      "Repeated measures ANOVA results indicated that the teachers' scores on the three subscales of the measure were significantly different (F\u00a0=\u00a07.96, p\u00a0&lt;\u00a00.01), with the score being highest on the symptoms subscale.",
+      "Repeated measures ANOVA results indicated that the teachers' scores on the three subscales of the measure were significantly different (F = 7.96, p &lt; 0.01), with the score being highest on the symptoms subscale.",
       "In conclusion, teachers in Mumbai need training on general information and treatment of ADHD, with a focus on correcting common misperceptions that they have with regards to ADHD."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ1387523",
+      "eric_EJ1089191",
+      "eric_EJ1057763",
+      "eric_EJ1137112"
+    ]
   },
   {
     "id": "eric_EJ917315",
@@ -14522,7 +14498,7 @@
     "steps": [],
     "key_points": [
       "This study investigated the executive functions (EF) of preschool children and their associations with emotional, linguistic, and cognitive skills, using parent and teacher reports.",
-      "A total of 130 children aged 34 to 71\u00a0months participated.",
+      "A total of 130 children aged 34 to 71 months participated.",
       "The preschool version of the Behavior Rating Inventory of Executive Function (BRIEF-P) was completed by both parents and teachers to assess behavioral difficulties in the use of EFs, while children were administered the Test of Emotion Comprehension (TEC), the Test of Language Evaluation (TVL), and the Coloured Progressive Matrices (CPM).",
       "Statistical analyses revealed significant differences between parents' and teachers' reports, with parents attributing to children more EF difficulties than parents.",
       "Children's EF difficulties were negatively associated with emotion comprehension, language ability, and non-verbal intelligence, although correlations were stronger when using teachers' reports.",
@@ -14660,7 +14636,7 @@
     "steps": [],
     "key_points": [
       "This study examines parents' perspectives of the participation patterns (frequency, involvement, and parental desire for change) in their adolescent children's everyday functioning with and without executive function deficit profiles.",
-      "Parents of 81 adolescents (10-14) years) with executive function deficits (n =\u00a041) and a matched group of parents of adolescents with typical development (n =\u00a040) completed the Participation and Environment Measure for Children and Youth (PEM-CY) questionnaire.",
+      "Parents of 81 adolescents (10-14) years) with executive function deficits (n = 41) and a matched group of parents of adolescents with typical development (n = 40) completed the Participation and Environment Measure for Children and Youth (PEM-CY) questionnaire.",
       "The questionnaire includes the adolescents' participation frequency and involvement in common everyday functions in three environments (home, school, and community) and parental desire for change.",
       "Parents of adolescents with executive function deficits reported that their children participated significantly less (in frequency and involvement) in many activities within each environment than parents of typically developing adolescents reported.",
       "Additional significant group differences were evident, particularly when comparing parental desires to change their adolescent children's participation.",
@@ -14843,7 +14819,9 @@
       "(DB)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED406798"
+    ]
   },
   {
     "id": "eric_EJ921227",
@@ -15056,7 +15034,9 @@
       "Mandala coloring, as a complementary therapy, might be effective in improving attention in children with ADHD."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W2567820649"
+    ]
   },
   {
     "id": "eric_EJ765970",
@@ -15181,7 +15161,9 @@
       "(SLD)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W4289109769"
+    ]
   },
   {
     "id": "eric_EJ1402961",
@@ -15375,7 +15357,7 @@
       "computer_assisted_instruction"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -15419,7 +15401,8 @@
       "sleep"
     ],
     "age_range": [
-      "all"
+      "adolescent",
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -15463,7 +15446,7 @@
       "behavior_modification"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -15483,7 +15466,9 @@
       "Implications of findings for delivery of school-based services for this population as well as directions for future research are discussed."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ957559"
+    ]
   },
   {
     "id": "eric_EJ1353969",
@@ -15622,7 +15607,9 @@
       "[The dissertation citations contained here are published with the permission of ProQuest LLC."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W4232985550"
+    ]
   },
   {
     "id": "eric_EJ788229",
@@ -15709,7 +15696,9 @@
       "Implications for both clients and therapists are discussed."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_11291014"
+    ]
   },
   {
     "id": "eric_EJ677843",
@@ -16127,7 +16116,7 @@
       "In a sample of 216 high school students, we explored the relationship between hope and school belonging to executive functioning (EF).",
       "This examination was carried out to better understand how these, and potentially other psychosocial factors, relate to the neurocognitive decision-making process of adolescent students.",
       "This study had several findings.",
-      "First, after controlling for demographics and previous achievement, hope\u00a0and school belonging were found to account for about 26%-39% of EF's\u00a0variance, a large effect size.",
+      "First, after controlling for demographics and previous achievement, hope and school belonging were found to account for about 26%-39% of EF's variance, a large effect size.",
       "Second, after the same controls, hope and school belonging accounted for about 13%-25% of all five subcomponents of EF, an effect size range of medium to large.",
       "Finally, in general, the pathways subcomponent of hope was a better predictor of EF than the agency subcomponent.",
       "These results provide insight into how EF interacts with school-based perceptions as well as have implications for psychosocial intervention research within schools."
@@ -16356,7 +16345,9 @@
       "Conclusion: Results emphasize the importance of understanding self-stigma of ADHD, symptom severity, and the need for interventions for families with ADHD."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_40498240"
+    ]
   },
   {
     "id": "eric_EJ736057",
@@ -16442,10 +16433,10 @@
     "steps": [],
     "key_points": [
       "Background: A cost-effective method to address reading delays is to use computer-assisted learning, but these techniques are not always effective.",
-      "Methods: We evaluated a commercially available computer system that uses visual mnemonics, in a randomised controlled trial with 78 English-speaking children (mean age 7\u00a0years) who their schools identified as needing reading support.",
+      "Methods: We evaluated a commercially available computer system that uses visual mnemonics, in a randomised controlled trial with 78 English-speaking children (mean age 7 years) who their schools identified as needing reading support.",
       "School-based individual tutorials usually took place 2-3 times/week.",
-      "Only the experimental group received the intervention in the first 10\u00a0months; thereafter, both the experimental and control groups received the intervention for 6\u00a0months.",
-      "Results: After 10\u00a0months, the experimental group had significantly higher standardised scores than the waiting list control group of decoding, phonological awareness, naming speed, phonological short-term memory and executive loaded working memory.",
+      "Only the experimental group received the intervention in the first 10 months; thereafter, both the experimental and control groups received the intervention for 6 months.",
+      "Results: After 10 months, the experimental group had significantly higher standardised scores than the waiting list control group of decoding, phonological awareness, naming speed, phonological short-term memory and executive loaded working memory.",
       "Conclusions: The computer-assisted intervention was effective, and this suggests that this medium can be used for reading interventions with English-speaking children."
     ],
     "contraindications": [],
@@ -17058,7 +17049,13 @@
       "Further reproduction is prohibited without permission."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ903698",
+      "oalex_W283048097",
+      "eric_EJ1294263",
+      "eric_EJ580716",
+      "eric_ED560363"
+    ]
   },
   {
     "id": "eric_EJ1391709",
@@ -17084,7 +17081,7 @@
       "middle_school_students"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -17144,7 +17141,9 @@
       "(Author/MKA)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W1544196159"
+    ]
   },
   {
     "id": "eric_EJ1106583",
@@ -17202,7 +17201,8 @@
       "student_evaluation"
     ],
     "age_range": [
-      "all"
+      "adolescent",
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -17532,7 +17532,7 @@
     "id": "eric_ED620775",
     "name": "Supporting Executive Function in Schools: A Look at Three Promising Program Models. The Abell Report. Volume 35, No. 1",
     "description": "A small but growing cadre of schools and districts across the nation are turning to interventions rooted in brain science to complement or replace core curricula. Such programs target a related set of",
-    "document_type": "strategy",
+    "document_type": "guidance",
     "tags": [
       "executive_function",
       "models",
@@ -17818,7 +17818,9 @@
       "(Contains 3 tables and 3 figures.)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ818239"
+    ]
   },
   {
     "id": "eric_ED614945",
@@ -18271,7 +18273,7 @@
   {
     "id": "eric_EJ1382036",
     "name": "Combating Attention Deficits with Mind-Mapping Tools",
-    "description": "It is no secret that many adult learners who enter GED\u00ae preparatory programs across the country experienced hardship and difficulty in K-12 schools. Often, many of these same students had to battle wi",
+    "description": "It is no secret that many adult learners who enter GED® preparatory programs across the country experienced hardship and difficulty in K-12 schools. Often, many of these same students had to battle wi",
     "document_type": "guidance",
     "tags": [
       "equivalency_tests",
@@ -18304,11 +18306,11 @@
     ],
     "steps": [],
     "key_points": [
-      "It is no secret that many adult learners who enter GED\u00ae preparatory programs across the country experienced hardship and difficulty in K-12 schools.",
+      "It is no secret that many adult learners who enter GED® preparatory programs across the country experienced hardship and difficulty in K-12 schools.",
       "Often, many of these same students had to battle with learning disabilities such as ADD/ADHD, making school and learning an even more challenging task.",
       "Learning and concentration difficulties are conditions commonly associated with the attention deficit disorders of ADD and ADHD.",
       "Listening to long lectures or reading voluminous amounts of information at one time while trying to make sense of and comprehend material can be a momentous task for students impacted by attention deficit disorders.",
-      "This article examines the impact of ADD and ADHD on learners and explores an alternative learning strategy of mind mapping to combat the challenges these students often face when returning to school to obtain their GED\u00ae credential."
+      "This article examines the impact of ADD and ADHD on learners and explores an alternative learning strategy of mind mapping to combat the challenges these students often face when returning to school to obtain their GED® credential."
     ],
     "contraindications": [],
     "related_ids": []
@@ -18422,7 +18424,7 @@
       "language_teachers"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -18629,7 +18631,9 @@
       "Implications of the study are discussed."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ638789"
+    ]
   },
   {
     "id": "eric_EJ1260351",
@@ -18665,7 +18669,7 @@
     "key_points": [
       "Executive functions (EF), including working memory, inhibition, and cognitive flexibility, vary as a function of socioeconomic status (SES), with children from economically disadvantaged backgrounds having poorer performance than their higher SES peers.",
       "Using observational methods, we investigated cognitive stimulation in the home as a mechanism linking SES with EF.",
-      "In a sample of 101 children aged 60-75\u00a0months, cognitive stimulation fully mediated SES-related differences in EF.",
+      "In a sample of 101 children aged 60-75 months, cognitive stimulation fully mediated SES-related differences in EF.",
       "Critically, cognitive stimulation was positively associated with the development of inhibition and cognitive flexibility across an 18-month follow-up period.",
       "Furthermore, EF at T1 explained SES-related differences in academic achievement at T2.",
       "Early cognitive stimulation--a modifiable factor--may be a desirable target for interventions designed to ameliorate SES-related differences in cognitive development and academic achievement."
@@ -18710,7 +18714,11 @@
       "This document is a literature review of the nature, clinical assessment, and treatment of children with ADHD, noting the treatment utilization of quantitative electroencephalography (QEEG)."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED415618",
+      "oalex_W2150989818",
+      "eric_EJ736945"
+    ]
   },
   {
     "id": "eric_EJ1311170",
@@ -18950,7 +18958,7 @@
       "research"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -19142,7 +19150,12 @@
       "(Author/CR)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ1054148",
+      "pm_41661012",
+      "pm_38738544",
+      "oalex_W1903210201"
+    ]
   },
   {
     "id": "eric_EJ1436087",
@@ -19283,7 +19296,10 @@
       "(Contains 8 tables.)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W4292856464",
+      "eric_EJ879105"
+    ]
   },
   {
     "id": "eric_EJ1287551",
@@ -19412,7 +19428,9 @@
       "(Contains 3 figures, 5 tables, and 4 footnotes.)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ833493"
+    ]
   },
   {
     "id": "eric_EJ1006822",
@@ -19790,7 +19808,7 @@
       "The researcher measured teachers' education, years of teaching, and intervention strategies via a teacher data survey.",
       "For the regression predicting Math achievement scores, the model was not significant.",
       "However, this may be due to the small sample size, and significant predictors were still examined.",
-      "Grade level taught was a significant predictor of Math achievement scores; (\u00df = 46 and p = 0.009) higher grade levels had higher scores.",
+      "Grade level taught was a significant predictor of Math achievement scores; (ß = 46 and p = 0.009) higher grade levels had higher scores.",
       "Behavior Management scores were a significant predictor of Science achievement scores; higher Behavior Management scores were a significant predictor of Science achievement scores; higher Behavior Management corresponded with higher Science scores."
     ],
     "contraindications": [],
@@ -20087,9 +20105,9 @@
     ],
     "steps": [],
     "key_points": [
-      "Children adopted from institutions have been studied as models of the impact of stimulus deprivation on cognitive development (Nelson, Bos, Gunnar, &amp; Sonuga-Barke, 2011), but these children may also suffer from micronutrient deficiencies (Fuglestad et\u00a0al., 2008).",
-      "The contributions of iron deficiency (ID) and duration of deprivation on cognitive functioning in children adopted from institutions between 17 and 36\u00a0months of age were examined.",
-      "ID was assessed in 55 children soon after adoption, and cognitive functioning was evaluated 11-14.6\u00a0months postadoption when the children averaged 37.4\u00a0months old (SD\u00a0=\u00a04.9).",
+      "Children adopted from institutions have been studied as models of the impact of stimulus deprivation on cognitive development (Nelson, Bos, Gunnar, &amp; Sonuga-Barke, 2011), but these children may also suffer from micronutrient deficiencies (Fuglestad et al., 2008).",
+      "The contributions of iron deficiency (ID) and duration of deprivation on cognitive functioning in children adopted from institutions between 17 and 36 months of age were examined.",
+      "ID was assessed in 55 children soon after adoption, and cognitive functioning was evaluated 11-14.6 months postadoption when the children averaged 37.4 months old (SD = 4.9).",
       "ID at adoption and longer duration of institutional care independently predicted lower IQ scores and executive function (EF) performance.",
       "IQ did not mediate the association between ID and EF."
     ],
@@ -20321,7 +20339,13 @@
       "(Contains 3 figures and 3 tables.)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED226563",
+      "pm_35441444",
+      "eric_EJ563940",
+      "pm_39855032",
+      "pm_37115542"
+    ]
   },
   {
     "id": "eric_ED392208",
@@ -20401,7 +20425,9 @@
       "(Author/SW)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ806221"
+    ]
   },
   {
     "id": "eric_EJ495320",
@@ -20500,7 +20526,7 @@
       "attention_deficit_disorders"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -20525,7 +20551,13 @@
       "Measures of impairment that report functioning in key domains (peer, family, school) as well as globally have more treatment utility than nonspecific global measures of impairment."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ754677",
+      "eric_EJ427018",
+      "eric_EJ944871",
+      "pm_24576365",
+      "eric_EJ754674"
+    ]
   },
   {
     "id": "eric_EJ977846",
@@ -20573,7 +20605,9 @@
       "equivalent) robustly improved WM relative to the no-incentive, placebo condition."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_41058319"
+    ]
   },
   {
     "id": "eric_ED548802",
@@ -20597,7 +20631,7 @@
       "music_education"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -20695,7 +20729,7 @@
       "educational_practices"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -20720,7 +20754,9 @@
       "It is imperative for schools and communities to provide the necessary supports to adolescents, particularly those with mental health and/or learning difficulties, and to their parents."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_33069580"
+    ]
   },
   {
     "id": "eric_EJ562603",
@@ -20740,7 +20776,7 @@
       "token_economy"
     ],
     "age_range": [
-      "all"
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -20803,7 +20839,11 @@
       "Regarding external motivation, those in their circle may contribute by providing guidance that strengthens the students' learning, study strategies, and self-regulated behavior."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pm_19072759",
+      "eric_EJ1203909",
+      "eric_ED636123"
+    ]
   },
   {
     "id": "eric_EJ550322",
@@ -20920,7 +20960,7 @@
       "case_studies"
     ],
     "age_range": [
-      "all"
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -21158,7 +21198,8 @@
       "secondary_school_students"
     ],
     "age_range": [
-      "all"
+      "adolescent",
+      "school_age"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -21183,7 +21224,9 @@
       "There was some consensus on the equivalence of computer-based tests and paper-and-pencil test formats."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED662902"
+    ]
   },
   {
     "id": "eric_EJ836402",
@@ -21303,7 +21346,9 @@
       "(Author/NB)"
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_ED660563"
+    ]
   },
   {
     "id": "eric_EJ735683",
@@ -21388,7 +21433,10 @@
       "Language difficulties in ADHD should not be overlooked but must be evaluated thoroughly for more effective intervention planning."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "oalex_W2006807752",
+      "oalex_W2089426758"
+    ]
   },
   {
     "id": "eric_EJ1222499",
@@ -21432,7 +21480,11 @@
       "This study aimed to evaluate the prevalence of this disorder in primary school's students in Khorramabad."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "eric_EJ782689",
+      "pm_17136303",
+      "oalex_W4302565443"
+    ]
   },
   {
     "id": "eric_EJ1132566",
@@ -21551,7 +21603,7 @@
       "adolescents"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -21569,12 +21621,17 @@
       "The adolescents completed questionnaires assessing the quality of their relationships with their best friends, social perspective taking, anxiety and depression.",
       "Their parents completed questionnaires assessing the adolescents' social skills, oppositional behaviors, and conduct problems.",
       "Being female was associated with higher levels of friendship quality.",
-      "Although ADHD status did not predict friendship quality among 13-15\u00a0years old adolescents, having a diagnosis of ADHD was negatively associated with friendship quality among 16-18\u00a0years old adolescents.",
+      "Although ADHD status did not predict friendship quality among 13-15 years old adolescents, having a diagnosis of ADHD was negatively associated with friendship quality among 16-18 years old adolescents.",
       "Friendship stability, anxiety, social perspective taking, and social skills were positive predictors of friendship quality over and above gender, age and ADHD status whereas oppositional behavior was a negative predictor of friendship quality.",
       "Social perspective taking mediated the relationship between friendship quality and anxiety and social skills mediated the relationship between oppositional behavior and friendship quality."
     ],
     "contraindications": [],
-    "related_ids": []
+    "related_ids": [
+      "pmc_PMC12798569",
+      "oalex_W1544196159",
+      "eric_ED591366",
+      "pm_39892034"
+    ]
   },
   {
     "id": "eric_EJ1412433",
@@ -21781,7 +21838,7 @@
       "multiple_regression_analysis"
     ],
     "age_range": [
-      "all"
+      "adolescent"
     ],
     "evidence_level": "moderate",
     "source": "eric",
@@ -21802,6 +21859,654 @@
       "Second, it examined whether executive function processes may play a role in explaining the inconsistent results for expressive writing among adolescents.",
       "Results identify several message processes that are linked with reports of bullying behavior directly as well as indirectly through the pathway of executive function.",
       "Implications for expressive writing interventions aimed at reducing bullying are discussed, particularly with respect to the importance of screening for executive function."
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_EJ524464",
+    "name": "An Examination of Youth with Attention-Deficit/Hyperactivity Disorder and Language Learning Disabilities: A Clinical Study.",
+    "description": "This study examined the performance of 96 youth hospitalized in a psychiatric hospital on a battery of language measures. Participants with both attention deficit hyperactivity disorder (ADHD) and lan",
+    "document_type": "guidance",
+    "tags": [
+      "adolescents",
+      "attention_deficit_disorders",
+      "children",
+      "emotional_disturbances",
+      "hospitalized_children",
+      "hyperactivity",
+      "language_impairments",
+      "language_skills",
+      "learning_disabilities",
+      "mental_disorders",
+      "multiple_disabilities",
+      "student_characteristics"
+    ],
+    "age_range": [
+      "adolescent"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ524464"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "This study examined the performance of 96 youth hospitalized in a psychiatric hospital on a battery of language measures.",
+      "Participants with both attention deficit hyperactivity disorder (ADHD) and language learning disabilities (LLD) performed similarly to those with only LLD but significantly more poorly than those with only ADHD or with neither disability.",
+      "(Author/DB)"
+    ],
+    "contraindications": [],
+    "related_ids": [
+      "eric_EJ650524",
+      "pm_11291014"
+    ]
+  },
+  {
+    "id": "eric_EJ1110786",
+    "name": "The Use of Test Accommodations as a Gaming Strategy: A State-Level Exploration of Potential Gaming Tendencies in the 2007-2009 Period and Implications for Re-Directing Research on Gaming through Test Accommodations",
+    "description": "The overuse of test accommodations (e.g., test readers, extra time, and calculators) for students with disabilities is a potential means of gaming the accountability system because it can inflate prof",
+    "document_type": "guidance",
+    "tags": [
+      "testing_accommodations",
+      "academic_accommodations",
+      "middle_school_students",
+      "grade_8",
+      "disabilities",
+      "achievement_gains",
+      "cheating",
+      "mathematics_skills",
+      "heuristics"
+    ],
+    "age_range": [
+      "adolescent",
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ1110786"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "The overuse of test accommodations (e.g., test readers, extra time, and calculators) for students with disabilities is a potential means of gaming the accountability system because it can inflate proficiency gains.",
+      "However, no direct evidence on this problem exists, and findings on whether or not test accommodations improve test scores are persistently mixed.",
+      "A key issue underlying both problems is the failure to account for contextual attributes.",
+      "We propose students' skill range--the breadth of knowledge and skills they acquire--as a fundamental contextual variable.",
+      "A wider skill range implies a broader and thus more complex skillset.",
+      "Under such conditions, more students with disabilities are likely to legitimately need test accommodations.",
+      "Gaming is thus suspect when a high percentage of students with disabilities are given test accommodations and the skill range is narrow.",
+      "Based on state-level panel data (2007-2009) for eighth graders, we find that states with a wider mathematics skill range indeed use test accommodations more commonly, and that under such conditions test accommodations do not necessarily result in greater proficiency gains, suggesting that gaming may be less likely in such states.",
+      "Proficiency gains from test accommodations are greatest in states where the mathematics skill range is markedly narrower, yet a high percentage of students with disabilities are nonetheless given test accommodations.",
+      "We offer a number of competing heuristic explanations of gaming and no-gaming under a wider set of combinations for skill range and test accommodations, which are testable in future research."
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_ED433916",
+    "name": "The Whole Parenting Guide: Strategies, Resources, and Inspiring Stories for Holistic Parenting and Family Living.",
+    "description": "Featuring profiles of families involved in a variety of progressive parenting approaches, this guide integrates the physical, mental, spiritual and social tasks of childrearing to present a holistic a",
+    "document_type": "guidance",
+    "tags": [
+      "child_rearing",
+      "family_environment",
+      "family_financial_resources",
+      "family_health",
+      "holistic_approach",
+      "nutrition",
+      "parent_child_relationship",
+      "parenting_skills",
+      "play",
+      "pregnancy",
+      "spirituality",
+      "values_education"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "ED433916"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "Featuring profiles of families involved in a variety of progressive parenting approaches, this guide integrates the physical, mental, spiritual and social tasks of childrearing to present a holistic approach to parenting and family life.",
+      "The chapters are: (1) &quot;The Whole Parenting Approach to Family Life&quot;; (2) &quot;A Healthy Start: Conscious Pregnancy, Birth, and Infancy&quot;; (3) &quot;Beginning the Weave: Raising Children with Holistic Family Values&quot;; (4) &quot;Family Wellness&quot;; (5) &quot;Holistic Family Diet&quot;; (6) &quot;The Learning Family&quot;; (7) &quot;The Artful Family&quot;; (8) &quot;Fields of Play&quot;; (9) &quot;Greening Your Family&quot;; (10) &quot;A Sense of Community&quot;; (11) &quot;Family Means&quot;; and (12) &quot;Family Spirituality.&quot; Each chapter includes a topical list of resources.",
+      "(HTH)"
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_EJ1470921",
+    "name": "The Effect of Field Independence on Self-Control and Self-Management Skills in Distance Education of Freshman College Students to the Strategy for ADHD Students",
+    "description": "This research aims to determine the extent to which first-year tertiary students exhibit Field Independence (FI) as a mediator in their self-control and self-management skills (SCMSk). The second phas",
+    "document_type": "guidance",
+    "tags": [
+      "self_control",
+      "self_management",
+      "college_freshmen",
+      "distance_education",
+      "attention_deficit_hyperactivity_disorder",
+      "students_with_disabilities",
+      "high_school_students",
+      "cognitive_style",
+      "foreign_countries",
+      "college_readiness",
+      "student_attitudes"
+    ],
+    "age_range": [
+      "adolescent"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ1470921"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "This research aims to determine the extent to which first-year tertiary students exhibit Field Independence (FI) as a mediator in their self-control and self-management skills (SCMSk).",
+      "The second phase of the study aimed to investigate strategies for preparing high school students with attention deficit hyperactivity disorder (ADHD) to successfully navigate their academic lives based on the findings from the first phase.",
+      "Explanatory sequential design was used in this mixed-methods research.",
+      "The researcher selected 400 first-year students as participants and asked them to respond to a questionnaire based on five major factors.",
+      "The focus group discussion included 10 special education teachers, four school directors and six psychologists who provided suggestions and strategies to assist ADHD students while attending online lessons.",
+      "The examination of the goodness-of-fit indices (GFI) for this model was found to be .982 and FI served as a partial mediator in this model.",
+      "Furthermore, SCMSk was directly influenced by other factors.",
+      "In the second phase, the stakeholders proposed effective strategies by focusing on the development of five relevant factors.",
+      "The findings are advantageous for teachers and other stakeholders working with students with ADHD.",
+      "Variables could serve as indications helping teachers develop effective strategies to enhance online learning."
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_EJ837301",
+    "name": "Confirming the Factor Structure of Attention-Deficit/Hyperactivity Disorder Symptoms in College Students Using Student and Parent Data",
+    "description": "This study used confirmatory factor analysis to compare one-, two-, and three-factor models of attention-deficit/hyperactivity disorder (ADHD) symptoms to determine which model is the best fit for the",
+    "document_type": "guidance",
+    "tags": [
+      "college_students",
+      "attention_deficit_hyperactivity_disorder",
+      "factor_structure",
+      "children",
+      "parents",
+      "factor_analysis",
+      "comparative_analysis",
+      "symptoms",
+      "clinical_diagnosis",
+      "rating_scales",
+      "child_behavior",
+      "self_evaluation",
+      "parent_attitudes"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ837301"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "This study used confirmatory factor analysis to compare one-, two-, and three-factor models of attention-deficit/hyperactivity disorder (ADHD) symptoms to determine which model is the best fit for the data.",
+      "Participants were 190 clinic-referred college students who had been evaluated for ADHD, 155 of whom had received a diagnosis.",
+      "Data consisted of both self- and other (e.g., parent) ratings of both current and childhood symptoms.",
+      "Symptoms came directly from the \"DSM-IV\" criteria for ADHD.",
+      "A three-factor model, consistent with the \"DSM-III,\" was superior for current and childhood symptoms, regardless of rater (i.e., self or parent).",
+      "The primary implication for these findings is that there may be a viable Impulsive subtype of ADHD within the adult population.",
+      "Further research might include a closer examination of the unique functional limitations associated with impulsivity, as well as the development of diagnostic items that maximize model fit.",
+      "(Contains 4 tables and 1 figure.)"
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_EJ793576",
+    "name": "The Role of Impairment in the Diagnosis of ADHD",
+    "description": "Objective: Current diagnostic criteria for ADHD require the consideration of impairment in making a diagnosis, although clinical and research definitions of ADHD rely more heavily on reported symptoms",
+    "document_type": "guidance",
+    "tags": [
+      "student_evaluation",
+      "evaluation_methods",
+      "attention_deficit_disorders",
+      "criteria",
+      "predictor_variables",
+      "identification",
+      "rating_scales",
+      "clinical_diagnosis",
+      "hyperactivity",
+      "correlation",
+      "symptoms",
+      "severity"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ793576"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "Objective: Current diagnostic criteria for ADHD require the consideration of impairment in making a diagnosis, although clinical and research definitions of ADHD rely more heavily on reported symptoms.",
+      "This study explored the relationship between impairment and symptoms, variables predictive of impairment, and variation in ADHD identification when impairment criteria are added to symptom criteria.",
+      "Method: ADHD symptoms and impairment were assessed using archival parent and teacher rating scale data.",
+      "Results: The results indicated that (a) single impairment measures alone and a global impairment index were, at best, only moderately correlated with symptom reports; (b) predictor variables accounted for a small percentage of the variance in impairment; and (c) the number of children meeting criteria for ADHD diagnosis varied dramatically when impairment measures were considered.",
+      "Conclusion: Symptoms and impairment are related yet distinct constructs that should be measured independently to determine the presence of ADHD.",
+      "(Contains 5 tables.)"
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_EJ1117940",
+    "name": "Understanding Adolescent Gifted Girls with ADHD: Motivated and Achieving",
+    "description": "The manifestation of ADHD in girls who are gifted can place strains on motivation and academic performance as they enter their middle school years. The purpose of this collective case study research w",
+    "document_type": "guidance",
+    "tags": [
+      "academically_gifted",
+      "attention_deficit_hyperactivity_disorder",
+      "females",
+      "comorbidity",
+      "middle_school_students",
+      "case_studies",
+      "coping",
+      "stress_variables",
+      "documentation",
+      "surveys",
+      "interviews",
+      "student_attitudes",
+      "teacher_student_relationship",
+      "family_relationship",
+      "stress_management",
+      "student_characteristics",
+      "cognitive_ability",
+      "intelligence_tests",
+      "questionnaires",
+      "personality_traits"
+    ],
+    "age_range": [
+      "adolescent"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ1117940"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "The manifestation of ADHD in girls who are gifted can place strains on motivation and academic performance as they enter their middle school years.",
+      "The purpose of this collective case study research was to examine the lived experiences of five girls who are gifted with ADHD in order to gain an understanding of the array of coping mechanisms used by this population as they navigate the academic pressures of their secondary school years.",
+      "The girls in this study participated in a variety of educational settings including public, private, and charter schools.",
+      "Using the experience sampling method, findings were drawn from the analysis of multiple data sources including experience sampling, document analysis, surveys, and interviews, in areas related to motivation as a result of their feelings toward school, relationships with teachers and family, and strategies used to center and refocus during times of stress."
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_ED574306",
+    "name": "An Analysis of Factors Related to Receipt of Accommodations and Services by Postsecondary Students with Disabilities",
+    "description": "A secondary analysis of the National Longitudinal Transition Study-2 examined the relationship between demographic, disability-related, secondary school preparation, and transition planning variables",
+    "document_type": "guidance",
+    "tags": [
+      "correlation",
+      "student_characteristics",
+      "disabilities",
+      "college_students",
+      "college_preparation",
+      "high_school_students",
+      "planning",
+      "transitional_programs",
+      "academic_accommodations",
+      "accessibility",
+      "two_year_colleges",
+      "career_education",
+      "technical_education",
+      "statistical_analysis",
+      "self_determination",
+      "interviews",
+      "surveys",
+      "parents",
+      "college_bound_students",
+      "family_characteristics",
+      "regression",
+      "symptoms",
+      "longitudinal_studies",
+      "special_education"
+    ],
+    "age_range": [
+      "adolescent"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "ED574306"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "A secondary analysis of the National Longitudinal Transition Study-2 examined the relationship between demographic, disability-related, secondary school preparation, and transition planning variables and receipt of accommodations and other disability-specific services at the postsecondary level for 2,470 postsecondary students with disabilities.",
+      "The results indicated that secondary students who received transition planning education were more likely to receive accommodations and other disability-specific services in 2-year colleges and that those who had a transition plan that specified postsecondary accommodations and supports as a needed post--high school service were more likely to receive those types of services in 2-year colleges and in career and technical education schools.",
+      "These findings suggest that secondary schools can influence the likelihood that students will seek out and receive postsecondary accommodations and other disability-specific services.",
+      "(Contains 1 table.)",
+      "[This article was published in &quot;Remedial and Special Education,&quot; v36 n4 p208-219 2015 (EJ1066946).]"
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_EJ950918",
+    "name": "Collaborative Analysis of DRD4 and DAT Genotypes in Population-Defined ADHD Subtypes",
+    "description": "Background: It has been proposed that some of the variability in reporting of associations between attention deficit hyperactivity disorder (ADHD) and candidate genes may result from mixing of genetic",
+    "document_type": "guidance",
+    "tags": [
+      "attention_deficit_hyperactivity_disorder",
+      "correlation",
+      "statistical_analysis",
+      "research_methodology",
+      "genetics"
+    ],
+    "age_range": [
+      "all"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ950918"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "Background: It has been proposed that some of the variability in reporting of associations between attention deficit hyperactivity disorder (ADHD) and candidate genes may result from mixing of genetically heterogeneous forms of ADHD using DSM-IV criteria.",
+      "The goal of the current study is to test whether population-based ADHD subtypes defined by latent class analysis help resolve issues of variable findings across individual gene association studies.",
+      "Methods: Three studies which had previously reported no associations between polymorphisms of the DRD4 and DAT genes and DSM-IV defined ADHD were reanalyzed using population-based and DSM-IV defined ADHD subtypes.",
+      "Results: Across studies no significant associations were found for either DRD4 or DAT polymorphisms using DSM-IV ADHD subtypes.",
+      "In contrast, a significant association was found between the combined data set for the 440 base pair 3' DAT VNTR polymorphism and population-defined severe combined ADHD (OR = 1.25, p = 0.01).",
+      "A marginally significant association was also found between the 7 repeat DRD4 allele and population-defined severe combined ADHD.",
+      "Conclusion: Use of alternative population-based defined ADHD subtypes may help resolve some of the variable results presented for candidate gene association studies in ADHD."
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_ED646737",
+    "name": "Bi-Directional Relations between Behavioral Problems and Executive Function: Assessing the Longitudinal Development of Self-Regulation",
+    "description": "During childhood, the ability to limit problem behaviors (i.e., externalizing) and the capacity for cognitive regulation (i.e., executive function) are often understood to develop in tandem, and toget",
+    "document_type": "guidance",
+    "tags": [
+      "behavior_problems",
+      "child_behavior",
+      "self_control",
+      "executive_function",
+      "children",
+      "adolescents",
+      "low_income_groups",
+      "correlation",
+      "child_development"
+    ],
+    "age_range": [
+      "preschool",
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "ED646737"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "During childhood, the ability to limit problem behaviors (i.e., externalizing) and the capacity for cognitive regulation (i.e., executive function) are often understood to develop in tandem, and together constitute two major components of self-regulation research.",
+      "The current study examines bi-directional relations between behavioral problems and executive function over the course of childhood and adolescence.",
+      "Relying on a diverse sample of children growing up in low-income neighborhoods, we applied a random intercept cross-lagged panel model to longitudinally test associations between behavioral problems and executive function from age 4 through age 16.",
+      "With this approach, which disaggregated between- and within-child variation, we did not observe significant cross-lagged paths, suggesting that within-child development in one domain did not strongly relate to development in the other.",
+      "We also observed a moderate correlation between the stable between-child components of behavioral problems and executive function over time in our preferred model, suggesting that these two domains may be relatively distinct when modeled from early childhood through adolescence.",
+      "[This paper was published in &quot;Developmental Science&quot; Article e13331.]"
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_EJ991841",
+    "name": "Brain Games as a Potential Nonpharmaceutical Alternative for the Treatment of ADHD",
+    "description": "Attention deficit hyperactivity disorder (ADHD) is the most commonly diagnosed childhood neurobehavioral disorder, affecting approximately 5.5 million children, of which approximately 66% take ADHD me",
+    "document_type": "guidance",
+    "tags": [
+      "attention_deficit_hyperactivity_disorder",
+      "brain",
+      "elementary_school_students",
+      "secondary_school_students",
+      "learner_engagement",
+      "games",
+      "neurological_impairments",
+      "behavior_problems",
+      "outcomes_of_treatment",
+      "cognitive_processes",
+      "effect_size"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ991841"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "Attention deficit hyperactivity disorder (ADHD) is the most commonly diagnosed childhood neurobehavioral disorder, affecting approximately 5.5 million children, of which approximately 66% take ADHD medication daily.",
+      "This study investigated a potential nonpharmaceutical alternative to address the academic engagement of 5th through 11th grade students (n = 10) diagnosed with ADHD.",
+      "Participants were asked to play \"brain games\" for a minimum of 20 minutes each morning before school for 5 weeks.",
+      "Engagement was measured at three points in time using electroencephalogram, parent and teacher reports, researcher observations, and participant self-reports.",
+      "An analysis of the data supports the hypothesis that daily use of brain games can help strengthen focusing ability and executive functioning in adolescents with ADHD.",
+      "The results provide hope for those searching for an alternative or supplement to medication as a means of helping students with ADHD engage in the classroom.",
+      "(Contains 5 tables and 6 figures.)"
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_EJ600882",
+    "name": "The Agony and the Empathy: A Hyperactive Child's Journey from Despair to Achievement.",
+    "description": "Reports on experiences of living with ADHD from parents' and young adult's perspectives. Describes the types and characteristics of ADHD. Presents suggestions on ways to live and cope with a hyperacti",
+    "document_type": "guidance",
+    "tags": [
+      "attention_deficit_disorders",
+      "child_rearing",
+      "cognitive_style",
+      "hyperactivity",
+      "individual_needs",
+      "parent_child_relationship"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ600882"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "Reports on experiences of living with ADHD from parents' and young adult's perspectives.",
+      "Describes the types and characteristics of ADHD.",
+      "Presents suggestions on ways to live and cope with a hyperactive child.",
+      "(Author/JDM)"
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_EJ1261385",
+    "name": "Utilizing In-Vivo Feedback for Caregiver Training of Pediatric Feeding Protocols",
+    "description": "Researchers have used multicomponent behavioral skills training packages including written and verbal instructions, modeling, rehearsal, and feedback when teaching caregivers to implement pediatric fe",
+    "document_type": "guidance",
+    "tags": [
+      "caregiver_training",
+      "nutrition",
+      "intervention",
+      "feedback",
+      "children",
+      "behavior_modification"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ1261385"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "Researchers have used multicomponent behavioral skills training packages including written and verbal instructions, modeling, rehearsal, and feedback when teaching caregivers to implement pediatric feeding treatment protocols (e.g., Anderson &amp; McMillan, 2001; Seiverling et al., 2012).",
+      "Some investigators have shown that fewer behavioral skills training components may be necessary for effective training (e.g., Mueller et al., 2003; Pangborn et al., 2013).",
+      "We examined the use of in-vivo feedback following written instructions to train caregivers to implement pediatric feeding treatment protocols using a multiple baseline design across 3 caregiver dyads.",
+      "Correct implementation of the feeding treatment procedures was low during baseline (written instructions only), increased with only the addition of in-vivo feedback, and remained high during follow-up sessions for all caregivers.",
+      "Results are discussed in terms of clinical implications and caregiver satisfaction."
+    ],
+    "contraindications": [],
+    "related_ids": []
+  },
+  {
+    "id": "eric_EJ695955",
+    "name": "Differential Effects of Methylphenidate on Attentional Functions in Children with Attention-Deficit-Hyperactivity Disorder",
+    "description": "Objective: To examine the effects of methylphenidate on different attentional functions and behavior in children with attention-deficit-hyperactivity disorder (ADHD). Method: A total of 60 ADHD childr",
+    "document_type": "guidance",
+    "tags": [
+      "behavior_rating_scales",
+      "hyperactivity",
+      "attention_deficit_disorders",
+      "drug_therapy",
+      "attention_span",
+      "children",
+      "behavior_change"
+    ],
+    "age_range": [
+      "school_age"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "EJ695955"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "Objective: To examine the effects of methylphenidate on different attentional functions and behavior in children with attention-deficit-hyperactivity disorder (ADHD).",
+      "Method: A total of 60 ADHD children aged between 8 and 12 years completed a randomized, double-blind, placebo-controlled, within-subject crossover trial with two doses of methylphenidate (0.25 and 0.5 mg/kg body weight) and placebo.",
+      "A comprehensive neuropsychological test battery was applied, including tests of alertness and sustained, focused, and divided attention as well as two executive tests, the stop-signal paradigm and a visual set-shifting task.",
+      "Results: A linear improvement was identified for both medication conditions in the alertness and focused and sustained attention task, but no significant improvement was found for divided attention.",
+      "Quadratic trends were found for both executive tasks.",
+      "Responders defined by behavior ratings did not differ from nonresponders.",
+      "Conclusions: Results indicate that attentional functions are influenced differentially by methylphenidate: intensity-dimension functions are best influenced by higher doses, executive functions by moderate doses, and selectivity-dimension functions by variable doses.",
+      "In addition, divergent results from behavior rating scales and from attentional paradigms emphasize that clinicians have to decide what constitutes an appropriate clinical response.",
+      "A more comprehensive assessment of attention may help to find an individually optimal dose for the treatment of attentional dysfunctions."
+    ],
+    "contraindications": [],
+    "related_ids": [
+      "oalex_W2127174530",
+      "oalex_W2176259088",
+      "eric_EJ945162",
+      "eric_EJ486030",
+      "eric_EJ439567"
+    ]
+  },
+  {
+    "id": "eric_ED472626",
+    "name": "Fragments: Coping with Attention Deficit Disorder.",
+    "description": "Written by a woman who, at age 25, was diagnosed as &quot;a textbook case for attention deficit hyperactivity disorder,&quot; (ADHD) this book, examines: the pitfalls of traditional psychotherapy and",
+    "document_type": "guidance",
+    "tags": [
+      "agricultural_education",
+      "attention_deficit_disorders",
+      "coping",
+      "dietetics",
+      "ecology",
+      "educational_environment",
+      "elementary_secondary_education",
+      "environmental_education",
+      "holistic_approach",
+      "hyperactivity",
+      "psychotherapy",
+      "spirituality",
+      "teaching_methods"
+    ],
+    "age_range": [
+      "school_age",
+      "adolescent"
+    ],
+    "evidence_level": "moderate",
+    "source": "eric",
+    "citations": [
+      {
+        "source_file": "",
+        "source_name": "eric",
+        "detail": "ED472626"
+      }
+    ],
+    "steps": [],
+    "key_points": [
+      "Written by a woman who, at age 25, was diagnosed as &quot;a textbook case for attention deficit hyperactivity disorder,&quot; (ADHD) this book, examines: the pitfalls of traditional psychotherapy and medications for those diagnosed with ADD/ADHD; how an interactive, hands-on learning environment can markedly improve the educational experience of children with ADD/ADHD; how an organic, holistic approach can benefit those diagnosed with ADD/ADHD; the correlation between ADD/ADHD and agriculture and the impact of eliminating pesticides and increasing fatty acid intake in the diet of people with ADD/ADHD; and how incorporating spirituality and faith into the lives of people with ADD/ADHD can help add discipline and bring greater satisfaction.",
+      "Five appendixes present environmental education  resources, agricultural resources for teaching or internships, a sample agricultural curriculum for high school students, a sample ecology curriculum for high school students, and a curriculum to integrate agriculture, horticulture, and environmental concepts into art.",
+      "(SM)"
     ],
     "contraindications": [],
     "related_ids": []
