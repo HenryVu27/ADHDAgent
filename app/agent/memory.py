@@ -10,7 +10,7 @@ import time
 
 from app.agent.store_protocol import SessionStoreBase
 from app.config import settings
-from app.models.schemas import EpisodeLink, EpisodicMemory, SessionSummary
+from app.models.schemas import EpisodeLink, EpisodicMemory, SessionSummary, UserSummary
 
 logger = logging.getLogger(__name__)
 
@@ -454,6 +454,82 @@ Parent message:
                     await self._store.add_episode_link(session_id, link)
         except Exception as e:
             logger.warning("Episode linking failed (non-critical): %s", e)
+
+    async def end_of_session_tasks(self, user_id: int, previous_session_id: str) -> None:
+        """Generate/update a longitudinal summary for a returning user.
+
+        Called as a background task on the first turn of a new session.
+        Summarizes the previous session into a user-level longitudinal summary.
+        """
+        if not self._gemini:
+            return
+
+        prev_summary = await self._store.get_latest_summary(previous_session_id)
+        prev_episodes = await self._store.get_recent_episodes(previous_session_id, limit=10)
+        prev_state = await self._store.get(previous_session_id)
+
+        existing = await self._store.get_user_summary(user_id)
+
+        parts = []
+        if existing:
+            parts.append(f"Existing longitudinal summary:\n{existing.summary}")
+        if prev_summary:
+            parts.append(f"Previous session summary:\n{prev_summary.summary}")
+        if prev_episodes:
+            ep_lines = []
+            for ep in prev_episodes:
+                line = f"- [{ep.event_type}] {ep.summary}"
+                if ep.emotional_context:
+                    line += f" (mood: {ep.emotional_context})"
+                ep_lines.append(line)
+            parts.append("Previous session episodes:\n" + "\n".join(ep_lines))
+        if prev_state.outcomes:
+            out_lines = [f"- {o.strategy_name}: {o.signal} — {o.detail}" for o in prev_state.outcomes]
+            parts.append("Previous session outcomes:\n" + "\n".join(out_lines))
+        if prev_state.goals:
+            goal_lines = [f"- [{g.status}] {g.description}" for g in prev_state.goals]
+            parts.append("Previous session goals:\n" + "\n".join(goal_lines))
+
+        if not parts:
+            return
+
+        context = "\n\n".join(parts)
+        prompt = f"""You are maintaining a longitudinal summary of a parent's ADHD coaching journey across multiple sessions.
+
+{context}
+
+Write a concise longitudinal summary (3-5 sentences) covering:
+- The parent's journey arc (how their situation and understanding has evolved)
+- Which strategies have been effective or ineffective
+- Emotional patterns (recurring frustrations, breakthroughs, shifts in confidence)
+- Ongoing concerns or goals that should carry forward
+
+If an existing summary is provided, integrate the new session information into it.
+Focus on what matters for the next conversation: what should the coach remember?"""
+
+        try:
+            summary_text = await self._gemini.generate(
+                prompt, temperature=0.0, max_output_tokens=512,
+                timeout=settings.MEMORY_TIMEOUT_S,
+            )
+            user_summary = UserSummary(
+                summary=summary_text.strip(),
+                covers_through_session=previous_session_id,
+            )
+            await self._store.save_user_summary(user_id, user_summary)
+            await self._store.commit()
+            logger.info(
+                "Longitudinal summary updated for user %d (through session %s)",
+                user_id, previous_session_id,
+            )
+            if self._event_bus:
+                await self._event_bus.emit(
+                    "memory", "longitudinal_summary_updated", "", 0,
+                    detail={"user_id": user_id, "covers_through_session": previous_session_id},
+                )
+        except Exception as e:
+            logger.error("Longitudinal summary generation failed for user %d: %s", user_id, e)
+            raise
 
     async def _infer_emotion(self, session_id: str, user_message: str) -> str:
         """Classify the parent's emotional state using an LLM call with conversation context."""

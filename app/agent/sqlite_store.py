@@ -34,6 +34,14 @@ from app.models.schemas import (
 logger = logging.getLogger(__name__)
 
 
+def _row_get(row, key, default=None):
+    """Safely get a value from a sqlite3.Row, returning default if key missing."""
+    try:
+        return row[key]
+    except (IndexError, KeyError):
+        return default
+
+
 class SQLiteSessionStore(SessionStoreBase):
     """Async SQLite implementation of the session store."""
 
@@ -113,7 +121,7 @@ class SQLiteSessionStore(SessionStoreBase):
                     "adhd_subtype=?, challenge_areas=?, attempted_strategies=?, "
                     "good_day_description=?, hardest_situations=? WHERE session_id=?",
                     (
-                        up_row["parent_name"],
+                        _row_get(up_row, "parent_name"),
                         up_row["child_name"],
                         up_row["child_age"],
                         up_row["diagnosis_status"],
@@ -150,7 +158,7 @@ class SQLiteSessionStore(SessionStoreBase):
         )
         prof_row = await cursor.fetchone()
         profile = FamilyProfile(
-            parent_name=prof_row["parent_name"],
+            parent_name=_row_get(prof_row, "parent_name"),
             child_name=prof_row["child_name"],
             child_age=prof_row["child_age"],
             diagnosis_status=prof_row["diagnosis_status"],
@@ -910,7 +918,7 @@ class SQLiteSessionStore(SessionStoreBase):
         if not row:
             return None
         return FamilyProfile(
-            parent_name=row["parent_name"],
+            parent_name=_row_get(row, "parent_name"),
             child_name=row["child_name"],
             child_age=row["child_age"],
             diagnosis_status=row["diagnosis_status"],

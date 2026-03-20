@@ -15,6 +15,7 @@ class CoachingState(MessagesState):
 
     remaining_steps: Annotated[int, RemainingStepsManager]
     session_id: str
+    user_id: int | None = None
     input_blocked: bool = False
     block_response: str = ""
     route: str = "pro"

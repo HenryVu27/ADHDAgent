@@ -19,6 +19,7 @@ from app.models.schemas import (
     SessionSummary,
     StoredToolResult,
     TurnAnalysis,
+    UserSummary,
 )
 
 
@@ -200,6 +201,32 @@ class SessionStoreBase(ABC):
     @abstractmethod
     async def get_attachments_by_session(self, session_id: str) -> list[dict]:
         """Get all attachment records for a session."""
+
+    # --- Cross-session (user-level) methods ---
+
+    @abstractmethod
+    async def get_user_profile(self, user_id: int) -> FamilyProfile | None:
+        """Return the user-level profile, or None if no row exists."""
+
+    @abstractmethod
+    async def update_user_profile(self, user_id: int, **kwargs) -> FamilyProfile:
+        """Create or update the user-level profile. No commit."""
+
+    @abstractmethod
+    async def get_user_summary(self, user_id: int) -> UserSummary | None:
+        """Return the most recent longitudinal summary, or None."""
+
+    @abstractmethod
+    async def save_user_summary(self, user_id: int, summary: UserSummary) -> None:
+        """Persist a longitudinal user summary. No commit."""
+
+    @abstractmethod
+    async def get_user_episodes(self, user_id: int, limit: int = 5) -> list[EpisodicMemory]:
+        """Return recent episodes across all sessions for this user."""
+
+    @abstractmethod
+    async def get_user_outcomes(self, user_id: int, limit: int = 5) -> list[Outcome]:
+        """Return recent outcomes across all sessions for this user."""
 
     @abstractmethod
     async def commit(self) -> None:

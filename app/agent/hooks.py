@@ -132,6 +132,27 @@ def create_prepare_context(
                 evidence_block = "\n\n<prior-search-evidence>\n" + "\n---\n".join(evidence_lines) + "\n</prior-search-evidence>"
                 system_prompt += evidence_block
 
+            # Cross-session context for returning users (first turn only)
+            user_id = state.get("user_id")
+            if user_id is not None and turn_count <= 1:
+                user_summary = await session_store.get_user_summary(user_id)
+                user_episodes = await session_store.get_user_episodes(user_id, limit=5)
+                user_outcomes = await session_store.get_user_outcomes(user_id, limit=5)
+
+                prior_parts = []
+                if user_summary:
+                    prior_parts.append(f"Journey so far:\n{user_summary.summary}")
+                if user_outcomes:
+                    out_lines = [f"- {o.strategy_name}: {o.signal} — {o.detail}" for o in user_outcomes]
+                    prior_parts.append("Recent outcomes across sessions:\n" + "\n".join(out_lines))
+                if user_episodes:
+                    ep_lines = [f"- [{ep.event_type}] {ep.summary}" for ep in user_episodes]
+                    prior_parts.append("Recent key moments:\n" + "\n".join(ep_lines))
+
+                if prior_parts:
+                    prior_block = "\n\n<prior-sessions>\n" + "\n\n".join(prior_parts) + "\n</prior-sessions>"
+                    system_prompt += prior_block
+
             # Cache the prompt
             _prompt_cache[cache_key] = system_prompt
             # Evict old entries (keep max 10)
