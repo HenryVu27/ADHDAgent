@@ -159,3 +159,75 @@ def test_recursive_chunker_empty_doc():
     # Should still produce at least one chunk (description, even if empty)
     assert len(chunks) == 1
     assert chunks[0].chunk_type == "description"
+
+
+def test_recursive_chunker_sectioned_text():
+    doc = {
+        "id": "sectioned1",
+        "name": "Sectioned Guide",
+        "description": "## Overview\nThis is the overview.\n\n## Details\nHere are the details of the guide.\n\n## Summary\nFinal summary.",
+        "document_type": "guidance",
+        "tags": ["guide"],
+        "age_range": [],
+        "evidence_level": "",
+        "source": "",
+        "citations": [],
+    }
+    chunker = RecursiveContextualChunker(contextual_headers=False)
+    chunks = chunker.chunk(doc)
+    # Should split on heading boundaries: 3 sections
+    assert len(chunks) == 3
+    assert all(c.chunk_type == "text_segment" for c in chunks)
+    assert "Overview" in chunks[0].text
+    assert "Details" in chunks[1].text
+    assert "Summary" in chunks[2].text
+
+
+def test_recursive_chunker_long_text_fallback():
+    # Generate text longer than chunk_size to force recursive splitting
+    long_text = ". ".join([f"Sentence number {i} with some extra words" for i in range(200)])
+    doc = {
+        "id": "longdoc",
+        "name": "Long Document",
+        "description": long_text,
+        "document_type": "guidance",
+        "tags": [],
+        "age_range": [],
+        "evidence_level": "",
+        "source": "",
+        "citations": [],
+    }
+    # Use small chunk size to force splitting
+    chunker = RecursiveContextualChunker(chunk_size=200, chunk_overlap=50, contextual_headers=False)
+    chunks = chunker.chunk(doc)
+    assert len(chunks) > 1
+    assert all(c.chunk_type == "text_segment" for c in chunks)
+    assert all(c.parent_document_id == "longdoc" for c in chunks)
+    # Each chunk should be within size limit (with some tolerance for boundary)
+    for c in chunks:
+        assert len(c.text) <= 300  # chunk_size + tolerance
+
+
+def test_recursive_chunker_overlap():
+    # Verify overlap between adjacent chunks
+    sentences = [f"Unique sentence {i} about topic {i}." for i in range(50)]
+    long_text = " ".join(sentences)
+    doc = {
+        "id": "overlap_test",
+        "name": "Overlap Test",
+        "description": long_text,
+        "document_type": "guidance",
+        "tags": [],
+        "age_range": [],
+        "evidence_level": "",
+        "source": "",
+        "citations": [],
+    }
+    chunker = RecursiveContextualChunker(chunk_size=200, chunk_overlap=80, contextual_headers=False)
+    chunks = chunker.chunk(doc)
+    assert len(chunks) > 2
+    # Check that adjacent chunks share some text (overlap)
+    for i in range(len(chunks) - 1):
+        words_current = set(chunks[i].raw_text.split()[-10:])
+        words_next = set(chunks[i + 1].raw_text.split()[:10])
+        assert words_current & words_next, f"No overlap between chunks {i} and {i+1}"
