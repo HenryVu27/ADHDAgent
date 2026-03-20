@@ -36,4 +36,4 @@ class IngestConfig(BaseSettings):
         "ADHD family support",
     ]
 
-    model_config = {"env_file": ".env", "env_prefix": "INGEST_"}
+    model_config = {"env_file": ".env", "env_prefix": "INGEST_", "extra": "ignore"}

@@ -25,7 +25,7 @@ class ERICConnector:
                     "format": "json",
                 }
                 resp = await session.get(ERIC_BASE, params=params)
-                data = await resp.json()
+                data = await resp.json(content_type=None)
 
                 docs = data.get("response", {}).get("docs", [])
                 if not docs:

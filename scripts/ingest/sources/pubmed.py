@@ -30,9 +30,10 @@ class PubMedConnector:
             "db": "pmc",
             "term": query,
             "retmax": min(max_docs, 100000),
-            "rettype": "json",
-            "api_key": self._api_key,
+            "retmode": "json",
         }
+        if self._api_key:
+            params["api_key"] = self._api_key
         resp = await session.get(f"{E_UTILS_BASE}/esearch.fcgi", params=params)
         text = await resp.text()
         data = json.loads(text)
@@ -44,8 +45,9 @@ class PubMedConnector:
             "db": "pmc",
             "id": ",".join(ids),
             "rettype": "xml",
-            "api_key": self._api_key,
         }
+        if self._api_key:
+            params["api_key"] = self._api_key
         resp = await session.get(f"{E_UTILS_BASE}/efetch.fcgi", params=params)
         return await resp.text()
 
@@ -61,7 +63,7 @@ class PubMedConnector:
             meta = article.find(".//article-meta")
             if meta is not None:
                 for aid in meta.findall("article-id"):
-                    if aid.get("pub-id-type") == "pmc":
+                    if aid.get("pub-id-type") in ("pmc", "pmcid"):
                         pmc_id = aid.text or ""
                         break
 
