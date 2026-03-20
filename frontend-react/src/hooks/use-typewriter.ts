@@ -1,8 +1,8 @@
 import { useRef, useState, useCallback, useEffect } from "react"
 
-const STEP_NORMAL = 12          // chars per frame at 60fps (~720 chars/sec)
-const BATCH_THRESHOLD = 30      // re-render every N chars advanced
-const CATCHUP_THRESHOLD = 100   // if this far behind, catch up faster
+const STEP_NORMAL = 8           // chars per frame at 60fps (~480 chars/sec)
+const BATCH_THRESHOLD = 20      // re-render every N chars advanced
+const CATCHUP_THRESHOLD = 200   // if this far behind, catch up faster
 
 interface TypewriterControls {
   displayedText: string
@@ -69,7 +69,10 @@ export function useTypewriter(
     }
 
     const behind = full.length - shown
-    const step = behind > CATCHUP_THRESHOLD ? Math.ceil(behind / 10) : STEP_NORMAL
+    // Gentle log-curve catch-up: avoids jarring jumps while still converging
+    const step = behind > CATCHUP_THRESHOLD
+      ? Math.ceil(STEP_NORMAL + Math.log2(behind - CATCHUP_THRESHOLD + 2) * 4)
+      : STEP_NORMAL
     shownRef.current = Math.min(shown + step, full.length)
 
     const advanced = shownRef.current - lastRenderedRef.current

@@ -16,9 +16,18 @@ export function useChat(sessionId: string) {
   const accumulatedRef = useRef("")
   // Exposed so ChatContainer can call typewriter.reset() on replace events
   const typewriterResetRef = useRef<((text: string) => void) | null>(null)
+  // Buffer the done payload so finalization waits for the typewriter to catch up
+  const pendingDoneRef = useRef<{ event: StreamDoneEvent; finalize: (e: StreamDoneEvent) => void } | null>(null)
 
-  // No-op callback for StreamingContent's onComplete — finalize is driven by done event now
-  const onStreamComplete = useCallback(() => {}, [])
+  // Called by useTypewriter when displayed text catches up to all received tokens.
+  // If a done event is already buffered, finalize now.
+  const onStreamComplete = useCallback(() => {
+    const pending = pendingDoneRef.current
+    if (pending) {
+      pendingDoneRef.current = null
+      pending.finalize(pending.event)
+    }
+  }, [])
 
   const sendMessage = useCallback(async (content: string, attachments?: Attachment[]) => {
     const userMsg: ChatMessage = {
@@ -69,7 +78,21 @@ export function useChat(sessionId: string) {
           typewriterResetRef.current?.(event.text)
 
         } else if (event.type === "done") {
-          _finalize(event)
+          // If no tokens were streamed (e.g. blocked input), finalize immediately.
+          // Otherwise buffer the done event and let the typewriter's onComplete trigger it.
+          if (!accumulatedRef.current) {
+            _finalize(event)
+          } else {
+            pendingDoneRef.current = { event, finalize: _finalize }
+            // Safety: finalize after 5s even if typewriter hasn't caught up
+            setTimeout(() => {
+              if (pendingDoneRef.current) {
+                const p = pendingDoneRef.current
+                pendingDoneRef.current = null
+                p.finalize(p.event)
+              }
+            }, 5000)
+          }
 
         } else if (event.type === "error") {
           setMessages(prev => [...prev, {
@@ -120,6 +143,7 @@ export function useChat(sessionId: string) {
       setStreamingContent("")
       setSummaryText("")
       accumulatedRef.current = ""
+      pendingDoneRef.current = null
     }
   }, [sessionId])  // sessionId only — no state in deps (local vars + refs used instead)
 
