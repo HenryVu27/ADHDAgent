@@ -112,6 +112,7 @@ class RetrievalResponse(BaseModel):
 # --- Session State ---
 
 class FamilyProfile(BaseModel):
+    parent_name: str | None = None
     child_age: str | None = None
     child_name: str | None = None
     diagnosis_status: str | None = None
@@ -139,6 +140,11 @@ class Outcome(BaseModel):
 class SessionSummary(BaseModel):
     summary: str
     covers_through_turn: int
+
+
+class UserSummary(BaseModel):
+    summary: str
+    covers_through_session: str
 
 
 class EpisodicMemory(BaseModel):
@@ -210,6 +216,7 @@ class PipelineTrace(BaseModel):
 class UserRow(BaseModel):
     id: int
     email: str
+    name: str | None = None
     created_at: str
 
 
@@ -221,11 +228,13 @@ class TokenResponse(BaseModel):
 class AuthRequest(BaseModel):
     email: str
     password: str = Field(min_length=8)
+    name: str | None = None
 
 
 class SeedSessionRequest(BaseModel):
     """Sent from the frontend after onboarding to pre-populate the session."""
     session_id: str
+    parent_name: str = ""
     child_name: str = ""
     child_age: str = ""
     diagnosis_status: str = ""
