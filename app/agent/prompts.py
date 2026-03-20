@@ -172,6 +172,8 @@ def format_structured_facts(
 ) -> str:
     """Format family profile and active strategies into the structured_facts section."""
     items = []
+    if profile.parent_name:
+        items.append(f"Parent's name: {profile.parent_name}")
     if profile.child_name:
         items.append(f"Child's name: {profile.child_name}")
     if profile.child_age:
