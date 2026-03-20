@@ -264,8 +264,9 @@ async def test_reranker_sorts_by_relevance():
     assert len(reranked) == 2
     assert reranked[0].document_id == "1"  # scored 0.9
     assert reranked[1].document_id == "3"  # scored 0.7
-    assert reranked[0].score == pytest.approx(0.9)
-    assert reranked[1].score == pytest.approx(0.7)
+    import math
+    assert reranked[0].score == pytest.approx(1 / (1 + math.exp(-0.9)))
+    assert reranked[1].score == pytest.approx(1 / (1 + math.exp(-0.7)))
 
 
 @pytest.mark.asyncio
@@ -341,9 +342,10 @@ async def test_relevance_threshold_filters_low_scores():
     # Simulate candidates that the reranker will re-score
     reranked = await reranker.rerank("test", results, top_k=3)
 
-    # With default threshold 0.0, -0.5 should be dropped
-    from app.config import settings
-    filtered = [r for r in reranked if r.score >= settings.RAG_RELEVANCE_THRESHOLD]
+    # Sigmoid maps raw 0 -> 0.5, so use 0.5 as threshold (decision boundary).
+    # Raw -0.5 -> sigmoid ~0.378 (below 0.5), raw 0.1 -> ~0.525, raw 0.9 -> ~0.711
+    threshold = 0.5
+    filtered = [r for r in reranked if r.score >= threshold]
     assert len(filtered) == 2
     assert all(r.document_id != "low" for r in filtered)
 
