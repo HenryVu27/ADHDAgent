@@ -17,6 +17,12 @@ class TestFormatStructuredFacts:
         result = format_structured_facts(FamilyProfile(), [])
         assert "Not yet gathered" in result
 
+    def test_format_structured_facts_includes_parent_name(self):
+        profile = FamilyProfile(parent_name="Sarah", child_name="Alex", child_age="8")
+        result = format_structured_facts(profile, [])
+        assert "Parent's name: Sarah" in result
+        assert "Child's name: Alex" in result
+
     def test_with_child_name_and_age(self):
         profile = FamilyProfile(child_name="Kai", child_age="7")
         result = format_structured_facts(profile, [])
