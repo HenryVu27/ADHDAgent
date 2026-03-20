@@ -193,6 +193,7 @@ export interface ChatMessage {
   pipelineTrace?: PipelineTrace
   summary?: string
   attachments?: Attachment[]
+  streamed?: boolean  // skip entrance animation for messages that were just streamed
 }
 
 export interface User {

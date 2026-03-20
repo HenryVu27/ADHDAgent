@@ -76,9 +76,17 @@ export function ChatContainer({
           </div>
           <div className="px-1 py-1">
             <div className="mb-1 text-xs font-medium text-coach">Ally</div>
-            <p className="text-sm text-muted-foreground animate-pulse">
-              {summaryText || statusText || "Thinking..."}
-            </p>
+            {summaryText || statusText ? (
+              <p className="text-sm text-muted-foreground animate-pulse">
+                {summaryText || statusText}
+              </p>
+            ) : (
+              <div className="flex items-center gap-1 pt-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40 animate-bounce [animation-delay:0ms]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40 animate-bounce [animation-delay:150ms]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40 animate-bounce [animation-delay:300ms]" />
+              </div>
+            )}
           </div>
         </motion.div>
       )}

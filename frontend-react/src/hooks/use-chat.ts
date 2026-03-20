@@ -141,6 +141,7 @@ export function useChat(sessionId: string) {
         agentUsed: done.agent_used,
         pipelineTrace: done.pipeline_trace ?? undefined,
         summary: done.summary ?? undefined,
+        streamed: true,
       }
       setMessages(prev => [...prev, assistantMsg])
       if (done.pipeline_trace) setLatestTrace(done.pipeline_trace)

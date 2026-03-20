@@ -38,11 +38,15 @@ export function StreamingContent({ content }: StreamingContentProps) {
 export function ChatBubble({ message }: Props) {
   const isUser = message.role === "user"
 
+  // Skip entrance animation for messages that were just streamed —
+  // the content was already visible in the streaming bubble.
+  const skipAnimation = message.streamed
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
+      initial={skipAnimation ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: skipAnimation ? 0 : 0.2 }}
       className={`flex gap-3 ${isUser ? "flex-row-reverse" : ""}`}
     >
       <div
