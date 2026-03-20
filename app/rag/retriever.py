@@ -115,6 +115,9 @@ class HybridRetriever:
                 logger.info("Relevance threshold %.2f filtered %d -> %d results",
                             settings.RAG_RELEVANCE_THRESHOLD, pre_filter, len(candidates))
 
+        # Step 3d: Parent document deduplication
+        candidates = self._deduplicate_by_parent(candidates)
+
         # Step 3c: Outcome boost/penalty (personalization from family history)
         if state and state.outcomes:
             candidates, boost_metadata = self._apply_outcome_boost(candidates, state.outcomes)
@@ -331,12 +334,15 @@ class HybridRetriever:
                 results.append(self._chunk_to_result(chunk, score, "keyword"))
 
         results.sort(key=lambda r: r.score, reverse=True)
+        results = self._deduplicate_by_parent(results)
         return results[:top_k]
 
     # Convert chunk dict to RetrievalResult
     def _chunk_to_result(self, chunk: dict, score: float, match_type: str) -> RetrievalResult:
+        doc_id = chunk["document_id"]
+        full_doc = self._store.get_document_by_id(doc_id) or {}
         return RetrievalResult(
-            document_id=chunk["document_id"],
+            document_id=doc_id,
             document_name=chunk["document_name"],
             content=chunk["text"],
             score=score,
@@ -347,8 +353,26 @@ class HybridRetriever:
             document_type=chunk.get("document_type", ""),
             age_range=chunk.get("age_range", []),
             citations=chunk.get("citations", []),
-            full_doc=chunk.get("full_doc", {}),
+            full_doc=full_doc,
+            chunk_id=chunk.get("chunk_id", ""),
+            chunk_type=chunk.get("chunk_type", ""),
         )
+
+    def _deduplicate_by_parent(
+        self, candidates: list[RetrievalResult]
+    ) -> list[RetrievalResult]:
+        """Keep only the highest-scoring chunk per parent document."""
+        if not settings.RAG_PARENT_DEDUP:
+            return candidates
+
+        best: dict[str, RetrievalResult] = {}
+        for r in candidates:
+            if r.document_id not in best or r.score > best[r.document_id].score:
+                best[r.document_id] = r
+
+        deduped = list(best.values())
+        deduped.sort(key=lambda r: r.score, reverse=True)
+        return deduped
 
     # --- Embedding-based query cache ---
 

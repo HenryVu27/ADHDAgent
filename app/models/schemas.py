@@ -85,6 +85,8 @@ class RetrievalResult(BaseModel):
     citations: list[dict] = Field(default_factory=list)
     # Full original document for structured formatting (excluded from API serialization)
     full_doc: dict = Field(default_factory=dict, exclude=True)
+    chunk_id: str = ""
+    chunk_type: str = ""
 
 
 class FacetCounts(BaseModel):

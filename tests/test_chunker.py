@@ -414,3 +414,89 @@ def test_knowledge_store_collection_name_varies_by_strategy(monkeypatch):
 
     assert store_none._collection != store_rc._collection
     assert "recursive_contextual" in store_rc._collection
+
+
+# --- Retriever integration ---
+
+from app.models.schemas import RetrievalResult
+from app.rag.retriever import HybridRetriever
+
+
+def test_parent_dedup_keeps_highest_score(monkeypatch):
+    """Parent dedup should keep the highest-scoring chunk per document."""
+    monkeypatch.setattr("app.config.settings.RAG_PARENT_DEDUP", True)
+    monkeypatch.setattr("app.config.settings.RAG_CHUNKING_STRATEGY", "none")
+
+    store = KnowledgeStore()
+    retriever = HybridRetriever(knowledge_store=store)
+
+    results = [
+        RetrievalResult(
+            document_id="doc1", document_name="Doc 1", content="chunk A",
+            score=0.8, chunk_id="doc1__step_1", chunk_type="step",
+        ),
+        RetrievalResult(
+            document_id="doc1", document_name="Doc 1", content="chunk B",
+            score=0.9, chunk_id="doc1__step_2", chunk_type="step",
+        ),
+        RetrievalResult(
+            document_id="doc2", document_name="Doc 2", content="chunk C",
+            score=0.7, chunk_id="doc2__step_1", chunk_type="step",
+        ),
+    ]
+
+    deduped = retriever._deduplicate_by_parent(results)
+    assert len(deduped) == 2
+    # doc1's highest score (0.9) should win
+    doc1_result = next(r for r in deduped if r.document_id == "doc1")
+    assert doc1_result.score == 0.9
+    assert doc1_result.chunk_id == "doc1__step_2"
+    # doc2 appears once
+    doc2_result = next(r for r in deduped if r.document_id == "doc2")
+    assert doc2_result.score == 0.7
+
+
+def test_parent_dedup_disabled(monkeypatch):
+    """When dedup is disabled, all results pass through."""
+    monkeypatch.setattr("app.config.settings.RAG_PARENT_DEDUP", False)
+    monkeypatch.setattr("app.config.settings.RAG_CHUNKING_STRATEGY", "none")
+
+    store = KnowledgeStore()
+    retriever = HybridRetriever(knowledge_store=store)
+
+    results = [
+        RetrievalResult(
+            document_id="doc1", document_name="Doc 1", content="A", score=0.8,
+        ),
+        RetrievalResult(
+            document_id="doc1", document_name="Doc 1", content="B", score=0.9,
+        ),
+    ]
+    deduped = retriever._deduplicate_by_parent(results)
+    assert len(deduped) == 2
+
+
+def test_chunk_to_result_looks_up_full_doc(monkeypatch):
+    """_chunk_to_result should look up full_doc from store, not chunk dict."""
+    monkeypatch.setattr("app.config.settings.RAG_CHUNKING_STRATEGY", "none")
+    store = KnowledgeStore()
+    retriever = HybridRetriever(knowledge_store=store)
+
+    # Pick a known document
+    first_doc = store.documents[0]
+    chunk = {
+        "document_id": first_doc["id"],
+        "document_name": first_doc["name"],
+        "text": "some chunk text",
+        "tags": first_doc.get("tags", []),
+        "source": first_doc.get("source", ""),
+        "evidence_level": first_doc.get("evidence_level", ""),
+        "document_type": first_doc.get("document_type", ""),
+        "age_range": first_doc.get("age_range", []),
+        "citations": first_doc.get("citations", []),
+        "chunk_id": f"{first_doc['id']}__full_0",
+        "chunk_type": "full",
+    }
+    result = retriever._chunk_to_result(chunk, 0.5, "keyword")
+    assert result.full_doc == first_doc
+    assert result.chunk_id == f"{first_doc['id']}__full_0"
