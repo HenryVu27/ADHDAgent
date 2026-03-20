@@ -29,7 +29,7 @@ export function ChatPage() {
   })
   const {
     messages, isLoading, isStreaming, statusText, streamingContent,
-    latestTrace, sendMessage, stopStreaming, clearMessages, loadMessages, summaryText,
+    latestTrace, suggestions, sendMessage, stopStreaming, clearMessages, loadMessages, summaryText,
   } = useChat(sessionId)
   const { session, refresh } = useSession(sessionId)
   const { user, getOnboarding } = useAuth()
@@ -189,7 +189,7 @@ export function ChatPage() {
 
         {/* Quick reply chips */}
         <QuickReplyChips
-          phase={phase}
+          suggestions={suggestions}
           onSelect={handleChipSelect}
           visible={showChips && !isLoading && !isStreaming}
         />

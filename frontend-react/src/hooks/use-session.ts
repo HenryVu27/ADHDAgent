@@ -1,10 +1,15 @@
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import type { SessionResponse } from "@/types"
 import { api } from "@/lib/api"
 
 export function useSession(sessionId: string) {
   const [session, setSession] = useState<SessionResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  // Reset session when switching to a new session
+  useEffect(() => {
+    setSession(null)
+  }, [sessionId])
 
   const refresh = useCallback(async () => {
     setIsLoading(true)

@@ -145,40 +145,38 @@ class AgentOrchestrator:
 
             prompt = (
                 "You generate follow-up message suggestions for a parent chatting with "
-                "an ADHD parenting coach. Based on the conversation below, suggest 0 to 3 "
+                "an ADHD parenting coach. Based on the conversation below, suggest 2 to 3 "
                 "short follow-up messages the parent might want to send next.\n\n"
                 "Rules:\n"
-                "- Each suggestion must be under 50 characters\n"
+                "- Always return 2-3 suggestions — never return an empty array\n"
+                "- Keep each suggestion SHORT: 3-8 words, under 40 characters\n"
                 "- Write as the PARENT would speak (first person)\n"
                 "- Be specific to what was just discussed, not generic\n"
                 "- If the coach asked a question, suggest possible answers\n"
                 "- If the coach gave strategies, suggest reactions or follow-ups\n"
-                "- If the conversation feels complete or is just a greeting, return 0 suggestions\n"
-                "- Return ONLY a JSON array of strings, nothing else\n"
+                "- If the coach shared information, suggest ways to dig deeper\n"
+                "- Return ONLY a single-line JSON array of strings, no newlines\n"
                 f"- The child's name is {child_name}\n\n"
                 f"Parent said: {user_message}\n\n"
                 f"Coach replied: {assistant_response[:500]}\n\n"
                 "JSON array:"
             )
-            raw = await self._gemini.generate(
+            suggestions = await self._gemini.extract_json(
                 prompt,
                 temperature=0.7,
-                max_output_tokens=256,
-                timeout=5.0,
+                max_output_tokens=150,
+                timeout=10.0,
+                disable_thinking=True,
             )
-            import json as _json
-            text = raw.strip()
-            if text.startswith("```"):
-                text = text.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
-            suggestions = _json.loads(text)
+            logger.info("[agent] Suggestions result from LLM: %r", suggestions)
             if not isinstance(suggestions, list):
                 return []
             return [
                 s.strip() for s in suggestions
                 if isinstance(s, str) and s.strip() and len(s.strip()) <= 60
             ][:3]
-        except Exception:
-            logger.debug("[agent] Suggestion generation failed — skipping")
+        except Exception as exc:
+            logger.warning("[agent] Suggestion generation failed: %s", exc)
             return []
 
     async def get_session(self, session_id: str) -> SessionState:
@@ -860,9 +858,12 @@ class AgentOrchestrator:
         try:
             suggestions = await asyncio.wait_for(suggestions_task, timeout=6.0)
         except (TimeoutError, asyncio.TimeoutError):
+            logger.warning("[agent] Suggestion generation timed out")
             suggestions = []
-        except Exception:
+        except Exception as exc:
+            logger.warning("[agent] Suggestion generation failed: %s", exc)
             suggestions = []
+        logger.info("[agent] Suggestions result: %s", suggestions)
         if suggestions:
             yield ("suggestions", {"suggestions": suggestions})
 

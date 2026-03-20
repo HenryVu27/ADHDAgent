@@ -11,7 +11,7 @@ import logging
 from typing import Any
 
 from google import genai
-from google.genai.types import GenerateContentConfig
+from google.genai.types import GenerateContentConfig, ThinkingConfig
 from tenacity import (
     before_sleep_log,
     retry,
@@ -93,18 +93,22 @@ class GeminiClient:
         model: str | None = None,
         max_output_tokens: int = 1024,
         timeout: float | None = None,
+        disable_thinking: bool = False,
     ) -> Any:
         """Generate structured JSON output. Returns parsed JSON."""
         try:
+            config = GenerateContentConfig(
+                temperature=temperature,
+                max_output_tokens=max_output_tokens,
+                response_mime_type="application/json",
+            )
+            if disable_thinking:
+                config.thinking_config = ThinkingConfig(thinking_budget=0)
             coro = asyncio.to_thread(
                 _retry_policy(self._client.models.generate_content),
                 model=model or self._model,
                 contents=prompt,
-                config=GenerateContentConfig(
-                    temperature=temperature,
-                    max_output_tokens=max_output_tokens,
-                    response_mime_type="application/json",
-                ),
+                config=config,
             )
             if timeout is not None:
                 response = await asyncio.wait_for(coro, timeout=timeout)

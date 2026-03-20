@@ -1,43 +1,15 @@
 import { motion } from "framer-motion"
-import type { ConversationPhase } from "@/types"
-
-const chipsByPhase: Record<ConversationPhase, string[]> = {
-  intake: [
-    "Homework struggles",
-    "Morning routines are tough",
-    "Emotional meltdowns",
-    "Focus and attention",
-  ],
-  strategy: [
-    "Tell me more about that",
-    "What else can I try?",
-    "That sounds helpful",
-    "Can we try something different?",
-  ],
-  progress: [
-    "It's going well!",
-    "We're still struggling",
-    "I have a question",
-    "Let's set a new goal",
-  ],
-  followup: [
-    "Check in on our goals",
-    "Try a new strategy",
-    "Things have changed",
-    "I need more support",
-  ],
-}
 
 interface Props {
-  phase: ConversationPhase
+  suggestions?: string[]
   onSelect: (text: string) => void
   visible: boolean
 }
 
-export function QuickReplyChips({ phase, onSelect, visible }: Props) {
-  if (!visible) return null
+export function QuickReplyChips({ suggestions, onSelect, visible }: Props) {
+  if (!visible || !suggestions || suggestions.length === 0) return null
 
-  const chips = chipsByPhase[phase] || chipsByPhase.intake
+  const chips = suggestions
 
   return (
     <motion.div

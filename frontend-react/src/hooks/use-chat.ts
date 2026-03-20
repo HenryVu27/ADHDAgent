@@ -16,6 +16,7 @@ export function useChat(sessionId: string) {
   const [summaryText, setSummaryText] = useState("")  // Contextual summary from parallel Flash call
   const [streamingContent, setStreamingContent] = useState("") // displayed during streaming
   const [latestTrace, setLatestTrace] = useState<PipelineTrace | null>(null)
+  const [suggestions, setSuggestions] = useState<string[]>([])
   const idCounter = useRef(0)
   const abortRef = useRef<AbortController | null>(null)
   // accumulatedRef: source of truth for token accumulation (avoids stale closure issues)
@@ -45,6 +46,7 @@ export function useChat(sessionId: string) {
     setIsLoading(true)
     setStreamingContent("")
     setStatusText("")
+    setSuggestions([])
     accumulatedRef.current = ""
 
     const controller = new AbortController()
@@ -97,6 +99,11 @@ export function useChat(sessionId: string) {
             flushTimerRef.current = null
           }
           _finalize(event)
+
+        } else if (event.type === "suggestions") {
+          if (Array.isArray(event.suggestions)) {
+            setSuggestions(event.suggestions)
+          }
 
         } else if (event.type === "error") {
           setMessages(prev => [...prev, {
@@ -164,6 +171,7 @@ export function useChat(sessionId: string) {
     setStreamingContent("")
     setStatusText("")
     setSummaryText("")
+    setSuggestions([])
     accumulatedRef.current = ""
     idCounter.current = 0
   }, [])
@@ -197,6 +205,7 @@ export function useChat(sessionId: string) {
     summaryText,
     streamingContent,
     latestTrace,
+    suggestions,
     sendMessage,
     stopStreaming,
     clearMessages,

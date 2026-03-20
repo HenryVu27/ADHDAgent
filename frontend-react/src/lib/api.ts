@@ -103,6 +103,26 @@ export const api = {
           }
         }
       }
+
+      // Process any remaining data left in the buffer after stream closes
+      if (buffer.trim()) {
+        for (const block of buffer.split("\n\n")) {
+          if (!block.trim()) continue
+          let eventType = ""
+          let dataStr = ""
+          for (const line of block.split("\n")) {
+            if (line.startsWith("event: ")) eventType = line.slice(7).trim()
+            else if (line.startsWith("data: ")) dataStr = line.slice(6)
+          }
+          if (!eventType || !dataStr) continue
+          try {
+            const parsed = JSON.parse(dataStr)
+            yield { type: eventType, ...parsed } as StreamEvent
+          } catch {
+            // malformed JSON — skip
+          }
+        }
+      }
     } finally {
       reader.releaseLock()
     }
