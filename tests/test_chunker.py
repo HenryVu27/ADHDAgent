@@ -306,3 +306,72 @@ def test_contextual_headers_graceful_failure():
     updated = asyncio.run(chunker.add_contextual_headers(chunks, doc))
     assert all(c.context_header == "" for c in updated)
     assert all("API error" not in c.text for c in updated)
+
+
+# --- SemanticChunker ---
+
+from app.rag.chunker import SemanticChunker
+import numpy as np
+
+
+def test_semantic_chunker_structured_doc():
+    """Structured docs use steps/key_points as sentence units."""
+    doc = {
+        "id": "sem1",
+        "name": "Semantic Test",
+        "description": "A test strategy.",
+        "document_type": "strategy",
+        "tags": ["test"],
+        "age_range": [],
+        "evidence_level": "",
+        "source": "",
+        "citations": [],
+        "steps": ["Step A about homework.", "Step B about homework.", "Step C about emotions."],
+    }
+
+    # Mock embeddings: steps A and B are similar, C is different
+    mock_gemini = AsyncMock()
+    embeddings = [
+        [1.0, 0.0, 0.0],  # description
+        [0.9, 0.1, 0.0],  # step A (similar to B)
+        [0.85, 0.15, 0.0],  # step B (similar to A)
+        [0.0, 0.0, 1.0],  # step C (different)
+    ]
+    mock_gemini.embed_batch = AsyncMock(return_value=embeddings)
+
+    chunker = SemanticChunker(gemini_client=mock_gemini, similarity_threshold=0.5, chunk_size=50)
+    chunks = asyncio.run(chunker.chunk_async(doc))
+
+    # Should group A+B together (similar) and C separate, plus description
+    # At minimum: boundary between B and C due to low similarity
+    assert len(chunks) >= 2
+    assert all(c.parent_document_id == "sem1" for c in chunks)
+    assert all(c.chunk_type == "text_segment" for c in chunks)
+
+
+def test_semantic_chunker_finds_boundaries():
+    """Verify boundary detection with controlled embeddings."""
+    # 5 embeddings: first 3 similar, then a gap, then 2 similar
+    embeddings = [
+        [1.0, 0.0],
+        [0.95, 0.05],
+        [0.9, 0.1],
+        [0.0, 1.0],  # big shift here
+        [0.05, 0.95],
+    ]
+
+    chunker = SemanticChunker(similarity_threshold=0.5)
+    boundaries = chunker._find_boundaries(embeddings, threshold=0.5)
+    # Should find a boundary between index 2 and 3
+    assert 3 in boundaries
+
+
+def test_semantic_chunker_merge_small():
+    """Small chunks below target size should be merged."""
+    chunker = SemanticChunker(chunk_size=200, similarity_threshold=0.5)
+    texts = ["Short A.", "Short B.", "Short C."]
+    merged = chunker._merge_small_chunks(texts, target_size=200)
+    # All three are tiny, should merge into one
+    assert len(merged) == 1
+    assert "Short A." in merged[0]
+    assert "Short C." in merged[0]

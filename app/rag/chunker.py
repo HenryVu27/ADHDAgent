@@ -332,3 +332,156 @@ class RecursiveContextualChunker:
 
         # Last resort: return as-is
         return [text]
+
+
+class SemanticChunker:
+    """Embedding-based boundary detection chunker.
+
+    Splits on topic shifts detected by cosine similarity drops between adjacent sentences.
+    """
+
+    def __init__(
+        self,
+        gemini_client=None,
+        similarity_threshold: float = 0.75,
+        chunk_size: int = 2048,
+    ):
+        self._gemini = gemini_client
+        self._threshold = similarity_threshold
+        self._chunk_size = chunk_size
+
+    def chunk(self, document: dict) -> list[Chunk]:
+        """Synchronous fallback -- cannot do semantic splitting without embeddings.
+
+        Returns single chunk like NoneChunker. Use chunk_async() for real semantic splitting.
+        """
+        doc_id = document.get("id", "")
+        doc_name = document.get("name", "")
+        meta = _extract_metadata(document)
+        text = self._extract_sentences_text(document)
+        prefixed = f"[{doc_name}] {text}" if doc_name else text
+        return [Chunk(
+            chunk_id=f"{doc_id}__text_segment_0",
+            parent_document_id=doc_id,
+            text=prefixed,
+            raw_text=text,
+            context_header="",
+            chunk_type="text_segment",
+            chunk_index=0,
+            metadata=meta,
+        )]
+
+    async def chunk_async(self, document: dict) -> list[Chunk]:
+        """Async semantic chunking with embedding-based boundary detection."""
+        import numpy as np
+
+        doc_id = document.get("id", "")
+        doc_name = document.get("name", "")
+        meta = _extract_metadata(document)
+
+        sentences = self._extract_sentences(document)
+        if len(sentences) <= 1:
+            text = sentences[0] if sentences else ""
+            prefixed = f"[{doc_name}] {text}" if doc_name else text
+            return [Chunk(
+                chunk_id=f"{doc_id}__text_segment_0",
+                parent_document_id=doc_id,
+                text=prefixed,
+                raw_text=text,
+                context_header="",
+                chunk_type="text_segment",
+                chunk_index=0,
+                metadata=meta,
+            )]
+
+        # Embed all sentences
+        embeddings = await self._gemini.embed_batch(sentences)
+
+        # Find boundaries
+        boundaries = self._find_boundaries(embeddings, self._threshold)
+
+        # Split sentences at boundaries
+        groups = []
+        start = 0
+        for b in sorted(boundaries):
+            groups.append(" ".join(sentences[start:b]))
+            start = b
+        groups.append(" ".join(sentences[start:]))
+        groups = [g for g in groups if g.strip()]
+
+        # Merge small chunks
+        merged = self._merge_small_chunks(groups, self._chunk_size)
+
+        chunks = []
+        for i, text in enumerate(merged):
+            prefixed = f"[{doc_name}] {text}" if doc_name else text
+            chunks.append(Chunk(
+                chunk_id=f"{doc_id}__text_segment_{i}",
+                parent_document_id=doc_id,
+                text=prefixed,
+                raw_text=text,
+                context_header="",
+                chunk_type="text_segment",
+                chunk_index=i,
+                metadata=meta,
+            ))
+        return chunks
+
+    def _extract_sentences(self, document: dict) -> list[str]:
+        """Extract sentence units from a document.
+
+        Structured docs: description + each step/key_point is a sentence.
+        Unstructured: split description on sentence boundaries.
+        """
+        sentences = []
+        description = document.get("description", "")
+        steps = document.get("steps", [])
+        key_points = document.get("key_points", [])
+
+        if steps or key_points:
+            if description:
+                sentences.append(description)
+            sentences.extend(steps)
+            sentences.extend(key_points)
+        else:
+            if description:
+                parts = re.split(r'(?<=[.!?])\s+', description)
+                sentences.extend([p for p in parts if p.strip()])
+
+        return sentences or [description]
+
+    def _extract_sentences_text(self, document: dict) -> str:
+        """Join all sentence units into a single text."""
+        return " ".join(self._extract_sentences(document))
+
+    def _find_boundaries(
+        self, embeddings: list[list[float]], threshold: float
+    ) -> list[int]:
+        """Find indices where cosine similarity between adjacent embeddings drops below threshold."""
+        import numpy as np
+
+        boundaries = []
+        for i in range(1, len(embeddings)):
+            a = np.asarray(embeddings[i - 1])
+            b = np.asarray(embeddings[i])
+            norm_a = np.linalg.norm(a)
+            norm_b = np.linalg.norm(b)
+            if norm_a == 0 or norm_b == 0:
+                boundaries.append(i)
+                continue
+            sim = float(np.dot(a, b) / (norm_a * norm_b))
+            if sim < threshold:
+                boundaries.append(i)
+        return boundaries
+
+    def _merge_small_chunks(self, texts: list[str], target_size: int) -> list[str]:
+        """Merge adjacent chunks that are smaller than target_size."""
+        if not texts:
+            return texts
+        merged = [texts[0]]
+        for text in texts[1:]:
+            if len(merged[-1]) + len(text) + 1 <= target_size:
+                merged[-1] = merged[-1] + " " + text
+            else:
+                merged.append(text)
+        return merged
