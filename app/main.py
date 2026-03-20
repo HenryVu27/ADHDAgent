@@ -158,7 +158,7 @@ async def build_dependencies() -> dict:
         colbert_index=colbert,
         event_bus=event_bus,
     )
-    tools = create_tools(retriever=retriever, session_store=session_store)
+    tools = create_tools(retriever=retriever, session_store=session_store, gemini_client=gemini)
 
     # 7. Create context preparation hook
     from app.agent.hooks import create_prepare_context
