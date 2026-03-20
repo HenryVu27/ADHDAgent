@@ -154,6 +154,76 @@ class KnowledgeStore:
                     next_id += 1
         self._avg_doc_len = sum(doc_lengths) / len(doc_lengths) if doc_lengths else 1.0
 
+    async def _async_enrich_chunks(self, gemini_client):
+        """Run async chunking enrichment before index build.
+
+        For semantic strategy: re-chunk with embedding-based boundary detection.
+        For recursive_contextual: add LLM contextual headers to chunk texts.
+        """
+        from app.rag.chunker import Chunk, RecursiveContextualChunker, SemanticChunker
+
+        strategy = settings.RAG_CHUNKING_STRATEGY
+
+        if strategy == "semantic" and isinstance(self._chunker, SemanticChunker):
+            self._chunker._gemini = gemini_client
+            new_chunks = []
+            for doc in self.documents:
+                chunk_objects = await self._chunker.chunk_async(doc)
+                for co in chunk_objects:
+                    new_chunks.append(self._chunk_obj_to_dict(co))
+            self.chunks = new_chunks
+            self._build_vocabulary()
+            logger.info("Semantic chunking: %d chunks from %d documents", len(self.chunks), len(self.documents))
+
+        elif (
+            strategy == "recursive_contextual"
+            and settings.RAG_CONTEXTUAL_HEADERS
+            and isinstance(self._chunker, RecursiveContextualChunker)
+        ):
+            self._chunker._gemini = gemini_client
+            enriched_chunks = []
+            for doc in self.documents:
+                doc_id = doc.get("id", "")
+                doc_chunk_dicts = [c for c in self.chunks if c["document_id"] == doc_id]
+                chunk_objs = [
+                    Chunk(
+                        chunk_id=c["chunk_id"],
+                        parent_document_id=c["document_id"],
+                        text=c["text"],
+                        raw_text=c["text"],
+                        context_header="",
+                        chunk_type=c["chunk_type"],
+                        chunk_index=i,
+                        metadata={},
+                    )
+                    for i, c in enumerate(doc_chunk_dicts)
+                ]
+                updated_objs = await self._chunker.add_contextual_headers(chunk_objs, doc)
+                for orig_dict, updated_obj in zip(doc_chunk_dicts, updated_objs):
+                    orig_dict["text"] = updated_obj.text
+                    orig_dict["context_header"] = updated_obj.context_header
+                    enriched_chunks.append(orig_dict)
+            self.chunks = enriched_chunks
+            self._build_vocabulary()
+            logger.info("Contextual headers applied to %d chunks", len(self.chunks))
+
+    @staticmethod
+    def _chunk_obj_to_dict(co) -> dict:
+        return {
+            "document_id": co.parent_document_id,
+            "document_name": co.metadata.get("document_name", ""),
+            "text": co.text,
+            "tags": co.metadata.get("tags", []),
+            "source": co.metadata.get("source", ""),
+            "evidence_level": co.metadata.get("evidence_level", ""),
+            "document_type": co.metadata.get("document_type", ""),
+            "age_range": co.metadata.get("age_range", []),
+            "citations": co.metadata.get("citations", []),
+            "chunk_id": co.chunk_id,
+            "chunk_type": co.chunk_type,
+            "context_header": co.context_header,
+        }
+
     # Convert text to sparse vector using TF or BM25 weights
     # (Qdrant applies IDF server-side via Modifier.IDF)
     def _text_to_sparse(self, text: str) -> SparseVector:
@@ -213,6 +283,9 @@ class KnowledgeStore:
                 f"{len(self.chunks)} points — skipping rebuild"
             )
             return
+
+        # Async chunk enrichment (semantic re-chunking or contextual headers)
+        await self._async_enrich_chunks(gemini_client)
 
         texts = [chunk["text"] for chunk in self.chunks]
         logger.info(f"Embedding {len(texts)} chunks (sparse_mode={self._sparse_mode})...")

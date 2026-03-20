@@ -60,6 +60,7 @@ async def build_dependencies() -> dict:
             await store.build_index(gemini, colbert_index=colbert)
             colbert_note = " + colbert" if colbert else ""
             logger.info("Qdrant hybrid index built (dense + sparse%s)", colbert_note)
+            logger.info("Chunking strategy: %s", settings.RAG_CHUNKING_STRATEGY)
         except Exception as e:
             logger.error(f"Qdrant index build failed: {e}")
 
