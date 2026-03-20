@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import re
 from dataclasses import dataclass, field
@@ -160,6 +161,41 @@ class RecursiveContextualChunker:
             ))
 
         return chunks
+
+    async def add_contextual_headers(
+        self, chunks: list[Chunk], document: dict
+    ) -> list[Chunk]:
+        """Generate and prepend LLM contextual headers to chunks.
+
+        Called separately from chunk() because it requires async LLM calls.
+        Returns the same chunks with context_header and text updated.
+        """
+        if not self._contextual_headers or not self._gemini:
+            return chunks
+
+        doc_name = document.get("name", "")
+        doc_type = document.get("document_type", "")
+        total = len(chunks)
+
+        async def _generate_header(chunk: Chunk) -> Chunk:
+            prompt = (
+                f"Write a 1-2 sentence context header for this chunk from a knowledge base document.\n"
+                f"Document: '{doc_name}' (type: {doc_type})\n"
+                f"Chunk {chunk.chunk_index + 1} of {total} (type: {chunk.chunk_type})\n"
+                f"Chunk text: {chunk.raw_text[:500]}\n\n"
+                f"Write ONLY the context header, nothing else. Be concise."
+            )
+            try:
+                header = await self._gemini.generate(prompt)
+                header = header.strip()
+                chunk.context_header = header
+                chunk.text = f"{header} {chunk.raw_text}"
+            except Exception as e:
+                logger.warning("Header generation failed for %s: %s", chunk.chunk_id, e)
+            return chunk
+
+        tasks = [_generate_header(c) for c in chunks]
+        return list(await asyncio.gather(*tasks))
 
     def _chunk_description_only(
         self, doc: dict, doc_id: str, doc_name: str, meta: dict

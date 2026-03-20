@@ -231,3 +231,78 @@ def test_recursive_chunker_overlap():
         words_current = set(chunks[i].raw_text.split()[-10:])
         words_next = set(chunks[i + 1].raw_text.split()[:10])
         assert words_current & words_next, f"No overlap between chunks {i} and {i+1}"
+
+
+# --- Contextual headers ---
+
+from unittest.mock import AsyncMock
+import asyncio
+
+
+def test_contextual_headers_applied():
+    """Test that contextual headers are prepended when enabled."""
+    doc = {
+        "id": "hdr_test",
+        "name": "Header Test Strategy",
+        "description": "Test description.",
+        "document_type": "strategy",
+        "tags": ["test"],
+        "age_range": ["school_age"],
+        "evidence_level": "strong",
+        "source": "Test",
+        "citations": [],
+        "steps": ["Step one.", "Step two."],
+    }
+
+    mock_gemini = AsyncMock()
+    mock_gemini.generate.return_value = "This chunk is from Header Test Strategy."
+
+    chunker = RecursiveContextualChunker(contextual_headers=True, gemini_client=mock_gemini)
+    chunks = chunker.chunk(doc)
+
+    # Before add_contextual_headers is called, headers should be empty
+    assert all(c.context_header == "" for c in chunks)
+
+    # Now apply headers
+    updated = asyncio.run(chunker.add_contextual_headers(chunks, doc))
+
+    assert len(updated) == 3  # description + 2 steps
+    for c in updated:
+        assert c.context_header == "This chunk is from Header Test Strategy."
+        assert c.text.startswith("This chunk is from Header Test Strategy. ")
+    assert mock_gemini.generate.call_count == 3
+
+
+def test_contextual_headers_disabled():
+    """When contextual_headers=False, add_contextual_headers is a no-op."""
+    chunks = [
+        Chunk(
+            chunk_id="x__step_1", parent_document_id="x",
+            text="original", raw_text="original", context_header="",
+            chunk_type="step", chunk_index=1, metadata={},
+        )
+    ]
+    chunker = RecursiveContextualChunker(contextual_headers=False)
+    updated = asyncio.run(chunker.add_contextual_headers(chunks, {}))
+    assert updated[0].text == "original"
+    assert updated[0].context_header == ""
+
+
+def test_contextual_headers_graceful_failure():
+    """If LLM call fails, chunk is kept without header."""
+    doc = {
+        "id": "fail_test",
+        "name": "Fail Test",
+        "description": "Desc.",
+        "steps": ["Step."],
+        "tags": [], "age_range": [], "evidence_level": "", "source": "", "citations": [],
+    }
+
+    mock_gemini = AsyncMock()
+    mock_gemini.generate.side_effect = Exception("API error")
+
+    chunker = RecursiveContextualChunker(contextual_headers=True, gemini_client=mock_gemini)
+    chunks = chunker.chunk(doc)
+    updated = asyncio.run(chunker.add_contextual_headers(chunks, doc))
+    assert all(c.context_header == "" for c in updated)
+    assert all("API error" not in c.text for c in updated)
