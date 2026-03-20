@@ -375,3 +375,42 @@ def test_semantic_chunker_merge_small():
     assert len(merged) == 1
     assert "Short A." in merged[0]
     assert "Short C." in merged[0]
+
+
+# --- KnowledgeStore integration ---
+
+from app.rag.knowledge_store import KnowledgeStore
+
+
+def test_knowledge_store_with_none_chunker(monkeypatch):
+    """KnowledgeStore with NoneChunker produces same chunk count as documents."""
+    monkeypatch.setattr("app.config.settings.RAG_CHUNKING_STRATEGY", "none")
+    store = KnowledgeStore()
+    assert len(store.chunks) == len(store.documents)
+
+
+def test_knowledge_store_with_recursive_chunker(monkeypatch):
+    """KnowledgeStore with recursive chunker produces more chunks than documents."""
+    monkeypatch.setattr("app.config.settings.RAG_CHUNKING_STRATEGY", "recursive_contextual")
+    monkeypatch.setattr("app.config.settings.RAG_CONTEXTUAL_HEADERS", False)
+    store = KnowledgeStore()
+    assert len(store.chunks) > len(store.documents)
+    # Each chunk dict should have document_id and document_name
+    for chunk in store.chunks:
+        assert "document_id" in chunk
+        assert "document_name" in chunk
+        assert "text" in chunk
+        assert "tags" in chunk
+
+
+def test_knowledge_store_collection_name_varies_by_strategy(monkeypatch):
+    """Collection name should differ per strategy."""
+    monkeypatch.setattr("app.config.settings.RAG_CHUNKING_STRATEGY", "none")
+    store_none = KnowledgeStore()
+
+    monkeypatch.setattr("app.config.settings.RAG_CHUNKING_STRATEGY", "recursive_contextual")
+    monkeypatch.setattr("app.config.settings.RAG_CONTEXTUAL_HEADERS", False)
+    store_rc = KnowledgeStore()
+
+    assert store_none._collection != store_rc._collection
+    assert "recursive_contextual" in store_rc._collection

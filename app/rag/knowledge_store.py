@@ -57,11 +57,18 @@ class KnowledgeStore:
         self.documents: list[dict] = []
         self.chunks: list[dict] = []
         self._client: QdrantClient | None = None
-        self._collection = collection_name or settings.QDRANT_COLLECTION
         self._indexed = False
         self._vocab: dict[str, int] = {}
         self._doc_index: dict[str, dict] = {}
         self._avg_doc_len: float = 0.0
+
+        # Strategy-specific collection name
+        strategy = settings.RAG_CHUNKING_STRATEGY
+        base = collection_name or settings.QDRANT_COLLECTION
+        self._collection = base if strategy == "none" else f"{base}_{strategy}"
+
+        # Create chunker based on config
+        self._chunker = self._create_chunker()
 
         self._load_documents()
 
@@ -88,31 +95,50 @@ class KnowledgeStore:
             if doc_id:
                 self._doc_index[doc_id] = doc
 
-    # One chunk per document — concatenate name, description, steps, key_points
+    def _create_chunker(self):
+        from app.rag.chunker import NoneChunker, RecursiveContextualChunker
+
+        strategy = settings.RAG_CHUNKING_STRATEGY
+        if strategy == "none":
+            return NoneChunker()
+        elif strategy == "recursive_contextual":
+            return RecursiveContextualChunker(
+                chunk_size=settings.RAG_CHUNK_SIZE_TOKENS * 4,  # tokens -> chars approx
+                chunk_overlap=settings.RAG_CHUNK_OVERLAP_TOKENS * 4,
+                contextual_headers=settings.RAG_CONTEXTUAL_HEADERS,
+                gemini_client=None,  # set later in build_index if needed
+            )
+        elif strategy == "semantic":
+            from app.rag.chunker import SemanticChunker
+            return SemanticChunker(
+                similarity_threshold=settings.RAG_SEMANTIC_SIMILARITY_THRESHOLD,
+                chunk_size=settings.RAG_CHUNK_SIZE_TOKENS * 4,
+            )
+        else:
+            logger.warning("Unknown chunking strategy '%s', using 'none'", strategy)
+            return NoneChunker()
+
+    # Create chunks using the configured chunker
     def _create_chunks(self):
+        from app.rag.chunker import Chunk as ChunkObj
+
         for doc in self.documents:
-            text_parts = [doc.get("name", ""), doc.get("description", "")]
-
-            steps = doc.get("steps", [])
-            if steps:
-                text_parts.append("Steps: " + " | ".join(steps))
-
-            key_points = doc.get("key_points", [])
-            if key_points:
-                text_parts.append("Key points: " + " | ".join(key_points))
-
-            self.chunks.append({
-                "document_id": doc.get("id", ""),
-                "document_name": doc.get("name", ""),
-                "text": " ".join(text_parts),
-                "tags": doc.get("tags", []),
-                "source": doc.get("source", ""),
-                "evidence_level": doc.get("evidence_level", ""),
-                "document_type": doc.get("document_type", ""),
-                "age_range": doc.get("age_range", []),
-                "citations": doc.get("citations", []),
-                "full_doc": doc,
-            })
+            chunk_objects = self._chunker.chunk(doc)
+            for chunk_obj in chunk_objects:
+                self.chunks.append({
+                    "document_id": chunk_obj.parent_document_id,
+                    "document_name": chunk_obj.metadata.get("document_name", ""),
+                    "text": chunk_obj.text,
+                    "tags": chunk_obj.metadata.get("tags", []),
+                    "source": chunk_obj.metadata.get("source", ""),
+                    "evidence_level": chunk_obj.metadata.get("evidence_level", ""),
+                    "document_type": chunk_obj.metadata.get("document_type", ""),
+                    "age_range": chunk_obj.metadata.get("age_range", []),
+                    "citations": chunk_obj.metadata.get("citations", []),
+                    "chunk_id": chunk_obj.chunk_id,
+                    "chunk_type": chunk_obj.chunk_type,
+                    "context_header": chunk_obj.context_header,
+                })
 
     # Build token->index mapping for sparse vectors
     def _build_vocabulary(self):
