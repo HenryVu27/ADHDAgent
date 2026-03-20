@@ -3,6 +3,8 @@
 
 import logging
 
+from langsmith import traceable
+
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -50,6 +52,7 @@ class QueryRewriter:
         self._gemini = gemini_client
 
     # Rewrite query with last 3 turns + family profile. Returns original on error.
+    @traceable(name="query_rewriter.rewrite", run_type="llm")
     async def rewrite(
         self,
         query: str,

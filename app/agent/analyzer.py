@@ -8,6 +8,8 @@ promises, missed tool calls, and tone problems.
 import logging
 from datetime import datetime, timezone
 
+from langsmith import traceable
+
 from app.agent.store_protocol import SessionStoreBase
 from app.config import settings
 from app.models.schemas import AnalysisFlag, EnrichedTrace, TurnAnalysis
@@ -57,6 +59,7 @@ class ConversationAnalyzer:
         self._store = session_store
         self._gemini = gemini_client
 
+    @traceable(name="analyzer.analyze_turn", run_type="llm")
     async def analyze_turn(
         self,
         session_id: str,

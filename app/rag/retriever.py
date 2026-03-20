@@ -11,6 +11,7 @@ from collections import defaultdict
 from typing import TYPE_CHECKING
 
 import numpy as np
+from langsmith import traceable
 
 if TYPE_CHECKING:
     from app.rag.colbert_index import ColBERTIndex
@@ -65,6 +66,7 @@ class HybridRetriever:
         self._query_cache: list[tuple[list[float], list[RetrievalResult], float]] = []
 
     # Full retrieval pipeline: rewrite -> hybrid search -> facets -> trim
+    @traceable(name="retriever.retrieve", run_type="retriever")
     async def retrieve(
         self,
         query: str,

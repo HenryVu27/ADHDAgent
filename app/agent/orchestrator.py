@@ -6,6 +6,7 @@ import time
 from datetime import datetime, timezone
 
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
+from langsmith import traceable
 
 from app.agent.store_protocol import SessionStoreBase
 from app.models.schemas import (
@@ -96,6 +97,7 @@ class AgentOrchestrator:
         self._gemini = gemini_client
         self._pending_tasks: set[asyncio.Task] = set()
 
+    @traceable(name="orchestrator.generate_summary", run_type="llm")
     async def _generate_summary(self, message: str) -> str | None:
         """Generate a contextual one-line summary from the user's message via Flash."""
         if not self._gemini:
@@ -130,6 +132,7 @@ class AgentOrchestrator:
             logger.debug("[agent] Summary generation failed — skipping")
             return None
 
+    @traceable(name="orchestrator.generate_suggestions", run_type="llm")
     async def _generate_suggestions(
         self, user_message: str, assistant_response: str, session_id: str,
     ) -> list[str]:
@@ -378,6 +381,7 @@ class AgentOrchestrator:
         await self._session_store.commit()
         return enriched
 
+    @traceable(name="orchestrator.process")
     async def process(self, message: str, session_id: str, attachment_ids: list[str] | None = None) -> StreamDonePayload:
         """Run the ReAct agent for a single parent message."""
         turn = await self._session_store.increment_turn(session_id)
@@ -480,6 +484,7 @@ class AgentOrchestrator:
             session_id=session_id,
         )
 
+    @traceable(name="orchestrator.process_stream")
     async def process_stream(self, message: str, session_id: str, user_id: int | None = None, attachment_ids: list[str] | None = None):
         """Streaming version of process(). Yields (event_type, data) tuples.
 
