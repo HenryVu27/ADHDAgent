@@ -72,6 +72,16 @@ export function useChat(sessionId: string) {
           accumulatedRef.current += event.text
           setStreamingContent(prev => prev + event.text)
 
+        } else if (event.type === "reset") {
+          // Agent is calling a tool — clear intermediate reasoning so only
+          // the final post-tool response is displayed
+          accumulatedRef.current = ""
+          setStreamingContent("")
+          typewriterResetRef.current?.("")
+          firstToken = true
+          setIsStreaming(false)
+          setIsLoading(true)
+
         } else if (event.type === "replace") {
           accumulatedRef.current = event.text
           setStreamingContent(event.text)

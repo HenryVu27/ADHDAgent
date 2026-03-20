@@ -136,6 +136,10 @@ export interface StreamSuggestionsEvent {
   suggestions: string[]
 }
 
+export interface StreamResetEvent {
+  type: "reset"
+}
+
 export interface StreamErrorEvent {
   type: "error"
   message: string
@@ -145,6 +149,7 @@ export type StreamEvent =
   | StreamStatusEvent
   | StreamTokenEvent
   | StreamReplaceEvent
+  | StreamResetEvent
   | StreamSummaryEvent
   | StreamDoneEvent
   | StreamSuggestionsEvent

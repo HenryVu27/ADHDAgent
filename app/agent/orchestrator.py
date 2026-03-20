@@ -486,6 +486,7 @@ class AgentOrchestrator:
         Event types:
             status  {"text": str}       — pipeline stage updates
             token   {"text": str}       — one LLM response chunk
+            reset   {}                  — clear streamed text (tool call starting)
             replace {"text": str}       — output gate replaced the streamed response
             done    {StreamDonePayload} — final payload with trace
             error   {"message": str}    — exception details
@@ -569,8 +570,15 @@ class AgentOrchestrator:
                                 summary_task.cancel()
                                 summary_sent = True
 
-                    # Tool invocation status updates — contextual
+                    # Tool invocation — reset streamed text so only the final
+                    # post-tool response is displayed (intermediate reasoning
+                    # before tool calls is not the real response).
                     if kind == "on_tool_start":
+                        if streamed_text:
+                            streamed_text = ""
+                            token_count = 0
+                            token_start = None
+                            yield ("reset", {})
                         tool_name = event.get("name", "")
                         tool_input = event.get("data", {}).get("input", {})
 
