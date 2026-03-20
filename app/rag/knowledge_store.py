@@ -74,7 +74,7 @@ class KnowledgeStore:
 
     # Load all JSON knowledge files
     def _load_documents(self):
-        for json_file in sorted(self.knowledge_dir.glob("*.json")):
+        for json_file in sorted(self.knowledge_dir.glob("**/*.json")):
             try:
                 with open(json_file) as f:
                     docs = json.load(f)

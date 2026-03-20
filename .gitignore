@@ -27,3 +27,4 @@ learning/
 .worktrees/
 .worktrees/
 qdrant_data/
+scripts/ingest/.cache/
