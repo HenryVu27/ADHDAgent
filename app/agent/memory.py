@@ -8,6 +8,8 @@ import asyncio
 import logging
 import time
 
+from langsmith import traceable
+
 from app.agent.store_protocol import SessionStoreBase
 from app.config import settings
 from app.models.schemas import EpisodeLink, EpisodicMemory, SessionSummary, UserSummary
@@ -79,6 +81,7 @@ class MemoryManager:
             if isinstance(result, Exception):
                 logger.error("Memory task %d failed: %s", i, result)
 
+    @traceable(name="memory.update_summary", run_type="llm")
     async def _update_summary(self, session_id: str, current_turn: int) -> None:
         """Generate a rolling summary covering turns since the last summary."""
         if not self._gemini:
@@ -167,6 +170,7 @@ Write a concise summary (2-4 sentences) focused on narrative and emotional conte
             logger.error("Summary generation failed for session %s: %s", session_id, e)
             raise
 
+    @traceable(name="memory.extract_facts", run_type="llm")
     async def _extract_facts(self, session_id: str, user_message: str, turn: int) -> None:
         """Extract structured facts from the user message and update the profile."""
         if not self._gemini:
@@ -289,6 +293,7 @@ Parent message:
             logger.error("Fact extraction failed for session %s: %s", session_id, e)
             raise
 
+    @traceable(name="memory.create_episode", run_type="chain")
     async def _create_episode(
         self,
         session_id: str,
@@ -455,6 +460,7 @@ Parent message:
         except Exception as e:
             logger.warning("Episode linking failed (non-critical): %s", e)
 
+    @traceable(name="memory.end_of_session_tasks", run_type="chain")
     async def end_of_session_tasks(self, user_id: int, previous_session_id: str) -> None:
         """Generate/update a longitudinal summary for a returning user.
 
@@ -531,6 +537,7 @@ Focus on what matters for the next conversation: what should the coach remember?
             logger.error("Longitudinal summary generation failed for user %d: %s", user_id, e)
             raise
 
+    @traceable(name="memory.infer_emotion", run_type="llm")
     async def _infer_emotion(self, session_id: str, user_message: str) -> str:
         """Classify the parent's emotional state using an LLM call with conversation context."""
         if not self._gemini:

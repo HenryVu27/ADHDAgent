@@ -14,6 +14,8 @@ import logging
 import re
 import time
 
+from langsmith import traceable
+
 from app.config import settings
 from app.models.schemas import (
     GuardrailsError,
@@ -141,6 +143,7 @@ class InputGate:
         self._timeout_s = settings.GUARDRAILS_TIMEOUT_S
         self._fast_path = fast_path  # SemanticFastPath | None
 
+    @traceable(name="input_gate.check", run_type="llm")
     async def check(self, user_message: str) -> InputCheckResult:
         start = time.time()
 
@@ -219,6 +222,7 @@ class OutputGate:
         self._client = gemini_client
         self._timeout_s = settings.GUARDRAILS_TIMEOUT_S
 
+    @traceable(name="output_gate.check", run_type="llm")
     async def check(self, bot_response: str) -> OutputCheckResult:
         start = time.time()
         try:

@@ -16,6 +16,7 @@ langchain-google-genai>=2.1.0
 langgraph>=0.2.0
 slowapi>=0.1.9
 aiosqlite>=0.20.0
+langsmith>=0.3.0
 Pillow>=11.0.0
 python-multipart>=0.0.9
 pytest>=8.0.0
