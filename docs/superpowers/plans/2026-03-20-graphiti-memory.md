@@ -10,7 +10,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-03-20-graphiti-memory-design.md`
 
-**Testing policy:** Never run integration tests requiring real API keys (GEMINI_API_KEY, Neo4j credentials) without asking. All unit tests use mocks. Run tests with: `./adhd312/Scripts/python.exe -m pytest tests/<file> -v`
+**Testing policy:** Never run integration tests requiring real API keys (GEMINI_API_KEY, Neo4j credentials) without asking. All unit tests use mocks. Run tests with: `./adhd312/bin/python -m pytest tests/<file> -v`
 
 ---
 
@@ -45,7 +45,7 @@
 
 - [ ] **Step 1: Install graphiti-core with Gemini support**
 
-Run: `./adhd312/Scripts/pip.exe install "graphiti-core[google-genai]"`
+Run: `./adhd312/bin/pip install "graphiti-core[google-genai]"`
 
 - [ ] **Step 2: Add graphiti-core to requirements.txt**
 
@@ -60,6 +60,7 @@ Add these fields to the `Settings` class, after the existing `SQLITE_ENABLED` bl
     NEO4J_URI: str = "bolt://localhost:7687"
     NEO4J_USER: str = "neo4j"
     NEO4J_PASSWORD: str = ""
+    NEO4J_DATABASE: str = "neo4j"
 
     # Graphiti memory
     GRAPHITI_ENABLED: bool = True
@@ -154,7 +155,7 @@ def test_edge_types_defined():
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_graphiti_client.py -v`
+Run: `./adhd312/bin/python -m pytest tests/test_graphiti_client.py -v`
 Expected: FAIL with "ModuleNotFoundError: No module named 'app.agent.graphiti_client'"
 
 - [ ] **Step 3: Implement graphiti_client.py**
@@ -280,6 +281,11 @@ async def create_graphiti_client():
         from graphiti_core.llm_client.gemini_client import GeminiClient, LLMConfig
         from graphiti_core.embedder.gemini_embedder import GeminiEmbedder, GeminiEmbedderConfig
 
+        # Register custom entity and edge types so Graphiti's extraction
+        # is guided toward ADHD coaching domain concepts.
+        entity_types = [Child, Parent, Strategy, Challenge, EmotionalState, Goal]
+        edge_types = [TriedStrategy, HasChallenge, ExperiencedEmotion, AddressesChallenge, SetGoal]
+
         client = Graphiti(
             settings.NEO4J_URI,
             settings.NEO4J_USER,
@@ -296,6 +302,8 @@ async def create_graphiti_client():
                     embedding_model=settings.GRAPHITI_EMBEDDING_MODEL,
                 )
             ),
+            entity_types=entity_types,
+            edge_types=edge_types,
         )
         await client.build_indices_and_constraints()
         logger.info(
@@ -311,7 +319,7 @@ async def create_graphiti_client():
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_graphiti_client.py -v`
+Run: `./adhd312/bin/python -m pytest tests/test_graphiti_client.py -v`
 Expected: All 4 tests PASS
 
 - [ ] **Step 5: Commit**
@@ -415,7 +423,7 @@ async def test_post_turn_handles_add_episode_failure(memory_manager, mock_graphi
     await memory_manager.post_turn_tasks("sess1", 1, "hello", "hi", user_id=1)
     mock_event_bus.emit.assert_any_call(
         "memory", "graphiti_ingestion_failed", "sess1", 1,
-        detail=pytest.approx({"error": "Neo4j down"}, abs=1),
+        detail={"error": "Neo4j down"},
     )
 
 
@@ -434,7 +442,7 @@ async def test_sync_profile_fills_empty_fields(memory_manager, mock_graphiti, mo
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_memory.py -v`
+Run: `./adhd312/bin/python -m pytest tests/test_memory.py -v`
 Expected: FAIL (MemoryManager constructor signature changed)
 
 - [ ] **Step 3: Rewrite app/agent/memory.py**
@@ -537,14 +545,20 @@ class MemoryManager:
         """Sync Graphiti-discovered facts into SQLite FamilyProfile.
 
         One-way: Graphiti -> SQLite. Only fills empty fields.
+        Queries Neo4j for Child entity attributes via episode traversal.
         """
         try:
-            # Try direct entity query first; fall back to episode traversal
-            # if entity nodes don't carry group_id.
+            # Traverse from episodes to Child entities via MENTIONS edges.
+            # Graphiti stores group_id on episode nodes, not entity nodes.
+            # The exact Cypher may need adjustment based on Graphiti's schema
+            # version -- validate during implementation.
             query = """
-            MATCH (e {group_id: $group_id})-[:MENTIONS]->(c:Entity)
-            WHERE any(label IN labels(c) WHERE label = 'Child' OR c.name CONTAINS 'child')
-            RETURN c.name AS child_name, c.summary AS summary
+            MATCH (e {group_id: $group_id})-[:MENTIONS]->(c)
+            WHERE 'Entity' IN labels(c)
+            RETURN c.name AS child_name, c.age AS child_age,
+                   c.diagnosis_status AS diagnosis_status,
+                   c.adhd_subtype AS adhd_subtype,
+                   c.summary AS summary
             ORDER BY c.created_at DESC LIMIT 1
             """
             result = await self._graphiti.driver.execute_query(
@@ -557,10 +571,11 @@ class MemoryManager:
             current_profile = (await self._store.get(session_id)).family_profile
 
             updates = {}
-            # Parse entity name/summary for profile fields
-            child_name = record.get("child_name")
-            if child_name and not current_profile.child_name:
-                updates["child_name"] = child_name
+            for field in ("child_name", "child_age", "diagnosis_status", "adhd_subtype"):
+                graph_val = record.get(field)
+                sqlite_val = getattr(current_profile, field, None)
+                if graph_val and not sqlite_val:
+                    updates[field] = graph_val
 
             if updates:
                 await self._store.update_profile(session_id, **updates)
@@ -577,7 +592,7 @@ class MemoryManager:
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_memory.py -v`
+Run: `./adhd312/bin/python -m pytest tests/test_memory.py -v`
 Expected: All tests PASS
 
 - [ ] **Step 5: Commit**
@@ -623,7 +638,7 @@ Same removal for the in-memory store. Search for each method name and delete.
 
 - [ ] **Step 4: Run existing tests to check for breakage**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_sqlite_store.py tests/test_session_store.py -v`
+Run: `./adhd312/bin/python -m pytest tests/test_sqlite_store.py tests/test_session_store.py -v`
 
 Fix any test failures caused by tests that call the removed methods (these tests should be deleted or updated since they test deleted functionality).
 
@@ -644,14 +659,20 @@ git commit -m "Remove summary, episode, and cross-session methods from store pro
 
 - [ ] **Step 1: Write test for search_memory tool**
 
-Add to `tests/test_agent_tools.py`:
+Add to `tests/test_agent_tools.py`. First check what fixtures already exist in the file (look for `mock_retriever`, `mock_store` fixtures or conftest). Then add:
 
 ```python
 @pytest.mark.asyncio
-async def test_search_memory_returns_formatted_facts(mock_graphiti):
+async def test_search_memory_returns_formatted_facts():
     """search_memory should format Graphiti edges as readable facts."""
     from datetime import datetime
-    from unittest.mock import MagicMock
+    from unittest.mock import AsyncMock, MagicMock
+    from app.agent.tools import create_tools
+
+    # Mock dependencies
+    mock_retriever = MagicMock()
+    mock_store = AsyncMock()
+    mock_graphiti = AsyncMock()
 
     edge = MagicMock()
     edge.fact = "Parent tried timer system for homework"
@@ -673,11 +694,26 @@ async def test_search_memory_returns_formatted_facts(mock_graphiti):
     result = await search_mem.ainvoke({"query": "homework strategies"}, config=config)
     assert "timer system" in result
     mock_graphiti.search.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_search_memory_not_added_when_no_graphiti():
+    """When graphiti_client is None, search_memory tool should not exist."""
+    from unittest.mock import AsyncMock, MagicMock
+    from app.agent.tools import create_tools
+
+    tools = create_tools(
+        retriever=MagicMock(),
+        session_store=AsyncMock(),
+        graphiti_client=None,
+    )
+    tool_names = [t.name for t in tools]
+    assert "search_memory" not in tool_names
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_agent_tools.py::test_search_memory_returns_formatted_facts -v`
+Run: `./adhd312/bin/python -m pytest tests/test_agent_tools.py::test_search_memory_returns_formatted_facts -v`
 Expected: FAIL
 
 - [ ] **Step 3: Add _get_user_id helper and search_memory tool to tools.py**
@@ -751,7 +787,7 @@ Make sure `all_tools` is the list that gets returned (check the existing return 
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_agent_tools.py::test_search_memory_returns_formatted_facts -v`
+Run: `./adhd312/bin/python -m pytest tests/test_agent_tools.py::test_search_memory_returns_formatted_facts -v`
 Expected: PASS
 
 - [ ] **Step 5: Commit**
@@ -771,31 +807,71 @@ git commit -m "Add search_memory tool backed by Graphiti"
 
 - [ ] **Step 1: Write test for graph-sourced context assembly**
 
-Add to `tests/test_agent_hooks.py`:
+Add to `tests/test_agent_hooks.py`. This test requires setting up a `CoachingState` with messages and invoking the hook. Study the existing tests in the file for the fixture pattern, then add:
 
 ```python
 @pytest.mark.asyncio
-async def test_prepare_context_queries_graphiti(mock_graphiti):
+async def test_prepare_context_queries_graphiti():
     """When graphiti_client is provided, context assembly should query it."""
     from datetime import datetime
-    from unittest.mock import MagicMock
+    from unittest.mock import AsyncMock, MagicMock
+    from langchain_core.messages import HumanMessage, SystemMessage
+    from app.agent.hooks import create_prepare_context
 
+    # Mock graphiti
+    mock_graphiti = AsyncMock()
     edge = MagicMock()
     edge.fact = "Alex struggles with homework initiation"
     edge.valid_at = datetime(2026, 1, 1)
     edge.invalid_at = None
     mock_graphiti.search = AsyncMock(return_value=[edge])
 
+    # Mock session store (return minimal session state)
+    mock_store = AsyncMock()
+    mock_state = MagicMock()
+    mock_state.turn_count = 1
+    mock_state.phase.value = "intake"
+    mock_state.family_profile = MagicMock()
+    mock_state.family_profile.child_name = None
+    mock_state.family_profile.child_age = None
+    mock_state.family_profile.diagnosis_status = None
+    mock_state.family_profile.adhd_subtype = None
+    mock_state.family_profile.challenge_areas = []
+    mock_state.family_profile.attempted_strategies = []
+    mock_state.family_profile.hardest_situations = []
+    mock_state.family_profile.good_day_description = None
+    mock_state.family_profile.parent_name = None
+    mock_state.active_strategies = []
+    mock_state.goals = []
+    mock_state.outcomes = []
+    mock_store.get = AsyncMock(return_value=mock_state)
+    mock_store.get_traces = AsyncMock(return_value=[])
+    mock_store.get_recent_tool_results = AsyncMock(return_value=[])
+
     prepare = create_prepare_context(
         session_store=mock_store,
         graphiti_client=mock_graphiti,
     )
-    # ... invoke and assert "homework initiation" appears in system prompt
+
+    # Build state with a user message
+    state = {
+        "messages": [HumanMessage(content="Help with homework struggles")],
+        "session_id": "test-session",
+        "user_id": 1,
+    }
+
+    result = await prepare(state)
+    # Graphiti should have been searched
+    mock_graphiti.search.assert_called_once()
+    # The system prompt should contain the graph fact
+    system_msg = result["llm_input_messages"][0]
+    assert isinstance(system_msg, SystemMessage)
+    assert "homework initiation" in system_msg.content
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_agent_hooks.py -v`
+Run: `./adhd312/bin/python -m pytest tests/test_agent_hooks.py -v`
 Expected: FAIL (create_prepare_context doesn't accept graphiti_client yet)
 
 - [ ] **Step 3: Update create_prepare_context to accept graphiti_client**
@@ -865,7 +941,7 @@ Remove the `get_latest_summary` and `get_recent_episodes` calls.
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_agent_hooks.py -v`
+Run: `./adhd312/bin/python -m pytest tests/test_agent_hooks.py -v`
 Expected: PASS
 
 - [ ] **Step 5: Commit**
@@ -917,7 +993,7 @@ The tools list is already passed from `main.py` -> `create_tools` -> `build_agen
 
 - [ ] **Step 4: Run prompt tests**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_prompts.py -v`
+Run: `./adhd312/bin/python -m pytest tests/test_prompts.py -v`
 Expected: PASS (adjust any tests that assert exact prompt content for "Session Summary" -> "Memory Context")
 
 - [ ] **Step 5: Commit**
@@ -1034,7 +1110,12 @@ Then update the call:
 
 Remove the `tool_calls` and `force_summary` kwargs since the new MemoryManager doesn't use them.
 
-Update all callers of `_fire_background_tasks` to pass `user_id`.
+Update **both** callers of `_fire_background_tasks` to pass `user_id`:
+
+1. In `process()` (around line 464): add `user_id=user_id` to the call. Since `process()` now accepts `user_id`, this works.
+2. In `process_stream()` (around line 876): add `user_id=user_id` to the call. `user_id` is already a parameter of `process_stream`.
+
+Also check `app/api/routes.py` for any callers of `process()` -- if they exist, they may need to pass `user_id` too (check whether `process()` is actually called anywhere or only `process_stream()` is used in the API routes).
 
 - [ ] **Step 5: Add search_memory status in the streaming tool handler**
 
@@ -1049,7 +1130,7 @@ In `process_stream()`, in the `on_tool_start` handler (around line 588), add a c
 
 - [ ] **Step 6: Run orchestrator tests**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/test_agent_orchestrator.py -v`
+Run: `./adhd312/bin/python -m pytest tests/test_agent_orchestrator.py -v`
 Expected: PASS (fix any failures from signature changes)
 
 - [ ] **Step 7: Commit**
@@ -1182,7 +1263,7 @@ git commit -m "Wire Graphiti client into app initialization and shutdown"
 
 - [ ] **Step 1: Run the full test suite (excluding integration tests)**
 
-Run: `./adhd312/Scripts/python.exe -m pytest tests/ -v -m "not integration" --ignore=tests/test_e2e_conversations.py --ignore=tests/test_integration_guardrails.py --ignore=tests/test_integration_llm.py --ignore=tests/test_integration_memory.py --ignore=tests/test_integration_pipeline.py --ignore=tests/test_integration_rag.py`
+Run: `./adhd312/bin/python -m pytest tests/ -v -m "not integration" --ignore=tests/test_e2e_conversations.py --ignore=tests/test_integration_guardrails.py --ignore=tests/test_integration_llm.py --ignore=tests/test_integration_memory.py --ignore=tests/test_integration_pipeline.py --ignore=tests/test_integration_rag.py`
 
 - [ ] **Step 2: Fix any test failures**
 
@@ -1211,7 +1292,7 @@ git commit -m "Fix test suite for Graphiti memory migration"
 
 - [ ] **Step 1: Start the app**
 
-Run: `./adhd312/Scripts/python.exe -m uvicorn app.main:app --reload`
+Run: `./adhd312/bin/python -m uvicorn app.main:app --reload`
 
 Check logs for:
 - "Graphiti client initialized" or "Graphiti disabled"
