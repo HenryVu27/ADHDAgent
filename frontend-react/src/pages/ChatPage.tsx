@@ -29,7 +29,7 @@ export function ChatPage() {
   })
   const {
     messages, isLoading, isStreaming, statusText, streamingContent,
-    latestTrace, typewriterResetRef, onStreamComplete, sendMessage, stopStreaming, clearMessages, loadMessages, summaryText,
+    latestTrace, sendMessage, stopStreaming, clearMessages, loadMessages, summaryText,
   } = useChat(sessionId)
   const { session, refresh } = useSession(sessionId)
   const { user, getOnboarding } = useAuth()
@@ -184,8 +184,6 @@ export function ChatPage() {
           isStreaming={isStreaming}
           statusText={statusText}
           streamingContent={streamingContent}
-          typewriterResetRef={typewriterResetRef}
-          onStreamComplete={onStreamComplete}
           summaryText={summaryText}
         />
 

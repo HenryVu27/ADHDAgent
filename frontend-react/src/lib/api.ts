@@ -86,7 +86,6 @@ export const api = {
         const blocks = buffer.split("\n\n")
         buffer = blocks.pop() ?? ""
 
-        let yieldCount = 0
         for (const block of blocks) {
           if (!block.trim()) continue
           let eventType = ""
@@ -99,11 +98,6 @@ export const api = {
           try {
             const parsed = JSON.parse(dataStr)
             yield { type: eventType, ...parsed } as StreamEvent
-            // Yield to the event loop every few token events so React can render
-            // between batches instead of processing the entire HTTP chunk synchronously
-            if (eventType === "token" && ++yieldCount % 3 === 0) {
-              await new Promise(resolve => setTimeout(resolve, 0))
-            }
           } catch {
             // malformed JSON — skip
           }
