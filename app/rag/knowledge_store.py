@@ -6,15 +6,13 @@ from __future__ import annotations
 
 import json
 import logging
-import math
-import re
-from collections import Counter
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.rag.colbert_index import ColBERTIndex
 
+from fastembed import SparseTextEmbedding
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
@@ -47,20 +45,17 @@ class KnowledgeStore:
     def __init__(
         self,
         knowledge_dir: Path | None = None,
-        sparse_mode: Literal["tfidf", "bm25"] = "tfidf",
         collection_name: str | None = None,
     ):
         self.knowledge_dir = knowledge_dir or (
             Path(__file__).parent.parent / "knowledge"
         )
-        self._sparse_mode = sparse_mode
         self.documents: list[dict] = []
         self.chunks: list[dict] = []
         self._client: QdrantClient | None = None
         self._indexed = False
-        self._vocab: dict[str, int] = {}
         self._doc_index: dict[str, dict] = {}
-        self._avg_doc_len: float = 0.0
+        self._bm25_model = SparseTextEmbedding(model_name="Qdrant/bm25")
 
         # Strategy-specific collection name
         strategy = settings.RAG_CHUNKING_STRATEGY
@@ -85,8 +80,7 @@ class KnowledgeStore:
 
         self._build_doc_index()
         self._create_chunks()
-        self._build_vocabulary()
-        logger.info(f"Knowledge store: {len(self.documents)} documents, {len(self.chunks)} chunks, vocab={len(self._vocab)}")
+        logger.info(f"Knowledge store: {len(self.documents)} documents, {len(self.chunks)} chunks")
 
     # Build O(1) lookup index by document ID
     def _build_doc_index(self):
@@ -140,20 +134,6 @@ class KnowledgeStore:
                     "context_header": chunk_obj.context_header,
                 })
 
-    # Build token->index mapping for sparse vectors
-    def _build_vocabulary(self):
-        self._vocab = {}
-        next_id = 0
-        doc_lengths: list[int] = []
-        for chunk in self.chunks:
-            tokens = self._tokenize(chunk["text"])
-            doc_lengths.append(len(tokens))
-            for token in tokens:
-                if token not in self._vocab:
-                    self._vocab[token] = next_id
-                    next_id += 1
-        self._avg_doc_len = sum(doc_lengths) / len(doc_lengths) if doc_lengths else 1.0
-
     async def _async_enrich_chunks(self, gemini_client):
         """Run async chunking enrichment before index build.
 
@@ -172,7 +152,6 @@ class KnowledgeStore:
                 for co in chunk_objects:
                     new_chunks.append(self._chunk_obj_to_dict(co))
             self.chunks = new_chunks
-            self._build_vocabulary()
             logger.info("Semantic chunking: %d chunks from %d documents", len(self.chunks), len(self.documents))
 
         elif (
@@ -204,7 +183,6 @@ class KnowledgeStore:
                     orig_dict["context_header"] = updated_obj.context_header
                     enriched_chunks.append(orig_dict)
             self.chunks = enriched_chunks
-            self._build_vocabulary()
             logger.info("Contextual headers applied to %d chunks", len(self.chunks))
 
     @staticmethod
@@ -224,39 +202,7 @@ class KnowledgeStore:
             "context_header": co.context_header,
         }
 
-    # Convert text to sparse vector using TF or BM25 weights
-    # (Qdrant applies IDF server-side via Modifier.IDF)
-    def _text_to_sparse(self, text: str) -> SparseVector:
-        tokens = self._tokenize(text)
-        counts = Counter(tokens)
-
-        indices = []
-        values = []
-
-        if self._sparse_mode == "bm25":
-            k1, b = 1.2, 0.75
-            doc_len = len(tokens)
-            for token, count in sorted(counts.items()):
-                if token in self._vocab:
-                    indices.append(self._vocab[token])
-                    tf_sat = (count * (k1 + 1)) / (count + k1 * (1 - b + b * doc_len / self._avg_doc_len))
-                    values.append(tf_sat)
-        else:
-            for token, count in sorted(counts.items()):
-                if token in self._vocab:
-                    indices.append(self._vocab[token])
-                    values.append(float(count))
-
-        if not indices:
-            return SparseVector(indices=[0], values=[0.0])
-
-        return SparseVector(indices=indices, values=values)
-
-    @staticmethod
-    def _tokenize(text: str) -> list[str]:
-        return re.findall(r"\w+", text.lower())
-
-    # Build Qdrant collection with dense (Gemini) + sparse (TF/BM25) vectors
+    # Build Qdrant collection with dense (Gemini) + sparse (BM25) vectors
     # and optionally ColBERT multi-vectors.
     # Idempotent: skips rebuild if collection already has correct point count
     async def build_index(
@@ -288,9 +234,12 @@ class KnowledgeStore:
         await self._async_enrich_chunks(gemini_client)
 
         texts = [chunk["text"] for chunk in self.chunks]
-        logger.info(f"Embedding {len(texts)} chunks (sparse_mode={self._sparse_mode})...")
+        logger.info(f"Embedding {len(texts)} chunks...")
         raw_embeddings = await gemini_client.embed_batch(texts, timeout=settings.RAG_EMBED_TIMEOUT_S)
         dim = len(raw_embeddings[0])
+
+        # BM25 sparse embeddings (batch)
+        sparse_embeddings = list(self._bm25_model.embed(texts))
 
         # ColBERT multi-vector embeddings (optional)
         colbert_embeddings: list[list[list[float]]] | None = None
@@ -320,7 +269,11 @@ class KnowledgeStore:
 
         points = []
         for i, (embedding, chunk) in enumerate(zip(raw_embeddings, self.chunks)):
-            sparse_vec = self._text_to_sparse(chunk["text"])
+            sparse_emb = sparse_embeddings[i]
+            sparse_vec = SparseVector(
+                indices=sparse_emb.indices.tolist(),
+                values=sparse_emb.values.tolist(),
+            )
             vectors: dict = {
                 "dense": embedding,
                 "sparse": sparse_vec,
@@ -353,9 +306,8 @@ class KnowledgeStore:
         self._indexed = True
         logger.info(
             f"Qdrant collection built: {len(points)} vectors, "
-            f"dim={dim}, sparse={self._sparse_mode}, "
-            f"colbert={'yes' if colbert_embeddings else 'no'}, "
-            f"vocab={len(self._vocab)}"
+            f"dim={dim}, sparse=bm25, "
+            f"colbert={'yes' if colbert_embeddings else 'no'}"
         )
 
     # Check if collection exists with correct schema and point count
@@ -418,7 +370,11 @@ class KnowledgeStore:
             return []
 
         qdrant_filter = self._build_filter(filters) if filters else None
-        sparse_vec = self._text_to_sparse(query_text)
+        sparse_emb = next(self._bm25_model.query_embed([query_text]))
+        sparse_vec = SparseVector(
+            indices=sparse_emb.indices.tolist(),
+            values=sparse_emb.values.tolist(),
+        )
         prefetch_limit = min(top_k * 3, len(self.chunks))
 
         prefetches = [
@@ -543,4 +499,4 @@ class KnowledgeStore:
 
     @property
     def has_sparse(self) -> bool:
-        return self._indexed and len(self._vocab) > 0
+        return self._indexed

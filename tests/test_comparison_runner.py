@@ -29,19 +29,18 @@ def make_mock_retrieval_response(doc_ids: list[str]):
 
 
 def test_index_key_mapping():
-    """Each config maps to the right (sparse_mode, use_colbert) store key."""
+    """Each config maps to the right use_colbert store key."""
     from eval.runners.comparison_runner import _index_key
 
-    assert _index_key(ABLATION_CONFIGS[0]) == ("tfidf", False)  # baseline
-    assert _index_key(ABLATION_CONFIGS[3]) == ("bm25", False)   # +bm25
-    assert _index_key(ABLATION_CONFIGS[4]) == ("tfidf", True)   # +colbert
-    assert _index_key(ABLATION_CONFIGS[5]) == ("bm25", True)    # full
+    assert _index_key(ABLATION_CONFIGS[0]) is False   # baseline
+    assert _index_key(ABLATION_CONFIGS[3]) is True     # +colbert
+    assert _index_key(ABLATION_CONFIGS[4]) is True     # full
 
 
 def test_all_configs_have_valid_index_keys():
     from eval.runners.comparison_runner import _index_key
 
-    valid_keys = {("tfidf", False), ("bm25", False), ("tfidf", True), ("bm25", True)}
+    valid_keys = {True, False}
     for cfg in ABLATION_CONFIGS:
         assert _index_key(cfg) in valid_keys
 

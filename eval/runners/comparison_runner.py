@@ -1,6 +1,6 @@
-"""Run all 6 ablation pipeline configs against the golden retrieval dataset.
+"""Run all ablation pipeline configs against the golden retrieval dataset.
 
-Builds 4 distinct KnowledgeStore indexes once (keyed by sparse_mode x colbert),
+Builds distinct KnowledgeStore indexes (keyed by use_colbert),
 then wires each config and runs the eval loop. Prints a side-by-side table.
 
 Usage (from project root):
@@ -30,24 +30,22 @@ from eval.pipeline_config import ABLATION_CONFIGS, PipelineConfig
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-# Collection names — one per (sparse_mode, use_colbert) combination
-_COLLECTION_NAMES: dict[tuple[str, bool], str] = {
-    ("tfidf", False): "rag_tfidf",
-    ("bm25",  False): "rag_bm25",
-    ("tfidf", True):  "rag_tfidf_colbert",
-    ("bm25",  True):  "rag_bm25_colbert",
+# Collection names — one per use_colbert combination
+_COLLECTION_NAMES: dict[bool, str] = {
+    False: "rag_bm25",
+    True:  "rag_bm25_colbert",
 }
 
 
-def _index_key(cfg: PipelineConfig) -> tuple[str, bool]:
-    return (cfg.sparse_mode, cfg.use_colbert)
+def _index_key(cfg: PipelineConfig) -> bool:
+    return cfg.use_colbert
 
 
 async def _build_indexes(
     gemini: GeminiClient,
     configs: list[PipelineConfig],
-) -> tuple[dict[tuple[str, bool], KnowledgeStore], "ColBERTIndex | None"]:
-    """Build one KnowledgeStore per unique (sparse_mode, use_colbert) combination.
+) -> tuple[dict[bool, KnowledgeStore], "ColBERTIndex | None"]:
+    """Build one KnowledgeStore per unique use_colbert value.
 
     Returns (stores, colbert_instance). colbert_instance is None if no config
     uses ColBERT. The same instance is reused across all colbert-enabled configs
@@ -56,22 +54,21 @@ async def _build_indexes(
     from app.rag.colbert_index import ColBERTIndex
 
     needed_keys = {_index_key(cfg) for cfg in configs}
-    stores: dict[tuple[str, bool], KnowledgeStore] = {}
+    stores: dict[bool, KnowledgeStore] = {}
 
     # Instantiate ColBERTIndex once — shared across colbert-enabled configs
     colbert: ColBERTIndex | None = None
-    if any(key[1] for key in needed_keys):
+    if True in needed_keys:
         logger.info("Loading ColBERT model (first run downloads ~500 MB)...")
         colbert = ColBERTIndex()
 
-    for key in needed_keys:
-        sparse_mode, use_colbert = key
-        collection_name = _COLLECTION_NAMES[key]
-        logger.info("Building index: sparse=%s colbert=%s collection=%s",
-                    sparse_mode, use_colbert, collection_name)
-        store = KnowledgeStore(sparse_mode=sparse_mode, collection_name=collection_name)
+    for use_colbert in needed_keys:
+        collection_name = _COLLECTION_NAMES[use_colbert]
+        logger.info("Building index: colbert=%s collection=%s",
+                    use_colbert, collection_name)
+        store = KnowledgeStore(collection_name=collection_name)
         await store.build_index(gemini, colbert_index=colbert if use_colbert else None)
-        stores[key] = store
+        stores[use_colbert] = store
 
     return stores, colbert
 
