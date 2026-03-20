@@ -47,15 +47,15 @@ export async function getMe(): Promise<User | null> {
     return null
   }
   const data = await res.json()
-  return { id: data.id, email: data.email, createdAt: data.created_at }
+  return { id: data.id, email: data.email, name: data.name ?? null, createdAt: data.created_at }
 }
 
 // ---------------------------------------------------------------------------
 // Auth actions
 // ---------------------------------------------------------------------------
 
-export async function signUp(email: string, password: string): Promise<User> {
-  const { access_token } = await authPost("/register", { email, password })
+export async function signUp(email: string, password: string, name: string): Promise<User> {
+  const { access_token } = await authPost("/register", { email, password, name })
   setToken(access_token)
   const user = await getMe()
   if (!user) throw new Error("Registration succeeded but could not fetch user")

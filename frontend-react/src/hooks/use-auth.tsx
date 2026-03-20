@@ -15,7 +15,7 @@ interface AuthContextValue {
   hasOnboarded: boolean
   isLoading: boolean
   error: string | null
-  signUp: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string, name: string) => Promise<void>
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => void
   saveOnboarding: (data: OnboardingData) => void
@@ -42,11 +42,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }).finally(() => setIsLoading(false))
   }, [])
 
-  const handleSignUp = useCallback(async (email: string, password: string) => {
+  const handleSignUp = useCallback(async (email: string, password: string, name: string) => {
     setError(null)
     setIsLoading(true)
     try {
-      const u = await auth.signUp(email, password)
+      const u = await auth.signUp(email, password, name)
       setUser(u)
       setOnboarded(false)
     } catch (e) {
