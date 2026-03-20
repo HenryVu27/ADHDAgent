@@ -53,6 +53,7 @@ def _has_mutating_tool(messages) -> bool:
 def create_prepare_context(
     session_store: SessionStoreBase,
     event_bus=None,
+    graphiti_client=None,
 ):
     """Create the prepare_context closure used as pre_model_hook."""
 
@@ -98,21 +99,49 @@ def create_prepare_context(
             system_prompt = _prompt_cache[cache_key]
         else:
             # Full prompt build
-            # Load rolling summary if available
-            latest_summary = await session_store.get_latest_summary(session_id)
-            summary_text = latest_summary.summary if latest_summary else ""
+            # Load memory context from Graphiti (or empty if unavailable)
+            memory_context = ""
+            if graphiti_client is not None:
+                user_id = state.get("user_id")
+                group_ids = [str(user_id)] if user_id is not None else None
+                try:
+                    last_user_text = ""
+                    user_msgs = [m for m in messages if isinstance(m, HumanMessage)]
+                    if user_msgs:
+                        content = user_msgs[-1].content
+                        last_user_text = content if isinstance(content, str) else str(content)
 
-            # Load recent episodes into summary context
-            recent_episodes = await session_store.get_recent_episodes(session_id, limit=5)
-            if recent_episodes:
-                episode_lines = []
-                for ep in recent_episodes:
-                    line = f"- [{ep.event_type}] {ep.summary}"
-                    if ep.emotional_context:
-                        line += f" (mood: {ep.emotional_context})"
-                    episode_lines.append(line)
-                episodes_text = "\n\nKey moments:\n" + "\n".join(episode_lines)
-                summary_text = (summary_text + episodes_text) if summary_text else episodes_text
+                    if last_user_text.strip():
+                        import time as _time
+                        t0 = _time.monotonic()
+                        edges = await graphiti_client.search(
+                            last_user_text,
+                            group_ids=group_ids,
+                            num_results=settings.GRAPHITI_CONTEXT_RESULTS,
+                        )
+                        duration_ms = (_time.monotonic() - t0) * 1000
+
+                        valid_facts = []
+                        for edge in edges:
+                            fact = getattr(edge, "fact", "")
+                            if fact and getattr(edge, "invalid_at", None) is None:
+                                valid_at = getattr(edge, "valid_at", None)
+                                date_note = f" (since {valid_at.strftime('%b %Y')})" if valid_at else ""
+                                valid_facts.append(f"- {fact}{date_note}")
+
+                        if valid_facts:
+                            memory_context = "\n".join(valid_facts)
+
+                        if event_bus:
+                            await event_bus.emit(
+                                "memory", "graphiti_search_completed", session_id, turn_count,
+                                duration_ms=duration_ms,
+                                detail={"query_len": len(last_user_text), "result_count": len(edges)},
+                            )
+                except Exception as e:
+                    logger.warning("Graphiti context search failed: %s", e)
+
+            summary_text = memory_context or "This is the beginning of the conversation."
 
             # Load recent tool results for cross-turn evidence
             recent_tool_results = await session_store.get_recent_tool_results(session_id, limit=3)
@@ -131,27 +160,6 @@ def create_prepare_context(
                     evidence_lines.append(f"[Turn {tr.turn}, query: \"{tr.query}\"]:\n{tr.result_text[:2000]}")
                 evidence_block = "\n\n<prior-search-evidence>\n" + "\n---\n".join(evidence_lines) + "\n</prior-search-evidence>"
                 system_prompt += evidence_block
-
-            # Cross-session context for returning users (first turn only)
-            user_id = state.get("user_id")
-            if user_id is not None and turn_count <= 1:
-                user_summary = await session_store.get_user_summary(user_id)
-                user_episodes = await session_store.get_user_episodes(user_id, limit=5)
-                user_outcomes = await session_store.get_user_outcomes(user_id, limit=5)
-
-                prior_parts = []
-                if user_summary:
-                    prior_parts.append(f"Journey so far:\n{user_summary.summary}")
-                if user_outcomes:
-                    out_lines = [f"- {o.strategy_name}: {o.signal} — {o.detail}" for o in user_outcomes]
-                    prior_parts.append("Recent outcomes across sessions:\n" + "\n".join(out_lines))
-                if user_episodes:
-                    ep_lines = [f"- [{ep.event_type}] {ep.summary}" for ep in user_episodes]
-                    prior_parts.append("Recent key moments:\n" + "\n".join(ep_lines))
-
-                if prior_parts:
-                    prior_block = "\n\n<prior-sessions>\n" + "\n\n".join(prior_parts) + "\n</prior-sessions>"
-                    system_prompt += prior_block
 
             # Cache the prompt
             _prompt_cache[cache_key] = system_prompt
@@ -178,7 +186,7 @@ def create_prepare_context(
                 try:
                     await event_bus.emit(
                         "memory_usage", "profile_injected", session_id, turn_count,
-                        detail={"fields": injected_fields, "episode_count": len(recent_episodes)},
+                        detail={"fields": injected_fields, "has_memory_context": bool(memory_context)},
                     )
                 except Exception:
                     pass  # Never block context assembly for observability
