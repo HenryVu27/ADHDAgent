@@ -1,0 +1,1413 @@
+[
+  {
+    "strategy": "none",
+    "queries": [
+      {
+        "query": "How can I set up a daily report card with my child's teacher?",
+        "expected": [
+          "homebased_daily_report_card_drc",
+          "daily_behavior_report_cards",
+          "daily_schoolhome_report_card"
+        ],
+        "retrieved": [
+          "homebased_daily_report_card_drc",
+          "daily_schoolhome_report_card",
+          "teacher_communication",
+          "daily_behavior_report_cards",
+          "parent_training_and_schoolbased_behavior_plans"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "What are the symptoms of inattentive ADHD?",
+        "expected": [
+          "adhd_predominately_inattentive_symptoms",
+          "inattention_symptoms_in_adhd"
+        ],
+        "retrieved": [
+          "adhd_predominately_inattentive_symptoms",
+          "gov_adhd-treatment-classroom-html",
+          "gov_adhd-signs-symptoms-index-html",
+          "gov_adhd-diagnosis-index-html",
+          "inattention_symptoms_in_adhd"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "How do I get a 504 plan for my child with ADHD?",
+        "expected": [
+          "understanding_section_504_rights_for_students_with",
+          "school_ef_accommodations_504_iep"
+        ],
+        "retrieved": [
+          "school_ef_accommodations_504_iep",
+          "gov_adhd-treatment-classroom-html",
+          "understanding_section_504_rights_for_students_with",
+          "teacher_communication",
+          "empathy_perspective_taking"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "What is the ABC model of behavior modification?",
+        "expected": [
+          "implementing_behavior_modification_programs_abc_mo"
+        ],
+        "retrieved": [
+          "implementing_behavior_modification_programs_abc_mo",
+          "gov_adhd-treatment-index-html",
+          "behavior_therapy_principles",
+          "gov_adhd-treatment-classroom-html",
+          "behavioral_classroom_management"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "visual timer strategies for time blindness",
+        "expected": [
+          "time_blindness_interventions"
+        ],
+        "retrieved": [
+          "time_blindness_interventions",
+          "technology_tools_ef_support",
+          "planning_prioritization_visual_supports",
+          "transition_warnings_scripts",
+          "homework_battles"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "body doubling for homework focus",
+        "expected": [
+          "body_doubling_ef_support",
+          "task_initiation_homework_refusal"
+        ],
+        "retrieved": [
+          "body_doubling_ef_support",
+          "homework_battles",
+          "task_initiation_homework_refusal",
+          "homework_and_organization_interventions_for_studen",
+          "environmental_modifications_ef_load"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "How do I organize my child's backpack and school materials?",
+        "expected": [
+          "organization_backpack_school_materials"
+        ],
+        "retrieved": [
+          "organization_backpack_school_materials",
+          "homework_and_organization_interventions_for_studen",
+          "gov_adhd-treatment-classroom-html",
+          "planning_prioritization_visual_supports",
+          "working_memory_scaffolds_daily_tasks"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "teaching social skills to children with ADHD",
+        "expected": [
+          "systematic_teaching_of_social_skills_for_children",
+          "friendship_skills_groups",
+          "social_scripts_training"
+        ],
+        "retrieved": [
+          "social_scripts_training",
+          "friendship_skills_groups",
+          "peer_relationship_challenges",
+          "social_problem_solving_interventions_for_children_",
+          "systematic_teaching_of_social_skills_for_children"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "melatonin and sleep problems in ADHD kids",
+        "expected": [
+          "sleep_hygiene_adhd",
+          "bedtime_winddown_ef_strategies"
+        ],
+        "retrieved": [
+          "sleep_hygiene_adhd",
+          "bedtime_winddown_ef_strategies",
+          "sports_physical_activity_adhd",
+          "social_problem_solving_interventions_for_children_",
+          "gov_adhd-treatment-classroom-html"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my kid can't sit still",
+        "expected": [
+          "hyperactivityimpulsivity_symptoms_in_adhd",
+          "adhd_predominately_hyperactiveimpulsive_symptoms"
+        ],
+        "retrieved": [
+          "adhd_predominately_hyperactiveimpulsive_symptoms",
+          "emotional_dysregulation_coregulation",
+          "hyperactivityimpulsivity_symptoms_in_adhd",
+          "transition_warnings_scripts",
+          "gov_adhd-articles-is-it-adhd-html"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "nothing works with my child's behavior",
+        "expected": [
+          "parent_training_in_behavior_therapy",
+          "behavioral_treatments_for_adhd",
+          "behavior_therapy_for_adhd"
+        ],
+        "retrieved": [
+          "public_meltdowns",
+          "behavioral_interventions_for_children_with_adhd",
+          "gov_adhd-treatment-index-html",
+          "behavior_therapy_with_children",
+          "using_positive_reinforcement_structure_and_discipl"
+        ],
+        "recall": 0.0,
+        "rr": 0.0
+      },
+      {
+        "query": "school keeps calling about my son",
+        "expected": [
+          "schoolbased_interventions_for_adhd",
+          "teacher_communication",
+          "behavioral_classroom_management"
+        ],
+        "retrieved": [
+          "gov_adhd-treatment-classroom-html",
+          "teacher_communication",
+          "homeschool_communication_trackers",
+          "gov_adhd-es-treatment-el-tdah-en-el-salon-de-clases-como-ayudar-a-los-ninos-a-tener-exito-en-la-escuela-html",
+          "gov_adhd-es-about-otras-preocupaciones-y-condiciones-medicas-relacionadas-con-el-trastorno-por-deficit-de-atencion-html"
+        ],
+        "recall": 0.3333333333333333,
+        "rr": 0.5
+      },
+      {
+        "query": "how do I help with morning chaos",
+        "expected": [
+          "morning_routine_ef_support",
+          "time_blindness_interventions"
+        ],
+        "retrieved": [
+          "morning_routine_ef_support",
+          "public_meltdowns",
+          "sleep_hygiene_adhd",
+          "working_memory_scaffolds_daily_tasks",
+          "empathy_perspective_taking"
+        ],
+        "recall": 0.5,
+        "rr": 1.0
+      },
+      {
+        "query": "homework every night is a battle",
+        "expected": [
+          "homework_battles",
+          "task_initiation_homework_refusal",
+          "homework_and_organization_interventions_for_studen"
+        ],
+        "retrieved": [
+          "homework_battles",
+          "task_initiation_homework_refusal",
+          "homework_and_organization_interventions_for_studen",
+          "sleep_hygiene_adhd",
+          "environmental_modifications_ef_load"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "I feel like a terrible parent, I can't handle this anymore",
+        "expected": [
+          "parent_self_care"
+        ],
+        "retrieved": [
+          "parent_self_care",
+          "public_meltdowns",
+          "rsd_kids",
+          "empathy_perspective_taking",
+          "emotional_dysregulation_coregulation"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my child has meltdowns in the grocery store and I'm so embarrassed",
+        "expected": [
+          "public_meltdowns",
+          "emotional_dysregulation_coregulation"
+        ],
+        "retrieved": [
+          "public_meltdowns",
+          "emotional_dysregulation_coregulation",
+          "rsd_kids",
+          "transition_warnings_scripts",
+          "anger_management_adhd"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my daughter says everyone hates her and she has no friends",
+        "expected": [
+          "peer_relationship_challenges",
+          "rsd_kids",
+          "self_esteem_adhd"
+        ],
+        "retrieved": [
+          "gov_adhd-es-about-otras-preocupaciones-y-condiciones-medicas-relacionadas-con-el-trastorno-por-deficit-de-atencion-html",
+          "peer_relationship_challenges",
+          "rsd_kids",
+          "sibling_conflict_adhd",
+          "emotional_dysregulation_coregulation"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 0.5
+      },
+      {
+        "query": "my child cries and rages when he loses at games",
+        "expected": [
+          "frustration_tolerance",
+          "emotional_dysregulation_coregulation",
+          "anger_management_adhd"
+        ],
+        "retrieved": [
+          "building_ef_skills_play_games",
+          "rsd_kids",
+          "anger_management_adhd",
+          "empathy_perspective_taking",
+          "frustration_tolerance"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 0.3333333333333333
+      },
+      {
+        "query": "siblings are constantly fighting and I'm exhausted",
+        "expected": [
+          "sibling_conflict_adhd",
+          "parent_self_care"
+        ],
+        "retrieved": [
+          "sibling_conflict_adhd",
+          "self_esteem_adhd",
+          "parent_self_care",
+          "use_calm_discipline_strategies",
+          "homework_battles"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "I need help with bedtime routine and reducing screen time before sleep",
+        "expected": [
+          "bedtime_winddown_ef_strategies",
+          "screen_time_gaming_adhd",
+          "sleep_hygiene_adhd"
+        ],
+        "retrieved": [
+          "bedtime_winddown_ef_strategies",
+          "sleep_hygiene_adhd",
+          "screen_time_gaming_adhd",
+          "morning_routine_ef_support",
+          "transition_warnings_scripts"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "how to talk to my child about their ADHD diagnosis and build confidence",
+        "expected": [
+          "talking_adhd_diagnosis",
+          "self_esteem_adhd",
+          "adhd_strengths_reframing"
+        ],
+        "retrieved": [
+          "talking_adhd_diagnosis",
+          "self_esteem_adhd",
+          "adhd_strengths_reframing",
+          "empathy_perspective_taking",
+          "gov_adhd-treatment-classroom-html"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "positive reinforcement at home and at school with a reward chart",
+        "expected": [
+          "implementing_a_rewards_chart",
+          "using_positive_reinforcement_structure_and_discipl",
+          "parent_training_in_behavior_therapy"
+        ],
+        "retrieved": [
+          "implementing_a_rewards_chart",
+          "homebased_daily_report_card_drc",
+          "using_positive_reinforcement_structure_and_discipl",
+          "parent_training_and_schoolbased_behavior_plans",
+          "gov_adhd-treatment-classroom-html"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 1.0
+      },
+      {
+        "query": "how to communicate effectively with my child's teacher about ADHD accommodations",
+        "expected": [
+          "teacher_communication",
+          "familyschool_partnerships_for_adhd_management",
+          "school_ef_accommodations_504_iep"
+        ],
+        "retrieved": [
+          "teacher_communication",
+          "school_ef_accommodations_504_iep",
+          "gov_adhd-treatment-classroom-html",
+          "talking_adhd_diagnosis",
+          "homeschool_communication_trackers"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 1.0
+      },
+      {
+        "query": "behavior therapy for my 4 year old with ADHD",
+        "expected": [
+          "behavior_therapy_for_young_children_with_adhd",
+          "behavioral_parent_training_for_adhd"
+        ],
+        "retrieved": [
+          "behavior_therapy_for_adhd",
+          "gov_adhd-treatment-index-html",
+          "behavior_therapy_for_young_children_with_adhd",
+          "ef_development_trajectory",
+          "behavior_therapy_with_children"
+        ],
+        "recall": 0.5,
+        "rr": 0.3333333333333333
+      },
+      {
+        "query": "my teenager with ADHD is struggling with risky behavior and substance use",
+        "expected": [
+          "increased_risks_during_adolescence"
+        ],
+        "retrieved": [
+          "increased_risks_during_adolescence",
+          "natural_consequences",
+          "gov_adhd-articles-protecting-the-health-of-children-html",
+          "gov_adhd-treatment-index-html",
+          "gov_adhd-es-about-otras-preocupaciones-y-condiciones-medicas-relacionadas-con-el-trastorno-por-deficit-de-atencion-html"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "how to break big school projects into smaller steps",
+        "expected": [
+          "breaking_tasks_micro_steps",
+          "planning_prioritization_visual_supports"
+        ],
+        "retrieved": [
+          "breaking_tasks_micro_steps",
+          "homework_battles",
+          "homework_and_organization_interventions_for_studen",
+          "gov_adhd-treatment-classroom-html",
+          "planning_prioritization_visual_supports"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my child can't remember instructions and loses everything",
+        "expected": [
+          "working_memory_scaffolds_daily_tasks",
+          "inattention_symptoms_in_adhd"
+        ],
+        "retrieved": [
+          "inattention_symptoms_in_adhd",
+          "gov_adhd-diagnosis-index-html",
+          "working_memory_scaffolds_daily_tasks",
+          "adhd_predominately_inattentive_symptoms",
+          "transition_warnings_scripts"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "games and activities that build executive function skills",
+        "expected": [
+          "building_ef_skills_play_games"
+        ],
+        "retrieved": [
+          "building_ef_skills_play_games",
+          "ef_development_trajectory",
+          "cognitive_flexibility_task_shifting",
+          "empathy_perspective_taking",
+          "gov_adhd-diagnosis-index-html"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my child gets stuck and can't switch between tasks or activities",
+        "expected": [
+          "cognitive_flexibility_task_shifting",
+          "transition_warnings_scripts"
+        ],
+        "retrieved": [
+          "cognitive_flexibility_task_shifting",
+          "gov_adhd-diagnosis-index-html",
+          "inattention_symptoms_in_adhd",
+          "breaking_tasks_micro_steps",
+          "transition_warnings_scripts"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "what apps or technology tools help ADHD kids stay organized",
+        "expected": [
+          "technology_tools_ef_support",
+          "organization_backpack_school_materials"
+        ],
+        "retrieved": [
+          "technology_tools_ef_support",
+          "gov_adhd-treatment-classroom-html",
+          "organization_backpack_school_materials",
+          "homeschool_communication_trackers",
+          "gov_adhd-diagnosis-index-html"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      }
+    ],
+    "recall_at_k": 0.8666666666666667,
+    "mrr": 0.888888888888889
+  },
+  {
+    "strategy": "recursive_contextual",
+    "queries": [
+      {
+        "query": "How can I set up a daily report card with my child's teacher?",
+        "expected": [
+          "homebased_daily_report_card_drc",
+          "daily_behavior_report_cards",
+          "daily_schoolhome_report_card"
+        ],
+        "retrieved": [
+          "homebased_daily_report_card_drc",
+          "daily_schoolhome_report_card",
+          "behavioral_classroom_management"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 1.0
+      },
+      {
+        "query": "What are the symptoms of inattentive ADHD?",
+        "expected": [
+          "adhd_predominately_inattentive_symptoms",
+          "inattention_symptoms_in_adhd"
+        ],
+        "retrieved": [
+          "adhd_predominately_inattentive_symptoms",
+          "gov_adhd-signs-symptoms-index-html",
+          "inattention_symptoms_in_adhd",
+          "teacher_communication"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "How do I get a 504 plan for my child with ADHD?",
+        "expected": [
+          "understanding_section_504_rights_for_students_with",
+          "school_ef_accommodations_504_iep"
+        ],
+        "retrieved": [
+          "school_ef_accommodations_504_iep",
+          "understanding_section_504_rights_for_students_with",
+          "transition_warnings_scripts"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "What is the ABC model of behavior modification?",
+        "expected": [
+          "implementing_behavior_modification_programs_abc_mo"
+        ],
+        "retrieved": [
+          "implementing_behavior_modification_programs_abc_mo",
+          "gov_adhd-treatment-index-html"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "visual timer strategies for time blindness",
+        "expected": [
+          "time_blindness_interventions"
+        ],
+        "retrieved": [
+          "time_blindness_interventions",
+          "technology_tools_ef_support"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "body doubling for homework focus",
+        "expected": [
+          "body_doubling_ef_support",
+          "task_initiation_homework_refusal"
+        ],
+        "retrieved": [
+          "body_doubling_ef_support",
+          "task_initiation_homework_refusal"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "How do I organize my child's backpack and school materials?",
+        "expected": [
+          "organization_backpack_school_materials"
+        ],
+        "retrieved": [
+          "organization_backpack_school_materials",
+          "transition_warnings_scripts",
+          "public_meltdowns"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "teaching social skills to children with ADHD",
+        "expected": [
+          "systematic_teaching_of_social_skills_for_children",
+          "friendship_skills_groups",
+          "social_scripts_training"
+        ],
+        "retrieved": [
+          "social_scripts_training",
+          "friendship_skills_groups",
+          "systematic_teaching_of_social_skills_for_children",
+          "social_problem_solving_interventions_for_children_"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "melatonin and sleep problems in ADHD kids",
+        "expected": [
+          "sleep_hygiene_adhd",
+          "bedtime_winddown_ef_strategies"
+        ],
+        "retrieved": [
+          "sleep_hygiene_adhd",
+          "bedtime_winddown_ef_strategies"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my kid can't sit still",
+        "expected": [
+          "hyperactivityimpulsivity_symptoms_in_adhd",
+          "adhd_predominately_hyperactiveimpulsive_symptoms"
+        ],
+        "retrieved": [
+          "gov_adhd-articles-is-it-adhd-html",
+          "adhd_strengths_reframing",
+          "adhd_predominately_hyperactiveimpulsive_symptoms",
+          "transition_warnings_scripts",
+          "gov_adhd-es-signs-symptoms-sintomas-del-trastorno-por-deficit-de-atencion-e-hiperactividad-tdah-html"
+        ],
+        "recall": 0.5,
+        "rr": 0.3333333333333333
+      },
+      {
+        "query": "nothing works with my child's behavior",
+        "expected": [
+          "parent_training_in_behavior_therapy",
+          "behavioral_treatments_for_adhd",
+          "behavior_therapy_for_adhd"
+        ],
+        "retrieved": [
+          "behavioral_interventions_for_children_with_adhd",
+          "talking_adhd_diagnosis",
+          "parent_training_for_adhd_behavior_problems",
+          "transition_warnings_scripts",
+          "parent_training_for_adhd_behavior_management"
+        ],
+        "recall": 0.0,
+        "rr": 0.0
+      },
+      {
+        "query": "school keeps calling about my son",
+        "expected": [
+          "schoolbased_interventions_for_adhd",
+          "teacher_communication",
+          "behavioral_classroom_management"
+        ],
+        "retrieved": [
+          "gov_adhd-articles-is-it-adhd-html",
+          "transition_warnings_scripts",
+          "homebased_daily_report_card_drc",
+          "gov_adhd-treatment-classroom-html",
+          "taking_charge_of_adhd_the_authoritative_guide_for_"
+        ],
+        "recall": 0.0,
+        "rr": 0.0
+      },
+      {
+        "query": "how do I help with morning chaos",
+        "expected": [
+          "morning_routine_ef_support",
+          "time_blindness_interventions"
+        ],
+        "retrieved": [
+          "morning_routine_ef_support",
+          "self_monitoring_checklists",
+          "talking_adhd_diagnosis"
+        ],
+        "recall": 0.5,
+        "rr": 1.0
+      },
+      {
+        "query": "homework every night is a battle",
+        "expected": [
+          "homework_battles",
+          "task_initiation_homework_refusal",
+          "homework_and_organization_interventions_for_studen"
+        ],
+        "retrieved": [
+          "homework_battles"
+        ],
+        "recall": 0.3333333333333333,
+        "rr": 1.0
+      },
+      {
+        "query": "I feel like a terrible parent, I can't handle this anymore",
+        "expected": [
+          "parent_self_care"
+        ],
+        "retrieved": [
+          "parent_self_care",
+          "rsd_kids",
+          "public_meltdowns",
+          "emotional_dysregulation_coregulation"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my child has meltdowns in the grocery store and I'm so embarrassed",
+        "expected": [
+          "public_meltdowns",
+          "emotional_dysregulation_coregulation"
+        ],
+        "retrieved": [
+          "public_meltdowns"
+        ],
+        "recall": 0.5,
+        "rr": 1.0
+      },
+      {
+        "query": "my daughter says everyone hates her and she has no friends",
+        "expected": [
+          "peer_relationship_challenges",
+          "rsd_kids",
+          "self_esteem_adhd"
+        ],
+        "retrieved": [
+          "rsd_kids",
+          "transition_warnings_scripts",
+          "sibling_conflict_adhd"
+        ],
+        "recall": 0.3333333333333333,
+        "rr": 1.0
+      },
+      {
+        "query": "my child cries and rages when he loses at games",
+        "expected": [
+          "frustration_tolerance",
+          "emotional_dysregulation_coregulation",
+          "anger_management_adhd"
+        ],
+        "retrieved": [
+          "rsd_kids",
+          "transition_warnings_scripts",
+          "anger_management_adhd",
+          "empathy_perspective_taking"
+        ],
+        "recall": 0.3333333333333333,
+        "rr": 0.3333333333333333
+      },
+      {
+        "query": "siblings are constantly fighting and I'm exhausted",
+        "expected": [
+          "sibling_conflict_adhd",
+          "parent_self_care"
+        ],
+        "retrieved": [
+          "sibling_conflict_adhd",
+          "parent_self_care",
+          "emotional_dysregulation_coregulation"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "I need help with bedtime routine and reducing screen time before sleep",
+        "expected": [
+          "bedtime_winddown_ef_strategies",
+          "screen_time_gaming_adhd",
+          "sleep_hygiene_adhd"
+        ],
+        "retrieved": [
+          "sleep_hygiene_adhd",
+          "bedtime_winddown_ef_strategies"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 1.0
+      },
+      {
+        "query": "how to talk to my child about their ADHD diagnosis and build confidence",
+        "expected": [
+          "talking_adhd_diagnosis",
+          "self_esteem_adhd",
+          "adhd_strengths_reframing"
+        ],
+        "retrieved": [
+          "talking_adhd_diagnosis"
+        ],
+        "recall": 0.3333333333333333,
+        "rr": 1.0
+      },
+      {
+        "query": "positive reinforcement at home and at school with a reward chart",
+        "expected": [
+          "implementing_a_rewards_chart",
+          "using_positive_reinforcement_structure_and_discipl",
+          "parent_training_in_behavior_therapy"
+        ],
+        "retrieved": [
+          "implementing_a_rewards_chart",
+          "using_positive_reinforcement_structure_and_discipl",
+          "homebased_daily_report_card_drc",
+          "homework_battles",
+          "how_to_reach_and_teach_addadhd_children"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 1.0
+      },
+      {
+        "query": "how to communicate effectively with my child's teacher about ADHD accommodations",
+        "expected": [
+          "teacher_communication",
+          "familyschool_partnerships_for_adhd_management",
+          "school_ef_accommodations_504_iep"
+        ],
+        "retrieved": [
+          "teacher_communication",
+          "school_ef_accommodations_504_iep",
+          "talking_adhd_diagnosis"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 1.0
+      },
+      {
+        "query": "behavior therapy for my 4 year old with ADHD",
+        "expected": [
+          "behavior_therapy_for_young_children_with_adhd",
+          "behavioral_parent_training_for_adhd"
+        ],
+        "retrieved": [
+          "ef_development_trajectory",
+          "gov_adhd-treatment-index-html",
+          "behavior_therapy_for_young_children_with_adhd",
+          "behavior_therapy_for_adhd",
+          "parent_training_in_behavior_therapy"
+        ],
+        "recall": 0.5,
+        "rr": 0.3333333333333333
+      },
+      {
+        "query": "my teenager with ADHD is struggling with risky behavior and substance use",
+        "expected": [
+          "increased_risks_during_adolescence"
+        ],
+        "retrieved": [
+          "emotional_dysregulation_coregulation",
+          "gov_adhd-articles-protecting-the-health-of-children-html",
+          "increased_risks_during_adolescence"
+        ],
+        "recall": 1.0,
+        "rr": 0.3333333333333333
+      },
+      {
+        "query": "how to break big school projects into smaller steps",
+        "expected": [
+          "breaking_tasks_micro_steps",
+          "planning_prioritization_visual_supports"
+        ],
+        "retrieved": [
+          "homework_and_organization_interventions_for_studen",
+          "breaking_tasks_micro_steps",
+          "how_to_reach_and_teach_addadhd_children"
+        ],
+        "recall": 0.5,
+        "rr": 0.5
+      },
+      {
+        "query": "my child can't remember instructions and loses everything",
+        "expected": [
+          "working_memory_scaffolds_daily_tasks",
+          "inattention_symptoms_in_adhd"
+        ],
+        "retrieved": [
+          "gov_adhd-signs-symptoms-index-html",
+          "transition_warnings_scripts",
+          "adhd_predominately_inattentive_symptoms",
+          "emotional_dysregulation_coregulation",
+          "inattention_symptoms_in_adhd"
+        ],
+        "recall": 0.5,
+        "rr": 0.2
+      },
+      {
+        "query": "games and activities that build executive function skills",
+        "expected": [
+          "building_ef_skills_play_games"
+        ],
+        "retrieved": [
+          "building_ef_skills_play_games"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my child gets stuck and can't switch between tasks or activities",
+        "expected": [
+          "cognitive_flexibility_task_shifting",
+          "transition_warnings_scripts"
+        ],
+        "retrieved": [
+          "cognitive_flexibility_task_shifting",
+          "transition_warnings_scripts",
+          "gov_adhd-diagnosis-index-html",
+          "inattention_symptoms_in_adhd"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "what apps or technology tools help ADHD kids stay organized",
+        "expected": [
+          "technology_tools_ef_support",
+          "organization_backpack_school_materials"
+        ],
+        "retrieved": [
+          "technology_tools_ef_support",
+          "gov_adhd-treatment-classroom-html",
+          "gov_adhd-es-treatment-el-tdah-en-el-salon-de-clases-como-ayudar-a-los-ninos-a-tener-exito-en-la-escuela-html"
+        ],
+        "recall": 0.5,
+        "rr": 1.0
+      }
+    ],
+    "recall_at_k": 0.6833333333333333,
+    "mrr": 0.801111111111111
+  },
+  {
+    "strategy": "semantic",
+    "queries": [
+      {
+        "query": "How can I set up a daily report card with my child's teacher?",
+        "expected": [
+          "homebased_daily_report_card_drc",
+          "daily_behavior_report_cards",
+          "daily_schoolhome_report_card"
+        ],
+        "retrieved": [
+          "homebased_daily_report_card_drc",
+          "daily_behavior_report_cards",
+          "daily_schoolhome_report_card",
+          "teacher_communication",
+          "homeschool_communication_trackers"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "What are the symptoms of inattentive ADHD?",
+        "expected": [
+          "adhd_predominately_inattentive_symptoms",
+          "inattention_symptoms_in_adhd"
+        ],
+        "retrieved": [
+          "adhd_predominately_inattentive_symptoms",
+          "gov_adhd-signs-symptoms-index-html",
+          "pmc_PMC12953668",
+          "inattention_symptoms_in_adhd",
+          "pmc_PMC12973118"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "How do I get a 504 plan for my child with ADHD?",
+        "expected": [
+          "understanding_section_504_rights_for_students_with",
+          "school_ef_accommodations_504_iep"
+        ],
+        "retrieved": [
+          "school_ef_accommodations_504_iep",
+          "understanding_section_504_rights_for_students_with",
+          "teacher_communication",
+          "talking_adhd_diagnosis",
+          "emotional_dysregulation_coregulation"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "What is the ABC model of behavior modification?",
+        "expected": [
+          "implementing_behavior_modification_programs_abc_mo"
+        ],
+        "retrieved": [
+          "implementing_behavior_modification_programs_abc_mo",
+          "gov_adhd-treatment-index-html",
+          "behavior_therapy_principles",
+          "pmc_PMC12969478",
+          "behavioral_classroom_management"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "visual timer strategies for time blindness",
+        "expected": [
+          "time_blindness_interventions"
+        ],
+        "retrieved": [
+          "time_blindness_interventions",
+          "technology_tools_ef_support",
+          "planning_prioritization_visual_supports",
+          "transition_warnings_scripts",
+          "homework_battles"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "body doubling for homework focus",
+        "expected": [
+          "body_doubling_ef_support",
+          "task_initiation_homework_refusal"
+        ],
+        "retrieved": [
+          "body_doubling_ef_support",
+          "homework_battles",
+          "task_initiation_homework_refusal",
+          "homework_and_organization_interventions_for_studen"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "How do I organize my child's backpack and school materials?",
+        "expected": [
+          "organization_backpack_school_materials"
+        ],
+        "retrieved": [
+          "organization_backpack_school_materials",
+          "homework_and_organization_interventions_for_studen",
+          "public_meltdowns",
+          "gov_adhd-treatment-classroom-html",
+          "planning_prioritization_visual_supports"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "teaching social skills to children with ADHD",
+        "expected": [
+          "systematic_teaching_of_social_skills_for_children",
+          "friendship_skills_groups",
+          "social_scripts_training"
+        ],
+        "retrieved": [
+          "social_scripts_training",
+          "friendship_skills_groups",
+          "peer_relationship_challenges",
+          "systematic_teaching_of_social_skills_for_children",
+          "pmc_PMC12953414"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "melatonin and sleep problems in ADHD kids",
+        "expected": [
+          "sleep_hygiene_adhd",
+          "bedtime_winddown_ef_strategies"
+        ],
+        "retrieved": [
+          "sleep_hygiene_adhd",
+          "bedtime_winddown_ef_strategies",
+          "pmc_PMC12979961",
+          "pmc_PMC12998928",
+          "pmc_PMC12959369"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my kid can't sit still",
+        "expected": [
+          "hyperactivityimpulsivity_symptoms_in_adhd",
+          "adhd_predominately_hyperactiveimpulsive_symptoms"
+        ],
+        "retrieved": [
+          "adhd_predominately_hyperactiveimpulsive_symptoms",
+          "pmc_PMC12999239",
+          "hyperactivityimpulsivity_symptoms_in_adhd",
+          "emotional_dysregulation_coregulation",
+          "gov_adhd-articles-is-it-adhd-html"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "nothing works with my child's behavior",
+        "expected": [
+          "parent_training_in_behavior_therapy",
+          "behavioral_treatments_for_adhd",
+          "behavior_therapy_for_adhd"
+        ],
+        "retrieved": [
+          "public_meltdowns",
+          "using_positive_reinforcement_structure_and_discipl",
+          "gov_adhd-treatment-index-html",
+          "pmc_PMC12923175",
+          "behavior_therapy_with_children"
+        ],
+        "recall": 0.0,
+        "rr": 0.0
+      },
+      {
+        "query": "school keeps calling about my son",
+        "expected": [
+          "schoolbased_interventions_for_adhd",
+          "teacher_communication",
+          "behavioral_classroom_management"
+        ],
+        "retrieved": [
+          "homeschool_communication_trackers",
+          "pmc_PMC12933635",
+          "gov_adhd-treatment-classroom-html",
+          "pmc_PMC12973361"
+        ],
+        "recall": 0.0,
+        "rr": 0.0
+      },
+      {
+        "query": "how do I help with morning chaos",
+        "expected": [
+          "morning_routine_ef_support",
+          "time_blindness_interventions"
+        ],
+        "retrieved": [
+          "morning_routine_ef_support",
+          "sleep_hygiene_adhd",
+          "pmc_PMC12974586",
+          "organization_backpack_school_materials",
+          "emotional_dysregulation_coregulation"
+        ],
+        "recall": 0.5,
+        "rr": 1.0
+      },
+      {
+        "query": "homework every night is a battle",
+        "expected": [
+          "homework_battles",
+          "task_initiation_homework_refusal",
+          "homework_and_organization_interventions_for_studen"
+        ],
+        "retrieved": [
+          "homework_battles",
+          "homework_and_organization_interventions_for_studen",
+          "task_initiation_homework_refusal",
+          "environmental_modifications_ef_load"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "I feel like a terrible parent, I can't handle this anymore",
+        "expected": [
+          "parent_self_care"
+        ],
+        "retrieved": [
+          "public_meltdowns",
+          "parent_self_care",
+          "rsd_kids",
+          "pmc_PMC12940027",
+          "pmc_PMC12999239"
+        ],
+        "recall": 1.0,
+        "rr": 0.5
+      },
+      {
+        "query": "my child has meltdowns in the grocery store and I'm so embarrassed",
+        "expected": [
+          "public_meltdowns",
+          "emotional_dysregulation_coregulation"
+        ],
+        "retrieved": [
+          "public_meltdowns",
+          "emotional_dysregulation_coregulation",
+          "transition_warnings_scripts",
+          "rsd_kids"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my daughter says everyone hates her and she has no friends",
+        "expected": [
+          "peer_relationship_challenges",
+          "rsd_kids",
+          "self_esteem_adhd"
+        ],
+        "retrieved": [
+          "sibling_conflict_adhd",
+          "rsd_kids",
+          "peer_relationship_challenges",
+          "pmc_PMC12957435",
+          "friendship_skills_groups"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 0.5
+      },
+      {
+        "query": "my child cries and rages when he loses at games",
+        "expected": [
+          "frustration_tolerance",
+          "emotional_dysregulation_coregulation",
+          "anger_management_adhd"
+        ],
+        "retrieved": [
+          "building_ef_skills_play_games",
+          "frustration_tolerance",
+          "anger_management_adhd",
+          "emotional_dysregulation_coregulation",
+          "rsd_kids"
+        ],
+        "recall": 1.0,
+        "rr": 0.5
+      },
+      {
+        "query": "siblings are constantly fighting and I'm exhausted",
+        "expected": [
+          "sibling_conflict_adhd",
+          "parent_self_care"
+        ],
+        "retrieved": [
+          "sibling_conflict_adhd",
+          "pmc_PMC12956935",
+          "self_esteem_adhd",
+          "parent_self_care"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "I need help with bedtime routine and reducing screen time before sleep",
+        "expected": [
+          "bedtime_winddown_ef_strategies",
+          "screen_time_gaming_adhd",
+          "sleep_hygiene_adhd"
+        ],
+        "retrieved": [
+          "bedtime_winddown_ef_strategies",
+          "sleep_hygiene_adhd",
+          "pmc_PMC12998928",
+          "pmc_PMC11874094"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 1.0
+      },
+      {
+        "query": "how to talk to my child about their ADHD diagnosis and build confidence",
+        "expected": [
+          "talking_adhd_diagnosis",
+          "self_esteem_adhd",
+          "adhd_strengths_reframing"
+        ],
+        "retrieved": [
+          "talking_adhd_diagnosis",
+          "self_esteem_adhd",
+          "adhd_strengths_reframing",
+          "pmc_PMC12933635"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "positive reinforcement at home and at school with a reward chart",
+        "expected": [
+          "implementing_a_rewards_chart",
+          "using_positive_reinforcement_structure_and_discipl",
+          "parent_training_in_behavior_therapy"
+        ],
+        "retrieved": [
+          "implementing_a_rewards_chart",
+          "using_positive_reinforcement_structure_and_discipl",
+          "homebased_daily_report_card_drc",
+          "parent_training_and_schoolbased_behavior_plans",
+          "gov_adhd-treatment-classroom-html"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 1.0
+      },
+      {
+        "query": "how to communicate effectively with my child's teacher about ADHD accommodations",
+        "expected": [
+          "teacher_communication",
+          "familyschool_partnerships_for_adhd_management",
+          "school_ef_accommodations_504_iep"
+        ],
+        "retrieved": [
+          "teacher_communication",
+          "school_ef_accommodations_504_iep",
+          "talking_adhd_diagnosis",
+          "gov_adhd-treatment-classroom-html"
+        ],
+        "recall": 0.6666666666666666,
+        "rr": 1.0
+      },
+      {
+        "query": "behavior therapy for my 4 year old with ADHD",
+        "expected": [
+          "behavior_therapy_for_young_children_with_adhd",
+          "behavioral_parent_training_for_adhd"
+        ],
+        "retrieved": [
+          "behavior_therapy_for_young_children_with_adhd",
+          "gov_adhd-treatment-index-html",
+          "behavior_therapy_with_children",
+          "behavior_therapy_for_adhd",
+          "pmc_PMC12983569"
+        ],
+        "recall": 0.5,
+        "rr": 1.0
+      },
+      {
+        "query": "my teenager with ADHD is struggling with risky behavior and substance use",
+        "expected": [
+          "increased_risks_during_adolescence"
+        ],
+        "retrieved": [
+          "increased_risks_during_adolescence",
+          "gov_adhd-treatment-index-html",
+          "gov_adhd-articles-protecting-the-health-of-children-html",
+          "gov_adhd-es-about-otras-preocupaciones-y-condiciones-medicas-relacionadas-con-el-trastorno-por-deficit-de-atencion-html",
+          "pmc_PMC12453542"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "how to break big school projects into smaller steps",
+        "expected": [
+          "breaking_tasks_micro_steps",
+          "planning_prioritization_visual_supports"
+        ],
+        "retrieved": [
+          "breaking_tasks_micro_steps",
+          "homework_battles",
+          "homework_and_organization_interventions_for_studen",
+          "pmc_PMC12973361",
+          "planning_prioritization_visual_supports"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my child can't remember instructions and loses everything",
+        "expected": [
+          "working_memory_scaffolds_daily_tasks",
+          "inattention_symptoms_in_adhd"
+        ],
+        "retrieved": [
+          "adhd_predominately_inattentive_symptoms",
+          "pmc_PMC12999239",
+          "working_memory_scaffolds_daily_tasks",
+          "inattention_symptoms_in_adhd",
+          "transition_warnings_scripts"
+        ],
+        "recall": 1.0,
+        "rr": 0.3333333333333333
+      },
+      {
+        "query": "games and activities that build executive function skills",
+        "expected": [
+          "building_ef_skills_play_games"
+        ],
+        "retrieved": [
+          "building_ef_skills_play_games",
+          "ef_development_trajectory",
+          "cognitive_flexibility_task_shifting",
+          "pmc_PMC12982429",
+          "pmc_PMC12992236"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "my child gets stuck and can't switch between tasks or activities",
+        "expected": [
+          "cognitive_flexibility_task_shifting",
+          "transition_warnings_scripts"
+        ],
+        "retrieved": [
+          "cognitive_flexibility_task_shifting",
+          "gov_adhd-diagnosis-index-html",
+          "breaking_tasks_micro_steps",
+          "inattention_symptoms_in_adhd",
+          "task_initiation_homework_refusal"
+        ],
+        "recall": 0.5,
+        "rr": 1.0
+      },
+      {
+        "query": "what apps or technology tools help ADHD kids stay organized",
+        "expected": [
+          "technology_tools_ef_support",
+          "organization_backpack_school_materials"
+        ],
+        "retrieved": [
+          "technology_tools_ef_support",
+          "gov_adhd-treatment-classroom-html",
+          "organization_backpack_school_materials",
+          "homeschool_communication_trackers"
+        ],
+        "recall": 1.0,
+        "rr": 1.0
+      }
+    ],
+    "recall_at_k": 0.8388888888888889,
+    "mrr": 0.861111111111111
+  }
+]

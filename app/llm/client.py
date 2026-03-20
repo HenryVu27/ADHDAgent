@@ -143,16 +143,28 @@ class GeminiClient:
         return list(result.embeddings[0].values)
 
     async def embed_batch(self, texts: list[str], timeout: float | None = None) -> list[list[float]]:
-        """Get embedding vectors for a batch of texts."""
+        """Get embedding vectors for a batch of texts.
+
+        Gemini allows at most 100 texts per batchEmbedContents request,
+        so we chunk the input and concatenate the results.
+        """
         if not texts:
             return []
-        coro = asyncio.to_thread(
-            _retry_policy(self._client.models.embed_content),
-            model=self._embedding_model,
-            contents=texts,
-        )
-        if timeout is not None:
-            result = await asyncio.wait_for(coro, timeout=timeout)
-        else:
-            result = await coro
-        return [list(e.values) for e in result.embeddings]
+
+        MAX_BATCH = 100
+        all_embeddings: list[list[float]] = []
+
+        for start in range(0, len(texts), MAX_BATCH):
+            batch = texts[start : start + MAX_BATCH]
+            coro = asyncio.to_thread(
+                _retry_policy(self._client.models.embed_content),
+                model=self._embedding_model,
+                contents=batch,
+            )
+            if timeout is not None:
+                result = await asyncio.wait_for(coro, timeout=timeout)
+            else:
+                result = await coro
+            all_embeddings.extend(list(e.values) for e in result.embeddings)
+
+        return all_embeddings
