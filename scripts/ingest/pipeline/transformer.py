@@ -127,6 +127,7 @@ class SchemaTransformer:
     def _build_id(self, parsed: ParsedDocument) -> str:
         prefixes = {
             "pubmed": "pmc_",
+            "pubmed_abstract": "pm_",
             "openalex": "oalex_",
             "semantic_scholar": "s2_",
             "eric": "eric_",

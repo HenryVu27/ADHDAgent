@@ -27,7 +27,7 @@ class RelevanceFilter:
             ]
             scores = await self._client.score_relevance(batch_for_scoring)
 
-            score_map = {s["index"]: s["score"] for s in scores}
+            score_map = {s.get("index", 0): s.get("score", s.get("relevance_score", 0)) for s in scores}
             for j, doc in enumerate(batch, 1):
                 if score_map.get(j, 0) >= self._threshold:
                     kept.append(doc)

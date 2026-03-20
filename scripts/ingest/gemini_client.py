@@ -1,12 +1,15 @@
 import json
+import logging
 import google.genai as genai
 from tenacity import retry, stop_after_attempt, wait_exponential
+
+logger = logging.getLogger(__name__)
 
 
 class GeminiClient:
     """Standalone Gemini Flash client for relevance scoring."""
 
-    def __init__(self, api_key: str, model: str = "gemini-2.5-flash"):
+    def __init__(self, api_key: str, model: str = "gemini-2.5-flash-lite"):
         self._client = genai.Client(api_key=api_key)
         self._model = model
 
@@ -16,9 +19,22 @@ class GeminiClient:
             model=self._model,
             contents=prompt,
         )
-        return response.text
+        return response.text or ""
 
-    async def score_relevance(self, docs: list[dict]) -> list[dict]:
+    def _parse_json_response(self, raw: str) -> list[dict]:
+        """Parse JSON from Gemini response, handling markdown fences and edge cases."""
+        text = raw.strip()
+        if not text:
+            return []
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1] if "\n" in text else text[3:]
+            text = text.rsplit("```", 1)[0]
+        text = text.strip()
+        if not text:
+            return []
+        return json.loads(text)
+
+    async def score_relevance(self, docs: list[dict], max_retries: int = 2) -> list[dict]:
         """Score a batch of documents for ADHD parenting relevance (0-10)."""
         if not docs:
             return []
@@ -38,13 +54,18 @@ class GeminiClient:
             "- 3-4: Tangentially related (general child psychology, education theory)\n"
             "- 0-2: Not relevant\n\n"
             "Documents:\n" + "\n".join(doc_lines) + "\n\n"
-            'Return JSON array: [{"index": int, "score": int, "reason": str}, ...]'
+            "Return ONLY a JSON array, no other text: "
+            '[{"index": int, "score": int, "reason": str}, ...]'
         )
 
-        raw = await self._call_flash(prompt)
-        # Strip markdown code fences if present
-        text = raw.strip()
-        if text.startswith("```"):
-            text = text.split("\n", 1)[1]
-            text = text.rsplit("```", 1)[0]
-        return json.loads(text)
+        for attempt in range(max_retries + 1):
+            try:
+                raw = await self._call_flash(prompt)
+                return self._parse_json_response(raw)
+            except (json.JSONDecodeError, Exception) as e:
+                if attempt < max_retries:
+                    logger.warning(f"Gemini JSON parse failed (attempt {attempt + 1}), retrying: {e}")
+                else:
+                    logger.warning(f"Gemini scoring failed after {max_retries + 1} attempts, keeping all {len(docs)} docs: {e}")
+                    # Return max scores so all docs are kept when scoring fails
+                    return [{"index": i, "score": 10, "reason": "scoring failed"} for i in range(1, len(docs) + 1)]
