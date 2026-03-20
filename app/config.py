@@ -28,6 +28,14 @@ class Settings(BaseSettings):
     RAG_OUTCOME_BOOST_CAP: float = 0.30
     RAG_OUTCOME_JACCARD_THRESHOLD: float = 0.3
 
+    # Chunking
+    RAG_CHUNKING_STRATEGY: str = "none"  # "recursive_contextual" | "semantic" | "none"
+    RAG_CHUNK_SIZE_TOKENS: int = 512
+    RAG_CHUNK_OVERLAP_TOKENS: int = 64
+    RAG_SEMANTIC_SIMILARITY_THRESHOLD: float = 0.75
+    RAG_CONTEXTUAL_HEADERS: bool = True
+    RAG_PARENT_DEDUP: bool = True
+
     # Qdrant
     QDRANT_URL: str = ":memory:"
     QDRANT_API_KEY: str = ""
