@@ -4,7 +4,12 @@
     "name": "Effects of Medical Cannabis Treatment for Autistic Children on Family Accommodation: An Open-Label Mixed-Methods Study",
     "description": "Highlights \n What are the main findings? \n CBD-rich cannabis treatment over 6 months was associated with reduced family accommodation (FA) and parental distress in families of autistic children. Quali",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "family",
+      "treatment",
+      "child",
+      "accommodation"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -38,7 +43,9 @@
     "name": "Potentiation of Nigra\u2013Striatal Dopaminergic Projection Underpins Core Autism-Like Behaviors in Valproate-Exposed Mice",
     "description": "Autism is characterized by two key diagnostic criteria including social deficits and repetitive behaviors. However, the underlying neural circuit dysfunction that accounts for these coexisting symptom",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior"
+    ],
     "age_range": [
       "all"
     ],
@@ -71,7 +78,10 @@
     "name": "Advances in Research on Adolescent Suicide and a High Priority Agenda for Future Research",
     "description": "Suicide is the second leading cause of death for adolescents in the United States, yet remarkably little is known regarding risk factors for suicidal thoughts and behaviors (STBs), relatively few fede",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "adolescent"
+    ],
     "age_range": [
       "all"
     ],
@@ -93,45 +103,13 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12866103",
-    "name": "The Immune Phenotype of Perinatal Anxiety",
-    "description": "Background: Immune dysregulation has been linked to both psychiatric illness and pregnancy morbidity, including perinatal depression, but little is known about the immune phenotype of perinatal anxiet",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Sherer Morgan L. et al. (2022)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Sherer Morgan L. et al. (2022)",
-        "detail": "10.1016/j.bbi.2022.09.005"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background: Immune dysregulation has been linked to both psychiatric illness and pregnancy morbidity, including perinatal depression, but little is known about the immune phenotype of perinatal anxiety.",
-      "Here, we sought to identify the unique immune profile of antenatal anxiety.",
-      "Materials and Methods: Pregnant women (n=107) were followed prospectively at 2nd and 3rd trimesters (T2, T3) and 6 weeks postpartum (PP6).",
-      "Each visit included a blood draw and psychological evaluation, with clinical anxiety assessed using the Spielberg State-Trait Anxiety Scale.",
-      "We enrolled both healthy controls and participants with anxiety alone; those with comorbid depression were excluded.",
-      "Multiplex cytokine assays and flow cytometry were used to examine the association of anxiety symptoms with secreted immune markers and PBMC-derived immune cells.",
-      "Results: K cluster means revealed three clusters of anxiety symptomatology; due to low numbers in the highest severity anxiety group, these were collapsed into two groups: Non-Anxiety and Anxiety.",
-      "Principal components analysis revealed two distinct clusters of cytokine secretion including one cluster that consisted of many innate immune cytokines and differed between groups.",
-      "Compared to women in the Non-Anxiety group, women in the Anxiety group had lower levels of cytokine expression during pregnancy and an increase in levels into the postpartum, whereas Non-Anxiety women experienced a time-dependent decline.",
-      "Immune cell populations also differed between our two groups, with the Anxiety group showing a decrease in the ratio of B cells to T cells from pregnancy to postpartum, whereas the Non-Anxiety women showed an increase in this ratio over time."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12830276",
     "name": "A Narrative Review of Dental General Anaesthesia in Children With Special Health Care Needs",
     "description": "Background Children with special health care needs (CSHCN) cannot perform daily personal care and participate in social activities similar to healthy children, thus requiring special medical services.",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -165,7 +143,10 @@
     "name": "Drug-induced urinary incontinence in pediatric patients: A disproportionality analysis of the FDA Adverse Event Reporting System",
     "description": "Despite the substantial impact of urinary incontinence (UI) on the physical and mental health of children, research on drug-induced pediatric UI (PUI) remains limited. This study aimed to identify dru",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child",
+      "pediatric"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -195,45 +176,13 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12936869",
-    "name": "Reciprocal effects between loneliness and sleep disturbances from adolescence to mid-adulthood: the HUNT study",
-    "description": "Abstract Study Objectives Loneliness and sleep disturbances are prevalent and interrelated public health concerns, especially during the transition from adolescence to adulthood, a period marked by ma",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Parlikar Nayan et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Parlikar Nayan et al. (2026)",
-        "detail": "10.1093/sleepadvances/zpag004"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Abstract Study Objectives Loneliness and sleep disturbances are prevalent and interrelated public health concerns, especially during the transition from adolescence to adulthood, a period marked by major psychological and social changes.",
-      "However, less is known about their potential reciprocal relationship across development.",
-      "This study examines the longitudinal, bidirectional associations between loneliness and sleep from adolescence to mid-adulthood using data from the Tr\u00f8ndelag Health Study (HUNT).",
-      "Methods We used data from Young-HUNT1 (1995\u20131997), HUNT3 (2006\u20132008), and HUNT4 (2017\u20132019), including 2185 participants (60.6% female).",
-      "Loneliness and sleep were measured using harmonized items across waves.",
-      "Structural equation modeling tested cross-lagged associations between loneliness and sleep, adjusting for sociodemographic and mental health covariates.",
-      "Mediation analyses explored the underlying mechanisms of anxiety and depression.",
-      "Results Loneliness declined over time, while sleep showed a fluctuating pattern.",
-      "Both constructs demonstrated high temporal stability.",
-      "Loneliness did not significantly predict future sleep problems; however, sleep in early adulthood was a predictor of increased loneliness in midlife."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12938174",
     "name": "Preliminary Data on Behavioral Profiles of Youth with Neurodevelopmental Disorders and Trauma",
     "description": "Youth with neurodevelopmental disorders (NDDs) face an increased risk of trauma compared to their peers without NDDs, often leading to challenging behaviors such as self-injury, aggression, and proper",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior"
+    ],
     "age_range": [
       "adolescent"
     ],
@@ -261,45 +210,14 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12862455",
-    "name": "Particulate Air Pollution, Disease, and Death in the Cities and Towns of Southwestern Pennsylvania",
-    "description": "Background:  PM 2.5  air pollution is a leading cause of disease and death. US air pollutant emissions have declined by 75% since passage of the Clean Air Act in 1970, but the Pittsburgh Metropolitan",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Whitman Ella M. et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Whitman Ella M. et al. (2026)",
-        "detail": "10.5334/aogh.5145"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background:  PM 2.5  air pollution is a leading cause of disease and death.",
-      "US air pollutant emissions have declined by 75% since passage of the Clean Air Act in 1970, but the Pittsburgh Metropolitan Statistical Area (MSA) continues to have elevated pollution levels and, in 2025, had the US\u2019s 12 th  highest PM 2.5  concentration.",
-      "Steel mills and coke ovens are major point sources.",
-      "Objective:  To quantify deaths, adverse birth outcomes, and children\u2019s IQ loss in the Pittsburgh MSA attributable to PM 2.5  air pollution.",
-      "Methods:  Mean annual PM 2.5  air pollution concentrations were obtained for each census tract in the Pittsburgh MSA from NASA\u2019s satellite-based Socioeconomic Data and Applications Center map layers and linked with vital records obtained from the Pennsylvania Department of Health.",
-      "Exposure\u2013response functions from peer-reviewed literature and EPA\u2019s BenMAP software were used to quantify deaths, adverse birth outcomes, and IQ loss attributable to PM 2.5  pollution.",
-      "Results:  The mean annual PM 2.5  concentration in the Pittsburgh MSA was 8.54 \u03bcg/m 3 .",
-      "Concentrations across census tracts ranged from 5.74 to 15.90 \u03bcg/m 3 .",
-      "Of 27,224 adult deaths in the Pittsburgh MSA in 2019, we estimate that between 3,085 and 3,467 (11.1%\u201312.5%) were attributable to PM 2.5  pollution.",
-      "We estimate that 229 premature births, 177 low-weight births, and 12 stillbirths could be attributed to prenatal PM 2.5  exposure."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12952114",
     "name": "Multi-omics analysis reveals distinct spatial compartmentalization of lung repair niches in pediatric ARDS",
     "description": "Background Pediatric acute respiratory distress syndrome (PARDS), often triggered by viral infections, is a life-threatening condition. Despite its severity, children demonstrate significantly better",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child",
+      "pediatric"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -329,42 +247,14 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12988251",
-    "name": "Discovering Real Men Care: The Emergent Masculinities of Stay-at-Home Husbands in Hong Kong",
-    "description": "The rising phenomenon of stay-at-home husbands (SAHHs) in Hong Kong exemplifies the evolution of masculinities in Asia. The development of emergent masculinities through SAHHs is intertwined with hybr",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "YH Tsang Eileen (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "YH Tsang Eileen (2026)",
-        "detail": "10.1177/15579883261423526"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The rising phenomenon of stay-at-home husbands (SAHHs) in Hong Kong exemplifies the evolution of masculinities in Asia.",
-      "The development of emergent masculinities through SAHHs is intertwined with hybrid masculinities to expand the range of visible male roles in an Asian context.",
-      "The implication of SAHHs is explored through interviews conducted with 31 middle-class SAHHs and 19 wives of SAHHs in Hong Kong.",
-      "Two key findings are (1) emergent masculinities via SAHHs upend conventional gendered family roles as they become the primary caregivers for their children with notable support from their breadwinner wives and (2) hybrid masculinities in blended gender roles continue to actively evolve in Hong Kong.",
-      "These findings highlight how emergent masculinities are entwined with hybrid masculinities whereby SAHHs maintain some traditional gender roles and values while embracing tasks associated with child-rearing, which prioritize care, emotional expression, and domesticity.",
-      "These emerging roles contribute to the literature on masculinity by highlighting Hong Kong SAHHs during the COVID-19 era.",
-      "The data suggest a reframing of traditional or conventional expectations of masculinities, and through crucial support by their wives, they will continue the trend toward more dynamic gender relations."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12989010",
     "name": "Conceptualizing Autism as a Behavioral Network: Transdiagnostic Associations with Co-occurring Psychiatric Conditions",
     "description": "Autism is characterized by marked heterogeneity in behavioral presentation and high rates of co-occurring psychiatric symptoms, which hinder diagnostic precision, personalized intervention, and long-t",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "intervention"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -392,111 +282,13 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12877092",
-    "name": "An in vivo and in vitro spatiotemporal profile of human midbrain development",
-    "description": "The dopaminergic system has key roles in human physiology and is implicated in a broad range of neurological and neuropsychiatric conditions that are increasingly investigated using induced pluripoten",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Budinger Dimitri et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Budinger Dimitri et al. (2026)",
-        "detail": "10.1038/s41467-025-67779-1"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The dopaminergic system has key roles in human physiology and is implicated in a broad range of neurological and neuropsychiatric conditions that are increasingly investigated using induced pluripotent stem cell-derived midbrain models.",
-      "To determine similarities of such models to human systems, here we undertake single-cell and spatial profiling of first and second trimester fetal midbrain and compare it to in vitro midbrain models.",
-      "Histological examination reveals that, by the second trimester, fetal midbrain tissue exhibits structural complexity comparable to that of adults.",
-      "At the molecular level, single-cell profiling uncovers differences in cellular composition across models, with brain organoids most closely resembling late first trimester tissue \u2014 an observation supported by meta-integration of existing midbrain datasets.",
-      "By reconstructing developmental trajectories of neuronal and astrocytic lineages, we map gene expression dynamics associated with maturation.",
-      "Importantly, integration of spatial transcriptomics provides critical context for aligning organoid models, revealing that their spatial organization and intercellular signaling resemble the architecture and microenvironment of the second trimester midbrain.",
-      "Ultimately, we leverage our findings to study Dopamine Transporter Deficiency Syndrome progression in patient-derived midbrain organoids, validating their relevance.",
-      "Understanding the extent of human tissue recapitulation in midbrain laboratory models is essential to justify their use as biological proxies."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12931986",
-    "name": "Experiences of self-identification, diagnosis and support for adults seeking a recognition of tic disorders in the United Kingdom",
-    "description": "Aims: This study aimed to examine the experiences of self-identification, diagnosis, and support for adults with tic disorders (including Tourette Syndrome) in the United Kingdom (UK). Background: Tra",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Phoenix-Kane Danni et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Phoenix-Kane Danni et al. (2026)",
-        "detail": "10.1017/S1463423626100905"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Aims: This study aimed to examine the experiences of self-identification, diagnosis, and support for adults with tic disorders (including Tourette Syndrome) in the United Kingdom (UK).",
-      "Background: Traditionally viewed as a neurological disorder of childhood-onset, tic disorders have been observed to remit or persist, often in a milder form, into adulthood.",
-      "However, the reappearance of problematic symptoms after periods of asymptomatic latency might be more common than previously recognized.",
-      "The medical exposure and standardization of clinical practice for primary adult-onset or non-typical adult-presenting cases of tic disorders is currently limited and poses barriers to diagnosis.",
-      "Methods: An online survey of 42 adults with self-identified tic symptomology explored their tic recognition and journey of attaining a confirmed diagnosis and/or self-identifying after the age of 18 in the UK.",
-      "Findings: No significant differences were found between adult and childhood-onset cases.",
-      "Elevated scores on the Acceptance and Action Tic Specific Questionnaire (AAQ-T) correlated with higher overall frequency, intensity, and severity of motor tics from the Adult Tic Questionnaire (ATQ).",
-      "The AAQ-T was also shown to negatively correlate with increasing age.",
-      "Nearly all adults expressed dissatisfaction with the diagnostic process, especially regarding information provided and lack of post-diagnostic support.",
-      "Those who self-identified quoted fear of dismissal, long waiting lists and lack of understanding from clinicians as reasons for not seeking a formal diagnosis."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC11863334",
-    "name": "Differences in nonheme iron absorption between healthy adults of East Asian or Northern European ancestry from the Iron Genes in East Asian and Northern European Adults Study (FeGenes): A cross-sectional stable iron isotope study",
-    "description": "Background Because humans lack mechanisms for excreting excess iron (Fe), dietary Fe absorption must be tightly regulated to ensure optimal Fe levels. We previously showed that East Asian (EA) individ",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Barad Alexa et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Barad Alexa et al. (2025)",
-        "detail": "10.1016/j.ajcnut.2024.11.015"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background Because humans lack mechanisms for excreting excess iron (Fe), dietary Fe absorption must be tightly regulated to ensure optimal Fe levels.",
-      "We previously showed that East Asian (EA) individuals have higher Fe stores compared with Northern European (NE) individuals, but the physiological basis for this difference is unknown.",
-      "Objectives Our aim is to compare nonheme Fe absorption and its regulation in healthy participants of genetically confirmed EA or NE ancestry.",
-      "Methods Participants of this cross-sectional study were males and premenopausal, nonpregnant females of EA ( n  = 253) or NE ( n  = 251) ancestry, aged 18\u201350 y, and without obesity.",
-      "Participants ingested a stable  57 Fe isotope as a FeSO 4  solution mixed with syrup.",
-      "Percent Fe absorption was calculated based on erythrocyte  57 Fe enrichment 2 wk postdosing measured using magnetic sector thermal ionization mass spectrometry and normalized to a fixed serum ferritin (SF) level.",
-      "Fe status traits (SF, soluble transferrin receptor, total body Fe), hormones (hepcidin, erythropoietin, erythroferrone), and inflammatory markers were evaluated.",
-      "Results SF-corrected % Fe absorption was higher in EA females [27.4 (95% confidence interval (CI): 23.4, 32.0)] and males [19.8 (95% CI: 14.9, 26.4)] compared with NE females [14.8 (95% CI: 11.8, 18.2)] and males [14.9 (95% CI: 11.8, 18.9)], respectively (both  P  < 0.001).",
-      "Percent Fe absorption was consistently associated with hepcidin in EA males [ \u03b2  = \u20130.64; standard error (SE) = 0.24;  P  = 0.008] and females ( \u03b2  = \u20130.61; SE = 0.12;  P  < 0.001), and in NE males ( \u03b2  = \u20130.63; SE = 0.22;  P  = 0.005) and females ( \u03b2  = \u20130.71; SE = 0.14;  P  < 0.001).",
-      "Percent Fe absorption was linearly associated with SF in EA females ( \u03b2  = \u20130.57; SE = 0.09;  P  < 0.001) and NE males ( \u03b2  = \u20130.73; SE = 0.21;  P  < 0.001) and females ( \u03b2  = \u20130.68; SE = 0.12;  P  < 0.001), but in EA males, a U-shaped relationship was observed ( P  = 0.003)."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12969478",
     "name": "A model to assist psychiatric nurses in facilitating support of parents who are caring for an adolescent with a mental disorder",
     "description": "Background An estimated one in seven adolescents globally experiences a mental disorder, and parents, as primary caregivers, play an essential role in caring for their adolescent with a mental disorde",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adolescent"
+    ],
     "age_range": [
       "all"
     ],
@@ -526,77 +318,14 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12998197",
-    "name": "Lung organoids as a human system for Mycobacteria infection modeling and drug testing",
-    "description": "Mycobacterial infections remain a global public health challenge. Each year, high rates of morbidity and mortality worldwide are a consequence of chronic respiratory infections due to  Mycobacteria .",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Leon\u2010Icaza Stephen Adonai et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Leon\u2010Icaza Stephen Adonai et al. (2025)",
-        "detail": "10.1111/febs.70265"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Mycobacterial infections remain a global public health challenge.",
-      "Each year, high rates of morbidity and mortality worldwide are a consequence of chronic respiratory infections due to  Mycobacteria .",
-      "According to the World Health Organization (WHO), in 2023, 10.8\u2009million individuals fell ill with  Mycobacterium tuberculosis  (Mtb), resulting in an estimated 1.25\u2009million deaths.",
-      "This positions tuberculosis (TB) as the leading cause of death from a single pathogen worldwide after the coronavirus disease (COVID\u201019) pandemic.",
-      "On the other hand, the cases of people affected by nontuberculous mycobacteria (NTM) have risen globally, but the precise incidence and prevalence of both pulmonary and extrapulmonary disease remain unknown.",
-      "In Europe, nontuberculous mycobacterial pulmonary diseases affect between 0.2 and 2.9 per 100\u2009000 individuals, mainly patients with cystic fibrosis (CF) and non\u2010CF bronchiectasis.",
-      "The diagnosis and treatment of mycobacterial infections are challenging and complex, frequently requiring long\u2010duration treatments with several antibiotics, which in most cases leads to poor patient outcomes.",
-      "As the role of immune cells has been extensively assessed, in this Review, we summarize the current knowledge about the contribution of epithelial cells in the early steps of  Mycobacteria  infections.",
-      "Additionally, we describe how human lung organoid technology provides new tools to better understand host\u2013 Mycobacteria  interactions in the airways and test new therapeutic targets."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12973075",
-    "name": "Sex and age differences in brain metabolism and cognition in adolescents",
-    "description": "Abstract Adolescence is a period of neural development, marked by maturation of brain structure and function. While sex- and age-related markers of structural brain development are documented, neuroch",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Balaganesh Anjali et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Balaganesh Anjali et al. (2026)",
-        "detail": "10.1162/IMAG.a.1159"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Abstract Adolescence is a period of neural development, marked by maturation of brain structure and function.",
-      "While sex- and age-related markers of structural brain development are documented, neurochemical and cognitive changes are less understood.",
-      "Our goal was to evaluate neurochemistry and cognition in adolescents as a function of sex and age.",
-      "Magnetic resonance spectroscopy quantified brain metabolites, and attention networking, digital trail making, and cued task switching tests measured cognition in 354 healthy adolescents.",
-      "Groupwise comparisons and linear regressions evaluated sex- and age-related effects, respectively.",
-      "Males were differentiated from females in cognitive performance and brain metabolite concentrations, including myo-inositol, glutamate + glutamine (Glx),  N- acetylaspartate, and creatine.",
-      "Males performed tasks with faster speed while females demonstrated better accuracy.",
-      "Decreases in Glx concentration and faster reaction times were associated with increasing age, indicative of maturing brain function during adolescence.",
-      "These findings highlight adolescence as a period of active brain development."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12524690",
     "name": "Unveiling Social Media Content Related to ADHD Treatment: Machine Learning Study Using X\u2019s Posts over 15 Years",
     "description": "Background:  Public discourse on social media plays an increasingly influential role in shaping health-related perceptions and behaviours. Individuals share experiences, concerns, and opinions beyond",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "treatment"
+    ],
     "age_range": [
       "all"
     ],
@@ -630,7 +359,9 @@
     "name": "Intermittent Fasting and Akkermansia muciniphila Exert Independent and Combined Benefits on Behavioral and Neurobiological Deficits in a VPA-Induced Autism Rat Model",
     "description": "Background/Objectives : Autism is a complex neurodevelopmental condition characterized by social and cognitive impairments, with growing evidence implicating neuroinflammation, disrupted autophagy, ap",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior"
+    ],
     "age_range": [
       "all"
     ],
@@ -660,79 +391,13 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12907621",
-    "name": "Age\u2010 and alcohol\u2010related differences in adolescent neurometabolite levels",
-    "description": "Abstract Background Adolescence is a critical period for neurometabolite maturation as well as the initiation of alcohol use. However, despite its importance for long\u2010term neurodevelopmental outcomes,",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Perica Maria I. et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Perica Maria I. et al. (2026)",
-        "detail": "10.1111/acer.70256"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Abstract Background Adolescence is a critical period for neurometabolite maturation as well as the initiation of alcohol use.",
-      "However, despite its importance for long\u2010term neurodevelopmental outcomes, the impact of alcohol use during adolescence on neurometabolites remains understudied.",
-      "Methods We conducted an exploratory study using 3T proton magnetic resonance spectroscopy (1H\u2010MRS) to examine age\u2010 and alcohol\u2010related associations with six neurometabolites in the dorsal anterior cingulate cortex (dACC) that are involved in key neural functions: glutamate + glutamine (Glx), GABA plus macromolecules (GABA+), total N\u2010acetylaspartate (tNAA), total choline (tCho), total creatine (tCr), and  myo \u2010inositol (mI).",
-      "Participants were 84 adolescents (ages 17\u201322; 67% female) with moderate\u2010to\u2010high alcohol use who completed 1H\u2010MRS scans and self\u2010reported their alcohol use.",
-      "Alcohol use variables included as follows: estimated lifetime drinking episodes and past 60\u2010day total drinking days, total binge drinking days, total number of drinks, and drinks per drinking day.",
-      "Results Older adolescents had higher levels of GABA+, tNAA, tCho, and mI, and lower levels of Glx and Glx/GABA+; tCr was not associated with age.",
-      "More alcohol use\u2014specifically more drinking days, binge drinking days, and number of drinks\u2014was associated with lower tNAA levels.",
-      "There were no associations with lifetime drinking episodes.",
-      "Conclusions In a sample of moderate\u2010to\u2010heavy drinking adolescents, findings suggest associations between age and neurometabolites in dACC neurometabolites, which potentially reflect ongoing neuronal maturation, myelination, and shifts in excitatory and inhibitory neurotransmission.",
-      "Lower tNAA among recent heavier drinkers may reflect associations between alcohol exposure and neuronal damage."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12978286",
-    "name": "Associations between adolescent perceived loneliness and hair cortisol concentration",
-    "description": "Introduction Adolescents experience high levels of loneliness, which is linked to poor health in adulthood. Loneliness may contribute to poor health through chronic dysregulation of the hypothalamic-p",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "Anderson Avery M. et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Anderson Avery M. et al. (2024)",
-        "detail": "10.1016/j.psyneuen.2024.107184"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Introduction Adolescents experience high levels of loneliness, which is linked to poor health in adulthood.",
-      "Loneliness may contribute to poor health through chronic dysregulation of the hypothalamic-pituitary-adrenal axis.",
-      "In this analysis, we examined the associations between survey- and ecological momentary assessment (EMA)-based measures of loneliness and hair cortisol concentrations (HCC) in a sample of 1102 adolescents and assessed sex differences in this relationship.",
-      "Methods Data came from wave 1 of the Adolescent Health and Development in Context study.",
-      "We conducted a series of multivariable linear regression models to examine the associations between loneliness and HCC.",
-      "Models were adjusted for adolescent and caregiver demographics, adolescent clinical factors, adolescent hair care practices, and adolescent lifetime mental health diagnosis and current psychotropic medication use.",
-      "An interaction term between sex and loneliness was added to assess for effect moderation.",
-      "Results In our sample, the mean HCC was 1.35 pg/mg (SD=1.1).",
-      "The mean for the  unstandardized  survey loneliness measure was 1.79 ( SD =0.79) for the total analytic sample.",
-      "The  unstandardized  mean for the EMA loneliness measure was \u2212 0.02 ( SD =2.1) for the total analytic sample."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12975660",
     "name": "Regulatory Problems in Infancy: Prevalence and Association With Early Neurodevelopmental and Medical Conditions in Toddlers",
     "description": "ABSTRACT Aim Investigate the prevalence of persistent regulatory problems (RPs) in children aged 3\u201318\u2009months from an immigrant, low\u2010resource population, and assess how these develop and may coexist wi",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -762,34 +427,15 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12043075",
-    "name": "Practice-Based Models of Pediatric Mental Health Care",
-    "description": "",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Lee Chuan Mei et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Lee Chuan Mei et al. (2024)",
-        "detail": "10.1016/j.pcl.2024.07.013"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12889775",
     "name": "Epigenetic Responses to Abusive versus Accidental Injuries in Children: A Cross-sectional Epigenome Wide Association Meta-analysis",
     "description": "Child maltreatment is a leading cause of pediatric morbidity and mortality, potentially propagated by DNA methylation (DNAm) changes. We conducted an EWAS meta-analysis (n=175, 554,979 Illumina EPICv1",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "treatment",
+      "child",
+      "pediatric"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -819,7 +465,9 @@
     "name": "Coprophenomena Associated With Worse Individual and Family Function for Youth With Tourette Syndrome",
     "description": "Background and Objectives Tourette syndrome (TS) is defined by multiple motor tics and one or more phonic tics with a symptom duration of >1 year. Coprophenomena are uncommon tics characterized by obs",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "family"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -854,7 +502,12 @@
     "name": "Utility of the Modified Anxiety Dimensional Observation Scale in Autistic Preschoolers with Varying Intellectual Functioning",
     "description": "Objective: Co-occurring anxiety affects 40\u201380% of autistic individuals; however, little is understood about how anxiety manifests in young autistic children, especially those with intellectual disabil",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "school",
+      "anxiety",
+      "preschool",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -889,7 +542,9 @@
     "name": "Adverse childhood experiences negatively impact sustained attention in adulthood",
     "description": "Background Adverse childhood experiences (ACE) have been linked to reduced cognitive functioning in adulthood. This cross-sectional online study refines this picture by including emotional and physica",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "all"
     ],
@@ -918,179 +573,13 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12957654",
-    "name": "Factors associated with subjective cognitive complaints in former American football players",
-    "description": "Objective: Subjective cognitive complaints (SCC) can precede cognitive decline and are associated with demographic, exposure, lifestyle, and psychological factors. Prevalences of SCC and their correla",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Adler Jennifer S. et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Adler Jennifer S. et al. (2026)",
-        "detail": "10.1017/S1355617726101866"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Objective: Subjective cognitive complaints (SCC) can precede cognitive decline and are associated with demographic, exposure, lifestyle, and psychological factors.",
-      "Prevalences of SCC and their correlates in individuals with repetitive head impacts (RHI) are poorly understood.",
-      "This study characterized SCC in former elite American football players by frequency, mood and behavioral correlates, concordance with informant reports, and associations with neuropsychological test performance, cerebrospinal fluid (CSF), and magnetic resonance imaging (MRI) markers of neurodegeneration.",
-      "Method: Former American football players ( n  = 180) completed measures of global and domain-specific SCC, neuropsychiatric symptom questionnaires, neuropsychological testing, lumbar puncture, and MRI.",
-      "Elastic net regression evaluated the relative importance of potential SCC correlates.",
-      "Intraclass correlation coefficients measured concordance between self and informant reports.",
-      "Multiple linear regressions tested associations between SCC and verbal memory and executive functioning scores.",
-      "CSF A\u03b2 1-42 , p-tau 181 , t-tau, neurofilament light (NfL), hippocampal volume, and regional cortical thickness were examined for their potential associations with SCC.",
-      "Results: Rates of SCC ranged from 43 to 77% depending on the domain.",
-      "Symptoms of depression, impulsivity, and anxiety were strongly associated with SCC."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12937805",
-    "name": "From Metabolism to Mind: The Cardio\u2013Metabolic\u2013Brain Axis and the Role of Insulin Resistance\u2014A Review",
-    "description": "(1) Background:  Insulin resistance (IR) is increasingly recognized not only as a key factor in metabolic and cardiovascular disorders but also as an important contributor to cognitive decline. The gr",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Cielecka Joanna et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Cielecka Joanna et al. (2026)",
-        "detail": "10.3390/biomedicines14020394"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "(1) Background:  Insulin resistance (IR) is increasingly recognized not only as a key factor in metabolic and cardiovascular disorders but also as an important contributor to cognitive decline.",
-      "The growing prevalence of obesity, type 2 diabetes mellitus, and cardiovascular disease (CVD), paralleled by rising rates of dementia, highlights the need for an integrative model linking these conditions.",
-      "The emerging cardio\u2013metabolic\u2013brain axis proposes a unified model explaining how biomarkers of metabolic stress, adipose-tissue-derived mediators, and abnormalities in laboratory parameters interact with vascular injury and neurodegeneration.",
-      "(2) Methods:  A comprehensive literature review was conducted using MEDLINE, SCOPUS, and Web of Science databases, complemented by additional searches in Embase and Cochrane Library.",
-      "Studies from the past decade were screened using keywords such as \u201cinsulin resistance\u201d, \u201ccardio-metabolic-brain axis\u201d, \u201ccognitive decline\u201d, and \u201ccardiovascular disease\u201d.",
-      "Both epidemiological and mechanistic studies were analyzed to summarize current evidence and identify research gaps.",
-      "(3) Results and Conclusions:  Evidence indicates that insulin resistance contributes to endothelial dysfunction, chronic inflammation, and oxidative stress, driving the metabolic abnormalities characteristic of obesity and type 2 diabetes and promoting both atherosclerosis and neurodegeneration.",
-      "Individuals with elevated IR\u2014regardless of diabetes status\u2014display higher risks of cardiovascular events and measurable cognitive decline.",
-      "Brain insulin resistance further impairs glucose utilization, disrupts synaptic function, and facilitates amyloid accumulation, reflecting mechanisms observed in Alzheimer\u2019s disease.",
-      "These findings support IR as a key biomarker linking metabolic stress, vascular injury, and neural vulnerability within the cardio\u2013metabolic\u2013brain axis."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12945393",
-    "name": "Analyses of astrocyte-neuron lactate shuttle transporter levels in brain tissues from people with HIV-associated neurocognitive impairment and Alzheimer\u2019s disease",
-    "description": "Objectives: With the success of antiretroviral therapy (ART), people with HIV (PWH) are living longer. As they age, they increasingly face age-related comorbidities, including neurodegenerative condit",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Boustani Ali et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Boustani Ali et al. (2026)",
-        "detail": "10.1515/nipt-2025-0019"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Objectives: With the success of antiretroviral therapy (ART), people with HIV (PWH) are living longer.",
-      "As they age, they increasingly face age-related comorbidities, including neurodegenerative conditions.",
-      "The astrocyte\u2013neuron lactate shuttle (ANLS) is a key mechanism that couples astrocytic glycolysis to neuronal oxidative metabolism, ensuring an adequate energy supply for synaptic activity.",
-      "Disruption of this system has been implicated in both Alzheimer\u2019s disease (AD) and HIV-associated neurocognitive impairment (HIV-NCI), conditions characterized by some overlapping cognitive deficits yet distinct pathological drivers.",
-      "Methods: We investigated the expression of major ANLS transporters, including glucose transporters (GLUT1, GLUT3) and monocarboxylate transporters (MCT1, MCT2, MCT4), in postmortem frontal cortex from individuals with AD and PWH.",
-      "There were two HIV cohorts based on viral suppression (suppressed/non-suppressed), and both were stratified by neurocognitive status (neurocognitively normal/neurocognitively impaired), while AD participants were compared to cognitively healthy participants.",
-      "Quantitative immunoblotting and immunofluorescence imaging characterized disease-specific alterations.",
-      "Results: In AD, both endothelial (GLUT1 55 kDa ) and astrocytic (GLUT1 45 kDa ) isoforms were significantly reduced, along with MCT1, indicating widespread impairment of glucose and lactate transport.",
-      "GLUT3, the neuronal glucose transporter, also showed a marked reduction.",
-      "In contrast, in virally non-suppressed (VNS) PWH, GLUT1 45 kDa  and MCT4 were downregulated, while virally suppressed (VS) PWH maintained preserved expression."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12919054",
-    "name": "A Multimodal Single-Cell Epigenomic and 3D Genome Atlas of the Human Basal Ganglia",
-    "description": "SUMMARY The basal ganglia are a group of forebrain nuclei critical for motor control and reward processing, and their dysfunction contributes to neurological and neuropsychiatric disorders. Here, we p",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Ding Wubin et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Ding Wubin et al. (2026)",
-        "detail": "10.64898/2026.02.12.705594"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "SUMMARY The basal ganglia are a group of forebrain nuclei critical for motor control and reward processing, and their dysfunction contributes to neurological and neuropsychiatric disorders.",
-      "Here, we present the first multimodal single-cell epigenomic atlas of the human basal ganglia across major subregions and cell types.",
-      "We jointly profiled DNA methylation and 3D chromatin conformation in 197,003 nuclei from eight basal ganglia subregions using multi-omic sequencing (snm3C-seq), and integrated these data with existing DNA methylation and chromatin conformation sequencing datasets to build a unified atlas of 261,331 cells spanning 31 subclasses and 59 groups.",
-      "This atlas reveals extensive cell-type- and region-specific differential methylation, enriched for distinct transcription factor motifs, and validated by MERFISH spatial transcriptomics, which uncovered epigenetic gradients linked to transcriptional output.",
-      "Compared to neuronal cells, non-neuronal cells exhibit distinct 3D genome organization including smaller chromatin compartments, increased long-range inter-compartment contacts, shorter loops, and stronger CG hypomethylation in A compartments.",
-      "We further identified genes that display compartment switches, are strongly correlated with compartment scores, and exhibit differential domain boundaries and chromatin looping across basal ganglia cell types.",
-      "We identified multiple medium spiny neuron subtypes defined by distinct hypomethylated signature genes, with 3D genome embeddings emphasizing dorsal, ventral, and hybrid populations.",
-      "By integrating chromatin accessibility and histone modification profiles, we reconstructed cell-type\u2013resolved enhancer\u2013promoter links and gene regulatory networks, providing a comprehensive epigenomic framework for interpreting genetic risk loci and regulatory architecture in the human basal ganglia."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12859178",
-    "name": "Exogenous Melatonin and Sleep Quality: A Scoping Review of Systematic Reviews",
-    "description": "Abstract Melatonin is increasingly used to treat sleep disturbances, yet its overall efficacy remains unclear due to variability in existing evidence. This scoping review aimed to synthesize systemati",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Iyer Samyuktha et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Iyer Samyuktha et al. (2025)",
-        "detail": "10.1002/jcph.70115"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Abstract Melatonin is increasingly used to treat sleep disturbances, yet its overall efficacy remains unclear due to variability in existing evidence.",
-      "This scoping review aimed to synthesize systematic reviews with meta\u2010analyses assessing the effects of exogenously administered melatonin on sleep quality in humans.",
-      "Seven databases were searched from inception to July 9, 2025.",
-      "Eligible studies were systematic reviews containing at least one meta\u2010analysis evaluating melatonin's effects on any domain of sleep quality compared to any comparator.",
-      "Fifty\u2010seven systematic reviews were included, comprising 227 meta\u2010analyses.",
-      "Overlap in primary studies was low (corrected covered area = 2.5%), suggesting that reviews drew on largely distinct evidence bases.",
-      "Methodological quality was variable: only 8.8% of reviews met all seven predefined criteria for rigor, including protocol pre\u2010registration, dual screening, and bias assessments.",
-      "Vote counting based on the direction of effect was used to summarize efficacy.",
-      "Of the 215 meta\u2010analyses comparing melatonin to an inactive comparator, 80.9% favored melatonin, 7.9% favored the comparator, and 11.2% reported unclear results.",
-      "Sleep quality was assessed using heterogeneous definitions and tools, with few reviews evaluating overall sleep quality directly."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12959830",
     "name": "A nationwide analysis of mortality trends due to hypertensive heart disease with co-existing behavioral and mental disorders (1999\u20132020)",
     "description": "Introduction: One of the leading causes of cardiovascular death is hypertensive heart disease (HHD), especially in people who also have behavioral and mental disorders (BMDs). Cardiovascular risk is i",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior"
+    ],
     "age_range": [
       "all"
     ],
@@ -1120,79 +609,14 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12891980",
-    "name": "Neural Dynamics of Attentional Boost Effect",
-    "description": "ABSTRACT \n Background : The attentional boost effect refers to enhanced memory for information presented concurrently with target detection. This study explored the temporal neural dynamics of attenti",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Chen Xintong et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Chen Xintong et al. (2026)",
-        "detail": "10.1002/brb3.71250"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "ABSTRACT \n Background : The attentional boost effect refers to enhanced memory for information presented concurrently with target detection.",
-      "This study explored the temporal neural dynamics of attentional boost effect during encoding and recognition to clarify whether it results from target enhancement or distractor inhibition.",
-      "Methods : A dual\u2010task paradigm combining digit detection with word memorization was employed.",
-      "Electroencephalography was recorded throughout the encoding and recognition stages.",
-      "Event\u2010related potential components, including P1, N1, P2, N2, P3, FN400, and late positive component (LPC), were analyzed across four regions of interest to track the time course of neural processing associated with attentional facilitation.",
-      "Results : Recognition accuracy for target\u2010associated words was significantly higher than for baseline and distractor words, confirming a robust attentional boost effect.",
-      "Event\u2010related potential analyses revealed that during the encoding stage, target words elicited shorter P2/N2 latencies and larger P3 amplitudes.",
-      "During the recognition stage, target words evoked more positive FN400 and LPC responses relative to new words.",
-      "Conclusions : The attentional boost effect emerges from the combined operation of target enhancement and distractor inhibition.",
-      "These findings outline the neural timeline of attentional boost effect and provide insights for developing cognitive enhancement and rehabilitation strategies."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12951503",
-    "name": "The Psychometric Properties of the Turkish Versions of the Brief Hopelessness Scale with Positive and Negative Valence among Adolescents",
-    "description": "ABSTRACT Introduction: The present study aims to evaluate the psychometric properties of the Turkish versions of the Brief Hopelessness Scale with positive and negative valence, Brief-H-Pos and Brief-",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "G\u00fcrb\u00fcz Asiye Ar\u0131c\u0131 et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "G\u00fcrb\u00fcz Asiye Ar\u0131c\u0131 et al. (2026)",
-        "detail": "10.29399/npa.29189"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "ABSTRACT Introduction: The present study aims to evaluate the psychometric properties of the Turkish versions of the Brief Hopelessness Scale with positive and negative valence, Brief-H-Pos and Brief-H-Neg, in adolescents who presented to child and adolescent psychiatry outpatient clinics.",
-      "Method: The study sample consisted of 248 adolescents aged 12 to 17 years who presented to child and adolescent psychiatry outpatient clinics in two urban centers: Adana and Istanbul.",
-      "To assess concurrent validity, Pearson\u2019s correlation coefficients were calculated to examine the relationships among the Brief-H-Pos, Brief-H-Neg, Beck Hopelessness Scale (BHS), and Beck Depression Inventory (BDI) scores.",
-      "Reliability was evaluated using Cronbach\u2019s alpha, the Spearman\u2013Brown coefficient, and item\u2013total correlations.",
-      "Receiver Operating Characteristic (ROC) curve analyses were conducted to determine the diagnostic utility of the Brief-H-Pos and Brief-H-Neg in identifying adolescents with suicidal ideation.",
-      "Results: Both the Brief-H-Pos (r = 0.674) and Brief-H-Neg (r = 0.703) demonstrated strong correlations with BDI scores.",
-      "Additionally, the Brief-H-Pos (r = 0.745) and Brief-H-Neg (r = 0.753) were highly correlated with the BHS, supporting convergent validity.",
-      "The internal consistency of the Brief-H-Pos was acceptable, with both Cronbach\u2019s alpha and the Spearman\u2013Brown coefficient equal to 0.826.",
-      "Cronbach\u2019s alpha for the Brief-H-Neg was 0.816, and the Spearman\u2013Brown coefficient was 0.778.",
-      "The area under the curve (AUC) for the Brief-H-Pos and Brief-H-Neg was 0.745 and 0.780, indicating good discriminative capacity."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12977124",
     "name": "Boredom proneness and its correlation with Internet addiction and Internet activities in adolescents with attention\u2010deficit/hyperactivity disorder",
     "description": "Abstract This study examined the associations of boredom proneness with Internet addiction and activities as well as the moderators for such associations in adolescents with attention\u2010deficit/hyperact",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "hyperactivity",
+      "adolescent"
+    ],
     "age_range": [
       "all"
     ],
@@ -1220,44 +644,16 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12978681",
-    "name": "White Matter Diffusivity Predicts Change in Sight Word Reading Following Continuous Theta Burst Stimulation to the Left Temporal Parietal Junction",
-    "description": "Abstract Successful coordination of the functional networks underlying reading is highly dependent on the underlying white matter tracts that connect these regions. Continuous theta burst stimulation",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Arrington C. Nikki et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Arrington C. Nikki et al. (2026)",
-        "detail": "10.1162/NOL.a.217"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Abstract Successful coordination of the functional networks underlying reading is highly dependent on the underlying white matter tracts that connect these regions.",
-      "Continuous theta burst stimulation (cTBS) can temporarily inhibit brain activity in targeted brain networks and has been shown to modulate reading ability.",
-      "It was hypothesized that measures of diffusivity would predict change in reading efficiency following stimulation to the left temporal-parietal junction (TPJ), a targeted node of the dorsal stream of the reading network.",
-      "Fifty-three adults between the ages of 18 and 50 years ( M  = 22.79,  SD  = 5.40; 34 female) with a range in reading ability completed sight word and pseudoword fluency measures prior to and immediately following cTBS to either the left or right TPJ or a control site.",
-      "Participants also completed an MRI session including anatomical and diffusion weighted imaging sequences.",
-      "Regression analyses were conducted to predict change in reading fluency following cTBS.",
-      "Tracts associated with the reading network including the arcuate fasciculus, inferior longitudinal fasciculus, and portions of the superior longitudinal fasciculus, as well as the corpus callosum significantly predicted reliable change in a test of word reading efficiency\u2013sight word efficiency subtest following stimulation of the left TPJ.",
-      "These findings suggest that increased diffusivity of white matter tracts associated with the left hemisphere reading network and their right hemisphere homologues may support the impact of cTBS following stimulation to a targeted node of the reading network.",
-      "Individual differences in white matter diffusivity may underlie differences in behavioral outcomes following neuromodulation."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12973167",
     "name": "A comprehensive longitudinal analysis of changes during Attention Deficit Hyperactive Disorder pharmacological treatments: Relationships between clinical measures, QbCheck and Conners CPT\u2010II",
     "description": "Abstract Background This study aims to evaluate the clinical value of using QbCheck in routine Attention Deficit Hyperactive Disorder (ADHD) clinics by investigating longitudinal inter\u2010domain relation",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "treatment",
+      "routine"
+    ],
     "age_range": [
       "all"
     ],
@@ -1287,42 +683,14 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12996146",
-    "name": "How gut microbiota contribute to neuropsychiatric disorders: evidence from neuroimaging studies",
-    "description": "The interaction between the gut microbiota and central nervous system (CNS) diseases has emerged as a major focus in neuroscience and microbiome research. Accumulating evidence shows that gut microbio",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Jia Chunlan et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Jia Chunlan et al. (2026)",
-        "detail": "10.3389/fmicb.2026.1760096"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The interaction between the gut microbiota and central nervous system (CNS) diseases has emerged as a major focus in neuroscience and microbiome research.",
-      "Accumulating evidence shows that gut microbiota influence the pathogenesis of neurodevelopmental, neurodegenerative, autoimmune, and psychiatric conditions via the microbiota-gut-brain axis.",
-      "However, the underlying mechanisms are complex and not yet fully elucidated.",
-      "Advances in multimodal magnetic resonance imaging, positron emission tomography, and diffusion tensor imaging, now enable  in vivo  visualization of associations between gut microbial alterations and abnormalities in brain structure and function, providing new perspectives for understanding the role of gut microbiota in CNS pathology.",
-      "This review systematically reviews neuroimaging-based research linking gut microbiota to neurological diseases (e.g., Alzheimer\u2019s disease, multiple sclerosis, traumatic brain injury), and psychiatric disorders (e.g., schizophrenia, and autism spectrum disorder).",
-      "It highlights the mediating roles of microbial metabolites, immune-inflammatory responses, and neuroimmune pathways, and discusses future directions integrating multi-omics data with neuroimaging technologies, as well as their potential clinical applications.",
-      "What distinguishes this review from its predecessors in the same field is its explicit neuroimaging-driven framework rather than general mechanistic discussion."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12803520",
     "name": "The Effectiveness of a Multidisciplinary, Personalized Lifestyle Intervention Program of Diet, Sleep and Physical Activity in the Management of Overweight and Obesity in Adolescence",
     "description": "Abstract Introduction Overweight and obesity in adolescence represents a major health concern globally, owing to the associated increased morbidity and mortality in adulthood. The prevalence of overwe",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "intervention",
+      "sleep"
+    ],
     "age_range": [
       "all"
     ],
@@ -1352,42 +720,14 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12928841",
-    "name": "Supporting the appropriate use of psychotropic medicines in aged and disability care",
-    "description": "SUMMARY Royal Commissions into the aged-care and disability sectors revealed significant concerns about the inappropriate use of psychotropic medicines as chemical restraint in people with cognitive d",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Macfarlane Stephen et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Macfarlane Stephen et al. (2026)",
-        "detail": "10.18773/austprescr.2026.006"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "SUMMARY Royal Commissions into the aged-care and disability sectors revealed significant concerns about the inappropriate use of psychotropic medicines as chemical restraint in people with cognitive disability or impairment.",
-      "In response, the Australian Commission on Safety and Quality in Health Care developed the Psychotropic Medicines in Cognitive Disability or Impairment Clinical Care Standard (the Standard), aiming to guide psychotropic use and ensure best practice in supporting people with cognitive disability or impairment.",
-      "This article provides an overview of the Standard and its application in the aged-care and disability sectors.",
-      "The Standard promotes person-centred care and prioritises thorough assessment, non-medication strategies, and the development of individual behaviour support plans before considering psychotropic medicines.",
-      "It encourages healthcare services to have clear policies around psychotropic use, including the need for documentation of non-medication strategies trialled before such use, and for monitoring the effectiveness of any psychotropic medicine prescribed.",
-      "Informed consent is a regulatory requirement before using psychotropic medicines as a form of restrictive practice.",
-      "Clear treatment goals, clinical handover during transitions of care, and regular psychotropic review and deprescribing are emphasised in the Standard to minimise harm, particularly in cases of long-term use and psychotropic polypharmacy."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12618620",
     "name": "Infant sensory gating and a developmental cascade to autistic traits and anxiety",
     "description": "Disruptions to the infant sensory environment can have lasting effects on neural response properties and behavior in both humans and animals. Recent work has begun to highlight an additional factor in",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "anxiety"
+    ],
     "age_range": [
       "all"
     ],
@@ -1411,44 +751,16 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12886361",
-    "name": "Methodological insights from the inside: developing autistic-friendly interviewing in a group interview space",
-    "description": "Background A neurodiversity-informed approach recognizes the perspectives and experiences of autistic people from an insider perspective, yet little attention has been given to adapting qualitative me",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Hedlund \u00c5sa et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Hedlund \u00c5sa et al. (2026)",
-        "detail": "10.3389/fpsyt.2025.1659580"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background A neurodiversity-informed approach recognizes the perspectives and experiences of autistic people from an insider perspective, yet little attention has been given to adapting qualitative methods to account for the impact of cognition, sociality, and communication style of both interviewers and participants.",
-      "The aim of this paper was to contribute to the development of autistic-friendly interviewing in a group interview space.",
-      "Methods The paper is a collective reflexive pilot study, exploring experiences of autistic interviewer and autistic participants in group interviews.",
-      "The method followed five steps, from deciding what type of interview questions to use to test them in the group interviews.",
-      "An autistic interviewer conducted three group interviews, each with two to three autistic participants.",
-      "Interviews and analyses were conducted in Swedish, and the data were then translated into English by the authors.",
-      "Results The study identified key insights around four areas: participants\u2019 mixed views on the interview guide, the need to accommodate autistic processing styles, the importance of recognizing autistic forms of sociality, and the significance of conducting interviews within an autistic-friendly space that fosters comfort and understanding.",
-      "Conclusion The paper outlines step by step the procedure of conducting group interviews with autistic people.",
-      "We illustrate ways to capture the possibilities of autistic-friendly interviewing by working with\u2014rather than against\u2014autistic cognition, sociality, and communication styles in interviews with autistic people."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12959514",
     "name": "Design and effectiveness of a mother\u2013child interaction educational intervention based on PRECEDE model for mothers of children aged 11-14 with behavioral problems",
     "description": "BACKGROUND: Given the impact of familial relationships and interactions on children with behavioral problems, as well as the mother\u2019s crucial role in moderating these relationships, it is essential to",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "education",
+      "intervention",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -1482,7 +794,12 @@
     "name": "Active Breaks in Primary and Secondary School Children and Adolescents: The Point of View of Teachers",
     "description": "Background/Objectives:  Engaging in regular physical activity (PA) and reducing sedentary behaviors benefits youth health, especially for those with disabilities. However, two-thirds of European child",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "school",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -1517,7 +834,11 @@
     "name": "Remote Text\u2010Supplemented Audiobook Intervention Supports Children's Explicit and Incidental Vocabulary Learning",
     "description": "ABSTRACT Vocabulary knowledge is foundational to educational success, but significant gaps exist between students with reading disabilities or those from disadvantaged backgrounds and their peers. The",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "education",
+      "intervention",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -1551,7 +872,11 @@
     "name": "Teaching Taste: The TASTE\u2013MED Conceptual Framework for a Multisensory Mediterranean Approach to Food Literacy in Adolescence",
     "description": "Background/Objectives: Adolescence is pivotal for establishing dietary habits; however, school-based nutritional education remains focused on information dissemination, with minimal effects on behavio",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "school",
+      "education",
+      "nutrition"
+    ],
     "age_range": [
       "all"
     ],
@@ -1585,7 +910,10 @@
     "name": "Home\u2010to\u2010School Contact and Its Impact on Students' School Belonging: A Triadic, Mixed\u2010Methods Approach",
     "description": "ABSTRACT Home\u2010to\u2010school contact can reduce educational inequity. Yet, little research has examined how schools in low\u2010 and high\u2010SES neighborhoods engage only\u2010German\u2010speaking and multilingual families.",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "school",
+      "education"
+    ],
     "age_range": [
       "all"
     ],
@@ -1618,7 +946,10 @@
     "name": "Supplemental choline to prevent and treat learning and memory deficits of early-life iron deficiency (The SupCHO Study): study protocol for a randomized, placebo-controlled trial in Ugandan infants with iron deficiency anemia",
     "description": "Background Iron deficiency (ID) limits the neurodevelopmental potential of more than 200 million children each year. Iron therapy started when IDA is first diagnosed\u2014typically by screening for anemia",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "screening",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -1648,145 +979,15 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12976484",
-    "name": "Double-blind, sham-controlled, pilot study of trigeminal nerve stimulation for autism spectrum disorder",
-    "description": "Trigeminal nerve stimulation (TNS) is a minimal-risk, noninvasive neuromodulation method with growing evidence of efficacy across psychiatric conditions. However, its safety and potential effects in a",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Han Jae Hyun et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Han Jae Hyun et al. (2026)",
-        "detail": "10.1016/j.neurot.2026.e00838"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Trigeminal nerve stimulation (TNS) is a minimal-risk, noninvasive neuromodulation method with growing evidence of efficacy across psychiatric conditions.",
-      "However, its safety and potential effects in autism spectrum disorder (ASD) remain underexplored.",
-      "This exploratory pilot study aimed primarily to evaluate the safety and tolerability, and secondarily to explore changes in ASD-related symptoms - including impairments in social communication and reciprocity, attention, executive functioning, emotional regulation, sleep, and sensory processing - in children with ASD, and to examine associated changes using quantitative electroencephalography (qEEG).",
-      "This double-blind, sham-controlled, randomized exploratory pilot trial enrolled 29 children aged 7\u201312 years with ASD.",
-      "The participants were randomized to receive 28 nightly sessions of active or sham TNS over 4 weeks.",
-      "At baseline and week 4, we assessed safety, clinical outcomes and Clinical Global Impression scales, in addition to analyzing qEEG band power.",
-      "No serious adverse events were observed, and TNS was well tolerated.",
-      "Exploratory analyses showed nominal between-group differences (unadjusted) favoring the TNS group in maladaptive behavior (Vineland-II: 1.38 vs 0.08;  p  = .017) and social reciprocity (Social Responsiveness Scale-2: 12.07 vs \u22121.43;  p  = .025).",
-      "Exploratory qEEG analyses revealed decreased gamma/high-frequency and increased alpha power in the left frontal and parietal regions, changes that significantly correlated with improvements in social ( r  = \u22120.917;  p  = .001) and overall ( r  = \u22120.680;  p  = .030) functioning.",
-      "TNS was safe and showed preliminary evidence of potential benefits in improving behavioral and social functioning in children with ASD."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12960045",
-    "name": "Physical activity and academic performance in adolescents: a systematic review of intensity, frequency, and mediating factors",
-    "description": "Adolescence is a critical period during which physical activity (PA) may influence cognitive processes and academic performance (AP). Although PA has been linked to favorable academic outcomes, eviden",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "Jee Haemi (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Jee Haemi (2026)",
-        "detail": "10.12965/jer.2550854.427"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Adolescence is a critical period during which physical activity (PA) may influence cognitive processes and academic performance (AP).",
-      "Although PA has been linked to favorable academic outcomes, evidence remains mixed with respect to activity intensity, frequency, and developmental stage.",
-      "This systematic review narratively synthesized recent empirical studies (2024\u20132025) examining the relationship between PA and AP in healthy adolescents, with attention to activity characteristics, developmental moderators, and cognitive and psychosocial mediators.",
-      "Searches in PubMed, ScienceDirect, and Google Scholar identified 9 original research from 825 articles.",
-      "Overall, moderate-to-vigorous PA and vigorous PA were generally associated with better AP, however, effect sizes were modest and associations were not uniform.",
-      "Several studies indicated curvilinear relationships, whereby moderate PA was associated with optimal AP, while higher frequency or intensity was linked to weaker outcomes or inconsistent associations.",
-      "Positive relationships were more consistently observed in middle school than high school students.",
-      "Evidence from selected studies suggested that PA may influence AP indirectly through attention, inhibitory control, self-concept, and physical and mental health.",
-      "These findings support promoting regular, moderate-intensity PA within adolescents\u2019 daily routines, particularly in school-based programs, while emphasizing balanced approaches that account for developmental stage and mediating mechanisms."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC11928161",
-    "name": "Anxiety Sensitivity in the Perinatal Period: A Scoping Review",
-    "description": "Background: Anxiety Sensitivity (AS), the trait-like tendency to interpret anxiety-related sensations as harmful, is a well-established risk factor for anxiety disorders and other mental health condit",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Zimmermann Martha et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Zimmermann Martha et al. (2025)",
-        "detail": "10.1016/j.mhp.2025.200397"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background: Anxiety Sensitivity (AS), the trait-like tendency to interpret anxiety-related sensations as harmful, is a well-established risk factor for anxiety disorders and other mental health conditions.",
-      "Less is known about the role of AS in perinatal mental health\u2014encompassing pregnancy and the postpartum period\u2014despite the heightened risk for anxiety and anxiety-related disorders such as Obsessive Compulsive Disorder and Posttraumatic Stress Disorder (PTSD).",
-      "Objective: The goal of this scoping review was to examine 1) the state of research on AS in perinatal populations, 2) its relationship with mental health and pregnancy-specific outcomes, and 3) its integration into clinical interventions.",
-      "Methods: We conducted a systematic literature search using PubMed, Scopus, PsycInfo, CINAHL.",
-      "Study inclusion criteria were: 1) participants were pregnant or <1 year postpartum, and 2) AS was assessed.",
-      "Results: Twenty studies met inclusion criteria.",
-      "Most studies examined cross-sectional or prospective relationships between AS and mental health and related outcomes, finding positive association between AS and PTSD symptoms, depression symptoms, anxiety symptoms, fetal health anxiety, pregnancy-related anxiety, and fear of childbirth.",
-      "Results were more mixed for aspects of pain during labor (e.g., anesthetic consumption).",
-      "Two Randomized Clinical Trials and two case studies included AS as an outcome measure.",
-      "Conclusions: This review extends previous findings in the general population by highlighting associations between AS and perinatal mental health."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12562253",
-    "name": "Academic and Socio-Emotional Experiences of a Twice-Exceptional Student",
-    "description": "Twice-exceptional students, who are both gifted and present with characteristics of neurodiversity such as Autism Spectrum Disorder (ASD), possess distinctive academic and socio-emotional needs that n",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "A\u00e7ar Davut et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "A\u00e7ar Davut et al. (2025)",
-        "detail": "10.3390/bs15101349"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Twice-exceptional students, who are both gifted and present with characteristics of neurodiversity such as Autism Spectrum Disorder (ASD), possess distinctive academic and socio-emotional needs that necessitate individualized educational strategies.",
-      "This qualitative case study explores the academic and socio-emotional experiences of Murat, an eighth-grade learner identified as gifted and diagnosed with ASD, from the perspectives of the student himself, his mother, and his teachers.",
-      "Data were collected through semi-structured interviews and analyzed using Braun and Clarke\u2019s six-phase reflexive thematic analysis.",
-      "The findings revealed that Murat achieved success in mathematics and science, particularly within enriched, strength-oriented environments that accommodated his sensory sensitivities.",
-      "Despite challenges in social skills and group participation, he benefited considerably from teacher scaffolding and interactive pedagogies.",
-      "His mother\u2019s active engagement and strong family\u2013school collaboration emerged as pivotal factors in his developmental progress.",
-      "This study extends beyond individual challenges to highlight the potential strengths that arise from by the intersection of neurodiversity and giftedness.",
-      "Additionally, it contributes to the limited body of literature exploring how the notion of twice-exceptionality manifests within underrepresented educational contexts.",
-      "Future research could investigate diverse socio-cultural contexts and develop strategies to enhance teacher preparation and family engagement in supporting gifted learners with ASD."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12539651",
     "name": "Using Mobile Assessments to Characterize Mental and Physical Health Behaviors in Youth: Protocol for a Pilot Intensive Longitudinal Study",
     "description": "Abstract Background Promoting healthy behaviors including adequate sleep, regular physical activity, balanced diet, and abstinence from substance use, alongside nurturing affective functioning, may cr",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "assessment",
+      "sleep"
+    ],
     "age_range": [
       "adolescent"
     ],
@@ -1820,7 +1021,15 @@
     "name": "Mapping the Mind: A Network Meta-Analysis of Mindfulness and Traditional and Digital Interventions for Cognitive and Behavioral Enhancement in Children With Attention-Deficit/Hyperactivity Disorder (ADHD)",
     "description": "Pharmacological and behavioral interventions are\u2002commonly used to manage attention-deficit/hyperactivity disorder (ADHD). This disorder is highly prevalent among children and adolescents. New non-phar",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "behavior",
+      "intervention",
+      "adolescent",
+      "child",
+      "mindfulness"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -1854,7 +1063,12 @@
     "name": "Concomitant activation of D1 dopamine and \u03b12A adrenergic receptors improves cognition compared with methylphenidate",
     "description": "Rationale: Methylphenidate is commonly prescribed to manage symptoms of attention-deficit/hyperactivity disorder (ADHD), but like other stimulants it has limited effectiveness. Methylphenidate works b",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "stimulant",
+      "methylphenidate"
+    ],
     "age_range": [
       "all"
     ],
@@ -1886,7 +1100,9 @@
     "name": "Single vs Triple-Headed Toothbrushes in Children With Special Needs: A Randomised Crossover Trial of Brushing Efficacy",
     "description": "Introduction and aims Children with special needs (CSN) often struggle with effective toothbrushing, which is attributed to factors such as toothbrush type and visual-motor integration (VMI). This stu",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -1920,7 +1136,10 @@
     "name": "Assistance to children with Autism Spectrum Disorder: perceptions of\nhealthcare professionals in a Pediatric Emergency Room",
     "description": "ABSTRACT Objective: To understand the care provided to children with Autism Spectrum Disorder\n(ASD) in a Pediatric Emergency Room from the perspective of healthcare\nprofessionals. Method: Qualitative",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child",
+      "pediatric"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -1948,78 +1167,15 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12938400",
-    "name": "Autistic Individuals Are Flexible with Physical and Emotion Gradable Adjectives",
-    "description": "Gradable adjectives (long, happy) differ from absolute adjectives (spotted) in that they are dependent on context and speaker/listener perspective for their interpretation. Such context sensitivity ma",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Evans Leo et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Evans Leo et al. (2026)",
-        "detail": "10.3390/bs16020297"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Gradable adjectives (long, happy) differ from absolute adjectives (spotted) in that they are dependent on context and speaker/listener perspective for their interpretation.",
-      "Such context sensitivity may present challenges for individuals with autism spectrum disorder (ASD); however, this has never been investigated for these linguistic elements.",
-      "In the current study, we asked adolescents with ASD or typical development (TD), who were part of a larger longitudinal study in which autistic characteristics, nonverbal cognition (NVIQ), and standardized language were also assessed, to sort pictures whose properties were either gradable or absolute.",
-      "Adolescents sorted pictures on two occasions.",
-      "In the second sorting, we manipulated the context by adding images representing one end of the scale to induce a shift in interpretation.",
-      "Contrary to prediction, both groups demonstrated sensitivity to the context-specific properties by shifting their cutoffs of what counted as \u2018long\u2019 or \u2018happy\u2019 when the array was changed.",
-      "Whereas NVIQ correlated positively with physical property shifts for the TD group, language measures correlated negatively with emotion property shifts for the ASD group.",
-      "Autistic characteristics were not related to shift patterns in either group.",
-      "Adolescents with autism are clearly able to take context into account when interpreting gradable adjectives; however, those with better language seem more focused on maintaining their cutoffs more than shifting them."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12955833",
-    "name": "Tongue Reduction for Pediatric Obstructive Sleep Apnea: A Systematic Review",
-    "description": "Abstract Objective Obstructive sleep apnea (OSA) is a prevalent pediatric disorder that, if untreated, can result in substantial developmental and health consequences. Tongue reduction procedures, suc",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Williamson Adrian et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Williamson Adrian et al. (2026)",
-        "detail": "10.1002/oto2.70215"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Abstract Objective Obstructive sleep apnea (OSA) is a prevalent pediatric disorder that, if untreated, can result in substantial developmental and health consequences.",
-      "Tongue reduction procedures, such as midline posterior glossectomy (MPG), are increasingly used to address tongue base obstruction.",
-      "This systematic review evaluates the effectiveness and safety of tongue reduction procedures for pediatric OSA.",
-      "Data Sources Embase, PubMed, and Web of Science databases were queried for studies from inception to September 20, 2023. Review Methods Studies reporting on outcomes of pediatric patients (\u226421 years) undergoing tongue reduction surgery for OSA were included.",
-      "Results From 477 abstracts, 9 studies met the inclusion criteria, representing 146 pediatric patients.",
-      "Surgical techniques included MPG, transoral robotic\u2010assisted tongue base resection, and keyhole partial glossectomy.",
-      "Primary outcomes assessed were apnea\u2010hypopnea index (AHI), minimum oxygen saturation, and adverse events.",
-      "All studies reported a reduction in AHI and increased minimum oxygen saturation following tongue reduction despite the method.",
-      "Adverse events appear to be rare but included postoperative bleeding, need for reintubation, and wound dehiscence.",
-      "Conclusion Tongue reduction procedures appear to be safe and effective for managing pediatric OSA, improving key clinical outcomes."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12618732",
     "name": "What are we targeting when we support inclusive education for autistic students? A systematic review of 233 empirical studies and call for community partnerships",
     "description": "Interventions to support mainstream schooling for autistic students involve multiple complex considerations. This systematic review, following the Preferred Reporting Items for Systematic Reviews and",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "school",
+      "education",
+      "intervention"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -2049,45 +1205,13 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12982914",
-    "name": "Informal Coercion Experienced by Adolescents in Mental Health Care\u2014A Systematic Review",
-    "description": "ABSTRACT Adolescents are a developmentally vulnerable group in mental health care, yet their experiences of informal coercion remain underexplored. Most existing research reflects adult perspectives,",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "\u00d6verlund Tiina et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "\u00d6verlund Tiina et al. (2026)",
-        "detail": "10.1111/inm.70245"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "ABSTRACT Adolescents are a developmentally vulnerable group in mental health care, yet their experiences of informal coercion remain underexplored.",
-      "Most existing research reflects adult perspectives, leaving a gap in understanding how adolescents experience such practices.",
-      "This review synthesises qualitative evidence on the forms and consequences of informal coercion experienced by adolescents in mental health settings.",
-      "The review followed the PRISMA guidelines and was registered in PROSPERO.",
-      "A systematic search was conducted across seven databases in February 2025 (PubMed, CINAHL, PsycINFO, EMBASE, Scopus, Web of Science, Cochrane Library).",
-      "Screening and inclusion were performed using Covidence supplemented by manual reference searches.",
-      "Qualitative content analysis was applied, using a framework informed by previously identified forms of informal coercion.",
-      "Across 12 studies, informal coercion shaped adolescents' involvement in mental health care.",
-      "Predominant forms included treatment pressure, silencing and exclusion and appealing to rules and routines, accompanied by threats or disciplinary control.",
-      "These practices were experienced as undermining autonomy and trust."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12971896",
     "name": "Parenting stress among parents of outpatients with precocious puberty: a cross-sectional survey",
     "description": "Background Precocious puberty imposes notable psychological pressure on parents, yet specific patterns of their parenting stress and related influencing factors remain insufficiently explored. This st",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "parenting"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -2117,45 +1241,13 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12911297",
-    "name": "Common and distinct changes of regional resting-state brain activity between high- and low-functioning autism spectrum disorder",
-    "description": "Introduction Autism spectrum disorder (ASD) is a pervasive neurodevelopmental disorder, which is associated with changes of brain function. However, literature is lacking in information about differen",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Xu Hong et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Xu Hong et al. (2026)",
-        "detail": "10.1186/s12888-025-07766-4"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Introduction Autism spectrum disorder (ASD) is a pervasive neurodevelopmental disorder, which is associated with changes of brain function.",
-      "However, literature is lacking in information about differences of central mechanism between high-functioning ASD (HF-ASD) and low-functioning ASD (LF-ASD).",
-      "This study aimed to explore common and distinct changes of regional resting-state brain activity between HF-ASD and LF-ASD compared to typically developing (TD) children.",
-      "Methods Magnetic resonance imaging data were acquired form 23 HF-ASD, 23 LF-ASD and 26 TD children.",
-      "Based on the processed data, regional homogeneity (ReHo) and fractional amplitude of low-frequency fluctuation (fALFF) were calculated and compared between the groups of HF-ASD, LF-ASD and TD.",
-      "In addition, receiver operating characteristic (ROC) curve was conducted to evaluate the capacity of altered brain regions in distinguishing HF-ASD, LF-ASD and TD children.",
-      "Relationships between altered brain region and clinical measures in ASD were evaluated by  Pearson  correlation analysis.",
-      "Results Compared with TD group, HF-ASD group showed decreased ReHo values in the right hippocampus, left postcentral gyrus and increased ReHo values in the left orbital part of inferior frontal gyrus, right calcarine fissure.",
-      "LF-ASD group demonstrated decreased ReHo values in the right fusiform gyrus, left fusiform gyrus, left inferior temporal gyrus and increased ReHo values in the right dorsolateral superior frontal gyrus.",
-      "HF-ASD group exhibited increased ReHo values in the right dorsolateral superior frontal gyrus and decreased ReHo values in the left middle temporal gyrus."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12956065",
     "name": "\u201cThe system is a bit broken\u2026\u201d a qualitative exploration of barriers in the pathway for diagnosing Developmental Coordination Disorder",
     "description": "Background Approximately 5% of children are affected by a neurodevelopmental disorder of their sensorimotor skills. DSM-V and ICD-10, the two most widely used diagnostic systems, define this diagnosti",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -2189,7 +1281,9 @@
     "name": "Mental and Somatic Conditions in Children With the Broad Avoidant Restrictive Food Intake Disorder Phenotype",
     "description": "Key Points Question What mental and somatic conditions are observed in children with the broad avoidant restrictive food intake disorder (ARFID) phenotype? Findings In this cohort study including 616",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -2213,192 +1307,14 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12618724",
-    "name": "Feeling \u2018not enough\u2019 or \u2018too much\u2019: Exploring how LGBTQ+ adults experiencing disability navigate Canadian health contexts",
-    "description": "Disability and LGBTQ+ communities experience healthcare disparities, however, most research has looked at these communities separately which erases the unique health experiences of people who belong t",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Herrick Shannon S C et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Herrick Shannon S C et al. (2025)",
-        "detail": "10.1177/13591053251327263"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Disability and LGBTQ+ communities experience healthcare disparities, however, most research has looked at these communities separately which erases the unique health experiences of people who belong to both.",
-      "This project sought to explore intersections between gender, sexuality and disability within Canadian health contexts through three life-story interviews with seven adults (aged 25\u201335; 21 interviews total) who identified as LGBTQ+ and experiencing disability.",
-      "Thematic narrative analysis resulted in interrelated themes associated with axes of self-identification that demonstrated how participants navigated tensions between being perceived as not disabled, trans and/or queer \u2018enough\u2019 or \u2018too much\u2019 within healthcare settings.",
-      "Participants relayed stories of strategically omitting and/or sharing aspects of their intersectional identities with healthcare providers to receive the care they needed.",
-      "This study, in demonstrating some of the difficult compromises and decisions LGBTQ+ adults who experience disability navigate to access healthcare, highlights how ableism, cis-heterosexism and racism intertwine to shape medical systems."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12910869",
-    "name": "CNValidatron: accurate and efficient validation of PennCNV calls using computer vision",
-    "description": "Background Large, rare copy number variants (CNVs) are a main source of genetic variation in the genome and are important in both evolution and disease risk. CNVs can be detected using different data",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Montalbano Simone et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Montalbano Simone et al. (2026)",
-        "detail": "10.1186/s12859-026-06375-6"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background Large, rare copy number variants (CNVs) are a main source of genetic variation in the genome and are important in both evolution and disease risk.",
-      "CNVs can be detected using different data sources, including genome sequencing, genotyping arrays and quantitative PCR experiments, but in most large cohorts, genotyping arrays remain the most prevalent source.",
-      "Current methods to call CNVs from genotyping array data suffer from high false positive rates and while multiple approaches, including QC filtering, visual inspection of intensity tracks, and wet-lab validation are commonly applied to counter this problem, such methods are often non-specific (QC filtering) or inefficient (visual and wet-lab validations) at a genome-wide scale.",
-      "Results We have assembled the largest collection of human-verified CNV calls using visual validation, totalling almost 60,000 calls from 22,500 samples from three cohorts genotyped on several different arrays.",
-      "Across all cohorts our visual validation found the majority of CNV calls to be false positive (53.7%) or unclear (9.7%).",
-      "The false positive fraction varied substantially across datasets and genomic regions, and we show that existing filtering methods based on QC metrics are inefficient in removing false calls.",
-      "Given the supremacy of visual validation over existing filtering methods in controlling the false positive fraction, we used a subset of our visual validation dataset to train a convolutional neural network to automate the validation of CNVs through machine vision.",
-      "We tested the efficacy of the model using the remainder of the dataset and found the performance exceeded 90% in most measures, approximating that of a human analyst.",
-      "Orthogonal validation with genome sequencing data found our visual validation to be highly accurate, with only 1.7% of calls supported by the sequencing dataset deemed as false by the human analyst, and a further 7.5% deemed as unclear.",
-      "Conclusions Visual inspection is the only effective validation approach for CNV calls."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12949555",
-    "name": "COVID-19 convalescent plasma safety and efficacy analysis for biologics license application approval",
-    "description": "Introduction: COVID-19 convalescent plasma with high anti-SARS-CoV-2 antibody levels transfused within 6 months from donor collection was formally approved by the Food and Drug Administration in Decem",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Sullivan David J. et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Sullivan David J. et al. (2026)",
-        "detail": "10.1080/14787210.2026.2623136"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Introduction: COVID-19 convalescent plasma with high anti-SARS-CoV-2 antibody levels transfused within 6 months from donor collection was formally approved by the Food and Drug Administration in December 2024 for COVID-19 treatment in immunocompromised patients.",
-      "Here we summarize the safety and efficacy data submitted for the Biologics License Application.",
-      "Areas covered: Safety evaluation in over 100,000 individuals in the expanded access program and 24,000 in randomized controlled trials, showed no serious adverse event increases.",
-      "Robust randomized controlled trials established efficacy in four distinct disease stages: outpatient, inpatient, newly mechanically ventilated, and in those immunocompromised to prevent acute disease progression or eliminate persistent viral carriage.",
-      "Pharmacokinetics revealed a three-liter distribution volume with viral specific antibody effective dose near 2\u201350 mg. Major SARS-CoV-2 antibody-mediated antiviral actions included direct neutralization by viral-binding interference to cell receptors and fragment-crystallizable mediated antiviral effects that reduce virions.",
-      "Virus neutralization correlated with high anti-Spike antibody levels and antibody levels in the top donor plasma deciles retains therapeutic neutralization against future variants.",
-      "Expert opinion: With pandemic progression, the COVID-19 convalescent plasma safety and efficacy evidence quality increased.",
-      "Ultimate regulatory approval required robust randomized control efficacy data.",
-      "Future infectious disease outbreaks require randomized controlled trials in the convalescent plasma roadmap."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC11541044",
-    "name": "Clinical Considerations for an Evidence-based Assessment of Anxiety Disorders in Children and Adolescents",
-    "description": "",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Miller Michelle L. et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Miller Michelle L. et al. (2024)",
-        "detail": "10.1016/j.psc.2024.04.010"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12959386",
-    "name": "Severe Radiographic Legg-Calv\u00e9-Perthes Disease With Favorable Long-Term Functional Outcomes Following Conservative Management: A Case Report",
-    "description": "Legg-Calv\u00e9-Perthes disease (LCPD) is a pediatric disorder characterized by avascular necrosis of the femoral head, with prognosis largely determined by the extent of epiphyseal involvement. Severe rad",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "Grimmett Hannah J et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Grimmett Hannah J et al. (2026)",
-        "detail": "10.7759/cureus.102835"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Legg-Calv\u00e9-Perthes disease (LCPD) is a pediatric disorder characterized by avascular necrosis of the femoral head, with prognosis largely determined by the extent of epiphyseal involvement.",
-      "Severe radiographic classifications are typically associated with poor long-term outcomes and often prompt surgical intervention.",
-      "We present a case of a male patient diagnosed with unilateral LCPD at age three with extensive femoral head involvement by age six (Catterall Group 4, Salter-Thompson Group B, Herring Group C) who was managed non-operatively over two decades.",
-      "Treatment consisted of physiotherapy, activity modification, and pain management without surgical intervention.",
-      "Despite marked femoral head deformity and residual limitations in hip range of motion, the patient achieved high functional capacity, including participation in National Collegiate Athletic Association (NCAA) Division I athletics, and he maintains independence in activities of daily living as a young adult.",
-      "This case highlights the potential for favorable functional outcomes with conservative management in carefully selected patients with poor-prognosis LCPD and underscores the importance of individualized treatment planning."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12938695",
-    "name": "Unraveling the Link: Ferroptosis and Its Implications in Cerebrovascular Diseases",
-    "description": "Cerebrovascular diseases, encompassing a spectrum of conditions affecting the blood vessels supplying the brain, represent a significant global health burden. Among the diverse mechanisms implicated i",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Yu Zeran et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Yu Zeran et al. (2026)",
-        "detail": "10.3390/biom16020228"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Cerebrovascular diseases, encompassing a spectrum of conditions affecting the blood vessels supplying the brain, represent a significant global health burden.",
-      "Among the diverse mechanisms implicated in cerebrovascular pathology, emerging evidence highlights the role of ferroptosis, a regulated form of cell death characterized by iron-dependent lipid peroxidation.",
-      "The review also elucidates the molecular mechanisms underlying ferroptosis, emphasizing the pivotal role of iron, the intracellular antioxidant system, and lipid metabolism.",
-      "Subsequently, it explores the growing body of literature implicating ferroptosis in the pathogenesis of various cerebrovascular diseases, including atherosclerosis, ischemic stroke, intracerebral hemorrhage, and subarachnoid hemorrhage.",
-      "Special attention is given to the interplay between ferroptosis and other established mechanisms, such as oxidative stress, and inflammation.",
-      "Moreover, pharmacological interventions and therapeutic strategies aimed at modulating key players in the ferroptosis cascade are explored, with a focus on their translational potential for clinical application.",
-      "Finally, the review addresses current gaps in knowledge and proposes future research directions, emphasizing the need for a deeper understanding of the specific roles of ferroptosis in the pathogenesis of cerebrovascular diseases.",
-      "The elucidation of these aspects holds promise for advancing our comprehension of cerebrovascular pathology and opening new avenues for therapeutic intervention in these debilitating conditions."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12051838",
     "name": "The Moderating Effect of Maternal Modeling on Age-Related Decline in Children\u2019s Physical Activity",
     "description": "Maintaining adequate levels of physical activity is challenging for many children. Parents, particularly mothers, play a pivotal role in children\u2019s engagement in health behaviors. This longitudinal st",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -2429,7 +1345,11 @@
     "name": "Psychoeducational treatments for obsessive-compulsive disorder: A narrative review emphasizing family-based approaches",
     "description": "Psychoeducation is a structured but straightforward and effective treatment, which consists of educating patients and family members about psychiatric disorders, teaching them to cope with the illness",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "family",
+      "education",
+      "treatment"
+    ],
     "age_range": [
       "all"
     ],
@@ -2459,104 +1379,14 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12769769",
-    "name": "\u4e2d\u56fd\u8102\u80aa\u6027\u809d\u75c5\u8bca\u7597\u89c4\u8303\u5316\u7684\u4e13\u5bb6\u5efa\u8bae\uff082019\u5e74\u4fee\u8ba2\u7248\uff09",
-    "description": "\u975e\u9152\u7cbe\u6027\u8102\u80aa\u6027\u809d\u75c5\uff08NAFLD\uff09\u5df2\u6210\u4e3a\u6211\u56fd\u6700\u5e38\u89c1\u7684\u6162\u6027\u809d\u75c5\u3002\u672c\u5efa\u8bae\u4ece\u4ee5\u4e0b5\u4e2a\u65b9\u9762\u5bf9NAFLD\u7684\u89c4\u8303\u5316\u8bca\u65ad\u548c\u6cbb\u7597\u8fdb\u884c\u4e86\u4fee\u8ba2\uff1a\uff081\uff09\u8bca\u6cbb\u4e2d\u5fc3/\u4e13\u75c5\u95e8\u8bca\u7684\u7ec4\u7ec7\u67b6\u6784\u53ca\u529f\u80fd\uff1b\uff082\uff09\u7b5b\u67e5\u548c\u8bc4\u4f30\uff1a\u5305\u62ec\u7b5b\u67e5\u5bf9\u8c61\u3001\u521d\u6b65\u8bc4\u4f30\u3001\u75c5\u56e0\u7b5b\u67e5\u3001\u975e\u9152\u7cbe\u6027\u8102\u80aa\u6027\u809d\u708e\uff08NASH\uff09\u548c\u8fdb\u5c55\u6027\u809d\u7ea4\u7ef4\u5316\u7684\u65e0\u521b\u8bca\u65ad\u3001\u809d\u6d3b\u7ec4\u7ec7\u75c5\u7406\u5b66\u68c0\u67e5\u4ee5\u53ca\u4ee3\u8c22\u7d0a\u4e71\u548c\u5fc3\u8840\u7ba1\u98ce\u9669\u8bc4\u4f30\u7b49\uff1b\uff083\uff09\u4e34\u5e8a\u5904\u7406\uff1a\u5305\u62ec\u751f\u6d3b\u65b9\u5f0f\uff08\u996e\u98df\u8fd0\u52a8\u51cf\u91cd\uff09\u8c03\u6574\uff0c\u5408\u5e76\u7cd6\u8102\u4ee3\u8c22\u7d0a\u4e71\u3001\u9ad8\u8840\u538b\u7b49",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "pubmed",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "pubmed",
-        "detail": "10.3760/cma.j.issn.1007-3418.2019.10.003"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "\u975e\u9152\u7cbe\u6027\u8102\u80aa\u6027\u809d\u75c5\uff08NAFLD\uff09\u5df2\u6210\u4e3a\u6211\u56fd\u6700\u5e38\u89c1\u7684\u6162\u6027\u809d\u75c5\u3002\u672c\u5efa\u8bae\u4ece\u4ee5\u4e0b5\u4e2a\u65b9\u9762\u5bf9NAFLD\u7684\u89c4\u8303\u5316\u8bca\u65ad\u548c\u6cbb\u7597\u8fdb\u884c\u4e86\u4fee\u8ba2\uff1a\uff081\uff09\u8bca\u6cbb\u4e2d\u5fc3/\u4e13\u75c5\u95e8\u8bca\u7684\u7ec4\u7ec7\u67b6\u6784\u53ca\u529f\u80fd\uff1b\uff082\uff09\u7b5b\u67e5\u548c\u8bc4\u4f30\uff1a\u5305\u62ec\u7b5b\u67e5\u5bf9\u8c61\u3001\u521d\u6b65\u8bc4\u4f30\u3001\u75c5\u56e0\u7b5b\u67e5\u3001\u975e\u9152\u7cbe\u6027\u8102\u80aa\u6027\u809d\u708e\uff08NASH\uff09\u548c\u8fdb\u5c55\u6027\u809d\u7ea4\u7ef4\u5316\u7684\u65e0\u521b\u8bca\u65ad\u3001\u809d\u6d3b\u7ec4\u7ec7\u75c5\u7406\u5b66\u68c0\u67e5\u4ee5\u53ca\u4ee3\u8c22\u7d0a\u4e71\u548c\u5fc3\u8840\u7ba1\u98ce\u9669\u8bc4\u4f30\u7b49\uff1b\uff083\uff09\u4e34\u5e8a\u5904\u7406\uff1a\u5305\u62ec\u751f\u6d3b\u65b9\u5f0f\uff08\u996e\u98df\u8fd0\u52a8\u51cf\u91cd\uff09\u8c03\u6574\uff0c\u5408\u5e76\u7cd6\u8102\u4ee3\u8c22\u7d0a\u4e71\u3001\u9ad8\u8840\u538b\u7b49\u7279\u6b8a\u4eba\u7fa4\u7684\u5904\u7406\u4ee5\u53ca\u8102\u80aa\u6027\u809d\u708e\u548c\u809d\u7ea4\u7ef4\u5316\u7684\u836f\u7269\u9009\u62e9\uff1b\uff084\uff09\u7279\u6b8a\u4eba\u7fa4\u7684\u7ba1\u7406\uff1a\u513f\u7ae5\u3001\u598a\u5a20\u548c\u54fa\u4e73\u671f\u5987\u5973\u3001\u5408\u5e76\u9152\u7cbe\u6027\u809d\u75c5\u3001\u6162\u6027HBV\u548c/\u6216HCV\u611f\u67d3\u4ee5\u53ca\u5408\u5e76\u81ea\u8eab\u514d\u75ab\u73b0\u8c61\u7b49\uff1b\uff085\uff09\u76d1\u6d4b\u4e0e\u968f\u8bbf\u3002\u672c\u5efa\u8bae\u65e8\u5728\u4f18\u5316NAFLD\u60a3\u8005\u7684\u7ba1\u7406\u6d41\u7a0b\uff0c\u6307\u5bfc\u4e34\u5e8a\u533b\u751f\u5236\u5b9a\u66f4\u4e3a\u5408\u7406\u7684\u8bca\u7597\u51b3\u7b56\u3002"
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12832115",
-    "name": "Coffin\u2013Lowry syndrome: a systematic review of RPS6KA3 confirmed cases and implications for diagnosis and counseling",
-    "description": "Background Coffin\u2013Lowry syndrome (CLS) is a rare X-linked disorder caused by pathogenic variants in  RPS6KA3 , presenting with intellectual disability, distinctive facial and skeletal features, and va",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Maity Sabyasachi et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Maity Sabyasachi et al. (2026)",
-        "detail": "10.3389/fgene.2025.1715229"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background Coffin\u2013Lowry syndrome (CLS) is a rare X-linked disorder caused by pathogenic variants in  RPS6KA3 , presenting with intellectual disability, distinctive facial and skeletal features, and variable systemic involvement.",
-      "Advances in genomic technologies have expanded the mutation spectrum, yet genotype phenotype correlations remain incompletely understood.",
-      "Methods We conducted a systematic review of published cases (n = 72) following PRISMA guidelines.",
-      "Demographic, phenotypic, and genotypic data were extracted, standardized, and summarized using descriptive statistics.",
-      "Associations between mutation type and key clinical features were assessed with Chi-square or Fisher\u2019s exact tests.",
-      "Diagnostic approaches and global distribution were also analyzed.",
-      "Results The cohort comprised 50 males (69.4%) and 22 females (30.6%), median age 12 years (range: 1\u201345).",
-      "Developmental delay (87.5%) and intellectual disability (66.7%) were the most frequent features, alongside musculoskeletal deformities (kyphoscoliosis 33.3%, pectus anomalies 19.4%) and neurologic involvement (SIDEs 12.5%, seizures 15.3%, spasticity 5.6%).",
-      "Frameshift variants showed the strongest associations with SIDEs (35%,  p  = 0.009) and seizures (24%,  p  = 0.048), while splice-site mutations were linked to spasticity and cardiomyopathy.",
-      "No consistent clustering of intellectual disability severity by mutation type was observed."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12871824",
-    "name": "Early exposure to PFAS disrupts neuro-muscular development in zebrafish embryos",
-    "description": "Development is a tightly regulated process that establishes body axes and orchestrates the spatial organization of tissues and organs. Although developmental programs contain inherent redundancies, th",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Afzal Zainab et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Afzal Zainab et al. (2026)",
-        "detail": "10.64898/2026.01.19.700343"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Development is a tightly regulated process that establishes body axes and orchestrates the spatial organization of tissues and organs.",
-      "Although developmental programs contain inherent redundancies, they remain highly sensitive to environmental cues.",
-      "Among environmental contaminants, per- and polyfluoroalkyl substances (PFAS), chemicals that resist degradation and bioaccumulate in the body, are of particular concern.",
-      "These \u201cforever chemicals\u201d are widespread in our household products, including non-stick and waterproof materials, and drinking water remains a major source of exposure.",
-      "PFAS accumulate in specific tissues and have been associated with developmental delays, childhood leukemia, and other adverse health outcomes, yet the cellular and molecular mechanisms by which they disrupt early development remain largely unknown.",
-      "To address this, we employ zebrafish embryos as a New Approach Methodology (NAM) to investigate how perfluorooctanoic acid (PFOA), a prevalent environmental PFAS, alters early embryogenesis.",
-      "Embryos were exposed to physiologically relevant low and high doses of PFOA and analyzed at 24 hours post-fertilization (hpf), a key stage of organogenesis.",
-      "We also included a parental exposure group, in which adults were treated with PFOA and their offspring were collected to assess whether the effects of exposure were transmitted to the next generation.",
-      "Developmental processes are inherently plastic, and we wanted to understand the extent to which PFOA impacts normal cellular processes as well as the redundancy in the system (different developmental signaling pathways) which ensures that an embryo develops properly.",
-      "Towards this, we performed single-nucleus RNA sequencing at 24 hpf, and it revealed that neuronal and muscle tissue clusters are particularly sensitive to PFOA exposure."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12975482",
     "name": "Research progress on exercise-induced executive function improvements in older adults: insights from functional near-infrared spectroscopy",
     "description": "Functional near-infrared spectroscopy (fNIRS) has emerged as a promising technique in motor cognitive neuroscience and has become an important neuroimaging tool for the study of motor cognition. This",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "exercise"
+    ],
     "age_range": [
       "all"
     ],
@@ -2586,77 +1416,16 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12996853",
-    "name": "Bilingualism Enhances Metalinguistic Awareness in Autism: Extending the Two\u2010Dimensional Grammaticality Judgment Task",
-    "description": "ABSTRACT Bilingualism has been associated with enhanced metalinguistic awareness (MA), the ability to reflect upon language. However, findings remain mixed, and little is known about how proficiency i",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Wolfer Pauline et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Wolfer Pauline et al. (2025)",
-        "detail": "10.1002/aur.70173"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "ABSTRACT Bilingualism has been associated with enhanced metalinguistic awareness (MA), the ability to reflect upon language.",
-      "However, findings remain mixed, and little is known about how proficiency in the most proficient (L1) and second\u2010best language (L2) contribute to MA, especially in children with autism spectrum disorder (ASD), who often present heterogeneous cognitive and linguistic profiles.",
-      "We tested 270 children aged 5\u201312 (90 autistic, 180 neurotypical) using a two\u2010dimensional Grammaticality Judgment Task (GJT) requiring two components of MA:  analyzed knowledge  (understanding of grammatical rules) and  cognitive control  (suppressing irrelevant semantic cues).",
-      "Bilingualism was examined both categorically (monolingual vs. bilingual) and continuously (L2 proficiency), using generalized linear mixed\u2010effects models controlling for age, nonverbal IQ, and L1 proficiency.",
-      "Among neurotypical children, no significant bilingual advantage was found.",
-      "In contrast, bilingual autistic children significantly outperformed monolingual peers on items requiring cognitive control, and higher L2 proficiency was associated with better overall GJT performance.",
-      "These findings advance understanding of how bilingualism relates to metalinguistic abilities in autism and suggest that it is not only non\u2010detrimental but may confer specific metalinguistic benefits.",
-      "The study underscores the importance of combining categorical and continuous approaches to bilingualism to better capture individual variability in neurodiverse populations."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12967515",
-    "name": "Application of untargeted plasma metabolomics and machine learning to construct a diagnostic model for hypertrophic cardiomyopathy: a case-control study",
-    "description": "Background Hypertrophic cardiomyopathy (HCM) is the most common inherited cardiovascular disease. Recent metabolomics studies have revealed pathogenic mechanisms and provided new perspectives for diag",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Li Ruoxuan et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Li Ruoxuan et al. (2026)",
-        "detail": "10.1007/s11306-026-02412-w"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background Hypertrophic cardiomyopathy (HCM) is the most common inherited cardiovascular disease.",
-      "Recent metabolomics studies have revealed pathogenic mechanisms and provided new perspectives for diagnosis.",
-      "Aim This study aimed to analyze plasma metabolic alterations and construct a preliminary diagnostic model for HCM based on untargeted metabolomics and machine learning (ML) algorithms, in order to explore potential pathogenic pathways and improve diagnostic accuracy during screening.",
-      "Methods A total of 76 HCM patients and 35 normal participants were consecutively recruited from August, 2023 to December, 2023.",
-      "Data were split into discovery and validation sets at a ratio of 7:3 and the feature combinations were selected using support vector machine (SVM) and random forest (RF).",
-      "Stepwise multivariate linear regression analysis was performed to identify key metabolites associated with left ventricular wall thickness.",
-      "Metabolic pathway analysis was performed using KEGG.",
-      "Results Totally 1481 metabolites were identified with 640 differential metabolites and 240 significant differential metabolites.",
-      "Multivariate statistical analysis showed that metabolism results could effectively differentiate the two cohorts (OPLS-DA positive ion mode R2Y\u2009=\u20090.744, Q2\u2009=\u20090.456; negative ion mode R2Y\u2009=\u20090.611, Q2\u2009=\u20090.441).",
-      "SVM and RF screened the same combination of features including 7-keto-8-aminopelargonic acid (KAPA), \u03b3-linolenoyl ethanolamid, nitrilotriacetic acid, D-quinovose and N-acetyl-l-aspartic acid (NAA), which could effectively and accurately differentiate HCM patients from normal participants (in discovery and validation sets, the SVM model AUROC was 0.996 and 0.985 with accuracies of 96.1% and 97.1%, respectively; the RF model AUROC was 1.000 with accuracies of 94.8% and 100.0%, respectively)."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12481733",
     "name": "Challenges and opportunities for inclusive, equitable and accessible school holiday clubs for children with special educational needs and disabilities (SEND)",
     "description": "Background  Children with special educational needs and disabilities (SEND), particularly those from families with low-income, experience inequities across educational and health outcomes. The school",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "school",
+      "education",
+      "child",
+      "special_education"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -2690,7 +1459,9 @@
     "name": "Knowledge, attitudes, and practices towards dry eye disease treatment among patients: a cross-sectional study",
     "description": "Background To examine the knowledge, attitudes, and practices (KAP) regarding dry eye disease (DED) treatment among patients. Methods We conducted a cross-sectional study at the Shanghai Fourth People",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "treatment"
+    ],
     "age_range": [
       "adolescent"
     ],
@@ -2720,42 +1491,16 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12965197",
-    "name": "Mimicry and social affiliation with virtual partner are decreased in autism",
-    "description": "Copying other people\u2019s mannerisms (i.e., mimicry) occurs spontaneously during social interactions, and is thought to contribute to sharing emotions, affiliation with partners and interaction quality.",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Tun\u00e7gen\u00e7 Bahar et al. (2023)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Tun\u00e7gen\u00e7 Bahar et al. (2023)",
-        "detail": "10.1016/j.rasd.2022.102073"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Copying other people\u2019s mannerisms (i.e., mimicry) occurs spontaneously during social interactions, and is thought to contribute to sharing emotions, affiliation with partners and interaction quality.",
-      "While previous research shows decreased mimicry of emotional facial expressions in autism spectrum disorders (ASD), we know relatively little about how non-emotional, non- facial behavioural mimicry manifests and, more importantly, what it means for autistic individuals\u2019 social interactions.",
-      "In a controlled, semi-naturalistic interaction setting, this study examined how often autistic and neurotypical (NT) children mimicked a virtual partner\u2019s non-facial mannerisms as they engaged in an interactive story-telling activity.",
-      "Subsequently, children reported how affiliated they felt towards their interaction partner using an established implicit measure of closeness and a set of questions.",
-      "Results revealed reduced mimicry (p =.001, \u03c6 =0.38) and less affiliation (p =.01, \u03c6 =0.33) in ASD relative to NT children.",
-      "Mimicry was associated with affiliation for NT (r(23) =0.64, p =.0009), but not ASD, children (r(31) =0.07, p =.72).",
-      "These results suggest an autism-associated reduction in mimicry and that mimicry during social interactions may not substantially contribute to affiliation in autism."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12875426",
     "name": "Family-Based Digital Lifestyle Intervention for Hispanic Adolescents and Their Parents: Iterative Co-Design and Development Study",
     "description": "Abstract Background Hispanic youth in the United States have the highest rates of pediatric obesity and do not often meet national guidelines for physical activity and dietary intake. Family-based int",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "family",
+      "intervention",
+      "adolescent",
+      "pediatric"
+    ],
     "age_range": [
       "adolescent"
     ],
@@ -2785,43 +1530,13 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12900644",
-    "name": "Genome-wide association study of major anxiety disorders in 122,341 European-ancestry cases identifies 58 loci and highlights GABAergic signaling",
-    "description": "The major anxiety disorders (ANX; including generalized anxiety disorder, panic disorder and phobias) are highly prevalent, often onset early and cause substantial global disability. Although distinct",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Strom Nora I. et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Strom Nora I. et al. (2026)",
-        "detail": "10.1038/s41588-025-02485-8"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The major anxiety disorders (ANX; including generalized anxiety disorder, panic disorder and phobias) are highly prevalent, often onset early and cause substantial global disability.",
-      "Although distinct in their clinical presentations, they probably represent differential expressions of a dysregulated threat\u2013response system.",
-      "Here, we present a genome-wide association meta-analysis comprising 122,341 European ancestry ANX cases and 729,881 controls.",
-      "We identified 58 independent genome-wide significant risk variants and 66 genes with robust biological support.",
-      "In an independent sample of 1,175,012 self-report ANX cases and 1,956,379 controls, 51 out of the 58 associations replicated.",
-      "As predicted by twin studies, we found substantial genetic correlation between ANX and depression, neuroticism and other internalizing phenotypes.",
-      "Follow-up analyses demonstrated enrichment in all major brain regions and highlighted GABAergic signaling as one potential mechanism implicated in ANX genetic risk.",
-      "These results advance our understanding of the genetic architecture of ANX and prioritize genes for functional follow-up studies."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12995510",
     "name": "Prenatal Maternal Stress and Weak Handedness in Early Childhood: The Iowa Flood Study",
     "description": "ABSTRACT Weak handedness is frequently observed in individuals with neurodevelopmental and psychiatric disorders. Although birth\u2010related stressors, such as prematurity, have been shown to contribute t",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -2855,7 +1570,13 @@
     "name": "Changes in Autism and Co-Occurring Conditions from Preschool to Adolescence: Considerations for Precision Monitoring and Treatment Planning",
     "description": "Purpose To describe retention of an autism spectrum disorder (ASD) diagnosis from preschool to adolescence and the most common co-occurring diagnoses among children with ASD in preschool and adolescen",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "school",
+      "treatment",
+      "diagnosis",
+      "preschool",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -2890,7 +1611,10 @@
     "name": "Neurological Adverse Effects of Antipsychotic Medication in Children and Young People",
     "description": "Neurological adverse effects (NAEs) are commonly reported in individuals treated with antipsychotic medications. Children and young people (CYP) may be particularly susceptible to these effects, but f",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "medication",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -2920,43 +1644,14 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12919520",
-    "name": "Prioritizing Neurocognitive and Psychosocial Outcomes in Adults With Congenital Heart Disease: A Consensus Statement From the Adults With Congenital Heart Disease/Neuro 2024 Conference",
-    "description": "Individuals with congenital heart disease are living well into adulthood, resulting in a growing population at risk for neurocognitive and psychosocial challenges. Numerous studies have described thes",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Jackson Jamie L. et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Jackson Jamie L. et al. (2026)",
-        "detail": "10.1161/JAHA.125.042672"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Individuals with congenital heart disease are living well into adulthood, resulting in a growing population at risk for neurocognitive and psychosocial challenges.",
-      "Numerous studies have described these risks in childhood, but significant gaps remain in our understanding of how those challenges evolve across stages of adulthood and how to optimally integrate neurocognitive and psychosocial care for adults with congenital heart disease.",
-      "A multidisciplinary group of experts and patient partners assembled in April 2024 in Atlanta, GA, forming 3 working groups: (1) Genetics and Brain Health, (2) Characterizing Neuropsychological and Psychological Outcomes, and (3) Neuropsychological and Psychosocial Interventions.",
-      "Current knowledge was reviewed, knowledge gaps were identified, and recommendations to address these gaps were formulated.",
-      "Five critical questions regarding the characterization of neuropsychological and psychological outcomes of adults with congenital heart disease were prioritized for discussion: which neurocognitive and psychosocial domains should be prioritized in research and clinical care, what are the trajectories of neurocognitive and psychosocial functioning over the lifespan, how should neurocognitive and psychosocial screening be deployed, what should neurocognitive and psychosocial assessments include, and how do we make comprehensive neurocognitive and psychosocial care a reality.",
-      "Although many gaps in knowledge were identified, particularly around characterizing neurocognitive trajectories throughout adulthood, there is substantial evidence of increased risk for poor psychosocial outcomes among adults with with congenital heart disease.",
-      "Clinical and research advances must progress in tandem to address these risks.",
-      "Specific recommendations for advancing this field over the next decade are offered."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12914742",
     "name": "Maternal bioactive lipids during pregnancy and early childhood neurodevelopment and behavior",
     "description": "BACKGROUND: Maternal immune activation, including inflammation and oxidative stress during pregnancy, has been linked to child neurodevelopmental problems (NDP) and emotional and behavioral problems (",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -2991,7 +1686,9 @@
     "name": "Neurodevelopmental Progression and Functional Outcomes in a Child With Joubert Syndrome: A Case Study",
     "description": "Joubert syndrome (JS) is a rare autosomal recessive neurodevelopmental disorder characterized by malformations of the cerebellum and brainstem, most notably the pathognomonic \u201cmolar tooth sign\u201d on mag",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3024,7 +1721,11 @@
     "name": "The Transition to Kindergarten for Children on the Autism Spectrum: A Qualitative Study Examining the Perspectives of Caregivers and Teachers on Home-School Collaboration",
     "description": "The transition to kindergarten can impact children\u2019s academic, social-emotional, and behavioral well-being. Caregivers and teachers play a critical role during the kindergarten transition, especially",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "school",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3056,7 +1757,9 @@
     "name": "Proteome-wide Mendelian randomisation identifies causal links between blood proteins and myopia",
     "description": "Background Myopia is one of the most prevalent eye diseases worldwide, and its incidence is increasing. However, effective pharmaceutical treatments remain limited. We aimed to identify blood proteins",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "treatment"
+    ],
     "age_range": [
       "all"
     ],
@@ -3090,7 +1793,9 @@
     "name": "Effectiveness of outdoor fitness equipment intervention on health outcomes: a systematic review and meta-analysis",
     "description": "Background Outdoor fitness equipment (OFE) is an environmental infrastructure in public areas to facilitate structured physical activity. This systematic review aims to evaluate the effectiveness of O",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "intervention"
+    ],
     "age_range": [
       "all"
     ],
@@ -3120,90 +1825,19 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12932522",
-    "name": "Stress-induced epigenome changes as a risk factor in the onset of mental disorders",
-    "description": "The global mental health study has revealed a steady increase in the prevalence of mental disorders worldwide. This trend reflects not only the improvements in diagnostics but also the global populati",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Shkarina Liliia et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Shkarina Liliia et al. (2026)",
-        "detail": "10.3389/fpsyt.2026.1764368"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The global mental health study has revealed a steady increase in the prevalence of mental disorders worldwide.",
-      "This trend reflects not only the improvements in diagnostics but also the global population ageing and the intensification of negative environmental impacts that provoke the manifestation of such disorders.",
-      "One of such primary external causes for mental disorders is stress, which accompanies humans throughout their lives.",
-      "Stressful exposure, particularly chronic stress, can alter the expression of genes involved in the development, maturation, and functioning of the nervous system, which in turn may provoke the manifestation of mental disorders in susceptible individuals.",
-      "The effects of stress can explain the increasing prevalence of mental illnesses (depression, anxiety disorders), and their aggravation with age.",
-      "Stress seems to have the greatest impact during critical periods of brain development: intrauterine and early postnatal stages.",
-      "The molecular mechanisms mediating the impact of stress on the expression of genes crucial for brain development and function, as well as the list of genes involved, remain poorly understood.",
-      "In this review, we have attempted to summarize the known information on the influence of stress on the activity of epigenetic modifiers and the state of the epigenome, the expression of target genes, brain development, and changes in behavioral patterns.",
-      "Studying such mechanisms and the genes involved opens up opportunities for diagnosing mental disorders at a new methodological level and potentially offers new precision approaches to their therapeutic correction at the epigenomic level."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12798183",
-    "name": "Revolutionizing attention deficit hyperactivity disorder with artificial intelligence",
-    "description": "",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Bongurala Archana Reddy et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Bongurala Archana Reddy et al. (2024)",
-        "detail": "10.1371/journal.pmen.0000181"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12945366",
-    "name": "ABSTRACTS FOR FREE PAPERS",
-    "description": "",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "pubmed",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "pubmed",
-        "detail": "10.4103/indianjpsychiatry_58_26"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12996202",
     "name": "Leveraging point-of-view camera and MediaPipe for objective hyperactivity assessment in preschool ADHD",
     "description": "Background Attention-Deficit/Hyperactivity Disorder (ADHD) often emerges in early childhood, with hyperactivity and impulsivity constituting the most prominent symptoms during the preschool period. Cu",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "school",
+      "assessment",
+      "impulsivity",
+      "preschool",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -3234,77 +1868,13 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12960478",
-    "name": "Distinct long-term neurological trajectories and their predictors in cerebral venous sinus thrombosis: a latent class mixed model analysis",
-    "description": "Background The long-term neurological recovery of patients with cerebral venous sinus thrombosis (CVST) exhibits significant heterogeneity, and the mechanisms underlying these distinct trajectories re",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Ye Wei et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Ye Wei et al. (2026)",
-        "detail": "10.3389/fnhum.2026.1747667"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background The long-term neurological recovery of patients with cerebral venous sinus thrombosis (CVST) exhibits significant heterogeneity, and the mechanisms underlying these distinct trajectories remain poorly understood.",
-      "Objective This study aimed to identify distinct long-term trajectories of functional outcome in CVST patients and to investigate their baseline predictors.",
-      "Methods In a longitudinal cohort of 127 CVST patients with complete follow-up data, we employed latent class mixed models (LCMM) to analyze repeated measures of the modified Rankin Scale (mRS) over time.",
-      "The optimal number of trajectory classes was determined using established information criteria.",
-      "Multivariable logistic regression was then used to identify baseline factors independently associated with class membership.",
-      "Results A two-trajectory model best characterized the heterogeneity in long-term outcomes.",
-      "Class 1 (the \u201cPoor-Recovery\u201d Class,  n \u202f=\u202f66, 52%) was characterized by older age, poorer venous collateral circulation, higher D-dimer levels, more severe initial brain parenchymal changes, and a slower, incomplete functional recovery.",
-      "Class 2 (the \u201cFavorable-Recovery\u201d Class,  n \u202f=\u202f61, 48%) consisted of younger patients with better collateral circulation and a rapid, near-complete recovery.",
-      "Multivariable analysis confirmed that increasing age [odds ratio (OR): 1.11 per year, 95% confidence interval (CI): 1.06\u20131.18,  p \u202f=\u202f0.0001] was an independent risk factor, while a higher venous collateral circulation score (indicating better collateral function; OR: 0.255 per point, 95% CI: 0.108\u20130.540,  p \u202f=\u202f0.0008) was a strong protective factor against belonging to the \u201cPoor-Recovery\u201d class.",
-      "Conclusion CVST patients follow one of two distinct long-term functional trajectories, which are predominantly driven by age and the status of the venous collateral circulation."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12877899",
-    "name": "Protective factors of mental health in a premature population: a 14-year exploratory study across developmental stages",
-    "description": "Background Every year, more premature infants grow into adulthood, yet while extensive research has focused on the risks associated with prematurity, information is scarce regarding the protective fac",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Gal\u00e1n-Meg\u00edas Roc\u00edo et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Gal\u00e1n-Meg\u00edas Roc\u00edo et al. (2026)",
-        "detail": "10.21037/tp-2025-601"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background Every year, more premature infants grow into adulthood, yet while extensive research has focused on the risks associated with prematurity, information is scarce regarding the protective factors that can support mental health in these individuals.",
-      "The aim of this study was to evaluate the impact of proxies for social and educational functioning on their mental health across different developmental stages (childhood, adolescence and adulthood).",
-      "Methods In this 14-year developmental study, 50 premature infants were assessed using Achenbach\u2019s behavioral scales, including the Child Behavior Checklist (CBCL), Adult Behavior Checklist (ABCL), and Adult Self-Report (ASR).",
-      "Results The findings of this exploratory study revealed that while most participants fell within the normative range, 10\u201320% displayed low social functioning proxies during childhood and adolescence.",
-      "Notably, the social functioning proxies were significantly associated with internalizing and externalizing symptoms, as well as overall mental health, particularly during adolescence and adulthood.",
-      "Furthermore, the educational functioning proxies emerged as a key protective factor in adulthood.",
-      "Conclusions These results emphasize the importance of fostering strong social and educational functioning throughout life to mitigate mental health risks associated with prematurity.",
-      "As an exploratory study, these findings suggest that further research is needed to confirm these relationships and enhance the generalizability of the results, with larger and more diverse samples potentially providing more robust insights."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12971951",
     "name": "Environmental sensitivity and psychosocial characteristics in junior high school students with school refusal",
     "description": "Objective Environmental sensitivity is a temperamental trait characterized by heightened responsiveness to environmental stimuli. Although individual differences in sensitivity have been associated wi",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "school"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -3335,73 +1905,18 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12953123",
-    "name": "Genetic variability and response to sertraline in pediatric populations: a review on pharmacogenetics, pharmacokinetics, and the risk of adverse events",
-    "description": "Anxiety disorders in the pediatric population represent a highly prevalent mental health concern whose pharmacological management has been consolidated through the use of selective serotonin reuptake",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "G\u00e1ndara-Mireles Jes\u00fas Alonso et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "G\u00e1ndara-Mireles Jes\u00fas Alonso et al. (2026)",
-        "detail": "10.3389/frcha.2026.1731268"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Anxiety disorders in the pediatric population represent a highly prevalent mental health concern whose pharmacological management has been consolidated through the use of selective serotonin reuptake inhibitors (SSRIs).",
-      "Among these agents, sertraline is one of the most frequently prescribed; however, its efficacy and safety in children and adolescents exhibit substantial interindividual variability, largely attributed to clinical, physiological, and genetic factors.",
-      "This review aimed to analyze the current evidence on the efficacy, safety, and optimization strategies for sertraline therapy in pediatric patients, with a particular focus on pharmacokinetic and pharmacogenetic determinants that modulate therapeutic response.",
-      "Available evidence indicates that genetic variants in CYP2C19, CYP2D6, and ABCB1 significantly influence hepatic metabolism, plasma exposure, and drug tolerability.",
-      "These differences support the integration of pharmacogenetic testing as a clinical tool to individualize dosing and prevent adverse effects.",
-      "In addition, population pharmacokinetic modeling has emerged as a valuable approach to design personalized therapeutic regimens, especially for patients with medical comorbidities or atypical metabolic profiles.",
-      "In conclusion, the integration of clinical, genetic, and pharmacokinetic information into pediatric psychiatric practice may facilitate the advancement of precision medicine, promoting safer, more effective, and individualized sertraline-based treatments for anxiety disorders in children and adolescents."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12554567",
-    "name": "Rethinking self-identification in neurodivergent communities: barriers, harms, and the need for change",
-    "description": "Self-identification of neurodivergence is increasingly common, yet remains contentious in psychiatric, medical, and public discourse. While concerns have been raised about the reliability and potentia",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Newton Alice et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Newton Alice et al. (2025)",
-        "detail": "10.3389/frcha.2025.1682129"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Self-identification of neurodivergence is increasingly common, yet remains contentious in psychiatric, medical, and public discourse.",
-      "While concerns have been raised about the reliability and potential impact on clinical services, these discussions often neglect the systemic barriers and personal experiences that can lead to self-identification in the first place.",
-      "This article explores why individuals might self-identify, highlighting inequities in diagnostic access and clinician biases, as well as individual experiences and beliefs around clinical diagnosis.",
-      "We argue that while self-identification can be a personal preference, it is often a survival strategy in the face of inaccessible, exclusionary, and sometimes harmful diagnostic systems.",
-      "Drawing on theories of epistemic justice, we critique medical gatekeeping that delegitimises self-identification and propose a shift towards neurodiversity-affirming care.",
-      "Rather than policing self-identification, we suggest that efforts should be made to address structural failures that render it necessary.",
-      "Until access to clinical diagnosis become equitable, self-identification will remain an essential and legitimate means of understanding neurodivergence."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12614269",
     "name": "Reduced Threat-Related Neural Efficiency: A Possible Biomarker for Pediatric Anxiety Disorders",
     "description": "Objective. Pediatric anxiety disorders are common and predict adult psychopathology, yet current treatments like cognitive behavioral therapy (CBT) produce lasting remission in less than 50% of affect",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "behavioral_therapy",
+      "treatment",
+      "anxiety",
+      "pediatric",
+      "cognitive_behavioral"
+    ],
     "age_range": [
       "adolescent"
     ],
@@ -3435,7 +1950,11 @@
     "name": "The effect of physical activity on homework effort of middle school students: the chain mediating effect of executive function and positive homework emotions",
     "description": "Objective Homework effort is widely recognized as a key factor influencing academic performance. This study explores the profound association between physical activity (PA) and homework effort among m",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "school",
+      "homework"
+    ],
     "age_range": [
       "all"
     ],
@@ -3469,7 +1988,11 @@
     "name": "The relationship between social anxiety, ADHD symptoms and online learning experiences among medical students: A cross-sectional survey",
     "description": "The COVID-19 pandemic necessitated a rapid transition to online education, presenting unique challenges for medical students, especially those with psychological conditions such as attention-deficit/h",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "education",
+      "anxiety"
+    ],
     "age_range": [
       "all"
     ],
@@ -3503,7 +2026,12 @@
     "name": "A Comparison of Gaming Behavior between Teens and Preteens and its Association with Depression, Anxiety, Stress, and Academic Performance in Children",
     "description": "Background Video games have emerged as a significant and timely source of entertainment among teens and preteens, primarily targeting the younger generation while also gaining popularity among the old",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "anxiety",
+      "depression",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -3538,7 +2066,12 @@
     "name": "Epigenetic age across development in children and adolescents with ADHD",
     "description": "Attention-deficit/hyperactivity disorder (ADHD) is a common neurodevelopmental condition, though symptoms vary both within and between people in the population. We aimed to investigate trajectories of",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3570,7 +2103,12 @@
     "name": "A Neuroaffirmative, Self-Determination Theory\u2013Based Psychosocial Intervention for Adults With Attention-Deficit/Hyperactivity Disorder: Randomized Feasibility Study",
     "description": "Background Neurodevelopmental disorders are complex and heterogeneous, creating challenges for treatment design. Multiple syndromes are associated with executive function (EF) deficits; however, theor",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "hyperactivity",
+      "executive_function",
+      "intervention",
+      "treatment"
+    ],
     "age_range": [
       "all"
     ],
@@ -3604,7 +2142,12 @@
     "name": "A diffusion model analysis of task set inertia and task set reconfiguration in ADHD",
     "description": "Objective: Switching is one of three primary executive functions alongside inhibitory control and updating but remains relatively understudied in childhood attention-deficit/hyperactivity disorder (AD",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "executive_function",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3636,7 +2179,11 @@
     "name": "Parental Low Education, Low Income, Deprivation and School Refusal Among Japanese Elementary School Students in First Grade: Results From A\u2010CHILD Study",
     "description": "ABSTRACT Background School refusal has negative consequences throughout life. While parental education and child poverty are closely linked to school refusal, the mechanism by which parental low educa",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "school",
+      "education",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3670,7 +2217,9 @@
     "name": "Control of microglial dynamics by the Arp2/3 complex and the autism- and schizophrenia-associated protein CYFIP1",
     "description": "Significance Microglia, the resident immune cells of the brain, continuously survey their environment using a highly dynamic network of branched processes. Altered microglial morphology and behavior a",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior"
+    ],
     "age_range": [
       "all"
     ],
@@ -3695,40 +2244,15 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12924788",
-    "name": "Addictive drug abuse and depression-a focus on epigenetics",
-    "description": "The global rise in addictive drug use has become a major public health concern, increasingly linked to the development of depression-a psychiatric disorder affecting over 300 million people worldwide.",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Zhang Wangwei et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Zhang Wangwei et al. (2026)",
-        "detail": "10.1038/s42003-026-09705-9"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The global rise in addictive drug use has become a major public health concern, increasingly linked to the development of depression-a psychiatric disorder affecting over 300 million people worldwide.",
-      "Emerging evidence indicates that chronic exposure to addictive substances can induce or exacerbate depressive symptoms through reward circuitry alterations, neuroinflammation, altered hypothalamic pituitary adrenal axis function, and mitochondrial dysfunction, thereby establishing a neurobiological milieu that favors drug induced depressive states.",
-      "This review summarizes how epigenetic mechanisms, such as DNA methylation, histone modifications, non-coding RNAs and RNA modifications, convey the enduring effects of addictive drugs on gene expression related to mood regulation, stress response, and neural plasticity, offering potential biomarkers for early detection and individualized treatment.",
-      "We further outline major technical constraints and unresolved mechanistic issues and highlight emerging approaches such as cell type resolved epigenomic mapping and locus specific epigenome editing that may enable more causal and translational insights.",
-      "By integrating neurobiological and epigenetic perspectives, this review offers a clearer framework for understanding addiction and depression comorbidity and points to promising therapeutic opportunities."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12173216",
     "name": "The Significance of a Higher Prevalence of ADHD and ADHD Symptoms in Children Who Stutter",
     "description": "Purpose: Research suggests that attention-deficit/hyperactivity disorder (ADHD) and its symptoms occur more frequently in individuals who stutter. The purpose of this study was to document the prevale",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3758,78 +2282,13 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12776408",
-    "name": "Fidelity of Spatiotemporal Patterns of Brain Activity Across Sampling Rate, Scan Duration, and Frequency Content",
-    "description": "Intrinsic brain activity is characterized by large-scale spatiotemporal patterns that underpin functional connectivity and cognition. Quasi-periodic patterns (QPPs) and complex principal component ana",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "LaGrow Theodore J. et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "LaGrow Theodore J. et al. (2026)",
-        "detail": "10.64898/2026.01.02.697199"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Intrinsic brain activity is characterized by large-scale spatiotemporal patterns that underpin functional connectivity and cognition.",
-      "Quasi-periodic patterns (QPPs) and complex principal component analysis (cPCA) have emerged as reproducible methods for capturing spatiotemporal network interactions in resting-state functional magnetic resonance imaging (rs-fMRI).",
-      "However, these methods remain sensitive to methodological factors such as scan duration, repetition time (TR), and frequency band selection.",
-      "This study systematically evaluates how these parameters influence the stability and reliability of QPP- and cPCA-derived functional connectivity patterns across multiple datasets.",
-      "Using five independent rs-fMRI datasets, we evaluate the impact of scan length on pattern reliability, explore the effects of TR on spatiotemporal patterns, and compare the sensitivity of different frequency bands (Slow-5, Slow-4, infraslow) in capturing network dynamics.",
-      "Our findings reveal that while both QPPs and cPCA detect intrinsic network activity, their reliability varies with acquisition parameters.",
-      "QPPs exhibit greater stability in shorter scans, making them suitable for individual-level analyses, whereas cPCA provides a broader representation of phase-coherent fluctuations but shows greater between-subject variability and benefits more from longer, group-level acquisitions.",
-      "Additionally, frequency band selection significantly influences the temporal structure of extracted patterns: in our analyses, Slow-5 (0.01\u20130.027 Hz) tended to emphasize more recurrent, synchronized network configurations, whereas Slow-4 (0.027\u20130.073 Hz) more often revealed transitions between connectivity states.",
-      "These results provide critical insights into optimizing methodological choices for dynamic functional connectivity analysis, enhancing the interpretability of spatiotemporal patterns in both basic and clinical neuroimaging research."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12917904",
-    "name": "Functional genomics studies of psychiatric disorders in individuals of Latin American populations: a scoping review",
-    "description": "Over the past 15 years, genetic studies of psychiatric disorders have provided important insight into the contribution of both common variants of small effect, as well as rare exonic and copy number v",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Porras Luz M. et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Porras Luz M. et al. (2025)",
-        "detail": "10.1002/ajmg.b.33063"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Over the past 15 years, genetic studies of psychiatric disorders have provided important insight into the contribution of both common variants of small effect, as well as rare exonic and copy number variants with large effect sizes.",
-      "Genome-wide association studies (GWAS) allow us to understand the intricate polygenicity characteristic of many psychiatric disorders.",
-      "However, a considerable proportion of single nucleotide polymorphisms (SNPs) implicated in these disorders localize to the non-coding regions of the genome.",
-      "Unraveling the molecular mechanisms that underlie the etiology of psychiatric illnesses requires integration using functional genomics approaches.",
-      "Functional genomics methods are critical for developing a mechanistic understanding of genetic findings in psychiatric disorders.",
-      "Unfortunately, most studies on psychiatric genetics have focused on individuals of European ancestry, which limits our understanding to only a portion of the population.",
-      "This further contributes to the underrepresentation of other groups, including individuals from Latin America, in genomic studies and restricts our biological insight into these disorders in these populations.",
-      "To address this issue, we performed an advanced scoping review to ascertain the landscape of functional genomics psychiatric research in Latin American populations.",
-      "After analyzing over 1,380 papers using our search terms, 52 original papers were identified considering individuals of Latin American origin in psychiatric functional genomics research.",
-      "The majority of these focused on schizophrenia (N=7), bipolar disorder (N=7), or a combination of various disorders encompassed in one study (N=6)."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12649183",
     "name": "Effects of Core Executive Function Training on Student Interpreters\u2019 Consecutive Interpreting",
     "description": "While updating, inhibition, and task switching (TS)\u2014the acknowledged core executive function (EF) components\u2014are implicated in interpreting processing, their distinct roles, particularly for inhibitio",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function"
+    ],
     "age_range": [
       "all"
     ],
@@ -3859,7 +2318,13 @@
     "name": "Gendered school expectations and ADHD recognition in an Ultra-Orthodox Jewish community: a qualitative study of parents, educators, and therapists",
     "description": "Background Attention Deficit Hyperactivity Disorder (ADHD) is a common neurodevelopmental condition that manifests differently in boys and girls, often leading to disparities in diagnosis and treatmen",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "school",
+      "diagnosis"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3893,7 +2358,10 @@
     "name": "Altered oscillatory activity pattern during reconfiguration processes of perception\u2013action representations in adolescents with AD(H)D",
     "description": "Highlights \u2022 AD(H)D adolescents struggle more to reconfigure perception\u2013action links. \u2022 Poor behavioral performance was specifically evident in binding incompatible trials. \u2022 Reduced alpha band modula",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "adolescent"
+    ],
     "age_range": [
       "all"
     ],
@@ -3916,294 +2384,17 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12967755",
-    "name": "Potentially Harmful Consequences of Artificial Intelligence (AI) Chatbot Use Among Patients With Mental Illness: Early Data From a Large Psychiatric Service System",
-    "description": "",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Olsen Sidse Godske et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Olsen Sidse Godske et al. (2026)",
-        "detail": "10.1111/acps.70068"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12702476",
-    "name": "Interpretation bias training for bipolar disorder: A randomized controlled trial",
-    "description": "Background Bipolar disorder (BD) is associated with emotion interpretation biases that can exacerbate depressed mood. Interpretation bias training (IBT) may help; according to the \u201cvirtuous cycle\u201d hyp",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Van Meter Anna et al. (2021)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Van Meter Anna et al. (2021)",
-        "detail": "10.1016/j.jad.2020.12.162"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background Bipolar disorder (BD) is associated with emotion interpretation biases that can exacerbate depressed mood.",
-      "Interpretation bias training (IBT) may help; according to the \u201cvirtuous cycle\u201d hypothesis, interpreting others\u2019 emotions as positive can lead to interactions that improve mood.",
-      "Our goals were to determine whether IBT can shift emotion interpretation biases and demonstrate clinical benefits (lower depressed mood, improved social function) in people with BD.",
-      "Method Young adults with BD were recruited for three sessions of computer-based IBT.",
-      "Active IBT targets negative emotion bias by training judgments of ambiguous face emotions towards happy judgments.",
-      "Participants were randomized to active or sham IBT.",
-      "Participants reported on mood and functioning at baseline, intervention end (week two), and week 10.",
-      "Results Fifty participants (average age 22, 72% female) enrolled, 38 completed the week 10 follow-up.",
-      "IBT shifted emotion interpretations (Hedges  g =1.63).",
-      "There was a group-by-time effect (\u221213.88,  p <.0001) on self-reported depression; the IBT group had a larger decrease in depressed mood."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12996886",
-    "name": "Regulatory Genomic Circuitry of Brain Age by Integrative Functional Genomic Analyses",
-    "description": "Abstract Brain age gap (BAG) is a valuable biomarker for evaluating brain healthy status and detecting age-associated cognitive degeneration. However, the genetic architecture of BAG and the underlyin",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Zhao Xingzhong et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Zhao Xingzhong et al. (2025)",
-        "detail": "10.1093/gpbjnl/qzaf064"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Abstract Brain age gap (BAG) is a valuable biomarker for evaluating brain healthy status and detecting age-associated cognitive degeneration.",
-      "However, the genetic architecture of BAG and the underlying mechanisms are poorly understood.",
-      "Here, we estimated brain age from magnetic resonance imaging with improved accuracy using our proposed adversarial convolution network (ACN), and applied the ACN model to an elderly cohort from the UK Biobank.",
-      "The genetic heritability of BAG was significantly enriched in regulatory regions and implicated in glial cells.",
-      "We prioritized a set of BAG-associated genes, and further characterized their expression patterns across brain cell types and regions.",
-      "Two BAG-associated genes,  RUNX2  and  KLF3 , were found to be associated with epigenetic clock and diverse aging-related biological pathways.",
-      "Finally, two BAG-associated hub transcription factor genes,  KLF3  and  SOX10 , were identified as regulators of pleiotropic risk genes for diverse brain disorders.",
-      "Altogether, we improve the estimation of BAG, and identify BAG-associated genes and regulatory networks implicated in brain disorders."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12672945",
-    "name": "Overlapping Pathways: Autism Spectrum Disorder in Fragile X Carrier States and the Need for Greater Awareness",
-    "description": "Fragile X syndrome (FXS), caused by a full mutation (>200 CGG repeats) in the gene\u00a0Fragile X messenger ribonucleoprotein 1 (FMR1), is the most common single-gene cause of autism spectrum disorder (ASD",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Fernandez Maria V et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Fernandez Maria V et al. (2025)",
-        "detail": "10.7759/cureus.95948"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Fragile X syndrome (FXS), caused by a full mutation (>200 CGG repeats) in the gene\u00a0Fragile X messenger ribonucleoprotein 1 (FMR1), is the most common single-gene cause of autism spectrum disorder (ASD).",
-      "Far less is known about the clinical significance of smaller FMR1\u00a0expansions.",
-      "In this case series, we describe four male patients with ASD who carried the\u00a0FMR1 intermediate (gray-zone) alleles (45-50 CGG; counts: 45, 49, 49, 50).",
-      "All had early speech/language delay with ASD-consistent features (social-communication deficits, sensory sensitivities, and repetitive behaviors).",
-      "Common comorbidities included attention-deficit/hyperactivity disorder (ADHD) features and sleep disturbance responsive to standard interventions.",
-      "None of them met premutation (55-200 CGG) or full-mutation criteria.",
-      "These observations align with emerging evidence that gray-zone alleles can be associated with neurodevelopmental phenotypes, including ASD traits, in a subset of carriers.",
-      "Clinically, the series reinforces guidance to include FMR1 analysis in genetic evaluations for unexplained developmental delay/ASD and to provide counseling when intermediate results are identified.",
-      "Awareness of a potential overlap between the\u00a0FMR1 gray-zone states and ASD may aid comprehensive evaluation and family counseling.",
-      "Larger, controlled studies, especially those incorporating AGG interruption analysis, are needed to quantify risk and clarify mechanisms underlying phenotypic variability."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12860999",
-    "name": "Maternal environmental exposure and early-life health risks: The modulating role of nutritional status\u2014A scoping review",
-    "description": "Summary Emerging evidence suggests that maternal food intake and nutritional status may modify the relationship between environmental toxicants and early-life health risks, potentially mitigating thei",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Shafiq Nida et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Shafiq Nida et al. (2026)",
-        "detail": "10.1016/j.isci.2025.114606"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Summary Emerging evidence suggests that maternal food intake and nutritional status may modify the relationship between environmental toxicants and early-life health risks, potentially mitigating their adverse effects.",
-      "However, the interplay between nutritional status, environmental exposures, and health outcomes remains poorly characterized in the literature.",
-      "Notably, foods can serve as the dual source of toxins (e.g., methylmercury in fish) and protective nutrients (e.g., omega-3 fatty acids), which complicate their role in risk reduction.",
-      "This scoping review aims to evaluate the extent of research on how maternal nutrition (from both dietary intake and supplements) modify the risk of adverse early-life outcomes associated with environmental exposures.",
-      "We also identified critical research gaps to guide future investigations.",
-      "Our search included identified English-language, free full-text articles from PubMed and Google Scholar published up to November 2025.",
-      "Among the 60 included studies (55 observational and 5 interventional), most were conducted in the USA (42%), with toxic metals (33%) and endocrine disrupting chemicals (EDCs) (20%) as the primary exposures.",
-      "Folate (28%) and fish/fatty acids (15%) were the most frequently studied nutrients/food sources.",
-      "Neurodevelopmental/behavioral disorders (42%) and adverse birth outcomes (32%) were the predominant endpoints.",
-      "Maternal nutrition, particularly folate, fish, vitamins, and minerals, may mitigate environmental exposure-related risks."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12827511",
-    "name": "Multimodal graph neural networks in healthcare: a review of fusion strategies across biomedical domains",
-    "description": "Graph Neural Networks (GNNs) have transformed multimodal healthcare data integration by capturing complex, non-Euclidean relationships across diverse sources such as electronic health records, medical",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Vaida Maria et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Vaida Maria et al. (2026)",
-        "detail": "10.3389/frai.2025.1716706"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Graph Neural Networks (GNNs) have transformed multimodal healthcare data integration by capturing complex, non-Euclidean relationships across diverse sources such as electronic health records, medical imaging, genomic profiles, and clinical notes.",
-      "This review synthesizes GNN applications in healthcare, highlighting their impact on clinical decision-making through multimodal integration, advanced fusion strategies, and attention mechanisms.",
-      "Key applications include drug interaction and discovery, cancer detection and prognosis, clinical status prediction, infectious disease modeling, genomics, and the diagnosis of mental health and neurological disorders.",
-      "Various GNN architectures demonstrate consistent applications in modeling both intra- and intermodal relationships.",
-      "GNN architectures, such as Graph Convolutional Networks and Graph Attention Networks, are integrated with Convolutional Neural Networks (CNNs), transformer-based models, temporal encoders, and optimization algorithms to facilitate robust multimodal integration.",
-      "Early, intermediate, late, and hybrid fusion strategies, enhanced by attention mechanisms like multi-head attention, enable dynamic prioritization of critical relationships, improving accuracy and interpretability.",
-      "However, challenges remain, including data heterogeneity, computational demands, and the need for greater interpretability.",
-      "Addressing these challenges presents opportunities to advance GNN adoption in medicine through scalable, transparent GNN models."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12118963",
-    "name": "Modeling the developing nervous system: a neuroscience perspective on the use of new approach methodologies in developmental neurotoxicity testing",
-    "description": "Abstract There is widespread concern that environmental exposures constitute an underappreciated but significant contribution to rising rates of neurodevelopmental disorders (NDDs). There is also inte",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Newell Andrew J et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Newell Andrew J et al. (2025)",
-        "detail": "10.1093/toxsci/kfaf028"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Abstract There is widespread concern that environmental exposures constitute an underappreciated but significant contribution to rising rates of neurodevelopmental disorders (NDDs).",
-      "There is also international consensus that regulatory frameworks for developmental neurotoxicity (DNT) testing are woefully inadequate, prompting reappraisal of DNT testing methods.",
-      "One approach aims to make testing more efficient, less animal-intensive, and higher throughput through in vitro evaluation of DNT.",
-      "These new approach methodologies (NAMs) promise to accelerate and standardize DNT testing through interrogation of fundamental mechanisms of neurodevelopment.",
-      "While in the early stages of development, they have significant, well-publicized shortcomings, including little to no accounting for cellular or genetic diversity, cell-extrinsic signaling molecules, sex as a biological variable, developmental stage, or relevance to NDDs.",
-      "One of the most advanced NAM platforms is a collection of 17 in vitro assays termed the DNT in vitro battery (IVB).",
-      "While it models some aspects of neurodevelopmental processes, it fails to capture others.",
-      "Proper brain ontogeny, and consequently normal behavior and cognition, relies on the integrity of fundamental mechanisms, their temporal/spatial fidelity, and the magnitude of their expression.",
-      "These fundamental mechanisms are regulated by factors not considered by the DNT IVB, including diverse cell types and neurotransmitters.",
-      "While the DNT IVB could prove to be an important tool in DNT hazard detection, we identify key areas, including cell-extrinsic neurotransmitter signaling, diversity of neural progenitors, interneurons, and biological sex, that should be prioritized for development and inclusion in future refinements to meaningfully enhance biological coverage and relevance to human cognition and behavior."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC11871997",
-    "name": "Heterogeneity in pediatric resting EEG data processing and analysis: A state of the field",
-    "description": "Developmental, resting electroencephalography (EEG) is gaining rapid popularity with implementation in large-scale studies as well as a recent WHO report naming resting EEG as a gold standard measure",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Troller-Renfree Sonya V. et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Troller-Renfree Sonya V. et al. (2025)",
-        "detail": "10.1111/psyp.14733"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Developmental, resting electroencephalography (EEG) is gaining rapid popularity with implementation in large-scale studies as well as a recent WHO report naming resting EEG as a gold standard measure of brain health.",
-      "With an increased interest in resting EEG as a potential biomarker for neurocognition, it is paramount that resting EEG findings are reliable and reproducible.",
-      "One of the major threats to replicability and reproducibility stems from variations in preprocessing and analysis.",
-      "One the primary challenges facing the field of developmental EEG is that it can be challenging acquiring data from infants and children, which commonly makes data cleaning and analysis difficult and unstandardized.",
-      "The goal of the present manuscript is to take a state of the field of the methods experts in resting EEG report they would use to clean and analyze a hypothetical dataset.",
-      "Here we report on the responses of 66 self-identified experts in developmental psychophysiology, none of which submitted identical preregistrations.",
-      "As expected, there were areas of more and less consensus, but ultimately, we believe our findings highlight opportunities for core methodological work and field-level efforts to establish consensus."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12980143",
-    "name": "Increasing visibility of the neurobiology of eating disorders in youth - A commentary on Hagan et al.",
-    "description": "Eating disorders (EDs) are among the most severe psychiatric conditions emerging in adolescence, yet they remain markedly underrepresented within neuroscience and developmental psychopathology researc",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "Makowski Carolina (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Makowski Carolina (2026)",
-        "detail": "10.1111/jcpp.70136"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Eating disorders (EDs) are among the most severe psychiatric conditions emerging in adolescence, yet they remain markedly underrepresented within neuroscience and developmental psychopathology research.",
-      "Building on the review by Hagan and colleagues, this commentary proposes four key expansions to advance neurobiological research in youth with EDs: adoption of transdiagnostic approaches, inclusion of broader developmental and longitudinal timeframes, implementation of more rigorous and replicable methodological frameworks, and deeper interdisciplinary integration.",
-      "Together, these directions aim to more fully capture neurobiological mechanisms underlying ED onset, maintenance, and recovery across development, with the goal of anchoring this research more firmly within child and adolescent psychiatry.",
-      "Taken together, the work by Hagan et al.",
-      "serves as both a synthesis of the field and a call to action toward a more integrated and developmentally informed understanding of eating disorders."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC12932534",
     "name": "Bridging access and impact: primary care parenting intervention reduces early behavior problems in both virtual and in-person delivery modes",
     "description": "Background Early childhood behavior problems are common and linked to adverse outcomes, including risk of maltreatment. Child-Adult Relationship Enhancement in primary care (PriCARE) is an evidence-ba",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "parenting",
+      "intervention",
+      "treatment",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -4234,70 +2425,15 @@
     "related_ids": []
   },
   {
-    "id": "pmc_PMC12939051",
-    "name": "Neurodevelopment at Two Years in Preterm Infants: Corrected Versus Chronological Age",
-    "description": "Highlights \n What are the main findings? \n At 2 years, corrected age reveals selective developmental vulnerabilities, whereas chronological age indicates a generalised delay. Greater prematurity is as",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Caravale Barbara et al. (2026)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Caravale Barbara et al. (2026)",
-        "detail": "10.3390/children13020219"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Highlights \n What are the main findings?",
-      "At 2 years, corrected age reveals selective developmental vulnerabilities, whereas chronological age indicates a generalised delay.",
-      "Greater prematurity is associated with poorer developmental performance.",
-      "What are the implications of the main findings?",
-      "Corrected age should be used at least until 24 months in the developmental assessment of pre-term children.",
-      "Age correction should be tailored according to gestational age and developmental domain to im-prove clinical accuracy.",
-      "Abstract Background: Preterm birth is a significant risk factor for neurodevelopmental delays, but the appropriate use and timing of age correction for developmental assessment remain debated.",
-      "Objective: This study investigated psychomotor development in preterm children at two years of age, with the aim of clarifying whether age correction remains necessary at this stage, particularly across different gestational age groups.",
-      "Methods: A total of 161 preterm infants were assessed at a mean chronological age of 25.4 months (mean corrected age: 23.3 months) and compared with two control groups of typically developing children matched for gender and either corrected age (Control\u2013Corr,  N  = 88) or chronological age (Control\u2013Chron,  N  = 87).",
-      "The preterm group was further stratified by gestational age: extremely preterm (<28 weeks), very preterm (28\u201331 weeks), and moderate-to-late preterm (32\u201336 weeks)."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pmc_PMC12948542",
-    "name": "\u57fa\u4e8e\u8111\u7535\u7684\u4e0d\u540c\u9776\u70b9\u7ecf\u9885\u76f4\u6d41\u7535\u523a\u6fc0\u8c03\u63a7\u5bf9\u5de5\u4f5c\u8bb0\u5fc6\u7684\u5f71\u54cd\u7814\u7a76",
-    "description": "\u7ecf\u9885\u76f4\u6d41\u7535\u523a\u6fc0(tDCS)\u4f5c\u4e3a\u4e00\u79cd\u975e\u4fb5\u5165\u3001\u65e0\u521b\u7684\u795e\u7ecf\u8c03\u63a7\u65b9\u6cd5\uff0c\u53ef\u8c03\u8282\u5927\u8111\u76ae\u5c42\u795e\u7ecf\u5143\u6d3b\u52a8\uff0c\u7528\u4e8e\u6539\u5584\u5927\u8111\u7684\u8ba4\u77e5\u529f\u80fd\u3002\u4f46\u76ee\u524d\uff0c\u5728tDCS\u6539\u5584\u8ba4\u77e5\u529f\u80fd\u7684\u7814\u7a76\u4e2d\uff0c\u5c1a\u672a\u53d1\u73b0\u7597\u6548\u786e\u5207\u7684\u523a\u6fc0\u9776\u70b9\u3002\u5df2\u6709\u7814\u7a76\u53d1\u73b0\uff0c\u5927\u8111\u5de6\u4fa7\u80cc\u5916\u4fa7\u524d\u989d\u53f6\u76ae\u8d28\u533a(DLPFC)\u548c\u9876\u6795\u53f6\u76ae\u8d28\u533a\uff08PO\uff09\u53ef\u80fd\u662f\u6f5c\u5728\u7684\u6cbb\u7597\u9776\u70b9\uff1b\u57fa\u4e8e\u6b64\uff0c\u672c\u7814\u7a76\u65e8\u5728\u6bd4\u8f83tDCS\u8c03\u63a7DLPFC\u548cPO\u5bf9\u5de5\u4f5c\u8bb0\u5fc6\u5f71\u54cd\u7684\u673a\u5236\uff0c\u4e3a\u4e34\u5e8a\u5e94\u7528\u63d0\u4f9b\u7ecf\u9a8c\u652f\u6301\u3002\u672c\u7814\u7a76\u6309\u523a\u6fc0\u9776\u70b9\u7684\u4e0d\u540c\uff0c\u5c06",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "pubmed",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "pubmed",
-        "detail": "10.7507/1001-5515.202502008"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "\u7ecf\u9885\u76f4\u6d41\u7535\u523a\u6fc0(tDCS)\u4f5c\u4e3a\u4e00\u79cd\u975e\u4fb5\u5165\u3001\u65e0\u521b\u7684\u795e\u7ecf\u8c03\u63a7\u65b9\u6cd5\uff0c\u53ef\u8c03\u8282\u5927\u8111\u76ae\u5c42\u795e\u7ecf\u5143\u6d3b\u52a8\uff0c\u7528\u4e8e\u6539\u5584\u5927\u8111\u7684\u8ba4\u77e5\u529f\u80fd\u3002\u4f46\u76ee\u524d\uff0c\u5728tDCS\u6539\u5584\u8ba4\u77e5\u529f\u80fd\u7684\u7814\u7a76\u4e2d\uff0c\u5c1a\u672a\u53d1\u73b0\u7597\u6548\u786e\u5207\u7684\u523a\u6fc0\u9776\u70b9\u3002\u5df2\u6709\u7814\u7a76\u53d1\u73b0\uff0c\u5927\u8111\u5de6\u4fa7\u80cc\u5916\u4fa7\u524d\u989d\u53f6\u76ae\u8d28\u533a(DLPFC)\u548c\u9876\u6795\u53f6\u76ae\u8d28\u533a\uff08PO\uff09\u53ef\u80fd\u662f\u6f5c\u5728\u7684\u6cbb\u7597\u9776\u70b9\uff1b\u57fa\u4e8e\u6b64\uff0c\u672c\u7814\u7a76\u65e8\u5728\u6bd4\u8f83tDCS\u8c03\u63a7DLPFC\u548cPO\u5bf9\u5de5\u4f5c\u8bb0\u5fc6\u5f71\u54cd\u7684\u673a\u5236\uff0c\u4e3a\u4e34\u5e8a\u5e94\u7528\u63d0\u4f9b\u7ecf\u9a8c\u652f\u6301\u3002\u672c\u7814\u7a76\u6309\u523a\u6fc0\u9776\u70b9\u7684\u4e0d\u540c\uff0c\u5c06tDCS\u8c03\u63a7\u8bd5\u9a8c\u5206\u4e3a\uff1aDLPFC\u7ec4\u3001PO\u7ec4\u53ca\u5047\u523a\u6fc0\uff08sham\uff09\u7ec4\uff1b\u5171\u62db\u52df20\u540d\u53d7\u8bd5\u8005\u53c2\u4e0e\u8bd5\u9a8c\uff0c\u6bcf\u540d\u53d7\u8bd5\u8005\u968f\u673a\u63a5\u53d7\u5176\u4e2d\u4e24\u79cd\u523a\u6fc0\uff0c\u4e24\u6b21\u523a\u6fc0\u4e4b\u95f4\u95f4\u9694\u81f3\u5c113 d\uff08\u7d2f\u8ba140\u4eba\u6b21\uff09\u3002\u672c\u7814\u7a76\u8bbe\u8ba1\u4e86\u201c3\u2014\u56de\u6eaf\u201d\u5de5\u4f5c\u8bb0\u5fc6\u4efb\u52a1\u8303\u5f0f\uff0c\u8ba1\u7b97\u5e76\u5206\u6790\u4e863\u7ec4\u53d7\u8bd5\u8005\u63a5\u53d7tDCS\u8c03\u63a7\u524d\u540e\u5728\u8ba4\u77e5\u4efb\u52a1\u4e2d\u7684\u53cd\u5e94\u65f6\u95f4\uff08RT\uff09\u548c\u6b63\u786e\u7387\uff08AC\uff09\u3002\u672c\u7814\u7a76\u91c7\u96c63\u7ec4\u53d7\u8bd5\u8005\u8c03\u63a7\u524d\u3001\u540e\u9759\u606f\u6001\u8111\u7535\uff08EEG\uff09\u4fe1\u53f7\uff0c\u5bf9\u6bd4\u5206\u6790\u5404\u8111\u529f\u80fd\u533a\u7684\u81ea\u76f8\u5173\u6027\u3001\u4e0d\u540c\u8111\u529f\u80fd\u533a\u95f4\u7684\u4e92\u76f8\u5173\u6027\u53ca\u76f8\u5e94\u7684\u7f51\u7edc\u62d3\u6251\u7279\u5f81\u3002\u7ed3\u679c\u663e\u793a\uff0cDLPFC\u7ec4\u548cPO\u7ec4\u8c03\u63a7\u540e\u53d7\u8bd5\u8005\u7684AC\u63d0\u5347\uff0cRT\u7f29\u77ed\uff0c\u4e14DLPFC\u7ec4\u6548\u679c\u66f4\u597d\uff1b\u6b64\u5916\uff0cDLPFC\u523a\u6fc0\u53ef\u589e\u5f3a\u03b8\u9891\u6bb5\u548c\u03b2\u9891\u6bb5\u9776\u70b9\u53ca\u76f8\u5173\u8111\u533a\u7684\u81ea\u76f8\u5173\u6027\u4e0e\u8de8\u8111\u533a\u8fde\u63a5\uff0c\u63d0\u9ad8\u03b8\u9891\u6bb5\u548c\u03b2\u9891\u6bb5\u8111\u533a\u7684\u805a\u7c7b\u7cfb\u6570\u4e0e\u5c40\u90e8\u6548\u7387\uff0c\u800cPO\u523a\u6fc0\u548csham\u523a\u6fc0\u65e0\u4e0a\u8ff0\u6548\u5e94\u3002\u672c\u7814\u7a76\u8bc1\u5b9e\uff0ctDCS\u523a\u6fc0DLPFC\u53ef\u901a\u8fc7\u589e\u5f3a\u03b8\u9891\u6bb5\u3001\u03b2\u9891\u6bb5\u76f8\u5173\u8111\u533a\u7f51\u7edc\u8fde\u63a5\u6539\u5584\u8ba4\u77e5\u529f\u80fd\uff0c\u4e3atDCS\u7528\u4e8e\u8111\u8ba4\u77e5\u529f\u80fd\u969c\u788d\u4e34\u5e8a\u5eb7\u590d\u63d0\u4f9b\u4e86\u8bd5\u9a8c\u4f9d\u636e\u4e0e\u7406\u8bba\u652f\u6491\u3002"
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pmc_PMC11720965",
     "name": "Neural hyperscanning in caregiver-child dyads: A paradigm for studying the long-term effects of facilitated vs. disrupted attention on working memory and executive functioning in young children",
     "description": "Parent-child interactions shape children\u2019s cognitive outcomes such that caregivers can guide attention and facilitate learning opportunities. These interactions provide infants and toddlers with rich,",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "working_memory",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -4332,7 +2468,10 @@
     "name": "The effects of cooperative learning on self-reported peer relations, peer support, and classroom engagement among students with disabilities",
     "description": "Students with disabilities are at an increased risk of experiencing poorer quality peer relationships than those without disabilities. Previous school-based efforts to promote positive peer interactio",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "classroom",
+      "school"
+    ],
     "age_range": [
       "all"
     ],
@@ -4362,7 +2501,11 @@
     "name": "Multi-method ADHD diagnostics in children: CBCL and TRF lead the way",
     "description": "Objective Diagnosing ADHD in children requires multi-method examinations, yet the efficacy of this approach remains inconsistent. Our case control study investigated which standardized assessment meth",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "assessment",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"

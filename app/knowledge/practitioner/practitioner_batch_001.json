@@ -2,9 +2,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-homework-study-skills",
     "name": "Homework Help & Studying Tips for Students with ADHD",
-    "description": "Homework Help & Studying Tips for Students with ADHD\nFooter\nLogo\nADHD Parenting\nSchool & Learning\nFollow these 10 ADHD-friendly tips to create an inviting homework space and study area that promotes..",
+    "description": "Homework Help & Studying Tips for Students with ADHD\nSchool & Learning\nFollow these 10 ADHD-friendly tips to create an inviting homework space and study area that promotes..",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "school",
+      "homework"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -33,9 +37,15 @@
   {
     "id": "pract_category-parenting-adhd-kids-adhd-boys",
     "name": "ADHD in Boys: ADD Behavior, School, Friends, Treatment",
-    "description": "ADHD in Boys: ADD Behavior, School, Friends, Treatment\nFooter\nLogo\nADHD Parenting\nAdolescent hormonal changes impact ADHD symptoms, behavior, and responses to treatment. Here's how to...\nAccess the vi",
+    "description": "ADHD in Boys: ADD Behavior, School, Friends, Treatment\nAdolescent hormonal changes impact ADHD symptoms, behavior, and responses to treatment. Here's how to...",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "behavior",
+      "school",
+      "treatment",
+      "adolescent"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -63,9 +73,14 @@
   {
     "id": "pract_category-parenting-adhd-kids-page-3",
     "name": "ADHD in Children: ADD Parenting Help Behavior, Discipline, Self-Esteem",
-    "description": "ADHD in Children: ADD Parenting Help Behavior, Discipline, Self-Esteem\nFooter\nLogo\nResearch confirms that ADHD is a significant risk factor for motor vehicle accidents and traffic...\nChildren with opp",
+    "description": "ADHD in Children: ADD Parenting Help Behavior, Discipline, Self-Esteem\nResearch confirms that ADHD is a significant risk factor for motor vehicle accidents and traffic...\nChildren with opp",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "behavior",
+      "parenting",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -92,9 +107,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-food-nutrition",
     "name": "Kids Health & Nutrition: Food for ADHD Brains",
-    "description": "Kids Health & Nutrition: Food for ADHD Brains\nFooter\nLogo\nADHD Parenting\nADHD medications sometimes curb kids' appetites so they don't eat all day, then arrive home from...\nMost people who have been d",
+    "description": "Kids Health & Nutrition: Food for ADHD Brains\nADHD medications sometimes curb kids' appetites so they don't eat all day, then arrive home from...\nMost people who have been d",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "medication",
+      "nutrition"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -121,9 +140,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning",
     "name": "Teaching Strategies & Learning Styles for Kids with ADHD",
-    "description": "Teaching Strategies & Learning Styles for Kids with ADHD\nFooter\nLogo\nADHD Parenting\nAccommodations\nADHD in College\nADHD/LD Schools\nExecutive Functions\nFor Teachers\nFree Learning Downloads\nHigh School",
+    "description": "Teaching Strategies & Learning Styles for Kids with ADHD\nADHD in College\nADHD/LD Schools\nExecutive Functions\nFree Learning Downloads",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "executive_function",
+      "school"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -159,9 +182,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-organization",
     "name": "How to Stay Organized for School: ADHD Student Guide",
-    "description": "How to Stay Organized for School: ADHD Student Guide\nFooter\nLogo\nADHD Parenting\nSchool & Learning\nFollow these 10 ADHD-friendly tips to create an inviting homework space and study area that promotes..",
+    "description": "How to Stay Organized for School: ADHD Student Guide\nSchool & Learning\nFollow these 10 ADHD-friendly tips to create an inviting homework space and study area that promotes..",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "school",
+      "homework"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -189,9 +216,12 @@
   {
     "id": "pract_category-parenting-adhd-kids-behavior-discipline-oppositional-behavior",
     "name": "Oppositional Defiant Behavior in Kids with ADHD: Help for Parents",
-    "description": "Oppositional Defiant Behavior in Kids with ADHD: Help for Parents\nFooter\nLogo\nADHD Parenting\nBehavior & Discipline\nThe eight diagnostic criteria that define oppositional defiant disorder (ODD) exclude",
+    "description": "Oppositional Defiant Behavior in Kids with ADHD: Help for Parents\nBehavior & Discipline\nThe eight diagnostic criteria that define oppositional defiant disorder (ODD) exclude",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "behavior"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -220,9 +250,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-child-diagnosed",
     "name": "Symptoms of ADHD in Children: After the Diagnosis",
-    "description": "Symptoms of ADHD in Children: After the Diagnosis\nFooter\nLogo\nADHD Parenting\nAccess the video replay, listen to the podcast episode (#265), and download the slide presentation...\nIf you're considering",
+    "description": "Symptoms of ADHD in Children: After the Diagnosis\nAccess the video replay, listen to the podcast episode (#265), and download the slide presentation...\nIf you're considering",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "diagnosis",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -249,9 +283,12 @@
   {
     "id": "pract_category-parenting-adhd-kids-webinar-parents",
     "name": "ADHD in Children: Webinars for Parents of Kids with ADD",
-    "description": "ADHD in Children: Webinars for Parents of Kids with ADD\nFooter\nLogo\nADHD Parenting\nAccess the video replay, listen to the podcast episode (#590), download the slide presentation, and...\nAccess the vid",
+    "description": "ADHD in Children: Webinars for Parents of Kids with ADD\nAccess the video replay, listen to the podcast episode (#590), download the slide presentation, and...",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -278,9 +315,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-positive-parenting",
     "name": "Positive Parenting Styles: Build Self-Esteem & Improve Behavior",
-    "description": "Positive Parenting Styles: Build Self-Esteem & Improve Behavior\nFooter\nLogo\nADHD Parenting\nADHD Moms & Dads\nEmotions\nSelf Esteem\nTalking About ADHD\nThe last thing any father wants is to look back on h",
+    "description": "Positive Parenting Styles: Build Self-Esteem & Improve Behavior\nADHD Moms & Dads\nTalking About ADHD\nThe last thing any father wants is to look back on h",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "behavior",
+      "parenting"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -309,9 +350,15 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-accommodations",
     "name": "504 Plans & IEPs: Student Accommodations for ADHD at School",
-    "description": "504 Plans & IEPs: Student Accommodations for ADHD at School\nFooter\nLogo\nADHD Parenting\nSchool & Learning\nUse these sample letters to help craft your own request for accommodations or when documentin..",
+    "description": "504 Plans & IEPs: Student Accommodations for ADHD at School\nSchool & Learning\nUse these sample letters to help craft your own request for accommodations or when documentin..",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "school",
+      "iep",
+      "504_plan",
+      "accommodation"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -340,9 +387,14 @@
   {
     "id": "pract_category-parenting-adhd-kids-friendships-activities-making-friends",
     "name": "How to Make Friends: Social Skills for Children with ADHD",
-    "description": "How to Make Friends: Social Skills for Children with ADHD\nFooter\nLogo\nADHD Parenting\nFriendships & Activities\nYou don't need to helicopter to help your middle-schooler make friends. In fact, too much.",
+    "description": "How to Make Friends: Social Skills for Children with ADHD\nFriendships & Activities\nYou don't need to helicopter to help your middle-schooler make friends. In fact, too much.",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "school",
+      "social_skills",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -371,9 +423,12 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-download-school-learning-page-2",
     "name": "Teaching & Learning Strategies for Kids with ADHD: Free Resources",
-    "description": "Teaching & Learning Strategies for Kids with ADHD: Free Resources\nFooter\nLogo\nThis back-to-school download is a powerful tool for learning every student's strengths and...\nCome prepared to your parent",
+    "description": "Teaching & Learning Strategies for Kids with ADHD: Free Resources\nThis back-to-school download is a powerful tool for learning every student's strengths and...\nCome prepared to your parent",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "school"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -400,9 +455,14 @@
   {
     "id": "pract_category-parenting-adhd-kids-positive-parenting-talking-about-adhd",
     "name": "Explaining ADHD: Talking About Attention Deficit w/ Your Child",
-    "description": "Explaining ADHD: Talking About Attention Deficit w/ Your Child\nFooter\nLogo\nADHD Parenting\nPositive Parenting\nOne mom shares the top ten ADHD myths that she wishes people would stop saying and spreadin",
+    "description": "Explaining ADHD: Talking About Attention Deficit w/ Your Child\nPositive Parenting\nOne mom shares the top ten ADHD myths that she wishes people would stop saying and spreadin",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "parenting",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -430,9 +490,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-for-teachers",
     "name": "Classroom Strategies for Teachers of Students with ADHD or LD",
-    "description": "Classroom Strategies for Teachers of Students with ADHD or LD\nFooter\nLogo\nADHD Parenting\nSchool & Learning\nWhen emotions run high, use these teacher-tested strategies \u2014 cool-down zones, emotional chec",
+    "description": "Classroom Strategies for Teachers of Students with ADHD or LD\nSchool & Learning\nWhen emotions run high, use these teacher-tested strategies \u2014 cool-down zones, emotional chec",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "classroom",
+      "school"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -460,9 +524,12 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-learning-challenges",
     "name": "Learning Disabilities Common in Kids with ADHD",
-    "description": "Learning Disabilities Common in Kids with ADHD\nFooter\nLogo\nADHD Parenting\nSchool & Learning\nFor high schoolers who view independent or summer reading as a miserable chore \u2014 whether because of...\nIf yo",
+    "description": "Learning Disabilities Common in Kids with ADHD\nSchool & Learning\nFor high schoolers who view independent or summer reading as a miserable chore \u2014 whether because of...",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "school"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -490,9 +557,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-behavior-discipline-screen-time",
     "name": "Screen Time and Video Game Limits: Digital Rules for Kids",
-    "description": "Screen Time and Video Game Limits: Digital Rules for Kids\nFooter\nLogo\nADHD Parenting\nBehavior & Discipline\nMeta e-Learning platforms like Google Classroom allow children to learn, complete assignments",
+    "description": "Screen Time and Video Game Limits: Digital Rules for Kids\nBehavior & Discipline\nMeta e-Learning platforms like Google Classroom allow children to learn, complete assignments",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "classroom",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -520,9 +591,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-behavior-discipline-behavior-therapy",
     "name": "Behavioral Therapy for ADHD: Discipline Strategies for Parents",
-    "description": "Behavioral Therapy for ADHD: Discipline Strategies for Parents\nFooter\nLogo\nADHD Parenting\nBehavior & Discipline\nJust because you've never done it before doesn't mean it's not within your power. This i",
+    "description": "Behavioral Therapy for ADHD: Discipline Strategies for Parents\nBehavior & Discipline\nJust because you've never done it before doesn't mean it's not within your power. This i",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "behavior",
+      "behavioral_therapy"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -550,9 +625,12 @@
   {
     "id": "pract_category-parenting-adhd-kids-positive-parenting-self-esteem",
     "name": "How to Build Confidence & Self-Esteem in Kids with ADHD",
-    "description": "How to Build Confidence & Self-Esteem in Kids with ADHD\nFooter\nLogo\nADHD Parenting\nPositive Parenting\n\u201cWhether we\u2019re neurodiverse or neurotypical, truly understanding the positive benefits of diversit",
+    "description": "How to Build Confidence & Self-Esteem in Kids with ADHD\nPositive Parenting\n\u201cWhether we\u2019re neurodiverse or neurotypical, truly understanding the positive benefits of diversit",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "parenting"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -580,9 +658,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-teens-young-adults",
     "name": "ADHD in Teens: Parenting Strategies in High School",
-    "description": "ADHD in Teens: Parenting Strategies in High School\nFooter\nLogo\nADHD Parenting\nDear Teen Parenting Coach\nCannabis use has grown in popularity among people with ADHD, some of whom report that marijuana",
+    "description": "ADHD in Teens: Parenting Strategies in High School\nDear Teen Parenting Coach\nCannabis use has grown in popularity among people with ADHD, some of whom report that marijuana",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "parenting",
+      "school"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -611,9 +693,15 @@
   {
     "id": "pract_category-parenting-adhd-kids-difficult-child-page-2",
     "name": "Parenting the Difficult Child: Extreme ADHD Behavior Problems \u2014 and Solutions",
-    "description": "Parenting the Difficult Child: Extreme ADHD Behavior Problems \u2014 and Solutions\nFooter\nLogo\nA child with ADHD who is also oppositional and defiant may refuse to take his ADHD medication....\nFor many chi",
+    "description": "Parenting the Difficult Child: Extreme ADHD Behavior Problems \u2014 and Solutions\nA child with ADHD who is also oppositional and defiant may refuse to take his ADHD medication....",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "behavior",
+      "parenting",
+      "medication",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -641,9 +729,14 @@
   {
     "id": "pract_category-parenting-adhd-kids-friendships-activities",
     "name": "How to Make Friends: ADHD Social Skills & Activities",
-    "description": "How to Make Friends: ADHD Social Skills & Activities\nFooter\nLogo\nADHD Parenting\nADHD/LD Camps\nFamily\nFamily Travel & Holidays\nFriends at School\nMaking Friends\nSports & Activities\nSummer\nDoes your chil",
+    "description": "How to Make Friends: ADHD Social Skills & Activities\nFamily Travel & Holidays\nFriends at School\nSports & Activities",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "family",
+      "school",
+      "social_skills"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -673,9 +766,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-executive-functions",
     "name": "Executive Functions Tied to ADHD: Planning & Executing",
-    "description": "Executive Functions Tied to ADHD: Planning & Executing\nFooter\nLogo\nADHD Parenting\nSchool & Learning\nExecutive functions are the skills that help us organize projects, manage processes, anticipate...\nA",
+    "description": "Executive Functions Tied to ADHD: Planning & Executing\nSchool & Learning\nExecutive functions are the skills that help us organize projects, manage processes, anticipate...",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "executive_function",
+      "school"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -704,9 +801,15 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-ieps-504-plans",
     "name": "504 Plans & IEPs: School Accommodations for Kids with ADHD",
-    "description": "504 Plans & IEPs: School Accommodations for Kids with ADHD\nFooter\nLogo\nADHD Parenting\nSchool & Learning\n\u201cFederal law requires states, districts, and schools to provide students with and without...\n\"Th",
+    "description": "504 Plans & IEPs: School Accommodations for Kids with ADHD\nSchool & Learning\n\u201cFederal law requires states, districts, and schools to provide students with and without...",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "school",
+      "iep",
+      "504_plan",
+      "accommodation"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -734,9 +837,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-positive-parenting-add-moms",
     "name": "ADHD Mom & Dad Support: Life Strategies for Women w/ Attention Deficit",
-    "description": "ADHD Mom & Dad Support: Life Strategies for Women w/ Attention Deficit\nFooter\nLogo\nADHD Parenting\nPositive Parenting\n\u201cAdults make mistakes. Actually, adults make whopper mistakes compared to most kids",
+    "description": "ADHD Mom & Dad Support: Life Strategies for Women w/ Attention Deficit\nPositive Parenting\n\u201cAdults make mistakes. Actually, adults make whopper mistakes compared to most kids",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "parenting"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -764,9 +871,12 @@
   {
     "id": "pract_category-parenting-adhd-kids-positive-parenting-add-emotions",
     "name": "ADHD & Emotions: Parenting Through Anger, Fear & Frustration",
-    "description": "ADHD & Emotions: Parenting Through Anger, Fear & Frustration\nFooter\nLogo\nADHD Parenting\nPositive Parenting\nEmotional dysregulation is a core symptom of ADHD. The result: overblown reactions to small s",
+    "description": "ADHD & Emotions: Parenting Through Anger, Fear & Frustration\nPositive Parenting\nEmotional dysregulation is a core symptom of ADHD. The result: overblown reactions to small s",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "parenting"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -794,9 +904,16 @@
   {
     "id": "pract_category-parenting-adhd-kids-behavior-discipline",
     "name": "ADHD in Children: Behavior & Discipline Help for Parents",
-    "description": "ADHD in Children: Behavior & Discipline Help for Parents\nFooter\nLogo\nADHD Parenting\nBehavioral Therapy\nFocus & Following Directions\nImpulsivity & Hyperactivity\nMeltdowns & Anger\nOppositional Behavior",
+    "description": "ADHD in Children: Behavior & Discipline Help for Parents\nBehavioral Therapy\nFocus & Following Directions\nImpulsivity & Hyperactivity\nMeltdowns & Anger\nOppositional Behavior",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "behavior",
+      "behavioral_therapy",
+      "impulsivity",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -830,9 +947,12 @@
   {
     "id": "pract_category-parenting-adhd-kids-organizing-your-child",
     "name": "Organization Skills for Kids with ADHD: Chores, Time Management",
-    "description": "Organization Skills for Kids with ADHD: Chores, Time Management\nFooter\nLogo\nADHD Parenting\nChores & Cleaning Up\nManaging Time\n\u201cChildren with ADHD can learn how to prioritize with brain dumps, deadline",
+    "description": "Organization Skills for Kids with ADHD: Chores, Time Management\nChores & Cleaning Up\n\u201cChildren with ADHD can learn how to prioritize with brain dumps, deadline",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -860,9 +980,14 @@
   {
     "id": "pract_category-parenting-adhd-kids-schedules-routines",
     "name": "Daily Schedules for Kids with ADHD: Parenting with Routines",
-    "description": "Daily Schedules for Kids with ADHD: Parenting with Routines\nFooter\nLogo\nADHD Parenting\nAfternoons\nBedtime & Sleep\nMornings\nAccess the video replay, listen to the podcast episode (#445), download the s",
+    "description": "Daily Schedules for Kids with ADHD: Parenting with Routines\nBedtime & Sleep\nAccess the video replay, listen to the podcast episode (#445), download the s",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "parenting",
+      "routine",
+      "sleep"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -890,9 +1015,12 @@
   {
     "id": "pract_category-parenting-adhd-kids-school-learning-high-school",
     "name": "ADHD in High School: Helping Teens Manage Symptoms",
-    "description": "ADHD in High School: Helping Teens Manage Symptoms\nFooter\nLogo\nADHD Parenting\nSchool & Learning\nTeens want freedom, not rules. Learn to establish cooperation and peace at home with these...\nWhen your",
+    "description": "ADHD in High School: Helping Teens Manage Symptoms\nSchool & Learning\nTeens want freedom, not rules. Learn to establish cooperation and peace at home with these...",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "school"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -921,9 +1049,14 @@
   {
     "id": "pract_category-parenting-adhd-kids-behavior-discipline-rewards-consequences",
     "name": "Behavior Motivation: Consequences, Rewards, and Discipline Advice",
-    "description": "Behavior Motivation: Consequences, Rewards, and Discipline Advice\nFooter\nLogo\nADHD Parenting\nBehavior & Discipline\nFor many children with ADHD, rewards for good behavior are only motivating if they ar",
+    "description": "Behavior Motivation: Consequences, Rewards, and Discipline Advice\nBehavior & Discipline\nFor many children with ADHD, rewards for good behavior are only motivating if they ar",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "behavior",
+      "child",
+      "reward"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -952,9 +1085,13 @@
   {
     "id": "pract_category-parenting-adhd-kids-behavior-discipline-meltdowns-anger",
     "name": "ADHD Anger & Meltdowns: Behavior Help for Parents",
-    "description": "ADHD Anger & Meltdowns: Behavior Help for Parents\nFooter\nLogo\nADHD Parenting\nBehavior & Discipline\nAll toddlers throw tantrums. But if your child\u2019s extreme meltdowns come out of nowhere, that could be",
+    "description": "ADHD Anger & Meltdowns: Behavior Help for Parents\nBehavior & Discipline\nAll toddlers throw tantrums. But if your child\u2019s extreme meltdowns come out of nowhere, that could be",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "behavior",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -982,9 +1119,14 @@
   {
     "id": "pract_category-parenting-adhd-kids-download-parents",
     "name": "ADHD in Children: Resources for Parents of Kids with ADHD",
-    "description": "ADHD in Children: Resources for Parents of Kids with ADHD\nFooter\nLogo\nADHD Parenting\nParent training programs are an effective antidote to the defiance and behavioral challenges that...\nParenting is a",
+    "description": "ADHD in Children: Resources for Parents of Kids with ADHD\nParent training programs are an effective antidote to the defiance and behavioral challenges that...",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "behavior",
+      "parent_training",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -1012,9 +1154,12 @@
   {
     "id": "pract_category-parenting-adhd-kids-teens-young-adults-dear-teen-parenting-coach",
     "name": "Help for Parents of Teens with ADHD, Anxiety, ODD, and LDs",
-    "description": "Help for Parents of Teens with ADHD, Anxiety, ODD, and LDs\nFooter\nLogo\nADHD Parenting\nTeens with ADHD\nSocial media and its mental health impact on teens is of great concern, especially in light of the",
+    "description": "Help for Parents of Teens with ADHD, Anxiety, ODD, and LDs\nTeens with ADHD\nSocial media and its mental health impact on teens is of great concern, especially in light of the",
     "document_type": "strategy",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "anxiety"
+    ],
     "age_range": [
       "school_age",
       "adolescent"

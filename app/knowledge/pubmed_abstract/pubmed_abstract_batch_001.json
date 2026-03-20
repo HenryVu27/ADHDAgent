@@ -149,7 +149,9 @@
     "name": "Clinical Utility of Virtual Kitchen Errand Task for Children (VKET-C) as a Functional Cognition Evaluation for Children with Developmental Disabilities.",
     "description": "BACKGROUND/OBJECTIVES: This study evaluated the clinical utility of a virtual reality (VR)-based kitchen error task for children (VKET-C) to assess functional cognition in children. METHODS: In total,",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -321,7 +323,12 @@
     "name": "The impact of repeated read-aloud teaching strategy on executive function and basic early literacy skills of preschool children.",
     "description": "OBJECTIVES: The aim was to investigate the impact of repeated read-aloud teaching strategy on executive function and basic early literacy skills of preschool children. METHODS: The study sample consis",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "school",
+      "preschool",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -391,50 +398,6 @@
       "RESULTS: Participants included 175 children (mean [SD] age 9.48 [2.04] years, 19% female).",
       "Of participants, 151 completed the stimulant optimization phase, with aggression remitting among 96 (63%), and 45 were randomly assigned to adjunctive treatment groups.",
       "The adjunctive RISP group showed greater reductions in aggression ratings than the PBO group (least squares means difference [\u0394LSM],\u00a0-2.33; 95% CI,\u00a0-3.83 to\u00a0-0.82; effect size [ES],\u00a0-1.32), as did the DVPX group (\u0394LSM,\u00a0-1.60; 95% CI,\u00a0-3.18 to\u00a0-0.03; ES,\u00a0-0.91)."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_9571295",
-    "name": "Frontal lobe functions and dysfunctions.",
-    "description": "Frontal lobe syndromes with personality change are well known for about 150 years but mysteries of their underlying anatomophysiological mechanisms have started to unfold in recent years. The frontal",
-    "document_type": "fact",
-    "tags": [
-      "attention_deficit_disorder_with_hyperactivity",
-      "frontal_lobe",
-      "humans",
-      "mental_processes",
-      "personality",
-      "psychomotor_disorders",
-      "psychomotor_performance",
-      "rett_syndrome",
-      "speech"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Niedermeyer E (1998)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Niedermeyer E (1998)",
-        "detail": "10.1177/155005949802900206"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Frontal lobe syndromes with personality change are well known for about 150 years but mysteries of their underlying anatomophysiological mechanisms have started to unfold in recent years.",
-      "The frontal lobe accommodates an extension of the primary motor (precentral) cortex, the premotor region and the interhemispherically located supplementary motor region, both of them forming area 6 and its subdivisions.",
-      "The anterior and inferior frontal structures (and also the eye field, area 8) belong to the prefrontal region.",
-      "The prefrontal cortex is also involved in motor action: in its initiation, planning, designing and sequencing rather than its mere execution.",
-      "This requires drive and initiative to move, their deficits resulting in moderate to extreme apathy.",
-      "Forces of motivation are likely to be mediated via the fronto-orbital cortex (known as an extension of the temporo-limbic system) which also exerts inhibitory influences on prefrontal functioning, and disinhibitory frontal lobe syndromes (from tactlessness to aggression) are the result of frontobasal impairment.",
-      "A special form of frontal-motor cortex disconnection may occur in childhood: in the rare Rett syndrome and, with limitation to the prefrontal cortex, in the common Attention Deficit Hyperactivity Disorder (ADHD).",
-      "The initiation of movement is based upon the constant influx of afferent-sensory messages from posterior cerebral regions and strong mesiodorsal thalamic connections, providing information for each following initiatory prefrontal motor impulse which depends on such information from the past moment.",
-      "This \"Working Memory\" appears to be the keystone of mental and motor prefrontal function.",
-      "Becoming unnecessary in the next moments, the afferent signals undergo immediate extinction due to inhibitory fronto-orbital impulses."
     ],
     "contraindications": [],
     "related_ids": []
@@ -712,61 +675,16 @@
     "related_ids": []
   },
   {
-    "id": "pm_38622540",
-    "name": "Shared and divergent mental health characteristics of ADNP-, CHD8- and DYRK1A-related neurodevelopmental conditions.",
-    "description": "BACKGROUND: Neurodevelopmental conditions such as intellectual disability (ID) and autism spectrum disorder (ASD) can stem from a broad array of inherited and de novo genetic differences, with marked",
-    "document_type": "fact",
-    "tags": [
-      "adolescent",
-      "child",
-      "female",
-      "humans",
-      "male",
-      "autism_spectrum_disorder",
-      "dna-binding_proteins",
-      "homeodomain_proteins",
-      "intellectual_disability",
-      "mental_health",
-      "nerve_tissue_proteins",
-      "neurodevelopmental_disorders",
-      "quality_of_life",
-      "transcription_factors",
-      "dyrk_kinases"
-    ],
-    "age_range": [
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "Neuhaus Emily et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Neuhaus Emily et al. (2024)",
-        "detail": "10.5498/wjp.v13.i5.247"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND: Neurodevelopmental conditions such as intellectual disability (ID) and autism spectrum disorder (ASD) can stem from a broad array of inherited and de novo genetic differences, with marked physiological and behavioral impacts.",
-      "We currently know little about the psychiatric phenotypes of rare genetic variants associated with ASD, despite heightened risk of psychiatric concerns in ASD more broadly.",
-      "Understanding behavioral features of these variants can identify shared versus specific phenotypes across gene groups, facilitate mechanistic models, and provide prognostic insights to inform clinical practice.",
-      "In this paper, we evaluate behavioral features within three gene groups associated with ID and ASD - ADNP, CHD8, and DYRK1A - with two aims: (1) characterize phenotypes across behavioral domains of anxiety, depression, ADHD, and challenging behavior; and (2) understand whether age and early developmental milestones are associated with later mental health outcomes.",
-      "METHODS: Phenotypic data were obtained for youth with disruptive variants in ADNP, CHD8, or DYRK1A (N\u2009=\u200965, mean age\u2009=\u20098.7 years, 40% female) within a long-running, genetics-first study.",
-      "Standardized caregiver-report measures of mental health features (anxiety, depression, attention-deficit/hyperactivity, oppositional behavior) and developmental history were extracted and analyzed for effects of gene group, age, and early developmental milestones on mental health features.",
-      "RESULTS: Patterns of mental health features varied by group, with anxiety most prominent for CHD8, oppositional features overrepresented among ADNP, and attentional and depressive features most prominent for DYRK1A.",
-      "For the full sample, age was positively associated with anxiety features, such that elevations in anxiety relative to same-age and same-sex peers may worsen with increasing age.",
-      "Predictive utility of early developmental milestones was limited, with evidence of early language delays predicting greater difficulties across behavioral domains only for the CHD8 group.",
-      "CONCLUSIONS: Despite shared associations with autism and intellectual disability, disruptive variants in ADNP, CHD8, and DYRK1A may yield variable psychiatric phenotypes among children and adolescents."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_36744072",
     "name": "Mindful Movement Intervention Applied to at Risk Urban School Children for Improving Motor, Cognitive, and Emotional-Behavioral Regulation.",
     "description": "OBJECTIVES: Preliminary evidence has supported the notion that mindful movement-based practices may offer benefits for self-regulation, particularly for vulnerable children. However, this evidence has",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "school",
+      "intervention",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -1016,48 +934,6 @@
       "Among children with ESI, the percentage receiving psychological services following release of the guidelines decreased significantly by 5%, from 44% in 2011 to 42% in 2014; the change in medication treatment rates (77% in 2011 compared with 76% in 2014) was not significant.",
       "CONCLUSIONS AND COMMENTS: Among insured children aged 2-5 years receiving clinical care for ADHD, medication treatment was more common than receipt of recommended first-line treatment with psychological services.",
       "Among children with ADHD who had ESI, receipt of psychological services did not increase after release of the 2011 guidelines."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_38760282",
-    "name": "French guidelines for the diagnosis and management of Tourette syndrome.",
-    "description": "The term \"Gilles de la Tourette syndrome\", or the more commonly used term \"Tourette syndrome\" (TS) refers to the association of motor and phonic tics which evolve in a context of variable but frequent",
-    "document_type": "fact",
-    "tags": [
-      "adolescent",
-      "child",
-      "humans",
-      "diagnosis,_differential",
-      "france",
-      "tourette_syndrome",
-      "systematic_reviews_as_topic"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Hartmann A et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Hartmann A et al. (2024)",
-        "detail": "10.1016/j.neurol.2024.04.005"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The term \"Gilles de la Tourette syndrome\", or the more commonly used term \"Tourette syndrome\" (TS) refers to the association of motor and phonic tics which evolve in a context of variable but frequent psychiatric comorbidity.",
-      "The syndrome is characterized by the association of several motor tics and at least one phonic tic that have no identifiable cause, are present for at least one year and appear before the age of 18.",
-      "The presence of coprolalia is not necessary to establish or rule out the diagnosis, as it is present in only 10% of cases.",
-      "The diagnosis of TS is purely clinical and is based on the symptoms defined by the Diagnostic and Statistical Manual of Mental Disorders (DSM-5).",
-      "No additional tests are required to confirm the diagnosis of TS.",
-      "However, to exclude certain differential diagnoses, further tests may be necessary.",
-      "Very frequently, one or more psychiatric comorbidities are also present, including attention deficit hyperactivity disorder, obsessive-compulsive disorder, anxiety, explosive outbursts, self-injurious behaviors, learning disorders or autism spectrum disorder.",
-      "The condition begins in childhood around 6 or 7 years of age and progresses gradually, with periods of relative waxing and waning of tics.",
-      "The majority of patients experience improvement by the end of the second decade of life, but symptoms may persist into adulthood in around one-third of patients.",
-      "The cause of TS is unknown, but genetic susceptibility and certain environmental factors appear to play a role."
     ],
     "contraindications": [],
     "related_ids": []
@@ -1328,8 +1204,7 @@
       "cross-sectional_studies",
       "mathematical_concepts",
       "intelligence",
-      "aptitude",
-      "mathematics"
+      "aptitude"
     ],
     "age_range": [
       "school_age"
@@ -1701,7 +1576,11 @@
     "name": "Does central executive training and/or inhibitory control training improve emotion regulation for children with attention-deficit/hyperactivity disorder? A randomized controlled trial.",
     "description": "INTRODUCTION: Approximately 48-54% of children with attention-deficit/hyperactivity disorder (ADHD) have impairing difficulties with emotion regulation, and these difficulties are not ameliorated by f",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -1733,7 +1612,9 @@
     "name": "Atypical Functional Network Properties and Associated Dimensions of Child Psychopathology During Rest and Task Performance.",
     "description": "BACKGROUND: When brain networks deviate from typical development, this is thought to contribute to varying forms of psychopathology. However, research has been limited by the reliance on discrete diag",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -2408,7 +2289,10 @@
     "name": "Cognitive stagnation and executive function deficits in young children with SCN1A+ Dravet syndrome: Detailed characterization of onset, progression, and impact in the ENVISION natural history study.",
     "description": "OBJECTIVE: Dravet syndrome (DS) is a developmental and epileptic encephalopathy characterized by drug-resistant seizures and developmental slowing. Although cognitive and executive function deficits h",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -2443,7 +2327,10 @@
     "name": "Behavioral health outcomes and social determinants of health in children with diabetes and juvenile arthritis.",
     "description": "OBJECTIVE: Children with chronic illnesses, including arthritis, are at increased risk for adverse psychosocial outcomes influenced by social determinants of health (SDOH). Comparing psychosocial outc",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -2604,51 +2491,6 @@
     "related_ids": []
   },
   {
-    "id": "pm_35953260",
-    "name": "Prospective association between evening circadian preference and academic functioning in adolescents: the role of daytime sleepiness.",
-    "description": "BACKGROUND: There is growing evidence for the role of circadian factors in adolescents' sleep and academic adjustment, with greater evening preference being linked to poorer academic functioning. Howe",
-    "document_type": "fact",
-    "tags": [
-      "adolescent",
-      "humans",
-      "female",
-      "male",
-      "sleepiness",
-      "attention_deficit_disorder_with_hyperactivity",
-      "disorders_of_excessive_somnolence",
-      "sleep",
-      "sleep_wake_disorders",
-      "circadian_rhythm"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Fredrick Joseph W et al. (2023)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Fredrick Joseph W et al. (2023)",
-        "detail": "10.1111/jcpp.13683"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND: There is growing evidence for the role of circadian factors in adolescents' sleep and academic adjustment, with greater evening preference being linked to poorer academic functioning.",
-      "However, studies have yet to evaluate this association prospectively in adolescence, nor have studies examined daytime sleepiness as a putative mechanism linking evening preference to poor academic functioning.",
-      "The current study used a multi-informant design to test the prospective association of evening circadian preference, daytime sleepiness, and academic functioning (e.g., global academic impairment and grades) across 2\u2009years in adolescence.",
-      "As evening circadian preference, sleepiness, and academic problems are elevated in adolescents with ADHD, we used a sample enriched for adolescents with ADHD and explored whether ADHD moderated effects.",
-      "METHOD: Participants were 302 adolescents (Mage \u2009=\u200913.17\u2009years; 44.7% female; 81.8% White; 52% with ADHD).",
-      "In the fall of eighth grade, adolescents reported on their circadian preference, and in the fall of ninth grade, adolescents and parents completed ratings of daytime sleepiness.",
-      "In the middle of 10th grade, parents and teachers reported on adolescents' academic impairment and at the end of 10th grade, adolescents' grade point average (GPA) was obtained from school records.",
-      "RESULTS: Above and beyond covariates (e.g., adolescent sex, ADHD status, medication, sleep duration) and baseline academic impairment, greater self-reported evening preference in 8th grade predicted increased parent ratings of academic impairment in 10th grade indirectly via adolescent and parent ratings of daytime sleepiness in 9th grade.",
-      "Furthermore, evening preference in 8th grade predicted greater teacher ratings of academic impairment and lower average GPA in 10th grade via parent ratings of daytime sleepiness in 9th grade, controlling for covariates and baseline GPA.",
-      "ADHD status did not moderate indirect effects."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_37817104",
     "name": "Tourette-like syndrome secondary to Kleefstra syndrome 1 with a de novo microdeletion in the EHMT1 gene.",
     "description": "BACKGROUND: Gills de la Tourette syndrome (TS) is a childhood-onset neurodevelopmental disorder manifested by motor and vocal tics. Kleefstra syndrome 1 (KS1), a rare genetic disorder, is caused by ha",
@@ -2697,7 +2539,10 @@
     "name": "Motor activities and executive functions in early adolescence after hypothermia-treated neonatal hypoxic-ischemic encephalopathy.",
     "description": "AIM: To explore the relationship between motor activities and executive functions (EF) in children (aged 10-12\u2009years) with a history of neonatal hypothermia-treated hypoxic-ischemic encephalopathy (HI",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3189,7 +3034,10 @@
     "name": "Self-Regulation of Attention in Children in a Virtual Classroom Environment: A Feasibility Study.",
     "description": "Attention is a crucial cognitive function that enables us to selectively focus on relevant information from the surrounding world to achieve our goals. Impairments in sustained attention pose challeng",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "classroom",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3223,7 +3071,9 @@
     "name": "Impact of social media on cognitive development of children and young adults: a systematic review.",
     "description": "BACKGROUND: Social media has become an integral part of daily life for children and young adults, raising concerns about its influence on cognitive development. This systematic review evaluates the im",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -3258,7 +3108,9 @@
     "name": "Developmental disorders among Norwegian-born children with immigrant parents.",
     "description": "BACKGROUND: Risk of being diagnosed with different developmental disorders is found to vary with immigrant background. Knowledge about such differences in Norway are a starting point for equity in hea",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3292,7 +3144,11 @@
     "name": "Neglect and Neurodevelopment: A Narrative Review Understanding the Link Between Child Neglect and Executive Function Deficits.",
     "description": "Background: Childhood neglect is a pervasive yet often overlooked form of maltreatment that exerts profound and lasting effects on neurodevelopment. Unlike other types of abuse, neglect is characteriz",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "treatment",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3317,55 +3173,6 @@
       "Chronic stress associated with neglect also induces HPA axis dysregulation and elevated cortisol levels, which further compromise neural plasticity.",
       "Additionally, epigenetic modifications appear to mediate long-term cognitive and emotional consequences.",
       "Conclusions: Childhood neglect represents a distinct and critical risk factor for executive dysfunction."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_34039076",
-    "name": "Differential Clinical Features in Colombian Patients With Rolandic Epilepsy and Suggestion of Unlikely Association With GRIN2A, RBFOX1, or RBFOX3 Gene Variants.",
-    "description": "PURPOSE: Our purpose was to describe the phenotypic features and test for association of genes GRIN2A, RBFOX1 and RBFOX3 with rolandic epilepsy in patients from Colombia. METHODS: Thirty patients were",
-    "document_type": "fact",
-    "tags": [
-      "adolescent",
-      "antigens,_nuclear",
-      "child",
-      "child,_preschool",
-      "cohort_studies",
-      "colombia",
-      "electroencephalography",
-      "epilepsy,_rolandic",
-      "female",
-      "humans",
-      "male",
-      "nerve_tissue_proteins",
-      "rna_splicing_factors",
-      "receptors,_n-methyl-d-aspartate"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Tasc\u00f3n-Arcila Jos\u00e9 et al. (2021)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Tasc\u00f3n-Arcila Jos\u00e9 et al. (2021)",
-        "detail": "10.1177/08830738211015017"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "PURPOSE: Our purpose was to describe the phenotypic features and test for association of genes GRIN2A, RBFOX1 and RBFOX3 with rolandic epilepsy in patients from Colombia.",
-      "METHODS: Thirty patients were enrolled.",
-      "A structured interview was applied.",
-      "In addition, saliva samples were collected from the patients and their parents.",
-      "One polymorphism in each of GRIN2A, RBFOX1 and RBFOX3 genes was tested.",
-      "RESULTS: The average age at onset was 5.3 years.",
-      "Almost half the sample presented prolonged seizures (>5 minutes); although the majority of the patients presented their seizures only while asleep, over a quarter presented them only while awake.",
-      "The most frequent comorbidity was the presence of symptoms compatible with attention-deficit hyperactivity disorder (ADHD).",
-      "Personal history of febrile seizures and parasomnias were equally frequent (20%).",
-      "Family history of any type of epilepsy was reported in 80% of the patients, followed by migraine (73.3%) and poor academic performance (63.3%)."
     ],
     "contraindications": [],
     "related_ids": []
@@ -3417,7 +3224,11 @@
     "name": "Physical Aggression Toward Others and Self: Correlates in Autism, Attention-Deficit/Hyperactivity Disorder, and Population-Based Child Samples.",
     "description": "OBJECTIVE: This is the first study investigating physical aggression toward others and toward self (self-injurious behavior [SIB]) and its association with comorbid disorders and symptoms and demograp",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "hyperactivity",
+      "behavior",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3496,7 +3307,11 @@
     "name": "Clinical evaluation of premonitory urges in children and adolescents using the Chinese version of Individualized Premonitory Urge for Tics Scale.",
     "description": "BACKGROUND: Premonitory urges (PUs) have been the focus of recent efforts to assess the severity and develop interventions for tic disorders (TD). We aimed to investigate the PUs in TD and its comorbi",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "intervention",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -3723,45 +3538,6 @@
       "The data show that the BENCI is a reliable and valid instrument for assessing neurodevelopment in Cuban children and adolescents.",
       "Since this is the first neuropsychological test of its kind to be validated in the Cuban population, this finding is of particular importance."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_27426904",
-    "name": "Attention-Deficit/Hyperactivity Disorder.",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "adrenergic_uptake_inhibitors",
-      "adrenergic_alpha-2_receptor_agonists",
-      "antidepressive_agents",
-      "attention_deficit_disorder_with_hyperactivity",
-      "central_nervous_system_stimulants",
-      "child",
-      "comorbidity",
-      "diagnosis,_differential",
-      "humans",
-      "medical_history_taking",
-      "neuropsychological_tests",
-      "parents",
-      "physical_examination",
-      "prognosis",
-      "psychotherapy"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Leung Alexander K C et al. (2016)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Leung Alexander K C et al. (2016)",
-        "detail": "10.1016/j.yapd.2016.04.017"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -4239,45 +4015,6 @@
     "related_ids": []
   },
   {
-    "id": "pm_36122883",
-    "name": "Nuak kinase signaling in development and disease of the central nervous system.",
-    "description": "Protein kinases represent important signaling hubs for a variety of biological functions. Many kinases are traditionally studied for their roles in cancer cell biology, but recent advances in neurosci",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "autism_spectrum_disorder",
-      "signal_transduction",
-      "amp-activated_protein_kinases",
-      "central_nervous_system",
-      "attention_deficit_disorder_with_hyperactivity",
-      "protein_kinases",
-      "repressor_proteins",
-      "protein_serine-threonine_kinases"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Bennison Sarah A et al. (2022)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Bennison Sarah A et al. (2022)",
-        "detail": "10.1016/j.cellsig.2022.110472"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Protein kinases represent important signaling hubs for a variety of biological functions.",
-      "Many kinases are traditionally studied for their roles in cancer cell biology, but recent advances in neuroscience research show repurposed kinase function to be important for nervous system development and function.",
-      "Two members of the AMP-activated protein kinase (AMPK) related family, NUAK1 and NUAK2, have drawn attention in neuroscience due to their mutations in autism spectrum disorder (ASD), attention deficit hyperactivity disorder (ADHD), schizophrenia, and intellectual disability (ID).",
-      "Furthermore, Nuak kinases have also been implicated in tauopathy and other disorders of aging.",
-      "This review highlights what is known about the Nuak kinases in nervous system development and disease and explores the possibility of Nuak kinases as targets for therapeutic innovation."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_26771437",
     "name": "The Effectiveness and Tolerability of Central Nervous System Stimulants in School-Age Children with Attention-Deficit/Hyperactivity Disorder and Disruptive Mood Dysregulation Disorder Across Home and School.",
     "description": "OBJECTIVE: This study examines the effectiveness and tolerability of stimulants in children with attention-deficit/hyperactivity disorder (ADHD) and disruptive mood dysregulation disorder (DMDD). METH",
@@ -4415,54 +4152,6 @@
       "The best-performing composite model combining the Strengths and Difficulties Questionnaire, the Parental Evaluation of Developmental Status, vision screening and biological sex had 'excellent' predictive power (C-statistic: 0.83) compared with existing referral pathways which had 'poor' predictive power (C-statistic: 0.68).",
       "In addition, the composite model was able to improve the sensitivity of NDD diagnosis detection by 13% without any reduction in specificity.",
       "CONCLUSIONS: Combination of B4SC screening measures using composite modelling could lead to significantly improved identification of preschool children with NDDs when compared with surveillance that rely on individual psychometric test results alone."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_39824923",
-    "name": "Oxytocin levels in response to CRH administration in hypopituitarism and hypothalamic damage: a randomized, crossover, placebo-controlled trial.",
-    "description": "Increasing evidence supports the presence of oxytocin deficiency (OXT-D) in patients with hypopituitarism and hypothalamic damage (HHD), that might be associated with neuropsychological deficits and s",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "oxytocin",
-      "corticotropin-releasing_hormone",
-      "female",
-      "male",
-      "hypopituitarism",
-      "adult",
-      "cross-over_studies",
-      "middle_aged",
-      "quality_of_life",
-      "hypothalamus",
-      "single-blind_method",
-      "hypothalamic_diseases"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Asla Queralt et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Asla Queralt et al. (2025)",
-        "detail": "10.1016/j.neubiorev.2017.04.017"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Increasing evidence supports the presence of oxytocin deficiency (OXT-D) in patients with hypopituitarism and hypothalamic damage (HHD), that might be associated with neuropsychological deficits and sexual dysfunction, leading to worse quality of life (QoL).",
-      "Therefore, identifying a provocative test to diagnose an OXT-D will be important.",
-      "Corticotropin-releasing hormone (CRH) is a candidate for such a test as it increases oxytocin secretion in animal models.",
-      "This study aimed to examine the effects of CRH on oxytocin release in HHD compared to healthy controls (HC) and to describe the psychopathology, sexual function and QoL and their associations with oxytocin.",
-      "This is a single-blind, randomized, placebo-controlled, proof-of-concept study (NCT04902235) with crossover assignment (CRH vs. placebo).",
-      "Nineteen HHD patients (10 females) and 20 HC (11 females) completed two visits, receiving CRH or placebo in random order and completed validated questionnaires to assess psychopathology, sexual function and QoL.",
-      "Samples were collected over 120\u00a0min to assess oxytocin.",
-      "Linear mixed-effects regression model evaluated the change in oxytocin after CRH/placebo in HHD vs. HC.",
-      "CRH administration did not impact oxytocin concentrations across groups over time (p\u2009=\u20090.97).",
-      "HHD had greater psychopathology (most ps\u2009<\u20090.05), sexual dysfunction (p\u2009<\u20090.03) and worse QoL (p\u2009<\u20090.001) compared to HC, nevertheless, baseline oxytocin concentrations and area under the curve of oxytocin were not significantly associated with psychopathology, sexual function or QoL, neither in HHD or HC."
     ],
     "contraindications": [],
     "related_ids": []
@@ -4701,52 +4390,6 @@
     "related_ids": []
   },
   {
-    "id": "pm_39406680",
-    "name": "Psychiatric Comorbidities in Pediatric Trichotillomania: A\u00a0Multicenter Cohort Study.",
-    "description": "BACKGROUND: Trichotillomania (TTM) significantly increases the risk of psychiatric comorbidities. Sparse research in pediatric populations necessitates larger studies to assess these risks. This study",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "trichotillomania",
-      "female",
-      "male",
-      "child",
-      "adolescent",
-      "case-control_studies",
-      "comorbidity",
-      "mental_disorders",
-      "united_states",
-      "cohort_studies"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Games Margaux et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Games Margaux et al. (2025)",
-        "detail": "10.1111/pde.15791"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND: Trichotillomania (TTM) significantly increases the risk of psychiatric comorbidities.",
-      "Sparse research in pediatric populations necessitates larger studies to assess these risks.",
-      "This study investigates the risk of developing psychiatric comorbidities in pediatric TTM patients.",
-      "METHODS: This case-control study assessed pediatric patients (<\u200918\u2009years old) with TTM diagnosed between May 18, 2013, and January 1, 2024, using US-based data from the TriNetX global research network.",
-      "TTM patients (ICD-10 diagnostic category F63.3) aged 18 years or younger at diagnosis and control patients (ICD-10 code Z00.129) matched for age, sex, race, and ethnicity were assessed.",
-      "Propensity score matching yielded 16,590 patients in each cohort.",
-      "The analysis assessed subsequent diagnoses of ADHD, conduct disorders, tic disorders, obsessive-compulsive disorder, anxiety disorders, dissociative, stress-related, and somatoform disorders, mood disorders, and suicide attempts compared to controls.",
-      "RESULTS: TTM patients under 18 years exhibited significantly greater risks of subsequent diagnoses for ADHD (OR: 2.002; CI 1.841-2.178; p\u2009<\u20090.001), conduct disorders (OR: 3.668; 3.2-3.668; p\u2009<\u20090.0001), tic disorders (OR: 2.247; 1.826-2.765; p\u2009<\u20090.0001), obsessive-compulsive disorder (OR: 11.047; 8.822-13.832; p\u2009<\u20090.0001), anxiety disorders (OR: 3.583; 3.387-3.7; p\u2009<\u20090.0001), dissociative, stress-related, and somatoform disorders (OR: 6.179; 3.935-9.701; p\u2009<\u20090.0001), mood disorders (OR: 2.476; 2.288-2.68; p\u2009<\u20090.0001), and suicide attempts (OR: 1.81; 1.121-2.924; p\u2009=\u20090.0139) compared to controls.",
-      "TTM patients had the greatest risk of psychiatric diagnosis 1\u2009year postindex event.",
-      "CONCLUSIONS: Pediatric TTM patients have higher psychiatric comorbidity risks, necessitating timely intervention and comprehensive management."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_34677682",
     "name": "The management of ADHD in children and adolescents: bringing evidence to the clinic: perspective from the European ADHD Guidelines Group (EAGG).",
     "description": "ADHD is the most common neurodevelopmental disorder presenting to child and adolescent mental health, paediatric, and primary care services. Timely and effective interventions to address core ADHD sym",
@@ -4884,7 +4527,11 @@
     "name": "Psychological Determinants of Conflict with the Law and Susceptibility to Rehabilitation in Relation to the Presence of Symptoms of Attention Deficit Hyperactivity Disorder.",
     "description": "Background/Objectives: Many prison-sentenced individuals exhibit symptoms of mental dysfunctions, including attention deficit hyperactivity disorder (ADHD). The presence of co-occurring mental disorde",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity"
+    ],
     "age_range": [
       "all"
     ],
@@ -4965,7 +4612,12 @@
     "name": "A Study of the Effects of Virtual Reality-Based Sports Games on Improving Executive and Cognitive Functions in Minors with ADHD-A Meta-Analysis of Randomized Controlled Trials.",
     "description": "(1) Background: Attention Deficit Hyperactivity Disorder (ADHD) is a common mental health condition in children that can significantly impact their quality of life. In this study, we compared the effe",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -5087,7 +4739,11 @@
     "name": "A Community Study on Sleep Characteristics and Anxiety Symptoms in Children with Dyslexia.",
     "description": "Objectives: Sleep serves a crucial role in the optimal development of cognitive, emotional, and physical domains. Sleep disturbances and disorders have been reported to frequently occur in many neurod",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "anxiety",
+      "sleep",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -5174,7 +4830,7 @@
       "covid-19",
       "clinical_trials_as_topic",
       "united_states",
-      "national_heart,_lung,_and_blood_institute_(u.s.)",
+      "national_heart,_lung,_and_blood_institute",
       "sars-cov-2",
       "covid-19_drug_treatment"
     ],
@@ -5206,7 +4862,10 @@
     "name": "The Mental Health of Children with Cerebral Palsy: A Review of the Last Five Years of Research.",
     "description": "BACKGROUND/OBJECTIVES: Children and adolescents with cerebral palsy (CP) often experience associated functional limitations, diseases, or impairments. Included in these associated concerns are mental",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -5421,7 +5080,12 @@
     "name": "Prevalence of Socio-Emotional and Behavioral Difficulties and Determinants Among Public School Adolescents in Hawassa, Sidama Regional State, Ethiopia.",
     "description": "BACKGROUND: Adolescents who attend public schools are more prone to experience behavioral and socio-emotional issues. The main reasons are that most parents send children to public schools when they e",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "school",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -6005,7 +5669,14 @@
     "name": "Reduced Efficacy of Behavior Therapy Following Initial Multimodal Treatment of ADHD.",
     "description": "BACKGROUND: Evidence-based treatments for childhood attention-deficit/hyperactivity disorder (ADHD) include behavioral treatment and psychostimulants, preferably in combination. Research on the treatm",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "behavior",
+      "treatment",
+      "child",
+      "stimulant"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -6129,7 +5800,12 @@
     "name": "Efficacy of Online Intervention for ADHD: A Meta-Analysis and Systematic Review.",
     "description": "BACKGROUND: With the popularity of computers, the internet, and the global spread of COVID-19, more and more attention deficit hyperactivity disorder (ADHD) patients need timely interventions through",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "intervention"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -6163,7 +5839,11 @@
     "name": "The Role of Sleep in Mediating Mental Health Symptoms During the COVID-19 Pandemic in Children with and Without ADHD.",
     "description": "Background: The COVID-19 virus is a source of both acute and chronic stress for many people. This stress could uniquely impact children and their mental health. Research has shown that children with n",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "sleep",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -6188,50 +5868,6 @@
       "Of the total sample, 234 children were reported as having an ADHD diagnosis, and 70 children were reported to not have ADHD.",
       "Results: We found that both the impact of COVID-19 and sleep problems independently and positively contributed to the mental health symptoms (p < 0.001) experienced by children with ADHD and without ADHD.",
       "Children with ADHD were found to have higher scores for COVID-19 child impact, sleep problems, and negative mental health."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_37674019",
-    "name": "Clinical and cognitive effects of external trigeminal nerve stimulation (eTNS) in neurological and psychiatric disorders: a systematic review and meta-analysis.",
-    "description": "This pre-registered (CRD42022322038) systematic review and meta-analysis investigated clinical and cognitive outcomes of external trigeminal nerve stimulation (eTNS) in neurological and psychiatric di",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "child",
-      "adolescent",
-      "young_adult",
-      "adult",
-      "middle_aged",
-      "mental_disorders",
-      "cognitive_behavioral_therapy",
-      "trigeminal_nerve",
-      "migraine_disorders",
-      "cognition"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Westwood Samuel J et al. (2023)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Westwood Samuel J et al. (2023)",
-        "detail": "10.3390/cells10082156"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "This pre-registered (CRD42022322038) systematic review and meta-analysis investigated clinical and cognitive outcomes of external trigeminal nerve stimulation (eTNS) in neurological and psychiatric disorders.",
-      "PubMed, OVID, Web of Science, Chinese National Knowledge Infrastructure, Wanfang, and VIP database for Chinese technical periodicals were searched (until 16/03/2022) to identify trials investigating cognitive and clinical outcomes of eTNS in neurological or psychiatric disorders.",
-      "The Cochrane Risk of Bias 2.0 tool assessed randomized controlled trials (RCTs), while the Risk of Bias of Non-Randomized Studies (ROBINS-I) assessed single-arm trials.",
-      "Fifty-five peer-reviewed articles based on 48 (27 RCTs; 21 single-arm) trials were included, of which 12 trials were meta-analyzed (N participants\u2009=\u20091048; of which ~3% ADHD, ~3% Epilepsy, ~94% Migraine; age range: 10-49 years).",
-      "The meta-analyses showed that migraine pain intensity (K trials\u2009=\u20094, N\u2009=\u2009485; SMD\u2009=\u20091.03, 95% CI[0.84-1.23]) and quality of life (K\u2009=\u20092, N\u2009=\u2009304; SMD\u2009=\u20091.88, 95% CI[1.22-2.53]) significantly improved with eTNS combined with anti-migraine medication.",
-      "Dimensional measures of depression improved with eTNS across 3 different disorders (K\u2009=\u20093, N\u2009=\u2009111; SMD\u2009=\u20090.45, 95% CI[0.01-0.88]).",
-      "eTNS was well-tolerated, with a good adverse event profile across disorders.",
-      "eTNS is potentially clinically relevant in other disorders, but well-blinded, adequately powered RCTs must replicate findings and support optimal dosage guidance."
     ],
     "contraindications": [],
     "related_ids": []
@@ -6835,7 +6471,10 @@
     "name": "functional outcome in late adolescence/early adulthood of patients with autism spectrum disorder and its relationships with parental burnout and depression: A preliminary multi-center, cross-sectional study.",
     "description": "The aim of this study is to determine the functioning of adults with autism spectrum disorders (ASDs) diagnosed in childhood and depression and burnout levels among their parents. A total of 261 adult",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "depression",
+      "child"
+    ],
     "age_range": [
       "all"
     ],
@@ -6910,7 +6549,13 @@
     "name": "Remote Recruitment Strategy and Structured E-Parenting Support (STEPS) App: Feasibility and Usability Study.",
     "description": "BACKGROUND: The Structured E-Parenting Support (STEPS) app provides support for parents of children with elevated hyperactivity, impulsivity, inattention, and conduct problems who are awaiting clinica",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "hyperactivity",
+      "parenting",
+      "impulsivity",
+      "inattention",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -7227,7 +6872,10 @@
     "name": "Racial disparities in the diagnosis of disruptive behavior disorders: a U.S. national inpatient sample analysis.",
     "description": "Disruptive behavior disorders (DBDs) are comprised of conduct disorder and oppositional defiant disorder. Limited literature exists on the demographics of patients diagnosed with these conditions. Des",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "diagnosis"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -7905,7 +7553,13 @@
     "name": "Pyromania/ Firesetters and Attention Deficit Hyperactivity Disorder in children and adolescents: a systematic review.",
     "description": "BACKGROUND: The following article aims to explore the relationship between Pyromania/Firesetters and Attention Deficit Hyperactivity Disorder (ADHD) in childhood and adolescence. METHOD: A systematic",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "all"
     ],
@@ -7969,44 +7623,6 @@
       "In the AC compared to the other conditions, inattention symptoms decreased at T1 and T2.",
       "For both active conditions compared to waitlist, hyperactivity-impulsivity symptoms decreased only at T2 and ODD symptoms did not decrease.",
       "No moderators were identified."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_39663462",
-    "name": "Antibiotic-perturbed microbiota and the role of probiotics.",
-    "description": "The disruptive effect of antibiotics on the composition and function of the human microbiota is well established. However, the hypothesis that probiotics can help restore the antibiotic-disrupted micr",
-    "document_type": "fact",
-    "tags": [
-      "probiotics",
-      "humans",
-      "anti-bacterial_agents",
-      "gastrointestinal_microbiome",
-      "diarrhea"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Szajewska Hania et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Szajewska Hania et al. (2025)",
-        "detail": "10.1093/advances/nmy063"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The disruptive effect of antibiotics on the composition and function of the human microbiota is well established.",
-      "However, the hypothesis that probiotics can help restore the antibiotic-disrupted microbiota has been advanced, with little consideration of the strength of evidence supporting it.",
-      "Some clinical data suggest that probiotics can reduce antibiotic-related side effects, including Clostridioides difficile-associated diarrhoea, but there are no data that causally link these clinical effects to microbiota protection or recovery.",
-      "Substantial challenges hinder attempts to address this hypothesis, including the absence of consensus on the composition of a 'normal' microbiota, non-standardized and evolving microbiome measurement methods, and substantial inter-individual microbiota variation.",
-      "In this Review, we explore these complexities.",
-      "First, we review the known benefits and risks of antibiotics, the effect of antibiotics on the human microbiota, the resilience and adaptability of the microbiota, and how microbiota restoration might be defined and measured.",
-      "Subsequently, we explore the evidence for the efficacy of probiotics in preventing disruption or aiding microbiota recovery post-antibiotic treatment.",
-      "Finally, we offer insights into the current state of research and suggest directions for future research."
     ],
     "contraindications": [],
     "related_ids": []
@@ -8148,45 +7764,6 @@
     "related_ids": []
   },
   {
-    "id": "pm_38272009",
-    "name": "Neuropsychological Assessments of Cognitive Impairment in Major Depressive Disorder: A Systematic Review and Meta-Analysis with Meta-Regression.",
-    "description": "INTRODUCTION: Cognitive dysfunction or deficits are common in patients with major depressive disorder (MDD). The current study systematically reviews and meta-analyzes multiple domains of cognitive im",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "major_depressive_disorder",
-      "cognitive_dysfunction",
-      "neuropsychological_tests"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Rhee Taeho Greg et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Rhee Taeho Greg et al. (2024)",
-        "detail": "10.1159/000535665"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "INTRODUCTION: Cognitive dysfunction or deficits are common in patients with major depressive disorder (MDD).",
-      "The current study systematically reviews and meta-analyzes multiple domains of cognitive impairment in patients with MDD.",
-      "METHODS: PubMed/MEDLINE, PsycINFO, Cochrane Library, Embase, Web of Science, and Google Scholar were searched from inception through May 17, 2023, with no language limits.",
-      "Studies with the following inclusion criteria were included: (1) patients with a diagnosis of MDD using standardized diagnostic criteria; (2) healthy controls (i.e., those without MDD); (3) neuropsychological assessments of cognitive impairment using Cambridge Neuropsychological Test Automated Battery (CANTAB); and (4) reports of sufficient data to quantify standardized effect sizes.",
-      "Hedges' g standardized mean differences (SMDs) with corresponding 95% confidence intervals (CIs) were used to quantify effect sizes of cognitive impairments in MDD.",
-      "SMDs were estimated using a fixed- or random-effects models.",
-      "RESULTS: Overall, 33 studies consisting of 2,596 subjects (n = 1,337 for patients with MDD and n = 1,259 for healthy controls) were included.",
-      "Patients with MDD, when compared to healthy controls, had moderate cognitive deficits (SMD, -0.39 [95% CI, -0.47 to -0.31]).",
-      "In our subgroup analyses, patients with treatment-resistant depression (SMD, -0.56 [95% CI, -0.78 to -0.34]) and older adults with MDD (SMD, -0.51 [95% CI, -0.66 to -0.36]) had greater cognitive deficits than healthy controls.",
-      "The effect size was small among unmedicated patients with MDD (SMD, -0.19 [95% CI, -0.37 to -0.00]), and we did not find any statistical difference among children."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_40384476",
     "name": "Effects of Exercise Intervention in Children With Attention-Deficit/Hyperactivity Disorder: The Mediating Role of Executive Function.",
     "description": "This randomized controlled trial investigated a 20-session combined aerobic and physical-cognitive exercise program in 66 children with ADHD (aged 6-9\u2009years, 29 medicated), evaluating impacts on core",
@@ -8279,7 +7856,9 @@
     "name": "Neurocognitive dysfunctions in childhood-onset schizophrenia: A systematic review.",
     "description": "OBJECTIVE: To conduct a systematic review of neurocognitive dysfunctions in patients with childhood-onset schizophrenia (COS), a neuropsychiatric disorder that occurs before age 13 and is rarer and mo",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "all"
     ],
@@ -8585,7 +8164,10 @@
     "name": "Attention-deficit/hyperactivity disorder is associated with increased risk of cardiovascular diseases: A systematic review and meta-analysis.",
     "description": "Attention-deficit/hyperactivity disorder (ADHD) often co-occurs with other psychiatric and physical diseases. However, available evidence on associations between ADHD and cardiovascular diseases (CVDs",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity"
+    ],
     "age_range": [
       "all"
     ],
@@ -8709,7 +8291,15 @@
     "name": "Beyond binary comparisons: a Bayesian dose-response meta-analysis of exercise on executive function in children and adolescents with ADHD.",
     "description": "OBJECTIVE: This study aimed to systematically evaluate the acute and long-term effects of exercise interventions on executive function in children and adolescents with attention-deficit/hyperactivity",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "executive_function",
+      "intervention",
+      "exercise",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "adolescent"
     ],
@@ -8936,7 +8526,11 @@
     "name": "Validity and reliability of the Japanese version of the Child and Adolescent Behavior Inventory: Parent version.",
     "description": "AIM: We developed a Japanese version of the Child and Adolescent Behavior Inventory (CABI) and evaluated its validity and reliability. METHODS: A total of 2433 parents and 108 students in grades 4 and",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -9374,7 +8968,12 @@
     "name": "Comprehensive analysis of Guanfacine treatment in autism spectrum disorder with comorbid attention deficit hyperactivity disorder.",
     "description": "Autism Spectrum Disorder (ASD) often co-occurs with Attention-Deficit/Hyperactivity Disorder (ADHD), exacerbating functional challenges. Standard ADHD treatments are often less effective and less well",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "treatment"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -9489,57 +9088,6 @@
       "No evidence of such associations was detected for adults with persistent ADHD (data from the last meta-analysis).",
       "Moreover, we found evidence that the 4R allele leads to higher receptor expression and increased sensitivity to dopamine, as compared with the 7R allele (d\u2009=\u20091.20, 95%CI: 0.71-1.69, Z\u2009=\u20094.81), and this is consistent with the ADHD protection/susceptibility effects of the respective alleles.",
       "Using bioinformatics tools, based on the latest genome-wide association (GWAS) meta-analysis of the Psychiatry Genomic Consortium (PGC), we demonstrated that the 48\u2009bp VNTR is not in Linkage Disequilibrium with the DRD4 SNPs (Single Nucleotide Polymorphisms), which were not found to be associated with ADHD."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_38228758",
-    "name": "Is irritability multidimensional: Psychometrics of The Irritability and Dysregulation of Emotion Scale (TIDES-13).",
-    "description": "Irritability is a common, impairing, and potentially multifaceted manifestation of psychopathology. We designed The Irritability and Dysregulation of Emotion Scale (TIDES-13) to determine whether vari",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "irritable_mood",
-      "male",
-      "female",
-      "child",
-      "psychometrics",
-      "adolescent",
-      "self_report",
-      "reproducibility_of_results",
-      "psychiatric_status_rating_scales",
-      "factor_analysis,_statistical",
-      "parents",
-      "anxiety",
-      "depression",
-      "emotions"
-    ],
-    "age_range": [
-      "school_age",
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "Dissanayake Andrew S et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Dissanayake Andrew S et al. (2024)",
-        "detail": "10.1038/s41598-022-23373-9"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Irritability is a common, impairing, and potentially multifaceted manifestation of psychopathology.",
-      "We designed The Irritability and Dysregulation of Emotion Scale (TIDES-13) to determine whether various expressions of irritability in children and youth form multiple subdimensions with distinct correlates.",
-      "We administered parent-report (n\u00a0=\u00a03875, mean age\u00a0=\u00a08.9) and youth self-report (n\u00a0=\u00a0579, mean age\u00a0=\u00a015.1) versions of TIDES-13 in a population and community-based sample.",
-      "We conducted exploratory/confirmatory factor analyses and regression analyses to examine the dimensionality of TIDES-13 and the associations of the scale with age, gender, anxiety, depression, ODD, ADHD traits, and the Affective Reactivity Index (ARI).",
-      "A higher-order model with a global irritability dimension and four subdimensions, including proneness to anger (PA), internalized negative emotional reactivity (iNER), externalized negative emotional reactivity (eNER), and reactive aggression (RA), showed good to excellent fit in both parent-report and self-report.",
-      "The global irritability dimension showed excellent internal reliability (\u2375Total; parent-report\u00a0=\u00a00.97, \u2375Total; self-report\u00a0=\u00a00.95), explained a majority of the item variance (\u2375Hierarchical; parent-report\u00a0=\u00a00.94, \u2375Hierarchical; self-report\u00a0=\u00a00.90), and was moderately correlated with the ARI (rparent\u00a0=\u00a00.68, rself\u00a0=\u00a00.77).",
-      "Subdimensions PA, eNER, and RA were negatively associated with age in males, whereas iNER was positively associated with age in females.",
-      "Traits of ODD and ADHD were associated primarily with the global irritability dimension, whereas iNER was strongly associated with anxiety and depression traits over and above the global irritability dimension.",
-      "Our results support a unidimensional interpretation of irritability in a population sample.",
-      "However, limited evidence of specific behavioral, age, and sex correlates with particular irritability subdimensions may warrant further investigation."
     ],
     "contraindications": [],
     "related_ids": []
@@ -9821,7 +9369,11 @@
     "name": "Effects of accelerated intermittent \u03b8 burst stimulation on depressive episodes and cognitive function in adolescents with bipolar disorder.",
     "description": "BACKGROUND: Pharmacological treatments for adolescent bipolar depression often show limited efficacy, safety, and significant side effects concerns. Accelerated intermittent theta burst stimulation (a",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "treatment",
+      "depression",
+      "adolescent"
+    ],
     "age_range": [
       "all"
     ],
@@ -9846,59 +9398,6 @@
       "However, the reduction was not statistically different from the HF-rTMS group.",
       "Within the aiTBS group, higher baseline HAMD-24 scores positively predicted a greater reduction of symptoms at both one and two weeks post-treatment.",
       "CONCLUSIONS: A two-week course of daily aiTBS targeting the left DLPFC appears to be an effective intervention for reducing depressive symptoms in adolescents with bipolar depression, with greater benefits in those with more severe baseline symptoms and efficacy comparable to HF-rTMS."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_40545471",
-    "name": "Association of Serum SOCS3 and Inflammatory Marker Levels With Cognitive Function in First-Episode Schizophrenia.",
-    "description": "BACKGROUND: Accumulating evidence suggests that dysregulated inflammatory signalling pathway plays a crucial role in the development and pathogenesis of clinical features in schizophrenia. SOCS3, a ke",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "male",
-      "schizophrenia",
-      "suppressor_of_cytokine_signaling_3_protein",
-      "female",
-      "adult",
-      "young_adult",
-      "biomarkers",
-      "c-reactive_protein",
-      "cognition",
-      "interleukin-6",
-      "cognitive_dysfunction",
-      "adolescent",
-      "inflammation",
-      "neuropsychological_tests",
-      "schizophrenic_psychology",
-      "interleukin-1beta",
-      "cytokines"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Luo Jiali et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Luo Jiali et al. (2025)",
-        "detail": "10.1002/jdn.70027"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND: Accumulating evidence suggests that dysregulated inflammatory signalling pathway plays a crucial role in the development and pathogenesis of clinical features in schizophrenia.",
-      "SOCS3, a key regulator of inflammatory signalling pathways, has been implicated in this process.",
-      "However, the complicated association between SOCS3 function and clinical features in unmedicated first-episode schizophrenia (SCZ) remains poorly understood.",
-      "While increased levels of systemic inflammatory markers, including C-reactive protein (CRP) and proinflammatory cytokines like IL-6 and IL-1\u03b2, have been negatively linked to severity of negative and mood symptoms in SCZ patients, the levels of systemic inflammatory markers cytokines levels neurocognitive function in SCZ warrants further investigation.",
-      "The primary hypotheses of this study are as follows: (1) The levels of SOCS3 and systemic inflammatory cytokines levels could differentiate between individuals with first-episode SCZ and healthy controls.",
-      "(2) Patients with first-episode SCZ exhibit significantly lower cognitive function and executive abilities compared to healthy controls.",
-      "(3) Dysregulated SOCS3 pathways contribute to cognitive impairment in first-episode SCZ.",
-      "METHODS: A total of 93 patients diagnosed with first-episode SCZ and 60 healthy controls were recruited for the current study.",
-      "The serum levels of CRP, IL-6, IL-1\u03b2 and SOCS3 were determined with ELISA.",
-      "Clinical symptoms in SCZ patients were evaluated using the PANSS scale and Stroop test, while cognitive function in the healthy control group were assessed solely using the Stroop test."
     ],
     "contraindications": [],
     "related_ids": []
@@ -9946,101 +9445,6 @@
       "FINDINGS: The acylcarnitine lipid module is associated with both ADHD and ASD symptoms at 2 years of age.",
       "Risk factors of these outcomes such as low income, Apgar score, and maternal inflammation were partly mediated by higher birth acylcarnitine levels.",
       "Other cord blood lipid profiles were also associated with ADHD and ASD symptoms."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_29032150",
-    "name": "Functional analysis of schizophrenia genes using GeneAnalytics program and integrated databases.",
-    "description": "Schizophrenia (SCZ) is a chronic debilitating neuropsychiatric disorder with multiple risk factors involving numerous complex genetic influences. We examined and updated a master list of clinically re",
-    "document_type": "fact",
-    "tags": [
-      "amino_acid_transport_systems",
-      "calcium_channels",
-      "cerebellum",
-      "cerebral_cortex",
-      "databases,_genetic",
-      "genome-wide_association_study",
-      "humans",
-      "hypothalamus",
-      "ion_transport",
-      "medulla_oblongata",
-      "membrane_potentials",
-      "receptors,_dopamine",
-      "receptors,_gaba-a",
-      "receptors,_ionotropic_glutamate",
-      "receptors,_serotonin",
-      "schizophrenia",
-      "synaptic_transmission",
-      "thalamus"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Sundararajan Tharani et al. (2018)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Sundararajan Tharani et al. (2018)",
-        "detail": "10.1016/j.gene.2017.10.035"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Schizophrenia (SCZ) is a chronic debilitating neuropsychiatric disorder with multiple risk factors involving numerous complex genetic influences.",
-      "We examined and updated a master list of clinically relevant and susceptibility genes associated with SCZ reported in the literature and genomic databases dedicated to gene discovery for characterization of SCZ genes.",
-      "We used the commercially available GeneAnalytics computer-based gene analysis program and integrated genomic databases to create a molecular profile of the updated list of 608 SCZ genes to model their impact in select categories (tissues and cells, diseases, pathways, biological processes, molecular functions, phenotypes and compounds) using specialized GeneAnalytics algorithms.",
-      "Genes for schizophrenia were predominantly expressed in the cerebellum, cerebral cortex, medulla oblongata, thalamus and hypothalamus.",
-      "Psychiatric/behavioral disorders incorporating SCZ genes included ADHD, bipolar disorder, autism spectrum disorder and alcohol dependence as well as cancer, Alzheimer's and Parkinson's disease, sleep disturbances and inflammation.",
-      "Function based analysis of major biological pathways and mechanisms associated with SCZ genes identified glutaminergic receptors (e.g., GRIA1, GRIN2, GRIK4, GRM5), serotonergic receptors (e.g., HTR2A, HTR2C), GABAergic receptors (e.g., GABRA1, GABRB2), dopaminergic receptors (e.g., DRD1, DRD2), calcium-related channels (e.g., CACNA1H, CACNA1B), solute transporters (e.g., SLC1A1, SLC6A2) and for neurodevelopment (e.g., ADCY1, MEF2C, NOTCH2, SHANK3).",
-      "Biological mechanisms involving synaptic transmission, regulation of membrane potential and transmembrane ion transport were identified as leading molecular functions associated with SCZ genes.",
-      "Our approach to interrogate SCZ genes and their interactions at various levels has increased our knowledge and insight into the disease process possibly opening new avenues for therapeutic intervention."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_41053002",
-    "name": "The interplay between genomic copy number variants, sleep, and cognition in the general population.",
-    "description": "Genomic Copy Number variants (CNVs) increase risk for neurodevelopmental disorders (NDDs) and affect cognition, but their impact on sleep remains understudied despite the well-established link between",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "dna_copy_number_variations",
-      "male",
-      "female",
-      "middle_aged",
-      "cognition",
-      "sleep",
-      "adult",
-      "executive_function",
-      "united_kingdom",
-      "genome-wide_association_study",
-      "aged",
-      "sleep_initiation_and_maintenance_disorders",
-      "sleep_wake_disorders"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Poulain Cecile et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Poulain Cecile et al. (2025)",
-        "detail": "10.1371/journal.pone.0231627"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Genomic Copy Number variants (CNVs) increase risk for neurodevelopmental disorders (NDDs) and affect cognition, but their impact on sleep remains understudied despite the well-established link between sleep disturbances, NDDs, and cognition.",
-      "We investigated the relationship between CNVs, sleep traits, cognitive ability, and executive function in 498,852 individuals from an unselected population in the UK Biobank.",
-      "We replicated the U-shape relationship between measures of cognitive ability and sleep duration.",
-      "The effects of CNVs on sleep duration were evident at the genome-wide level; CNV-burden analyses showed that overall, CNVs with an increasing number of intolerant genes were associated with increased or decreased sleep duration in a U-shape pattern (p\u2009<\u20092e-16), but did not increase risk of insomnia.",
-      "Sleep duration only marginally mediated the robust association between CNVs and poorer cognitive performance, suggesting that sleep and cognitive phenotypes may result from pleiotropic effects of CNVs with minimal causal relationship."
     ],
     "contraindications": [],
     "related_ids": []
@@ -10194,7 +9598,11 @@
     "name": "Reliability and Validity Assessment of the Observation of Human-Animal Interaction for Research (OHAIRE) Behavior Coding Tool.",
     "description": "The Observation of Human-Animal Interaction for Research (OHAIRE) is a coding tool developed to capture the behavior of children when interacting with social partners and animals in naturalistic setti",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "assessment",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -10228,7 +9636,11 @@
     "name": "Investigating the relationship between sleep disturbances and psychopathology In children and adolescents with microdeletion of 22q11 chromosome: an exploratory study.",
     "description": "INTRODUCTION: 22q11.2 deletion syndrome (22q11.2DS), also known as velo-cardiofacial syndrome or DiGeorge syndrome (DGS) is highly variable in phenotype, encompassing a wide range of physical and neur",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "sleep",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -10305,7 +9717,13 @@
     "name": "Quality of life, adjustment, and associative comorbid conditions in children diagnosed with attention deficit hyperactivity disorder: A comparative study.",
     "description": "INTRODUCTION: Attention deficit hyperactivity disorder (ADHD) is a common pediatric, neurodevelopmental disorder, with serious impacts on lives of those suffering from it. ADHD is known to be associat",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "child",
+      "pediatric"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -10384,7 +9802,11 @@
     "name": "Theory of mind, metacognition, and executive functions in adolescents with social anxiety disorder: a comparative study.",
     "description": "BACKGROUND: Social anxiety disorder (SAD) in adolescence is associated with significant functional impairment and increased risk of chronic mental health difficulties. Recent research highlights the p",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "anxiety",
+      "adolescent"
+    ],
     "age_range": [
       "all"
     ],
@@ -10513,45 +9935,15 @@
     "related_ids": []
   },
   {
-    "id": "pm_39156286",
-    "name": "Concussion May Result in New-Onset Bipolar Disorder: A Case Report.",
-    "description": "Emotional dysregulation following a concussion is well established. New onset of major psychiatric diseases such as bipolar disorder (BPD) post-concussion has not been investigated. BPD typically pres",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Sabatose Kent W et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Sabatose Kent W et al. (2024)",
-        "detail": "10.7759/cureus.64731"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Emotional dysregulation following a concussion is well established.",
-      "New onset of major psychiatric diseases such as bipolar disorder (BPD) post-concussion has not been investigated.",
-      "BPD typically presents with an initial depressive episode followed by mania and concurrent depressive and manic states.",
-      "Multiple theories explaining the etiology of BPD exist, including the diathesis-stress model (DiSM), though an accepted theory is not established.",
-      "In this case study, medical records of a 50-year-old ambidextrous male with co-morbid attention deficit hyperactivity disorder (ADHD) inattentive type, obsessive-compulsive disorder (OCD), and a family history of BPD\u00a0suffered a motor vehicle collision (MVC) resulting in a grade II concussion.",
-      "New onset BPD was diagnosed one-year after a concussion following an involuntary admission and led to the patient self-terminating his medications and suffering a hypertensive crisis and aortic dissection, and stroke.",
-      "One year later, the patient was again involuntarily admitted for a suicide attempt.",
-      "Bipolar disorder persisted unchanged indefinitely.",
-      "This case study may serve as a real-world example of the DiSM in the etiology of BPD post-concussion.",
-      "We aim to highlight the importance of early identification of risk factors for progression to psychiatric conditions following concussion."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_40282044",
     "name": "Development and Training of Mindfulness and Its Relationship with Executive Function in Chinese Rural Upper-Grade Elementary School Students.",
     "description": "The purpose of this study was to explore the development and relationship between mindfulness and executive function (EF) in students in grades 4-5 and investigate mindfulness training's impact on min",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "school",
+      "mindfulness"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -10585,7 +9977,14 @@
     "name": "Differences in Real World Executive Function between Children with Pediatric Bipolar Disorder and Children with ADHD.",
     "description": "BACKGROUND: Recent research evidence suggests that executive function (EF) is impaired in both pediatric bipolar disorder (PBD) and attention deficit-hyperactivity disorder (ADHD), although the underl",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "executive_function",
+      "child",
+      "pediatric"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -10700,38 +10099,6 @@
     "related_ids": []
   },
   {
-    "id": "pm_41300659",
-    "name": "A Boy with a Novel Variant in TCF20: An Expanded Phenotype and a Brief Review of the Literature.",
-    "description": "Background:TCF20-associated neurodevelopmental disorder (TCF20-NDD) is a heterogeneous clinical condition resulting from defects in gene-encoding Transcription Factor 20, which plays a key role in neu",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Ziveri Diletta et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Ziveri Diletta et al. (2025)",
-        "detail": "10.3171/2019.5.PEDS18382"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background:TCF20-associated neurodevelopmental disorder (TCF20-NDD) is a heterogeneous clinical condition resulting from defects in gene-encoding Transcription Factor 20, which plays a key role in neuronal development and synaptic function.",
-      "Here, we present a novel case involving an 11-year-old boy who was referred to us for a neuro-developmental disorder characterized by attention deficit hyperactivity disorder (ADHD), tremor in the upper limbs, tilted head posture, motor delay, impaired executive functioning, and oculomotor dyspraxia.",
-      "Methods: Genetic tests were performed, including CGH array, molecular analysis of the FMR1 gene, molecular analysis using a next-generation sequencing gene panel targeted for spinocerebellar diseases, and finally, WES including mitochondrial genome analysis.",
-      "A neuroimaging study of brain and spine was performed using MRI.",
-      "Results: Trio Whole Exome Sequencing revealed a de novo pathogenic frameshift variant NM_001378418.1:c.5009dup, p.(Thr1671Aspfs*5) in the TCF20 gene.",
-      "The MRI scan of the brain, cervical, dorsal, and lumbosacral spine revealed Chiari type I malformation.",
-      "Regarding the pathogenic mechanism underlying Chiari I malformation, it could be found in the homology between TCF20 and the RAI1 gene, the latter being associated with alterations in the posterior cranial fossa.",
-      "Conclusions: We emphasize the use of exome sequencing in patients with unclear clinical presentations, with awareness of TCF20-associated neurodevelopmental disorder; paying attention to brain MRI findings would be useful to further expand the phenotype of TCF20-NDD."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_38418443",
     "name": "ADHD medications use and risk of mortality and unintentional injuries: a population-based cohort study.",
     "description": "We assessed the association between the use of medications for attention-deficit/hyperactivity disorder (ADHD) and the risk of all-cause mortality and unintentional injuries leading to emergency depar",
@@ -10779,7 +10146,10 @@
     "name": "Effects of Computerized Cognitive Training in Children and Adolescents with Autism Spectrum Disorder: A Systematic Review.",
     "description": "Autism spectrum disorder (ASD) is a prevalent neurodevelopmental disorder often accompanied by cognitive impairments. Computerized cognitive training (CCT) has emerged as a scalable and engaging inter",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "all"
     ],
@@ -11055,35 +10425,6 @@
     "related_ids": []
   },
   {
-    "id": "pm_37713698",
-    "name": "Attention-Deficit/Hyperactivity Disorder-Associated Impulsive Aggression.",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "adolescent",
-      "attention_deficit_disorder_with_hyperactivity",
-      "aggression",
-      "adolescent_behavior"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Naguy Ahmed et al.",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Naguy Ahmed et al.",
-        "detail": "10.1097/MJT.0000000000001600"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_38859688",
     "name": "Highly Involved Parenting of Adolescents With ADHD: Examination of the Psychometric Properties of a Measure of \"Helicopter Parenting\".",
     "description": "OBJECTIVE: The concept of the \"helicopter parent\" was popularized in the 2000s and 2010s by Western culture, and it has recently begun to be examined by researchers to describe parental over-involveme",
@@ -11221,34 +10562,6 @@
       "Process evaluation showed the intervention was feasible and acceptable.",
       "Significant improvements were observed in attention (t\u00a0=\u00a0-9.11; 95% CI, -2.86 to -1.81; P\u00a0<\u00a0.001) and processing speed and executive functions (t\u00a0=\u00a05.56; 95% CI, 2.34 to 5.05; P\u00a0<\u00a0.001) but not nonverbal intelligence (t\u00a0=\u00a0-1.96; 95% CI, -3.01 to 0.05; P\u00a0=\u00a0.060) between baseline and 12-month follow-up.",
       "CONCLUSIONS: This study demonstrated the feasibility, acceptability, and potential efficacy of implementing a musical training program among survivors of pediatric brain tumors."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_41472845",
-    "name": "iMeta Conference 2025: Creating high-impact international journals.",
-    "description": "The iMeta Conference 2025, part of the iMeta Conference series, themed \"Creating High-Impact International Journals,\" held at the Huangjiahu Campus of Hubei University of Chinese Medicine from August",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Zhu Zhihao et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Zhu Zhihao et al. (2025)",
-        "detail": "10.1002/imt2.239"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The iMeta Conference 2025, part of the iMeta Conference series, themed \"Creating High-Impact International Journals,\" held at the Huangjiahu Campus of Hubei University of Chinese Medicine from August 23rd to 25th, 2025, and focused on frontier topics such as microbiology, medicine, traditional Chinese medicine, botany, and research career development.",
-      "The event aimed to support the development of researchers and strengthen the impact of academic journals.",
-      "Through invited reports, thematic seminars, and poster presentations, the conference highlighted hot topics including multi-omics technologies, microbe-host interactions, AI-assisted research, live biotherapeutic products, and the modernization of traditional Chinese medicine.",
-      "The event demonstrated the innovative momentum of interdisciplinary integration and technological convergence, providing an international platform for academic exchange and laying a foundation for building an innovative scientific research ecosystem and enhancing the global influence of Chinese academic journals."
     ],
     "contraindications": [],
     "related_ids": []
@@ -11433,34 +10746,15 @@
     "related_ids": []
   },
   {
-    "id": "pm_40251784",
-    "name": "Preliminary evidence of brain and behavioral consequences of sleep loss in children and their association with attention-deficit/hyperactivity-disorder traits.",
-    "description": "",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Saletin Jared M et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Saletin Jared M et al. (2025)",
-        "detail": "10.1093/sleep/zsaf097"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_24350191",
     "name": "The Integration of the Neurosciences, Child Public Health, and Education Practice: Hemisphere-Specific Remediation Strategies as a Discipline Partnered Rehabilitation Tool in ADD/ADHD.",
     "description": "ADD/ADHD is the most common and most studied neurodevelopmental problem. Recent statistics from the U.S. Center for Disease Control state that 11% or approximately one out of every nine children in th",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "education",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -12086,7 +11380,11 @@
     "name": "Investigating the relationship between DMFT and mothers' knowledge and attitude about oral health and dmft of 6-12-year-old children with attention-deficit/hyperactivity disorder.",
     "description": "BACKGROUND: Children with attention-deficit/hyperactivity disorder (ADHD) are more prone to tooth decay. In this regard, parents, especially their mothers, play a major role in the oral health of thei",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -12198,67 +11496,13 @@
     "related_ids": []
   },
   {
-    "id": "pm_34473692",
-    "name": "Examining sex differences in neurodevelopmental and psychiatric genetic risk in anxiety and depression.",
-    "description": "Anxiety and depression are common mental health disorders and have a higher prevalence in females. They are modestly heritable, share genetic liability with other psychiatric disorders, and are highly",
-    "document_type": "fact",
-    "tags": [
-      "adolescent",
-      "adult",
-      "age_of_onset",
-      "aged",
-      "anxiety",
-      "attention_deficit_disorder_with_hyperactivity",
-      "child",
-      "cohort_studies",
-      "dna_copy_number_variations",
-      "depression",
-      "major_depressive_disorder",
-      "female",
-      "genetic_predisposition_to_disease",
-      "humans",
-      "male",
-      "medical_history_taking",
-      "middle_aged",
-      "neurodevelopmental_disorders",
-      "schizophrenia",
-      "sex_factors",
-      "young_adult"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Martin Joanna et al. (2021)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Martin Joanna et al. (2021)",
-        "detail": "10.1001/jamapsychiatry.2013.1985"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Anxiety and depression are common mental health disorders and have a higher prevalence in females.",
-      "They are modestly heritable, share genetic liability with other psychiatric disorders, and are highly heterogeneous.",
-      "There is evidence that genetic liability to neurodevelopmental disorders, such as attention deficit hyperactivity disorder (ADHD) is associated with anxiety and depression, particularly in females.",
-      "We investigated sex differences in family history for neurodevelopmental and psychiatric disorders and neurodevelopmental genetic risk burden (indexed by ADHD polygenic risk scores (PRS) and rare copy number variants; CNVs) in individuals with anxiety and depression, also taking into account age at onset.",
-      "We used two complementary datasets: 1) participants with a self-reported diagnosis of anxiety or depression (N = 4,178, 65.5% female; mean age = 41.5 years; N = 1,315 with genetic data) from the National Centre for Mental Health (NCMH) cohort and 2) a clinical sample of 13,273 (67.6% female; mean age = 45.2 years) patients with major depressive disorder (MDD) from the Psychiatric Genomics Consortium (PGC).",
-      "We tested for sex differences in family history of psychiatric problems and presence of rare CNVs (neurodevelopmental and >500kb loci) in NCMH only and for sex differences in ADHD PRS in both datasets.",
-      "In the NCMH cohort, females were more likely to report family history of neurodevelopmental and psychiatric disorders, but there were no robust sex differences in ADHD PRS or presence of rare CNVs.",
-      "There was weak evidence of higher ADHD PRS in females compared to males in the PGC MDD sample, particularly in those with an early onset of MDD.",
-      "These results do not provide strong evidence of sex differences in neurodevelopmental genetic risk burden in adults with anxiety and depression.",
-      "This indicates that sex may not be a major index of neurodevelopmental genetic heterogeneity, that is captured by ADHD PRS and rare CNV burden, in adults with anxiety and depression."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_38790432",
     "name": "A Narrative Review of the Efficacy of Interventions for Emotional Dysregulation, and Underlying Bio-Psycho-Social Factors.",
     "description": "In this narrative, comprehensive, and updated review of the literature, we summarize evidence about the effectiveness of interventions aimed at reducing emotion dysregulation and improving emotion reg",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "intervention"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -12473,7 +11717,12 @@
     "name": "Neurocognitive Correlates of Diagnostic Heterogeneity in Children with ADHD: The Differential Contributions of Cognitive Disengagement Syndrome, Symptom Severity, and Anxiety.",
     "description": "Background/Objectives: Attention-Deficit/Hyperactivity Disorder (ADHD) shows substantial cognitive heterogeneity, complicating individualized clinical formulation. This study examined whether Cognitiv",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "anxiety",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -12543,7 +11792,12 @@
     "name": "The impact of attention-deficit/hyperactivity disorder and specific learning disorders on academic performance in Spanish children from a low-middle- and a high-income population.",
     "description": "INTRODUCTION: Past research has demonstrated that attention-deficit/hyperactivity disorder (ADHD), specific learning disorders (SLD), and socioeconomic status (SES) affect a host of educational outcom",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "education",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -12577,7 +11831,12 @@
     "name": "Metabolomic Profile in Children and Adolescents with Attention Deficit Hyperactivity Disorders.",
     "description": "OBJECTIVE: Biological processes are the sum of metabolic reactions that result in intermediate and end metabolite products. These processes are the reflection of genetic regulation and are profoundly",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "attention_deficit",
+      "hyperactivity",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -12649,49 +11908,6 @@
       "The GEC was most strongly associated with ADHD (odds ratios=4.46; 95% confidence interval, 1.77-11.22).",
       "Elevated scores on the BRIEF GEC were associated with low sensitivity (24.1 to 39.1) for detecting the outcomes but better specificity (range, 87.7 to 89.3).",
       "These results suggest that the parent-completed BRIEF is associated with clinical outcomes but is not a sensitive tool to identify leukemia survivors that require a comprehensive neuropsychological assessment."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_38869906",
-    "name": "International Consensus on Standard Outcome Measures for Neurodevelopmental Disorders: A Consensus Statement.",
-    "description": "IMPORTANCE: The use of evidence-based standardized outcome measures is increasingly recognized as key to guiding clinical decision-making in mental health. Implementation of these measures into clinic",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "neurodevelopmental_disorders",
-      "child",
-      "outcome_assessment,_health_care",
-      "adolescent",
-      "delphi_technique",
-      "attention_deficit_disorder_with_hyperactivity",
-      "female"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Mulraney Melissa et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Mulraney Melissa et al. (2024)",
-        "detail": "10.1001/jamanetworkopen.2024.16760"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "IMPORTANCE: The use of evidence-based standardized outcome measures is increasingly recognized as key to guiding clinical decision-making in mental health.",
-      "Implementation of these measures into clinical practice has been hampered by lack of clarity on what to measure and how to do this in a reliable and standardized way.",
-      "OBJECTIVE: To develop a core set of outcome measures for specific neurodevelopmental disorders (NDDs), such as attention-deficit/hyperactivity disorder (ADHD), communication disorders, specific learning disorders, and motor disorders, that may be used across a range of geographic and cultural settings.",
-      "EVIDENCE REVIEW: An international working group composed of clinical and research experts and service users (n\u2009=\u200927) was convened to develop a standard core set of accessible, valid, and reliable outcome measures for children and adolescents with NDDs.",
-      "The working group participated in 9 video conference calls and 8 surveys between March 1, 2021, and June 30, 2022.",
-      "A modified Delphi approach defined the scope, outcomes, included measures, case-mix variables, and measurement time points.",
-      "After development, the NDD set was distributed to professionals and service users for open review, feedback, and external validation.",
-      "FINDINGS: The final set recommends measuring 12 outcomes across 3 key domains: (1) core symptoms related to the diagnosis; (2) impact, functioning, and quality of life; and (3) common coexisting problems.",
-      "The following 14 measures should be administered at least every 6 months to monitor these outcomes: ADHD Rating Scale 5, Vanderbilt ADHD Diagnostic Rating Scale, or Swanson, Nolan, and Pelham Rating Scale IV; Affective Reactivity Index; Children's Communication Checklist 2; Colorado Learning Disabilities Questionnaire; Children's Sleep Habits Questionnaire; Developmental-Disability Children's Global Assessment Scale; Developmental Coordination Disorder Questionnaire; Family Strain Index; Intelligibility in Context Scale; Vineland Adaptive Behavior Scale or Repetitive Behavior Scale-Revised and Social Responsiveness Scale; Revised Child Anxiety and Depression Scales; and Yale Global Tic Severity Scale.",
-      "The external review survey was completed by 32 professionals and 40 service users."
     ],
     "contraindications": [],
     "related_ids": []
@@ -12962,7 +12178,13 @@
     "name": "Sex Differences in Children with Uncomplicated Attention Deficit/Hyperactivity Disorder and Sleep Problems.",
     "description": "BACKGROUND: Approximately 7.6% of children are diagnosed with attention deficit/hyperactivity disorder (ADHD), and sleep impairments affect 25-85%. There is a noticeable lack of research on girls and",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "sleep",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -12996,7 +12218,13 @@
     "name": "Information System for Symptom Diagnosis and Improvement of Attention Deficit Hyperactivity Disorder: Protocol for a Nonrandomized Controlled Pilot Study.",
     "description": "BACKGROUND: Attention deficit hyperactivity disorder (ADHD) is one of the most common neurodevelopmental disorders during childhood; however, the diagnosis procedure remains challenging, as it is nons",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "diagnosis",
+      "child"
+    ],
     "age_range": [
       "all"
     ],
@@ -13021,40 +12249,6 @@
       "During the study, gameplay data were collected and preprocessed.",
       "The protocol of the pilot trials was initially designed for in-person participation, but after the COVID-19 outbreak, it was adjusted for remote participation.",
       "State-of-the-art machine learning (ML) algorithms were used to analyze labeled gameplay data aiming to detect discriminative gameplay patterns among the 2 groups (ADHD and non-ADHD) and estimate a player's likelihood of having ADHD characteristics."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_40236494",
-    "name": "DMN network and neurocognitive changes associated with dissociative symptoms in major depressive disorder: a research protocol.",
-    "description": "INTRODUCTION: Depression is a heterogeneous disorder with diverse clinical presentations and etiological underpinnings, necessitating the identification of distinct subtypes to enhance targeted interv",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "preschool"
-    ],
-    "evidence_level": "moderate",
-    "source": "Ercan Dogan Asli et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Ercan Dogan Asli et al. (2025)",
-        "detail": "10.1016/j.psychres.2020.113292"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "INTRODUCTION: Depression is a heterogeneous disorder with diverse clinical presentations and etiological underpinnings, necessitating the identification of distinct subtypes to enhance targeted interventions.",
-      "Dissociative symptoms, commonly observed in major depressive disorder (MDD) and linked to early life trauma, may represent a unique clinical dimension associated with specific neurocognitive deficits.",
-      "Although emerging research has begun to explore the role of dissociation in depression, most studies have provided only descriptive analyses, leaving the mechanistic interplay between these phenomena underexplored.",
-      "The primary objective of this study is to determine whether MDD patients with prominent dissociative symptoms differ from those without such symptoms in clinical presentation, neurocognitive performance, and markers of functional connectivity.",
-      "This investigation will be the first to integrate comprehensive clinical evaluations, advanced neurocognitive testing, and high-resolution brain imaging to delineate the contribution of dissociative symptoms in MDD.",
-      "METHODS: We will recruit fifty participants for each of three groups: (1) depressive patients with dissociative symptoms, (2) depressive patients without dissociative symptoms, and (3) healthy controls.",
-      "Diagnostic assessments will be performed using the Structured Clinical Interview for DSM-5 (SCID) alongside standardized scales for depression severity, dissociation, and childhood trauma.",
-      "Neurocognitive performance will be evaluated through a battery of tests assessing memory, attention, executive function, and processing speed.",
-      "Structural and functional magnetic resonance imaging (MRI) will be conducted on a 3 Tesla scanner, focusing on the connectivity of the Default Mode Network with key regions such as the orbitofrontal cortex, insula, and posterior cingulate cortex.",
-      "Data analyses will employ SPM-12 and Matlab-based CONN and PRONTO tools, with multiclass Gaussian process classification applied to differentiate the three groups based on clinical, cognitive, and imaging data."
     ],
     "contraindications": [],
     "related_ids": []
@@ -13302,7 +12496,9 @@
     "name": "Developmental differences in neural correlates of semantic processing and executive performances between autistic boys and non-autistic boys.",
     "description": "BACKGROUND: Previous studies have separately investigated neural alterations during semantic judgments and executive functions in autism without extensively exploring their interrelations. Understandi",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -13382,7 +12578,10 @@
     "name": "Characterizing executive functioning and associated behaviors in individuals with dual-specificity tyrosine phosphorylation-regulated kinase 1A (DYRK1A) syndrome.",
     "description": "INTRODUCTION: DYRK1A, a protein kinase located on human chromosome 21, plays a role in postembryonic neuronal development and degeneration. Alterations to DYRK1A have been consistently associated with",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "behavior"
+    ],
     "age_range": [
       "all"
     ],
@@ -13735,57 +12934,6 @@
       "It may also affect the total symptoms through the FC of the IFG with the cerebellum.",
       "CONCLUSION: ADHD showed extensive spontaneous activity abnormalities and frontal-cerebellar FC impairments.",
       "Localized functional abnormalities in the MTG may affect the shift in EF, resulting in attention deficit behavior."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_40307697",
-    "name": "Protein-truncating variants and deletions of SHANK2 are associated with autism spectrum disorder and other neurodevelopmental concerns.",
-    "description": "BACKGROUND: SHANK2 disorder is a rare neurodevelopmental disorder caused by a deletion or pathogenic sequence variant of the SHANK2 gene and is associated with autism spectrum disorder (ASD), intellec",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "autism_spectrum_disorder",
-      "male",
-      "female",
-      "nerve_tissue_proteins",
-      "child",
-      "child,_preschool",
-      "chromosome_disorders",
-      "developmental_disabilities",
-      "adolescent",
-      "attention_deficit_disorder_with_hyperactivity",
-      "intellectual_disability",
-      "chromosomes,_human,_pair_22",
-      "adult",
-      "cohort_studies",
-      "chromosome_deletion"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Silver Hailey et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Silver Hailey et al. (2025)",
-        "detail": "10.1038/s41436-020-01076-8"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND: SHANK2 disorder is a rare neurodevelopmental disorder caused by a deletion or pathogenic sequence variant of the SHANK2 gene and is associated with autism spectrum disorder (ASD), intellectual disability (ID), and developmental delay.",
-      "To date, research in SHANK2 has focused on laboratory-based in vivo and in vitro studies with few prospective clinical studies in humans.",
-      "METHODS: A remote assessment battery was comprised of caregiver interviews with a psychiatrist, psychologists, and a genetic counselor, caregiver-reports, and review of records.",
-      "Results from this cohort were reported using descriptive statistics.",
-      "An age-matched sample of participants with SHANK3 haploinsufficiency (Phelan-McDermid syndrome, PMS) was used to compare adaptive behavior between the two groups.",
-      "RESULTS: All ten participants demonstrated delays in adaptive behavior, with most motor skills preserved and a weakness in communication.",
-      "According to parent report, 90% of participants carried a formal diagnosis of ASD, 50% of participants carried a diagnosis of attention-deficit/hyperactivity disorder (ADHD), and mild-to-moderate developmental delays were noted.",
-      "Sensory hyperreactivity and seeking behaviors were more pronounced than sensory hyporeactivity.",
-      "Medical features included hypotonia, recurrent ear infections, and gastrointestinal abnormalities.",
-      "No similar facial dysmorphic features were observed."
     ],
     "contraindications": [],
     "related_ids": []
@@ -14259,7 +13407,9 @@
     "name": "Profiles and correlates of language and social communication differences among young autistic children.",
     "description": "Delays in early language development are characteristic of young autistic children, and one of the most recognizable first concerns that motivate parents to seek a diagnostic evaluation for their chil",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -14601,53 +13751,6 @@
       "At the end of the study, parents reported treatment preferences.",
       "Stimulant medication led to significant improvements across all outcome variables with higher doses resulting in greater improvement.",
       "Behavioral treatment significantly improved child individualized goal attainment, symptoms, and impairment in the home setting and parenting stress and self-efficacy."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_39496559",
-    "name": "Callous-unemotional traits, cognitive functioning, and externalizing problems in a propensity-matched sample from the ABCD study.",
-    "description": "BACKGROUND: Many studies show that both callous-unemotional (CU) traits (e.g., low empathy, lack of guilt) and cognitive difficulties increase risk for externalizing psychopathology across development",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "male",
-      "female",
-      "conduct_disorder",
-      "adolescent",
-      "child",
-      "attention_deficit_and_disruptive_behavior_disorders",
-      "cognitive_dysfunction",
-      "empathy",
-      "cross-sectional_studies",
-      "aggression",
-      "propensity_score"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Murtha Kristin et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Murtha Kristin et al. (2025)",
-        "detail": "10.1101/2023.05.29.542742"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND: Many studies show that both callous-unemotional (CU) traits (e.g., low empathy, lack of guilt) and cognitive difficulties increase risk for externalizing psychopathology across development.",
-      "However, other work suggests that some aggression (e.g., relational, proactive) may rely on intact cognitive function, which could vary based on the presence of CU traits.",
-      "Moreover, no prior research has adequately accounted for common risk factors shared by CU traits, cognitive difficulties, and externalizing problems, which confounds conclusions that can be drawn about their purported relationships.",
-      "The current study addressed these knowledge gaps by leveraging rigorous propensity matching methods to isolate associations between CU traits and different dimensions of cognitive function and externalizing problems.",
-      "METHODS: Associations between CU traits, cognitive functioning, and externalizing outcomes were tested within dimensional (n\u2009=\u200911,868) and propensity-matched group-based (n\u2009=\u20091,224) models using data from the Adolescent Brain Cognitive Development Study\u00ae, with rigorous statistical control for shared sociodemographic risk factors.",
-      "Cross-sectional outcomes were parent-reported symptoms of conduct disorder (CD), oppositional defiant disorder (ODD), and attention deficit hyperactivity disorder (ADHD).",
-      "Longitudinal outcomes were child-reported overt and relational aggression.",
-      "RESULTS: CU traits were uniquely related to more parent-reported CD, ODD, ADHD symptoms, as well as more child-reported aggressive behaviors.",
-      "Effects of cognitive difficulties were domain specific and were not consistent across dimensional and propensity matched models.",
-      "There was minimal evidence for divergent associations between CU traits and externalizing outcomes as a function of cognition (i.e., no moderation)."
     ],
     "contraindications": [],
     "related_ids": []
@@ -15108,7 +14211,9 @@
     "name": "Association between COVID-19 risk-mitigation behaviors and specific mental disorders in youth.",
     "description": "BACKGROUND: Although studies of adults show that pre-existing mental disorders increase risk for COVID-19 infection and severity, there is limited information about this association among youth. Menta",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -15298,59 +14403,16 @@
     "related_ids": []
   },
   {
-    "id": "pm_40265388",
-    "name": "Visual-Motor Functions and Associated Cognitive Outcomes in Pediatric Cancer Survivors.",
-    "description": "INTRODUCTION: Pediatric cancer survivors are at high risk for visual-motor and cognitive deficits that persist throughout life. These domains are related to academic performance. The current study exa",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "child",
-      "female",
-      "male",
-      "adolescent",
-      "cognition",
-      "cancer_survivors",
-      "precursor_cell_lymphoblastic_leukemia-lymphoma",
-      "visual_perception",
-      "psychomotor_performance",
-      "attention",
-      "memory,_short-term",
-      "survivors"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Deviaterikova Alena (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Deviaterikova Alena (2025)",
-        "detail": "10.1097/MRR.0000000000000400"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "INTRODUCTION: Pediatric cancer survivors are at high risk for visual-motor and cognitive deficits that persist throughout life.",
-      "These domains are related to academic performance.",
-      "The current study examined (i) whether both visuomotor and cognitive functions and (ii) whether visuomotor functions alone mediate the relationship between age and cognitive functions.",
-      "METHODS: In total, there were 210 participants (7-17 years): 70 posterior fossa tumors (Mage = 12.1\u2009 \u00b1 \u20093.2 years, 44% female) and 70 acute lymphoblastic leukemia (Mage = 12.3\u2009 \u00b1 \u20093.4 years, 45% female) survivors and 70 (Mage = 12.2 \u00b1\u20093.3 years, 41% female) healthy controls.",
-      "Visual motor integration, motor coordination and visual perception were assessed using the Beery VMI test.",
-      "Working memory, attention and planning were assessed using CANTAB.",
-      "RESULTS: Impaired motor function is significantly more pronounced than cognitive impairment in both groups of cancer survivors (effect size from 25 to 30% for visual-motor and from 5 to 7% for cognitive functions).",
-      "A multiple regression model revealed that age and visual motor functions are significant predictors of attention (in the ALL group \u03b2 = -0.490, t = -4.88, p = 0.000) and working memory (in the PFT group \u03b2 = 0.264, t = 2.72, p = 0.008; in the ALL group \u03b2 = 0.215, t = 2.24, p = 0.028).",
-      "CONCLUSIONS: In children who have experienced acute lymphoblastic leukemia and tumors of the posterior cranial fossa, visual-motor dysfunction is more pronounced than cognitive impairment.",
-      "In addition, there is an association between visual-motor function disorders and working memory."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_33256132",
     "name": "Autism Spectrum Disorder and Disruptive Behavior Disorders Comorbidities Delineate Clinical Phenotypes in Attention-Deficit Hyperactivity Disorder: Novel Insights from the Assessment of Psychopathological and Neuropsychological Profiles.",
     "description": "Although childhood-onset psychiatric disorders are often considered as distinct and separate from each other, they frequently co-occur, with partial overlapping symptomatology. Autism spectrum disorde",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "hyperactivity",
+      "behavior",
+      "assessment",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -15373,73 +14435,6 @@
       "The ADHD alone group presented a greater impairment in metacognitive executive functions, ADHD+ASD patients presented higher internalizing problems and deficits in Shifting tasks, and ADHD+ODD/CD subjects presented emotional-behavioral dysregulation.",
       "Moreover, ADHD+ASD+ODD/CD individuals exhibited greater internalizing and externalizing problems, and specific neuropsychological impairments in the domains of emotional regulation.",
       "Our study supports the need to implement the evaluation of the psychopathological and neuropsychological functioning profiles, and to characterize specific endophenotypes for a finely customized establishment of treatment strategies."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_40271261",
-    "name": "Enhancing medical education: The crucial role of sensory processing - Insights from occupational therapy.",
-    "description": "The processing of sensory information is crucial for academic success, socialization, and emotional well-being. Students who struggle with sensory processing (SP) may have difficulty concentrating, fo",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Ghanbari Sahar et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Ghanbari Sahar et al. (2025)",
-        "detail": "10.4103/jehp.jehp_1770_23"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The processing of sensory information is crucial for academic success, socialization, and emotional well-being.",
-      "Students who struggle with sensory processing (SP) may have difficulty concentrating, forming relationships with peers, and getting adequate sleep.",
-      "These challenges are especially prevalent among college students with neurodevelopmental conditions like autism spectrum disorder and attention deficit hyperactivity disorder.",
-      "To provide a comprehensive analysis of SP findings in medical education, this review examines prior research in the field of occupational therapy.",
-      "To gather relevant studies, we conducted a literature search using various databases including PubMed, ISI Web of Science, and SCOPUS.",
-      "Our search utilized keywords such as \"sensory processing,\" \"university students,\" and \"college students\".",
-      "We have classified the outcomes into eight distinct subheadings, which we elaborated in detail.",
-      "\"Managing educational settings with senses into account,\" \"managing relationships with senses into account,\" \"SP affects medical education in various ways,\" \"challenges that learners with SP difficulties may face in medical education,\" \"misconceptions that medical educators have about learners with SP difficulties,\" \"learning more about SP difficulties in medical learners,\" \"techniques that can support medical learners with SP difficulties,\" and \"challenges related to incorporate sensory experiences into medical education\" are explained in the result section.",
-      "Understanding different personality types and their preferences according to the Dunn model of SP can help create a more productive and satisfying university setting for everyone.",
-      "Therefore, it is essential for universities to recognize the impact of SP difficulties and provide appropriate support and accommodations to help students succeed both academically and socially."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_40677471",
-    "name": "Neonatal Hypoglycemia and Long-Term Pediatric Neurodevelopmental Outcomes: A Systematic Review.",
-    "description": "Neonatal hypoglycemia is a common metabolic disturbance with potentially significant implications for neurodevelopment, yet the long-term consequences are not completely understood. This systematic re",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Abdelmonem Mahrous Rasha Fawzy et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Abdelmonem Mahrous Rasha Fawzy et al. (2025)",
-        "detail": "10.7759/cureus.86183"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Neonatal hypoglycemia is a common metabolic disturbance with potentially significant implications for neurodevelopment, yet the long-term consequences are not completely understood.",
-      "This systematic review synthesises evidence from 13 studies to evaluate the association between neonatal hypoglycemia and neurodevelopmental outcomes in children, examining the roles of severity, timing, and clinical management.",
-      "A comprehensive search across PubMed, Embase, Scopus, and Web of Science yielded 260 records, with 13 studies meeting inclusion criteria after rigorous screening.",
-      "Methodological quality was assessed using the Newcastle-Ottawa Scale (NOS), revealing that seven studies had a low risk of bias, while six demonstrated a moderate risk.",
-      "Findings indicate that severe hypoglycemia, particularly when early-onset or recurrent, is consistently associated with adverse outcomes, including motor dysfunction, cognitive delays, and executive function impairments.",
-      "In contrast, milder hypoglycemia showed no consistent association with neurodevelopmental deficits when promptly treated.",
-      "Heterogeneity in definitions and assessment methods across studies underscores the need for standardised criteria.",
-      "The review highlights the importance of vigilant monitoring and targeted intervention for high-risk infants while suggesting that aggressive management of transient hypoglycemia may be unnecessary.",
-      "Future research should prioritise longitudinal designs, consensus definitions, and exploration of protective factors to refine clinical guidelines and optimise neurodevelopmental outcomes."
     ],
     "contraindications": [],
     "related_ids": []
@@ -15485,29 +14480,6 @@
       "There were statistically significant negative correlations between the right-hand 2D:4D ratios and the ADHD, impulsivity, alexithymia and aggression scores and a significant negative correlation between Dr-I scores and the impulsivity scores of MUD and OUD patients.",
       "These findings contribute to the existing literature examining the complex relationship between prenatal testosterone exposure, substance use disorders and related psychological traits."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_36315259",
-    "name": "Correction to: Home-based parent training for school-aged children with attention-deficit/hyperactivity disorder and behavior problems with remaining impairing disruptive behaviors after routine treatment: a randomized controlled trial.",
-    "description": "",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Nobel Ellen et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Nobel Ellen et al. (2024)",
-        "detail": "10.1007/s00787-022-02102-7"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -15688,82 +14660,6 @@
       "However, despite suggestions of a relationship between ADHD and gut microbiota, few studies have explored the efficacy of FMT for ADHD.",
       "In the current study, we used 16S rDNA analysis to show that ADHD-like model rats possess a gut microbiota that is distinct from that of healthy rats, and we demonstrated that FMT from healthy rats improved hyperactivity in ADHD-like model rats.",
       "Our findings suggest that differences in gut microbiota underlie ADHD-like behaviors and that FMT may be an effective treatment for ADHD."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_38436069",
-    "name": "Psychosocial Status and Self-Perception in Patients with Cleft Lip and/or Palate.",
-    "description": "ObjectiveTo describe how the psychosocial status of patients with cleft lip and/or palate (CL/P) relates to patient-reported outcomes (PROs).DesignCross-sectional retrospective chart review.SettingTer",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "cleft_lip",
-      "cleft_palate",
-      "male",
-      "female",
-      "adolescent",
-      "cross-sectional_studies",
-      "retrospective_studies",
-      "child",
-      "adult",
-      "self_concept",
-      "patient_reported_outcome_measures",
-      "young_adult"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Salinero Lauren K et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Salinero Lauren K et al. (2025)",
-        "detail": "10.1177/10556656241236369"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "ObjectiveTo describe how the psychosocial status of patients with cleft lip and/or palate (CL/P) relates to patient-reported outcomes (PROs).DesignCross-sectional retrospective chart review.SettingTertiary care pediatric hospital.Patients/ParticipantsPatients aged 8 to 29 years attending cleft team evaluations during a 1-year period.Main Outcome MeasuresCLEFT-Q.ResultsPatients (N\u2009=\u2009158) with isolated or syndromic CL/P and mean age 13.4\u2009\u00b1\u20093.0 years were included.",
-      "Fifteen (9%) patients had siblings who also had CL/P.",
-      "Of 104 patients who met with the team psychologist, psychosocial concerns were identified in 49 (47%) patients, including 25 (24%) with Attention-Deficit/Hyperactivity Disorder or behavior concerns, 28 (27%) with anxiety, and 14 (13%) with depression or mood concerns.",
-      "Younger age and having siblings with cleft were associated with better PROs, while psychosocial concerns were associated with worse PROs on Speech, Psychosocial, and Face Appearance scales.ConclusionsPatient perception of cleft outcomes is linked to psychosocial factors."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_40745475",
-    "name": "Pantethine ameliorates dilated cardiomyopathy features in PPCS deficiency disorder in patients and cell line models.",
-    "description": "BACKGROUND: PPCS deficiency disorder (PPCS DD) is an ultra-rare, autosomal recessive form of dilated cardiomyopathy (DCM) caused by pathogenic variants in PPCS, which encodes the enzyme catalyzing the",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Zhang Fangfang et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Zhang Fangfang et al. (2025)",
-        "detail": "10.1038/s43856-025-01017-z"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND: PPCS deficiency disorder (PPCS DD) is an ultra-rare, autosomal recessive form of dilated cardiomyopathy (DCM) caused by pathogenic variants in PPCS, which encodes the enzyme catalyzing the second step in the coenzyme A (CoA) biosynthesis pathway.",
-      "To date, only six patients worldwide have been identified.",
-      "METHODS: Whole-exome sequencing was performed to identify pathogenic PPCS variants in affected individuals.",
-      "Protein stability was assessed by Western blotting.",
-      "CoA levels were quantified using a microplate-based assay in patient-derived fibroblasts, cardiac progenitor cells, and cardiomyocytes.",
-      "Functional evaluation of cardiac cells and engineered heart patches was conducted to investigate contractile performance and arrhythmogenicity.",
-      "Pantethine was tested as a potential therapeutic agent both in vitro and through long-term clinical follow-up in patients.",
-      "RESULTS: Causative PPCS variants are identified in six individuals with DCM and variable associated features, including neuromuscular and neurological symptoms.",
-      "Identified variants lead to reduced PPCS protein stability and decreased cellular CoA levels.",
-      "Cardiac cells exhibit impaired contractility and arrhythmias, which are partially rescued by pantethine treatment."
     ],
     "contraindications": [],
     "related_ids": []
@@ -16040,7 +14936,10 @@
     "name": "Associations between physical fitness and executive functions in 10-13\u202fyear male children in Saudi Arabia.",
     "description": "OBJECTIVES: The aim of the present study was investigating the associations between physical fitness and executive function tasks in children aged 10-13 years, with a particular focus on the contribut",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -16064,59 +14963,6 @@
       "From an educational and policy standpoint, integrating targeted fitness programs into school curricula may foster both physical health and cognitive development.",
       "Consequently, this study underscores the need for holistic approaches that combine physical and cognitive interventions, ultimately enhancing overall development and academic performance in schoolchildren.",
       "Hence, this study underscores the need for holistic educational interventions that integrate physical fitness with cognitive development."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_31996299",
-    "name": "Acceptability of an adjunct equine-assisted activities and therapies program for veterans with posttraumatic stress disorder and/or traumatic brain injury.",
-    "description": "OBJECTIVE: Equine-assisted activities and therapies (EAATs) have been a growing adjunctive integrative health modality, as they allow participants to practice mindfulness, emotional regulation, and se",
-    "document_type": "fact",
-    "tags": [
-      "adult",
-      "animals",
-      "brain_injuries,_traumatic",
-      "emotions",
-      "equine-assisted_therapy",
-      "female",
-      "horses",
-      "humans",
-      "interpersonal_relations",
-      "male",
-      "middle_aged",
-      "mindfulness",
-      "new_hampshire",
-      "patient_satisfaction",
-      "program_evaluation",
-      "self_concept",
-      "stress_disorders,_post-traumatic",
-      "surveys_and_questionnaires",
-      "veterans"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Sylvia Louisa et al. (2020)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Sylvia Louisa et al. (2020)",
-        "detail": "10.1016/j.joim.2020.01.005"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "OBJECTIVE: Equine-assisted activities and therapies (EAATs) have been a growing adjunctive integrative health modality, as they allow participants to practice mindfulness, emotional regulation, and self-mastery or self-esteem building skills.",
-      "Preliminary evidence suggests that these programs may be helpful in reducing posttraumatic stress disorder (PTSD), anxiety, and depressive symptoms.",
-      "The current study examines the acceptability of integrating an EAAT program as part of a two-week, intensive clinical program for veterans with PTSD and/or traumatic brain injury (TBI).",
-      "METHODS: A family member or support person could accompany veterans and participate in the program.",
-      "One hundred and six participants (veteran n\u00a0=\u00a062, family n\u00a0=\u00a044) left the urban environment in an intensive outpatient program (IOP) to attend a two-day, weekend EAAT in rural New Hampshire.",
-      "Satisfaction surveys were conducted on the last day of the program and examined using thematic analysis.",
-      "RESULTS: The following themes were reported in the surveys: ability of horses to catalyze emotional rehabilitation, effectiveness of immersion in equine-assisted activities, program's ability to foster interpersonal relationships and necessity of education about PTSD for staff.",
-      "Participants also reported enjoying the program as highlighted by qualitative feedback, a mean score of 9.76 (standard deviation [SD]\u00a0=\u00a00.61) as reported by veterans and a mean score of 9.91 (SD\u00a0=\u00a00.29) as reported by family members on a 10-point visual analog scale with higher scores indicating a greater overall experience.",
-      "CONCLUSION: These data offer preliminary evidence that an adjunct EAAT program is acceptable for veterans with PTSD and/or TBI participating in an IOP."
     ],
     "contraindications": [],
     "related_ids": []
@@ -16166,7 +15012,11 @@
     "name": "Jeopardized mental health of children and adolescents in coronavirus disease 2019 pandemic.",
     "description": "The coronavirus disease 2019 (COVID-19) outbreak became a worldwide pandemic in 2020. Social distancing measures, such as self-quarantine, lockdowns, and school closures, which have proven efficacy in",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "school",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -16235,60 +15085,6 @@
       "Children high in approach were more likely to meet criteria for anxiety and externalizing disorders by age 5 years.",
       "These findings further our understanding of individual differences in how young children adjust their behavior based on contextual cues and may inform methods for identifying children at increased likelihood for the development of emotional and behavioral problems.",
       "RESEARCH HIGHLIGHTS: Context-dependent approach and avoidance profiles were identified in 3-year-old children using a person-centered approach."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_35816314",
-    "name": "Associations of Maternal Milk Feeding With Neurodevelopmental Outcomes at 7 Years of Age in Former Preterm Infants.",
-    "description": "IMPORTANCE: Maternal milk feeding may have unique long-term neurodevelopmental benefits in very preterm infants. OBJECTIVE: To examine the extent to which maternal milk feeding after very preterm birt",
-    "document_type": "fact",
-    "tags": [
-      "adult",
-      "child",
-      "female",
-      "humans",
-      "infant",
-      "infant,_newborn",
-      "male",
-      "pregnancy",
-      "academic_success",
-      "attention_deficit_disorder_with_hyperactivity",
-      "australia",
-      "brain",
-      "breast_feeding",
-      "child_development",
-      "cohort_studies",
-      "infant,_premature",
-      "premature_birth",
-      "prospective_studies",
-      "milk,_human"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Belfort Mandy B et al. (2022)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Belfort Mandy B et al. (2022)",
-        "detail": "10.1159/000514747"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "IMPORTANCE: Maternal milk feeding may have unique long-term neurodevelopmental benefits in very preterm infants.",
-      "OBJECTIVE: To examine the extent to which maternal milk feeding after very preterm birth is associated with cognitive, academic, and behavioral outcomes at school age.",
-      "DESIGN, SETTING, AND PARTICIPANTS: This prospective cohort study assessed 586 infants born at less than 33 weeks' gestation at 5 Australian perinatal centers and enrolled in the Docosahexaenoic Acid for Improvement of Neurodevelopmental Outcomes study (January 1, 2001, to December 31, 2005) who were evaluated at a corrected age of 7 years.",
-      "The statistical analysis was completed on January 19, 2022.",
-      "EXPOSURES: Maternal milk intake, including mean volume (milliliters per kilogram per day) during neonatal hospitalization and total duration (in months).",
-      "MAIN OUTCOMES AND MEASURES: Neurodevelopmental outcomes at 7 years of age were (1) IQ (Wechsler Abbreviated Scale of Intelligence), (2) academic achievement (Wide Range Achievement Test, Fourth Edition), (3) symptoms of attention-deficit/hyperactivity disorder (ADHD) (Conners Third Edition ADHD Index, parent reported), (4) executive function (Behavior Rating Inventory of Executive Functioning, parent reported), and (5) behavior (Strengths and Difficulties Questionnaire, parent reported).",
-      "RESULTS: A total of 586 infants (mean [SD] gestational age at birth, 29.6 [2.3] weeks; 314 male [53.6%]) born to 486 mothers (mean [SD] age, 30.6 [5.5] years; 447 [92.0%] White) were included.",
-      "Mean (SD) maternal milk intake in the neonatal intensive care unit was 99 (48) mL/kg daily, and mean (SD) maternal milk duration was 5.1 (5.4) months.",
-      "Mean (SD) full-scale IQ was 98.5 (13.3) points.",
-      "After covariate adjustment, higher maternal milk intake during the neonatal hospitalization was associated with higher performance IQ (0.67 points per additional 25 mL/kg daily; 95% CI, 0.10-1.23 points), reading scores (1.14 points per 25 mL/kg daily; 95% CI, 0.39-1.89 points), and math scores (0.76 points per 25 mL/kg daily; 95% CI, 0.14-1.37 points) and fewer ADHD symptoms (-1.08 points per 25 mL/kg daily; 95% CI, -1.96 to -0.20 points)."
     ],
     "contraindications": [],
     "related_ids": []
@@ -16373,61 +15169,6 @@
       "This indirect relationship was mediated by receptive vocabulary size.",
       "In contrast, no EFs were associated with receptive vocabulary size, and vocabulary depth in the TD group.",
       "These results suggest that verbal working memory and cognitive flexibility play a role in the cognitive mechanisms linked to vocabulary development in school children with DLD."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_38582094",
-    "name": "Global burden of 288 causes of death and life expectancy decomposition in 204 countries and territories and 811 subnational locations, 1990-2021: a systematic analysis for the Global Burden of Disease Study 2021.",
-    "description": "BACKGROUND: Regular, detailed reporting on population health by underlying cause of death is fundamental for public health decision making. Cause-specific estimates of mortality and the subsequent eff",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "life_expectancy",
-      "cause_of_death",
-      "global_burden_of_disease",
-      "female",
-      "covid-19",
-      "male",
-      "aged",
-      "middle_aged",
-      "adult",
-      "child,_preschool",
-      "infant",
-      "global_health",
-      "adolescent",
-      "young_adult",
-      "child",
-      "aged,_80_and_over",
-      "sars-cov-2",
-      "infant,_newborn",
-      "pandemics"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "pubmed_abstract",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "pubmed_abstract",
-        "detail": "10.1038/d41586-023-03115-1"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND: Regular, detailed reporting on population health by underlying cause of death is fundamental for public health decision making.",
-      "Cause-specific estimates of mortality and the subsequent effects on life expectancy worldwide are valuable metrics to gauge progress in reducing mortality rates.",
-      "These estimates are particularly important following large-scale mortality spikes, such as the COVID-19 pandemic.",
-      "When systematically analysed, mortality rates and life expectancy allow comparisons of the consequences of causes of death globally and over time, providing a nuanced understanding of the effect of these causes on global populations.",
-      "METHODS: The Global Burden of Diseases, Injuries, and Risk Factors Study (GBD) 2021 cause-of-death analysis estimated mortality and years of life lost (YLLs) from 288 causes of death by age-sex-location-year in 204 countries and territories and 811 subnational locations for each year from 1990 until 2021.",
-      "The analysis used 56\u2009604 data sources, including data from vital registration and verbal autopsy as well as surveys, censuses, surveillance systems, and cancer registries, among others.",
-      "As with previous GBD rounds, cause-specific death rates for most causes were estimated using the Cause of Death Ensemble model-a modelling tool developed for GBD to assess the out-of-sample predictive validity of different statistical models and covariate permutations and combine those results to produce cause-specific mortality estimates-with alternative strategies adapted to model causes with insufficient data, substantial changes in reporting over the study period, or unusual epidemiology.",
-      "YLLs were computed as the product of the number of deaths for each cause-age-sex-location-year and the standard life expectancy at each age.",
-      "As part of the modelling process, uncertainty intervals (UIs) were generated using the 2\u00b75th and 97\u00b75th percentiles from a 1000-draw distribution for each metric.",
-      "We decomposed life expectancy by cause of death, location, and year to show cause-specific effects on life expectancy from 1990 to 2021."
     ],
     "contraindications": [],
     "related_ids": []
@@ -16527,7 +15268,9 @@
     "name": "Sensory processing atypicalities and social responsiveness in autism spectrum disorder: the mediation of executive function.",
     "description": "BACKGROUND: Individuals with autism spectrum disorder (ASD) commonly display challenges in social interaction, executive functioning, and sensory processing. Nevertheless, the interrelationships among",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -16684,50 +15427,6 @@
     "related_ids": []
   },
   {
-    "id": "pm_41444737",
-    "name": "Irritability in autism examined through network analysis of phenotypic and physiological correlates.",
-    "description": "Symptoms of irritability are commonly reported in autism, yet correlates of this domain remain poorly understood. While prevalence estimates in the literature vary considerably, they range up to 80%.",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "irritable_mood",
-      "male",
-      "child",
-      "female",
-      "autistic_disorder",
-      "phenotype",
-      "adolescent",
-      "heart_rate"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Alatrash Sara et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Alatrash Sara et al. (2025)",
-        "detail": "10.1007/s10803-013-2022-5"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Symptoms of irritability are commonly reported in autism, yet correlates of this domain remain poorly understood.",
-      "While prevalence estimates in the literature vary considerably, they range up to 80%.",
-      "Irritability can interfere with daily functioning, social relationships, and academic performance.",
-      "Despite years of research and the availability of approved medications, intervention outcomes for irritability remain highly variable.",
-      "To advance understanding and inform more targeted, personalized interventions, the present study aimed to clarify the correlates of irritability in autism using network analysis, an analytical tool suited to capture complex associations across interconnected variables.",
-      "We examined demographic, phenotypic, and physiological factors in a sample of autistic and neurotypical children.",
-      "Our findings identified strong direct associations between irritability and externalizing behaviors, emotion dysregulation, autism features, and negative affect.",
-      "Physiological responses, including heart rate reactivity and variability, were indirectly connected to irritability through links with self-regulation abilities and ADHD traits.",
-      "These results highlight the importance of conceptualizing irritability in autism as part of a broader, interconnected network of influences rather than an isolated symptom.",
-      "Recognizing these relationships informs potential targets for future intervention studies."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_40015057",
     "name": "Effect of sex on neuropsychiatric comorbidities in childhood epilepsy.",
     "description": "OBJECTIVE: Neuropsychiatric comorbidities are prevalent in children with epilepsy and often pose greater concerns than the seizures themselves. Identifying children at risk for these conditions is cru",
@@ -16776,7 +15475,11 @@
     "name": "The association between autistic-like traits and sluggish cognitive tempo symptoms in children with ADHD.",
     "description": "Objective: Sluggish cognitive tempo (SCT) and autistic-like traits (ALTs) may occur together in attention-deficit/hyperactivity disorder (ADHD). This study aimed to explore a possible association betw",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -16952,7 +15655,11 @@
     "name": "Physical Activity and Its Effects on Executive Functions and Brain Outcomes in Children: A Narrative Review.",
     "description": "Background/Objectives: Executive functions-including inhibitory control, working memory, and cognitive flexibility-are fundamental for children's learning and development. Physical activity is recogni",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "working_memory",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -16986,7 +15693,11 @@
     "name": "School-age growth and development following infant feeding and/or water, sanitation, and hygiene interventions in rural Zimbabwe: long-term follow-up of a cluster-randomised trial.",
     "description": "BACKGROUND: Few trials have explored long-term effects of interventions designed to reduce child stunting. We evaluated school-age outcomes in rural Zimbabwean children who received cluster-randomised",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "school",
+      "intervention",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -17020,7 +15731,9 @@
     "name": "Early Memory and Executive Function as Predictors of Language Development: Evidence for Early Cognitive Foundations in a Taiwanese Cohort.",
     "description": "BACKGROUND: Early cognitive abilities such as memory and executive function (EF) emerge rapidly in infancy and may provide a foundation for later language development. However, large-scale longitudina",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -17093,45 +15806,6 @@
       "Cognitive function was evaluated using the Kaufman Assessment Battery for Children (KABC-II), with additional tools measuring executive function, literacy, numeracy, fine motor skills, and socioemotional function.",
       "Physical function was assessed using standing broad jump and handgrip for strength, and the shuttle-run test for cardiovascular fitness.",
       "Growth was assessed by anthropometry."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_37350338",
-    "name": "Risks and familial coaggregation of death by suicide, accidental death and major psychiatric disorders in first-degree relatives of individuals who died by suicide.",
-    "description": "BACKGROUND: Evidence suggests a familial coaggregation of major psychiatric disorders, including schizophrenia, bipolar disorder, major depression (MDD), autism spectrum disorder (ASD) and attention-d",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "autism_spectrum_disorder",
-      "bipolar_disorder",
-      "suicide",
-      "attention_deficit_disorder_with_hyperactivity",
-      "major_depressive_disorder"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Tsai Shih-Jen et al. (2023)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Tsai Shih-Jen et al. (2023)",
-        "detail": "10.1192/bjp.2023.85"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND: Evidence suggests a familial coaggregation of major psychiatric disorders, including schizophrenia, bipolar disorder, major depression (MDD), autism spectrum disorder (ASD) and attention-deficit hyperactivity disorder (ADHD).",
-      "Those disorders are further related to suicide and accidental death.",
-      "However, whether death by suicide may coaggregate with accidental death and major psychiatric disorders within families remains unclear.",
-      "AIMS: To clarify the familial coaggregation of deaths by suicide with accidental death and five major psychiatric disorders.",
-      "METHOD: Using a database linked to the entire Taiwanese population, 68 214 first-degree relatives of individuals who died by suicide between 2003 and 2017 and 272 856 age- and gender-matched controls were assessed for the risks of death by suicide, accidental death and major psychiatric disorders.",
-      "RESULTS: A Poisson regression model showed that the first-degree relatives of individuals who died by suicide were more likely to die by suicide (relative risk RR = 4.61, 95% CI 4.02-5.29) or accident (RR = 1.62, 95% CI 1.43-1.84) or to be diagnosed with schizophrenia (RR = 1.53, 95% CI 1.40-1.66), bipolar disorder (RR = 1.99, 95% CI 1.83-2.16), MDD (RR = 1.98, 95% CI 1.89-2.08) or ADHD (RR = 1.34, 95% CI 1.24-1.44).",
-      "CONCLUSIONS: Our findings identified a familial coaggregation of death by suicide with accidental death, schizophrenia, major affective disorders and ADHD.",
-      "Further studies would be required to elucidate the pathological mechanisms underlying this coaggregation."
     ],
     "contraindications": [],
     "related_ids": []
@@ -17540,7 +16214,11 @@
     "name": "Examining the Effectiveness of Ayres Sensory Integration\u00ae Intervention for Children With Developmental Coordination Disorder in Improving Motor Coordination and Daily Activity Function: A Randomized Controlled Trial.",
     "description": "Background Ayres Sensory Integration\u00ae (ASI) intervention focuses on developing sensory processing abilities to improve motor coordination, executive functions, participation, and satisfaction in every",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "intervention",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -17793,7 +16471,9 @@
     "name": "An exploration of eating behaviours and caregiver mealtime actions of children with Tourette syndrome.",
     "description": "Food avoidant behaviours are common concerns amongst individuals with Tourette syndrome, with high levels of food selectivity reported in children and food neophobia and avoidant restrictive eating be",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -18432,82 +17112,6 @@
     "related_ids": []
   },
   {
-    "id": "pm_41412141",
-    "name": "Global burden of lower respiratory infections and aetiologies, 1990-2023: a systematic analysis for the Global Burden of Disease Study 2023.",
-    "description": "BACKGROUND: Lower respiratory infections (LRIs) remain the world's leading infectious cause of death. This analysis from the Global Burden of Diseases, Injuries, and Risk Factors Study (GBD) 2023 prov",
-    "document_type": "fact",
-    "tags": [],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "pubmed_abstract",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "pubmed_abstract",
-        "detail": "10.1016/S1473-3099(25)00689-9"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND: Lower respiratory infections (LRIs) remain the world's leading infectious cause of death.",
-      "This analysis from the Global Burden of Diseases, Injuries, and Risk Factors Study (GBD) 2023 provides global, regional, and national estimates of LRI incidence, mortality, and disability-adjusted life-years (DALYs), with attribution to 26 pathogens, including 11 newly modelled pathogens, across 204 countries and territories from 1990 to 2023.",
-      "With new data and revised modelling techniques, these estimates serve as an update and expansion to GBD 2021.",
-      "Through these estimates, we also aimed to assess progress towards the 2025 Global Action Plan for the Prevention and Control of Pneumonia and Diarrhoea (GAPPD) target for pneumonia mortality in children younger than 5 years.",
-      "METHODS: Mortality from LRIs, defined as physician-diagnosed pneumonia or bronchiolitis, was estimated using the Cause of Death Ensemble model with data from vital registration, verbal autopsy, surveillance, and minimally invasive tissue sampling.",
-      "The Bayesian meta-regression tool DisMod-MR 2.1 was used to model overall morbidity due to LRIs.",
-      "DALYs were calculated as the sum of years of life lost (YLLs) and years lived with disability (YLDs) for all locations, years, age groups, and sexes.",
-      "We modelled pathogen-specific case-fatality ratios (CFRs) for each age group and location using splined binomial regression to create internally consistent estimates of incidence and mortality proportions attributable to viral, fungal, parasitic, and bacterial pathogens.",
-      "Progress was assessed towards the GAPPD target of less than three deaths from pneumonia per 1000 livebirths, which is roughly equivalent to a mortality rate of less than 60 deaths per 100 000 children younger than 5 years.",
-      "FINDINGS: In 2023, LRIs were responsible for 2\u00b750 million (95% uncertainty interval [UI] 2\u00b724-2\u00b781) deaths and 98\u00b77 million (87\u00b77-112) DALYs, with children younger than 5 years and adults aged 70 years and older carrying the highest burden."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_38570480",
-    "name": "Behaviour-correlated profiles of cerebellar-cerebral functional connectivity observed in independent neurodevelopmental disorder cohorts.",
-    "description": "The cerebellum, through its connectivity with the cerebral cortex, plays an integral role in regulating cognitive and affective processes, and its dysregulation can result in neurodevelopmental disord",
-    "document_type": "fact",
-    "tags": [
-      "child",
-      "humans",
-      "autism_spectrum_disorder",
-      "brain_mapping",
-      "magnetic_resonance_imaging",
-      "cerebellum",
-      "brain"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Morgado Felipe et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Morgado Felipe et al. (2024)",
-        "detail": "10.1371/journal.pone.0133402"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The cerebellum, through its connectivity with the cerebral cortex, plays an integral role in regulating cognitive and affective processes, and its dysregulation can result in neurodevelopmental disorder (NDD)-related behavioural deficits.",
-      "Identifying cerebellar-cerebral functional connectivity (FC) profiles in children with NDDs can provide insight into common connectivity profiles and their correlation to NDD-related behaviours.",
-      "479 participants from the Province of Ontario Neurodevelopmental Disorders (POND) network (typically developing = 93, Autism Spectrum Disorder = 172, Attention Deficit/Hyperactivity Disorder = 161, Obsessive-Compulsive Disorder = 53, mean age = 12.2) underwent resting-state functional magnetic resonance imaging and behaviour testing (Social Communication Questionnaire, Toronto Obsessive-Compulsive Scale, and Child Behaviour Checklist - Attentional Problems Subscale).",
-      "FC components maximally correlated to behaviour were identified using canonical correlation analysis.",
-      "Results were then validated by repeating the investigation in 556 participants from an independent NDD cohort provided from a separate consortium (Healthy Brain Network (HBN)).",
-      "Replication of canonical components was quantified by correlating the feature vectors between the two cohorts.",
-      "The two cerebellar-cerebral FC components that replicated to the greatest extent were correlated to, respectively, obsessive-compulsive behaviour (behaviour feature vectors, rPOND-HBN\u2009=\u2009-0.97; FC feature vectors, rPOND-HBN\u2009=\u2009-0.68) and social communication deficit contrasted against attention deficit behaviour (behaviour feature vectors, rPOND-HBN\u2009=\u2009-0.99; FC feature vectors, rPOND-HBN\u2009=\u2009-0.78).",
-      "The statistically stable (|z|\u2009>\u20091.96) features of the FC feature vectors, measured via bootstrap re-sampling, predominantly comprised of correlations between cerebellar attentional and control network regions and cerebral attentional, default mode, and control network regions.",
-      "In both cohorts, spectral clustering on FC loading values resulted in subject clusters mixed across diagnostic categories, but no cluster was significantly enriched for any given diagnosis as measured via chi-squared test (p\u2009>\u20090.05).",
-      "Overall, two behaviour-correlated components of cerebellar-cerebral functional connectivity were observed in two independent cohorts."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_36068993",
     "name": "Understanding the association between adverse childhood experiences and subsequent attention deficit hyperactivity disorder: A systematic review and meta-analysis of observational studies.",
     "description": "OBJECTIVES: Attention deficit hyperactivity disorder (ADHD) is a common neurodevelopmental disorder in childhood, which may be related to adverse childhood experiences (ACEs). Our study aims to explor",
@@ -18798,7 +17402,7 @@
       "humans",
       "lithium_compounds",
       "male",
-      "national_institute_of_mental_health_(u.s.)",
+      "national_institute_of_mental_health",
       "prognosis",
       "prospective_studies",
       "psychiatric_status_rating_scales",
@@ -18898,7 +17502,7 @@
       "united_states",
       "cognition",
       "young_adult",
-      "national_institutes_of_health_(u.s.)",
+      "national_institutes_of_health",
       "cognition_disorders"
     ],
     "age_range": [
@@ -18978,7 +17582,9 @@
     "name": "Direct effects of dyscalculia on executive functions: revisiting mediation models.",
     "description": "Dyscalculia, a specific learning disability in mathematics, is linked to deficits in executive functions, yet integrative studies in Arabic-speaking contexts remain scarce. This study examined working",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -19103,7 +17709,10 @@
     "name": "Nutrition in early life interacts with genetic risk to influence preadult behaviour in the Raine Study.",
     "description": "BACKGROUND: Early life nutrition is associated with child behaviour; however, the interplay with genetic vulnerability is understudied. We hypothesised that psychiatric genetic risk interacted with ea",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "nutrition",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -19138,7 +17747,9 @@
     "name": "Why Do Migrant Children Have Poorer Mental Health Compared to Urban Children? A Network Analysis Approach.",
     "description": "INTRODUCTION: Although mobility has been identified as a significant risk factor adversely affecting mental health and well-being, the mechanisms underlying this association remain insufficiently unde",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -19320,7 +17931,11 @@
     "name": "Treatment Approaches for Psychiatric and Cognitive Comorbidities in Pediatric Epilepsy: A Systematic Review of Clinical Trials.",
     "description": "This systematic review examines the effectiveness of treatment strategies aimed at addressing psychiatric symptoms and cognitive impairments in children with epilepsy. Pediatric epilepsy is commonly a",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "treatment",
+      "child",
+      "pediatric"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -19353,7 +17968,11 @@
     "name": "Effectiveness of Social Problem-Solving Interventions for Children with Autism Spectrum Disorder: A Systematic Review and Meta-Analysis.",
     "description": "Social problem-solving (SPS) is a core component of social-emotional learning (SEL) that integrates cognitive, emotional, and behavioral processes essential for adaptive social functioning. Children w",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "intervention",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -19382,68 +18001,18 @@
     "related_ids": []
   },
   {
-    "id": "pm_30895802",
-    "name": "Familial confounding on the ability to read minds: A co-twin control study.",
-    "description": "Alterations in social cognition are hypothesized to underlie social communication challenges in autism spectrum disorder. However, the etiologic underpinnings driving this association, as well as the",
-    "document_type": "fact",
-    "tags": [
-      "adolescent",
-      "adult",
-      "age_factors",
-      "anxiety_disorders",
-      "attention_deficit_disorder_with_hyperactivity",
-      "autism_spectrum_disorder",
-      "child",
-      "confounding_factors,_epidemiologic",
-      "depressive_disorder",
-      "family",
-      "female",
-      "humans",
-      "intelligence",
-      "male",
-      "sex_factors",
-      "social_environment",
-      "social_perception",
-      "theory_of_mind",
-      "twins",
-      "twins,_dizygotic",
-      "twins,_monozygotic",
-      "wechsler_scales",
-      "young_adult"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Isaksson Johan et al. (2019)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Isaksson Johan et al. (2019)",
-        "detail": "10.1177/1362361319836380"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Alterations in social cognition are hypothesized to underlie social communication challenges in autism spectrum disorder.",
-      "However, the etiologic underpinnings driving this association, as well as the impact of other psychiatric conditions on the association, remain unclear.",
-      "Using a co-twin control design, we examined n\u2009=\u2009308 twins (mean age\u2009=\u200916.63; 46% females) with autism spectrum disorder, attention-deficit/hyperactivity disorder, affective disorders, or typical development using the Reading the Mind in the Eyes Test to operationalize social cognition ability.",
-      "Clinical diagnosis of autism spectrum disorder, as well as the extent of quantitative autistic traits, as measured by parental reports using the Social Responsiveness Scale-2, predicted fewer expected responses on the Reading the Mind in the Eyes Test across the pairs.",
-      "The association remained when adjusting for other diagnoses and IQ.",
-      "In addition, male sex, lower age, and lower IQ predicted poorer performance on the Reading the Mind in the Eyes Test.",
-      "The associations between autism and social cognition ability were lost within pairs in both the full sample and the monozygotic subsample.",
-      "We conclude that the association between autism and social cognition across the sample highlights the importance of social cognition alterations in autism spectrum disorder when compared with other conditions.",
-      "The attenuation of the association in the within-pair models indicate familial confounding, such as genes and shared environment, influencing both autism and social cognition."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_35345632",
     "name": "Confirming the Validity of the School-Refusal Assessment Scale-Revised in a Sample of Children With Attention-Deficit/Hyperactivity Disorder.",
     "description": "Children with developmental disorders, such as attention-deficit/hyperactivity disorder (ADHD), are at high risk of school-refusal behavior (SRB) compared with their peers. One of the most used scales",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "behavior",
+      "school",
+      "assessment",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -19513,7 +18082,11 @@
     "name": "Hair cortisol and psychiatric symptomatology in children; outcomes of group CBT.",
     "description": "The associations between hair cortisol concentration (HCC), a biomarker of chronic stress, and behavior and sleep disturbance symptoms have not been studied in children with psychiatric disorders. Whi",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "sleep",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -19865,7 +18438,15 @@
     "name": "Implementation of a Multi-Site Digitally-Enhanced School Clinician Training and ADHD/ODD Intervention Program in Mexico: Randomized Controlled Trial of CLS-R-FUERTE.",
     "description": "Childhood conditions of inattention and disruptive behavior, such as Attention-Deficit/Hyperactivity Disorder (ADHD) and Oppositional Defiant Disorder (ODD), are prevalent but undertreated worldwide.",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "behavior",
+      "school",
+      "intervention",
+      "inattention",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -19946,7 +18527,10 @@
     "name": "Childhood maltreatment and the structural development of hippocampus across childhood and adolescence.",
     "description": "BACKGROUND: Prior studies suggest that childhood maltreatment is associated with altered hippocampal volume. However, longitudinal studies are currently scarce, making it difficult to determine how al",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "treatment",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -20887,48 +19471,6 @@
     "related_ids": []
   },
   {
-    "id": "pm_41075428",
-    "name": "Movement and brain health in perimenopausal and early postmenopausal females: A scoping review.",
-    "description": "INTRODUCTION: The menopause transition is associated with dramatic fluctuations and eventual decline in levels of ovarian hormones, leading to loss of neuroprotection, marking this as an important int",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "female",
-      "perimenopause",
-      "postmenopause",
-      "exercise",
-      "brain",
-      "middle_aged"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Faridi Wejdaan et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Faridi Wejdaan et al. (2025)",
-        "detail": "10.1016/j.maturitas.2025.108747"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "INTRODUCTION: The menopause transition is associated with dramatic fluctuations and eventual decline in levels of ovarian hormones, leading to loss of neuroprotection, marking this as an important intervention period for brain health promotion in females.",
-      "Physical activity and exercise can improve brain health in older, postmenopausal females.",
-      "Whether movement (physical activity and exercise) can protect brain health in perimenopausal and early postmenopausal females is not clear.",
-      "OBJECTIVE: The objective of this scoping review was to map the literature examining the relationship between movement and brain health in perimenopausal and early postmenopausal females, with a focus on identifying key methodological approaches and gaps in the knowledge.",
-      "INCLUSION CRITERIA: This scoping review considered studies of any design that included a movement component with a primary focus on perimenopausal females and secondary focus on early postmenopausal females, with a brain health outcome.",
-      "METHODS: This scoping review followed JBI recommendations and methodology and the PRISMA-ScR reporting guidelines.",
-      "The following databases were searched: Medline All (OVID), Embase (OVID), APA PsycInfo (OVID), Scopus (Elsevier), CINAHL (Ebsco), and SportDiscus (Ebsco).",
-      "Details about participant population, study methods, and key findings were extracted.",
-      "RESULTS: Of the 30,927 identified records, 19 studies were included in the synthesis, with 3 studies conducted with only perimenopausal females, 8 studies with only early postmenopausal females, and 8 studies with a mixed cohort.",
-      "Aerobic training was the most common form of movement (n\u00a0=\u00a07) and executive function was the most common brain health outcome measured (n\u00a0=\u00a012)."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_19102840",
     "name": "[Electroencephalographic biofeedback for the treatment of attention deficit hyperactivity disorder in children].",
     "description": "OBJECTIVE: Attention deficit hyperactivity disorder (ADHD) is a common behavioral disorder in children. When the children fulfill cognition tasks, brain theta wave activity increases and beta wave act",
@@ -21103,47 +19645,6 @@
     "related_ids": []
   },
   {
-    "id": "pm_40839244",
-    "name": "Nonseizure Outcomes in Dravet Syndrome: Potential Impact of Pharmacotherapy.",
-    "description": "Dravet syndrome is a severe developmental and epileptic encephalopathy characterized by drug-resistant seizures and multiple nonseizure comorbidities. While disease management has mainly focused on se",
-    "document_type": "fact",
-    "tags": [
-      "humans",
-      "epilepsies,_myoclonic",
-      "anticonvulsants",
-      "quality_of_life",
-      "treatment_outcome"
-    ],
-    "age_range": [
-      "preschool",
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "Swindler Adriana et al. (2025)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Swindler Adriana et al. (2025)",
-        "detail": "10.1177/26330040241249762"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Dravet syndrome is a severe developmental and epileptic encephalopathy characterized by drug-resistant seizures and multiple nonseizure comorbidities.",
-      "While disease management has mainly focused on seizure control, there is growing recognition of the importance of nonseizure outcomes in treatment evaluation.",
-      "This review examines evidence for treatment effects on key nonseizure domains including cognitive functioning, adaptive behavior, speech and language, neurobehavior, sleep, motor outcomes, orthopedic sequelae, nutrition/growth, and quality of life.",
-      "There is limited evidence following anti-seizure medication trials suggesting improvements in executive function, particularly in preschool-aged children, though findings are inconsistent across studies.",
-      "Sodium channel blockers are contraindicated, with evidence linking their use to cognitive decline and reduced quality of life.",
-      "For neurobehavioral symptoms, pharmacological and nonpharmacological treatments show promise in reducing ADHD and behavioral difficulties.",
-      "Sleep disturbances affect most patients, but evidence for melatonin efficacy is limited.",
-      "Motor impairments are common, including delayed development, gait abnormalities, and decreased mobility and limited evidence suggests improvements with pharmacological treatment for parkinsonian symptoms.",
-      "Orthopedic complications include scoliosis, while feeding difficulties may necessitate gastrostomy tube placement.",
-      "Quality of life measures indicate significant impact from nonseizure symptoms, with evidence of improvement with anti-seizure medication treatment."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "pm_40192765",
     "name": "Universal school-based intervention: personal competence among public school children.",
     "description": "Childhood adversities profoundly affect mental and physical well-being. Effective psychosocial interventions in schools are crucial for mitigating adversities' impacts. Despite availability, many chil",
@@ -21243,7 +19744,12 @@
     "name": "Peer Problems and Prosocial Behavior Among Icelandic Children and Adolescents with ADHD and/or Autism: Gender and Age Differences.",
     "description": "Children with neurodevelopmental disorders tend to have more social difficulties than typically developing children. The aim of the current study was to examine parent and teacher-reported effects of",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "behavior",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -21269,51 +19775,6 @@
       "In contrast, boys with neurodevelopmental disorders experience similar issues at all ages.",
       "The results suggest different patterns of social difficulties for boys and girls with neurodevelopmental disorders.",
       "Future research should examine different developmental pathways of social challenges for boys and girls."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_32621560",
-    "name": "Cannabis use disorder trajectories and their prospective predictors in a large population-based sample of young Swiss men.",
-    "description": "BACKGROUND AND AIMS: Cannabis use disorder (CUD) is frequent in adolescence and often goes into remission towards adulthood. This study aimed to estimate trajectories of CUD severity (CUDS) in Swiss m",
-    "document_type": "fact",
-    "tags": [
-      "adolescent",
-      "adult",
-      "cannabis",
-      "cohort_studies",
-      "major_depressive_disorder",
-      "humans",
-      "infant,_newborn",
-      "marijuana_abuse",
-      "switzerland",
-      "young_adult"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Marmet Simon et al. (2021)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Marmet Simon et al. (2021)",
-        "detail": "10.1111/add.15177"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "BACKGROUND AND AIMS: Cannabis use disorder (CUD) is frequent in adolescence and often goes into remission towards adulthood.",
-      "This study aimed to estimate trajectories of CUD severity (CUDS) in Swiss men aged from 20 to 25\u00a0years and to identify prospective predictors of these trajectories.",
-      "DESIGN: Latent class growth analysis of self-reported CUDS in a cohort study with three data collection waves.",
-      "SETTING: A general population sample of young Swiss men.",
-      "PARTICIPANTS: A total of 5987 Swiss men assessed longitudinally at the mean ages of 20, 21.5 and 25\u00a0years.",
-      "MEASUREMENTS: Latent CUDS in the last 12\u00a0months was measured at each wave with the Cannabis Use Disorders Identification Test-Revised (CUDIT-R).",
-      "Predictors of CUDS trajectories, measured at age 20, were from six domains: factors related to cannabis use, family, peers, other substance use, mental health and personality.",
-      "FINDINGS: We distinguished four CUDS trajectories: stable-low (88.2%), decreasing (5.2%), stable-high (2.6%) and increasing (4.0%).",
-      "Predictors were generally associated with higher odds of membership in the decreasing and stable-high trajectory (versus the stable-low), and to a lesser degree with higher odds of membership in the increasing trajectory.",
-      "Bivariate predictors of persistent high CUDS (stable-high versus decreasing trajectory) were major depression severity [odds ratio (OR)\u00a0=\u00a01.19, 95% confidence interval (CI)\u00a0=\u00a01.01, 1.40], attention deficit hyperactivity disorder severity (OR\u00a0=\u00a01.25, 95% CI\u00a0=\u00a01.04, 1.51), antisocial personality disorder severity (OR = 1.18, 95 % CI = 1.04, 1.34), relationship with parents (OR\u00a0=\u00a00.74, 95% CI\u00a0=\u00a00.63, 0.88), number of friends with drug problems (OR\u00a0=\u00a01.33, 95% CI\u00a0=\u00a01.11, 1.60) and the personality dimensions neuroticism-anxiety (OR\u00a0= 1.35, 95% CI\u00a0=\u00a01.11, 1.65) and sociability (OR\u00a0=\u00a00.78, 95% CI\u00a0=\u00a00.62, 0.97)."
     ],
     "contraindications": [],
     "related_ids": []
@@ -21506,7 +19967,10 @@
     "name": "Investigating the effects of COVID-19 lockdown on Italian children and adolescents with and without neurodevelopmental disorders: a cross-sectional study.",
     "description": "UNLABELLED: We conducted a cross-sectional study to compare the impact of social distancing and lifestyle changes that occurred during Corona Virus Disease 2019 (COVID-19) lockdown on children and ado",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age",
       "adolescent"
@@ -21585,7 +20049,9 @@
     "name": "Transdiagnostic risk of mental disorders in offspring of affected parents: a meta-analysis of family high-risk and registry studies.",
     "description": "The offspring of parents with mental disorders are at increased risk for developing mental disorders themselves. The risk to offspring may extend transdiagnostically to disorders other than those pres",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "family"
+    ],
     "age_range": [
       "all"
     ],
@@ -21660,7 +20126,12 @@
     "name": "Personalized ADHD Medication Experiments to Inform Decisions About Continued Medication Use: An Open-Label Trial.",
     "description": "OBJECTIVE: To pilot test personalized stimulant medication experiments among children 11 to 15 years old with ADHD who questioned maintaining their current medication regimen. METHODS: Open-label tria",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "medication",
+      "child",
+      "stimulant"
+    ],
     "age_range": [
       "school_age"
     ],

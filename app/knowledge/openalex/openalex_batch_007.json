@@ -87,7 +87,7 @@
     "tags": [
       "telepsychiatry",
       "mental_health",
-      "coronavirus_disease_2019_(covid-19)",
+      "coronavirus_disease_2019",
       "psychiatry",
       "psychology"
     ],
@@ -268,7 +268,7 @@
     "tags": [
       "disadvantage",
       "referral",
-      "promotion_(chess)",
+      "promotion",
       "psychology",
       "rating_scale"
     ],
@@ -300,41 +300,12 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W4295021418",
-    "name": "The Impact of an Intensive Summer Treatment Program for Adolescents with ADHD: A Qualitative Study of Parent and Young Adult Perspectives",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "psychosocial",
-      "intervention_(counseling)",
-      "social_connectedness",
-      "clinical_psychology"
-    ],
-    "age_range": [
-      "adolescent"
-    ],
-    "evidence_level": "emerging",
-    "source": "Carlos E. Yeg\u00fcez et al. (2022)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Carlos E. Yeg\u00fcez et al. (2022)",
-        "detail": "10.1007/s10826-022-02384-0"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2218208280",
     "name": "The future of mobile health ADHD applications",
     "description": "Attention Deficit Hyperactivity Disorder (ADHD) is one of the most common disorders that affect children. The diagnosis and the Cognitive-Behavioral treatment approaches are based on child's behaviora",
     "document_type": "fact",
     "tags": [
-      "intervention_(counseling)",
+      "intervention",
       "data_collection",
       "attention_deficit_hyperactivity_disorder",
       "health_care",
@@ -375,7 +346,7 @@
     "tags": [
       "psychological_intervention",
       "psychology",
-      "intervention_(counseling)",
+      "intervention",
       "attendance",
       "attribution"
     ],
@@ -399,122 +370,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W119234032",
-    "name": "Early Risk for Problem Behavior and Substance Use: Targeted Interventions for the Promotion of Inhibitory Control",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "neurocognitive",
-      "psychology",
-      "psychological_intervention",
-      "inhibitory_control",
-      "impulsivity"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Nathaniel R. Riggs et al. (2011)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Nathaniel R. Riggs et al. (2011)",
-        "detail": "10.1007/978-1-4419-1268-8_13"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2944205672",
-    "name": "Development and Effects of a Combined Program of Cognitive Enhancement - Social Skills - Parents Training Program for ADHD Children and Their Parents",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "developmental_psychology",
-      "cognition",
-      "parent_training",
-      "social_skills"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Park HyunJin et al. (2011)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Park HyunJin et al. (2011)",
-        "detail": "W2944205672"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2198149013",
-    "name": "Long-term far-transfer effects of working memory training in children with ADHD: a randomized controlled trial",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "randomized_controlled_trial",
-      "working_memory",
-      "working_memory_training",
-      "psychology",
-      "executive_functions"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Aitana Bigorra et al. (2015)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Aitana Bigorra et al. (2015)",
-        "detail": "10.1007/s00787-015-0804-3"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2346138031",
-    "name": "Association between autism symptoms and family functioning in children with attention-deficit/hyperactivity disorder: a community-based study",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "attention_deficit_hyperactivity_disorder",
-      "autism_spectrum_disorder",
-      "autism",
-      "psychology",
-      "child_and_adolescent_psychiatry"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Jessica L. Green et al. (2016)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Jessica L. Green et al. (2016)",
-        "detail": "10.1007/s00787-016-0861-2"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2000675634",
     "name": "Anxiety and depression in children with ADHD: Unique associations with academic and social functioning",
     "description": "This study investigated the relationship of internalizing symptoms to impairments in academic and social functioning among 125 elementary school children diagnosed with Attention-Deficit/ Hyperactivit",
@@ -523,7 +378,7 @@
       "psychology",
       "anxiety",
       "social_anxiety",
-      "depression_(economics)",
+      "depression",
       "clinical_psychology"
     ],
     "age_range": [
@@ -587,8 +442,8 @@
     "description": "Attention Deficit Hyperactivity Disorder (ADHD) is the most common neuropsychiatric condition in childhood; It should be the focus of educational inclusion, having a legal basis, where differentiated",
     "document_type": "fact",
     "tags": [
-      "inclusion_(mineral)",
-      "promotion_(chess)",
+      "inclusion",
+      "promotion",
       "psychology",
       "workload",
       "pedagogy"
@@ -617,74 +472,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2108586761",
-    "name": "Learning disabilities: The need for neuropsychological evaluation",
-    "description": "A learning disability (LD) is a neurobiological disorder that presents as a serious difficulty with reading, arithmetic, and/or written expression that is unexpected, given the individual's intellectu",
-    "document_type": "fact",
-    "tags": [
-      "learning_disability",
-      "neurocognitive",
-      "neuropsychology",
-      "psychology",
-      "reading_disability"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "C. Silver et al. (2007)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "C. Silver et al. (2007)",
-        "detail": "10.1016/j.acn.2007.09.006"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "A learning disability (LD) is a neurobiological disorder that presents as a serious difficulty with reading, arithmetic, and/or written expression that is unexpected, given the individual's intellectual ability.",
-      "A learning disability is not an emotional disorder nor is it caused by an emotional disorder.",
-      "If inadequately or improperly evaluated, a learning disability has the potential to impact an individual's functioning adversely and produce functional impairment in multiple life domains.",
-      "When a learning disability is suspected, an evaluation of neuropsychological abilities is necessary to determine the source of the difficulty as well as the areas of neurocognitive strength that can serve as a foundation for compensatory strategies and treatment options."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W1949073527",
-    "name": "The potential of virtual reality in social skills training for people with autistic spectrum disorders",
-    "description": "Virtual reality technology may be an ideal tool for allowing participants to practise behaviours in role-play situations, whilst also providing a safe environment for rule learning and repetition of t",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "autism",
-      "virtual_reality",
-      "psycinfo",
-      "perspective_(graphical)"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Sarah Parsons et al. (2002)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Sarah Parsons et al. (2002)",
-        "detail": "10.1046/j.1365-2788.2002.00425.x"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Virtual reality technology may be an ideal tool for allowing participants to practise behaviours in role-play situations, whilst also providing a safe environment for rule learning and repetition of tasks.",
-      "Role-play within virtual environments could promote the mental simulation of social events, potentially allowing a greater insight into minds.",
-      "Practice of behaviours, both within and across contexts, could also encourage a more flexible approach to social problem solving.",
-      "Virtual environments offer a new and exciting perspective on social skills training for people with autistic spectrum disorders."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W3028854389",
     "name": "Supporting Self-Regulation of Children with ADHD Using Wearables",
     "description": "The design of wearable applications supporting children with Attention Deficit Hyperactivity Disorders (ADHD) requires a deep understanding not only of what is possible from a clinical standpoint but",
@@ -693,7 +480,6 @@
       "wearable_computer",
       "smartwatch",
       "viewpoints",
-      "computer_science",
       "human\u2013computer_interaction"
     ],
     "age_range": [
@@ -760,35 +546,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2257372",
-    "name": "An Interactional Approach to Intervention Research with Children Diagnosed with ADHD",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "intervention_(counseling)",
-      "generative_grammar",
-      "psychology",
-      "outcome_(game_theory)",
-      "value_(mathematics)"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Sandra Heriot et al. (2001)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Sandra Heriot et al. (2001)",
-        "detail": "10.1023/a:1012572725227"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2732786142",
     "name": "Disruptive Mood Dysregulation Disorder Symptoms by Age in Autism, ADHD, and General Population Samples",
     "description": "Disruptive mood dysregulation disorder (DMDD) is a controversial DSM-5 diagnosis. It is not known how DMDD symptoms vary by age and if differences are similar for autism, ADHD, and general population",
@@ -825,35 +582,6 @@
       "DMDD symptoms were found in 45% of children with autism and were common at all ages.",
       "Evidence-based interventions are discussed."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2744420538",
-    "name": "Do parental ADHD symptoms reduce the efficacy of parent training for preschool ADHD? A secondary analysis of a randomized controlled trial",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "parent_training",
-      "attention_deficit_hyperactivity_disorder",
-      "randomized_controlled_trial",
-      "psychology",
-      "intervention_(counseling)"
-    ],
-    "age_range": [
-      "preschool"
-    ],
-    "evidence_level": "emerging",
-    "source": "Rex Forehand et al. (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Rex Forehand et al. (2017)",
-        "detail": "10.1016/j.brat.2017.08.002"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -969,8 +697,8 @@
     "tags": [
       "attention_deficit_hyperactivity_disorder",
       "psychology",
-      "function_(biology)",
-      "set_(abstract_data_type)",
+      "function",
+      "set",
       "developmental_psychology"
     ],
     "age_range": [
@@ -1076,35 +804,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2160293430",
-    "name": "Attention-Deficit/Hyperactivity Disorder Is the Extreme and Impairing Tail of a Continuum",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "heritability",
-      "attention_deficit_hyperactivity_disorder",
-      "twin_study",
-      "trait",
-      "sibling"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Philip Asherson et al. (2015)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Philip Asherson et al. (2015)",
-        "detail": "10.1016/j.jaac.2015.01.014"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2031384270",
     "name": "Maternal attributions and child oppositional behavior: A longitudinal study of boys with and without attention-deficit/hyperactivity disorder.",
     "description": "The authors examined changes over a 1-year period in mothers' attributions for child behavior and child oppositional behavior among 53 mothers and nonproblem sons and 44 mothers and sons with attentio",
@@ -1114,7 +813,7 @@
       "psychology",
       "developmental_psychology",
       "attention_deficit_hyperactivity_disorder",
-      "intervention_(counseling)"
+      "intervention"
     ],
     "age_range": [
       "school_age"
@@ -1182,35 +881,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W1972571048",
-    "name": "Attention Deficit Hyperactivity Disorder Across the Lifespan: The Child, Adolescent, and Adult",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychopharmacology",
-      "atomoxetine",
-      "attention_deficit_hyperactivity_disorder",
-      "psychological_intervention",
-      "psychology"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "strong",
-    "source": "Donald E. Greydanus et al. (2007)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Donald E. Greydanus et al. (2007)",
-        "detail": "10.1016/j.disamonth.2007.01.001"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2672683031",
     "name": "The association between parent-reported and observed parenting: A multi-level meta-analysis.",
     "description": "The purpose of the present meta-analysis was to investigate the strength of the association between parent-reported and observed parenting, and to investigate which specific characteristics of partici",
@@ -1218,7 +888,7 @@
     "tags": [
       "psycinfo",
       "meta-analysis",
-      "association_(psychology)",
+      "association",
       "psychology",
       "observational_study"
     ],
@@ -1255,7 +925,7 @@
       "psychology",
       "focus_group",
       "online_research_methods",
-      "reading_(process)",
+      "reading",
       "population"
     ],
     "age_range": [
@@ -1362,297 +1032,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2148396375",
-    "name": "A review on cognitive and brain endophenotypes that may be common in autism spectrum disorder and attention-deficit/hyperactivity disorder and facilitate the search for pleiotropic genes",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "endophenotype",
-      "autism_spectrum_disorder",
-      "neurocognitive",
-      "attention_deficit_hyperactivity_disorder",
-      "psychology"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Nanda Rommelse et al. (2011)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Nanda Rommelse et al. (2011)",
-        "detail": "10.1016/j.neubiorev.2011.02.015"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2156407203",
-    "name": "Sex differences in ADHD: Conference summary",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "psychosocial",
-      "developmental_psychology",
-      "clinical_psychology",
-      "public_health"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "L. Eugene Arnold (1996)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "L. Eugene Arnold (1996)",
-        "detail": "10.1007/bf01670100"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2800541910",
-    "name": "Accelerate progress\u2014sexual and reproductive health and rights for all: report of the Guttmacher\u2013 Lancet Commission",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "sexual_and_reproductive_health_and_rights",
-      "commission",
-      "political_science",
-      "human_rights",
-      "work_(physics)"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Ann M Starrs et al. (2018)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Ann M Starrs et al. (2018)",
-        "detail": "10.1016/s0140-6736(18)30293-9"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W4220653894",
-    "name": "Associations Between Anxiety and Home Learning Difficulties in Children and Adolescents with ADHD During the COVID-19 Pandemic",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "pandemic",
-      "coronavirus_disease_2019_(covid-19)",
-      "anxiety",
-      "2019-20_coronavirus_outbreak"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Anna M. Jackson et al. (2022)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Anna M. Jackson et al. (2022)",
-        "detail": "10.1007/s10578-022-01338-3"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2766352063",
-    "name": "Consumer health information seeking in social media: a literature review",
-    "description": "Between 2011 and 2016, twenty-one studies published explored various topics related to consumer information seeking in social media. These ranged from online discussions on specific diseases (e.g. dia",
-    "document_type": "fact",
-    "tags": [
-      "social_media",
-      "information_seeking",
-      "health_information",
-      "psychology",
-      "quality_(philosophy)"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Yuehua Zhao et al. (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Yuehua Zhao et al. (2017)",
-        "detail": "10.1111/hir.12192"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Between 2011 and 2016, twenty-one studies published explored various topics related to consumer information seeking in social media.",
-      "These ranged from online discussions on specific diseases (e.g.",
-      "diabetes) to public health concerns (e.g.",
-      "pesticide residues).",
-      "Consumers' information needs vary depending on the health issues of interest.",
-      "Benefits of health seeking on social media, in addition to filling a need for health information, include the social and emotional support health consumers gain from peer-to-peer interactions.",
-      "These benefits, however, are tempered by concerns of information quality and authority and lead to decreased consumer engagement."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W3135761634",
-    "name": "Non-credible symptom report in the clinical evaluation of adult ADHD: development and initial validation of a new validity index embedded in the Conners\u2019 adult ADHD rating scales",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "neurotypical",
-      "attention_deficit_hyperactivity_disorder",
-      "index_(typography)",
-      "receiver_operating_characteristic",
-      "rating_scale"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Miriam Becke et al. (2021)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Miriam Becke et al. (2021)",
-        "detail": "10.1007/s00702-021-02318-y"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2144093039",
-    "name": "The impact of anxiety upon cognition: perspectives from human threat of shock studies",
-    "description": "Anxiety disorders constitute a sizeable worldwide health burden with profound social and economic consequences. The symptoms are wide-ranging; from hyperarousal to difficulties with concentrating. Thi",
-    "document_type": "fact",
-    "tags": [
-      "cognition",
-      "anxiety",
-      "psychology",
-      "shock_(circulatory)",
-      "cognitive_psychology"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Oliver J. Robinson et al. (2013)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Oliver J. Robinson et al. (2013)",
-        "detail": "10.3389/fnhum.2013.00203"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Anxiety disorders constitute a sizeable worldwide health burden with profound social and economic consequences.",
-      "The symptoms are wide-ranging; from hyperarousal to difficulties with concentrating.",
-      "This latter effect falls under the broad category of altered cognitive performance which is the focus of this review.",
-      "Specifically, we examine the interaction between anxiety and cognition focusing on the translational threat of unpredictable shock paradigm; a method previously used to characterize emotional responses and defensive mechanisms that is now emerging as valuable tool for examining the interaction between anxiety and cognition.",
-      "In particular, we compare the impact of threat of shock on cognition in humans to that of pathological anxiety disorders.",
-      "We highlight that both threat of shock and anxiety disorders promote mechanisms associated with harm avoidance across multiple levels of cognition (from perception to attention to learning and executive function)-a \"hot\" cognitive function which can be both adaptive and maladaptive depending upon the circumstances.",
-      "This mechanism comes at a cost to other functions such as working memory, but leaves some functions, such as planning, unperturbed.",
-      "We also highlight a number of cognitive effects that differ across anxiety disorders and threat of shock.",
-      "These discrepant effects are largely seen in \"cold\" cognitive functions involving control mechanisms and may reveal boundaries between adaptive (e.g., response to threat) and maladaptive (e.g., pathological) anxiety.",
-      "We conclude by raising a number of unresolved questions regarding the role of anxiety in cognition that may provide fruitful avenues for future research."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2062444032",
-    "name": "Embodiment and sense-making in autism",
-    "description": "In this article, I sketch an enactive account of autism. For the enactive approach to cognition, embodiment, experience, and social interaction are fundamental to understanding mind and subjectivity.",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "autism",
-      "sense_(electronics)",
-      "cognitive_psychology",
-      "developmental_psychology"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Hanne De Jaegher (2013)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Hanne De Jaegher (2013)",
-        "detail": "10.3389/fnint.2013.00015"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "In this article, I sketch an enactive account of autism.",
-      "For the enactive approach to cognition, embodiment, experience, and social interaction are fundamental to understanding mind and subjectivity.",
-      "Enaction defines cognition as sense-making: the way cognitive agents meaningfully connect with their world, based on their needs and goals as self-organizing, self-maintaining, embodied agents.",
-      "In the social realm, the interactive coordination of embodied sense-making activities with others lets us participate in each other's sense-making (social understanding = participatory sense-making).",
-      "The enactive approach provides new concepts to overcome the problems of traditional functionalist accounts of autism, which can only give a piecemeal and disintegrated view because they consider cognition, communication, and perception separately, do not take embodied into account, and are methodologically individualistic.",
-      "Applying the concepts of enaction to autism, I show: How embodiment and sense-making connect, i.e., how autistic particularities of moving, perceiving, and emoting relate to how people with autism make sense of their world.",
-      "For instance, restricted interests or preference for detail will have certain sensorimotor correlates, as well as specific meaning for autistic people.That reduced flexibility in interactional coordination correlates with difficulties in participatory sense-making.",
-      "At the same time, seemingly irrelevant \"autistic behaviors\" can be quite attuned to the interactive context.",
-      "I illustrate this complexity in the case of echolalia.",
-      "An enactive account of autism starts from the embodiment, experience, and social interactions of autistic people."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2916625049",
-    "name": "The epidemiology of trauma and post-traumatic stress disorder in a representative cohort of young people in England and Wales",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychopathology",
-      "epidemiology",
-      "medicine",
-      "psychiatry",
-      "cohort_study"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Stephanie J. Lewis et al. (2019)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Stephanie J. Lewis et al. (2019)",
-        "detail": "10.1016/s2215-0366(19)30031-8"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2910055523",
     "name": "Clinical practice guidelines for the management of conduct disorder",
     "description": "INTRODUCTION Conduct disorder (CD) and associated antisocial behavior is one of the most common mental and behavioral problems in children and young people. In the United States, CDs associated behavi",
@@ -1724,35 +1103,6 @@
       "In addition, the concepts of teacher support, parent collaboration, and student medication were also discussed.",
       "This text also provides suggestion and advice for future special education teachers."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W1565725398",
-    "name": "Handbook of Clinical Child Psychology",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "diversity_(politics)",
-      "psychology",
-      "the_internet",
-      "social_justice",
-      "criminology"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Johnny L. Matson (2023)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Johnny L. Matson (2023)",
-        "detail": "10.1007/978-3-031-24926-6"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -1834,80 +1184,13 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2143158080",
-    "name": "New Technology and Digital Worlds: Analyzing Evidence of Equity in Access, Use, and Outcomes",
-    "description": "Nowadays, in the educational field, a current pattern is Special Educational Needs which refers to the kind of education focus to support students that require more accompaniment to facilitate their l",
-    "document_type": "fact",
-    "tags": [
-      "equity_(law)",
-      "psychology",
-      "sociology",
-      "computer_science",
-      "business"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Mark Warschauer et al. (2010)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Mark Warschauer et al. (2010)",
-        "detail": "10.3102/0091732x09349791"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Nowadays, in the educational field, a current pattern is Special Educational Needs which refers to the kind of education focus to support students that require more accompaniment to facilitate their learning due to the fact that they present a variety of situations; one of those cases is the population that this study will have, Autism Spectrum Disorder.",
-      "Therefore, as the ASD population struggles with interaction with other humans beings, the aim of this research was to create a space of learning in which the mobile App Speech Blubs was the intermediary between the teacher and a child with Atypical Autism and to explore the potential benefits of the mobile application in fostering his/ her English language skills.",
-      "Thus, qualitative research was proposed using as design a case study since this research had only one unit of analysis.",
-      "The researchers assumed the roles of moderate and active participation.",
-      "In addition, this research used the following data collection instruments: field diary, observation, artifacts (Multiple-Baseline-Across-Behaviors Design and Before and After Designs), and a Rubric for the evaluation of apps in language learning (REALL).",
-      "The findings of this study revealed that using the adequate scaffolding connected to the technological input contributed to the English vocabulary learning.",
-      "Additionally, the prior knowledge and good management of technology of the student allowed a better development of the learning process.",
-      "Finally, it was discovered that there are some external factors that made normal classes difficult."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W4383105848",
-    "name": "Parents\u2019 work-family conflict and children\u2019s behavioral problems: Mediating roles of parental warmth and children\u2019s executive function difficulties",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "mediation",
-      "developmental_psychology",
-      "family_conflict",
-      "structural_equation_modeling"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Yangmi Lim (2023)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Yangmi Lim (2023)",
-        "detail": "10.1007/s12144-023-04866-w"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W1518920135",
     "name": "PARENT STRESS REDUCTION THROUGH A PSYCHOSOCIAL INTERVENTION FOR CHILDREN DIAGNOSED WITH ATTENTION-DEFICIT/HYPERACTIVITY DISORDER",
     "description": "Children with Attention-Deficit/Hyperactivity Disorder (ADHD) experience significant difficulties in the domains of attention, hyperactivity, and impulsivity. This constellation of symptoms not only h",
     "document_type": "fact",
     "tags": [
       "attention_deficit_hyperactivity_disorder",
-      "intervention_(counseling)",
+      "intervention",
       "psychosocial",
       "psychology",
       "stress_reduction"
@@ -1941,64 +1224,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2035450387",
-    "name": "Executive Functioning Deficits in Attention\u2010Deficit/Hyperactivity Disorder Are Independent of Oppositional Defiant or Reading Disorder",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "attention_deficit_hyperactivity_disorder",
-      "wisconsin_card_sorting_test",
-      "psychology",
-      "comorbidity",
-      "conduct_disorder"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Rafael Klorman et al. (1999)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Rafael Klorman et al. (1999)",
-        "detail": "10.1097/00004583-199909000-00020"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W1979336020",
-    "name": "Obesity-associated biomarkers and executive function in children",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "neurocognitive",
-      "obesity",
-      "cognition",
-      "executive_functions",
-      "childhood_obesity"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "strong",
-    "source": "Alison L. Miller et al. (2014)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Alison L. Miller et al. (2014)",
-        "detail": "10.1038/pr.2014.158"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W4281486316",
     "name": "Effects of Twenty Hours of Neurofeedback-Based Neuropsychotherapy on the Executive Functions and Achievements among ADHD Children",
     "description": "<i>Objective.</i> Neurofeedback can reduce ADHD symptoms; however, current programs are relatively long, with fewer concerns about executive function (EF). The present study aimed to investigate a 20-",
@@ -2008,7 +1233,7 @@
       "neurofeedback",
       "psychology",
       "executive_functions",
-      "test_(biology)"
+      "test"
     ],
     "age_range": [
       "school_age"
@@ -2110,75 +1335,6 @@
       "Lastly, we review sex-linked modifiers and clinical implications.",
       "Further understanding of these mechanisms is crucial for both comprehending ASD and for developing novel therapies."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2753982614",
-    "name": "Latent Class Analysis of Brain Injury Symptomatology among College Students",
-    "description": "Background Incidents potentially causing mild brain injury (BI) are common, and most people recover rapidly; however, a subset experiences long-lasting challenges. Objective This study used latent cla",
-    "document_type": "fact",
-    "tags": [
-      "latent_class_model",
-      "psychology",
-      "cognition",
-      "clinical_psychology",
-      "class_(philosophy)"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Karen Hux et al. (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Karen Hux et al. (2017)",
-        "detail": "10.1055/s-0037-1606578"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Background Incidents potentially causing mild brain injury (BI) are common, and most people recover rapidly; however, a subset experiences long-lasting challenges.",
-      "Objective This study used latent class analysis to identify a subset of college students presenting chronic symptomatology consistent with a mild BI diagnosis and pseudo-class mean equality tests to examine relations between latent classes and BI event and academic outcome variables.",
-      "Methods Participants were 118/423 undergraduates self-reporting possible mild BIs through a survey about general health, daily habits, academic performance, and potential BI events.",
-      "Twenty-four cognitive, physiological, or socio-emotional sequelae served to identify symptomatology profiles.",
-      "Results A three-class model including 11% with high symptomatology, 49% with moderate symptomatology, and 40% with negligible symptomatology provided excellent fit and entropy.",
-      "Symptoms best separating high and moderate classes were memory, thinking speed, new learning, and attention problems.",
-      "Mean equality tests revealed no significant difference in number of BI events across classes, but high symptomatology respondents were significantly less likely to lose consciousness and significantly more likely to have lower grade point averages and to have failed courses than moderate symptomatology respondents.",
-      "Discussion Cognitive problems are paramount in distinguishing college students with chronic high symptomatology following BI from those with moderate and negligible symptomatology.",
-      "Because high symptomatology class individuals differ academically from their counterparts, a functional consequence of mild BI appears to exist.",
-      "Conclusion About 1 in 10 undergraduate students self-reporting BI events experiences chronic symptomatology affecting general health and academic achievement."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W1981089515",
-    "name": "ADHD and comorbid disorders in relation to family environment and symptom severity",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "comorbidity",
-      "conduct_disorder",
-      "child_and_adolescent_psychiatry",
-      "psychiatry",
-      "attention_deficit_hyperactivity_disorder"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Tuula Hurtig et al. (2007)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Tuula Hurtig et al. (2007)",
-        "detail": "10.1007/s00787-007-0607-2"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -2287,35 +1443,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W4211107393",
-    "name": "Dental caries",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "root_caries",
-      "dentistry",
-      "medicine",
-      "crown_(dentistry)",
-      "tooth_loss"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Nigel Pitts et al. (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Nigel Pitts et al. (2017)",
-        "detail": "10.1038/nrdp.2017.30"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W4300080966",
     "name": "Investigating routine care non-pharmacological treatment for adolescents with ADHD",
     "description": "Routine non-pharmacological care for adolescent ADHD primarily consisted of low value practices such as youth-directed treatment and social skills training with low parent involvement and only occasio",
@@ -2354,7 +1481,7 @@
     "document_type": "fact",
     "tags": [
       "social_psychiatry",
-      "intervention_(counseling)",
+      "intervention",
       "psychology",
       "forensic_psychiatry",
       "health_psychology"
@@ -2384,122 +1511,6 @@
       "To reach the aim of reducing or preventing future criminal behaviour, it is much necessary to strengthen and integrate the appropriate execution of existing psychotherapeutic intervention programmes for delinquency prevention.",
       "This paper aims to delineate the conceptual formulation of an Integrated Intervention Programme which is aimed at providing rehabilitation for Children in Conflict with Law."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W3048253820",
-    "name": "Brief Report: Predictors of School Refusal Due to Bullying in Children with Autism Spectrum Disorder and Attention-Deficit/Hyperactivity Disorder",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "autism_spectrum_disorder",
-      "attention_deficit_hyperactivity_disorder",
-      "autism",
-      "clinical_psychology"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Abbey J. McClemont et al. (2020)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Abbey J. McClemont et al. (2020)",
-        "detail": "10.1007/s10803-020-04640-y"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2098082628",
-    "name": "Global, regional, and national incidence, prevalence, and years lived with disability for 301 acute and chronic diseases and injuries in 188 countries, 1990\u20132013: a systematic analysis for the Global Burden of Disease Study 2013",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "medicine",
-      "incidence_(geometry)",
-      "environmental_health",
-      "pediatrics",
-      "physics"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Theo Vos et al. (2015)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Theo Vos et al. (2015)",
-        "detail": "10.1016/s0140-6736(15)60692-4"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W4234360088",
-    "name": "Sanitation for the food preservation industries",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "sanitation",
-      "business",
-      "agricultural_economics",
-      "environmental_science",
-      "economics"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "openalex",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "openalex",
-        "detail": "10.1016/0016-0032(52)90643-1"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2168505085",
-    "name": "Meta-Analysis of Genome-Wide Association Studies of Attention-Deficit/Hyperactivity Disorder",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "genome-wide_association_study",
-      "heritability",
-      "attention_deficit_hyperactivity_disorder",
-      "meta-analysis",
-      "genetic_association"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Benjamin M. Neale et al. (2010)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Benjamin M. Neale et al. (2010)",
-        "detail": "10.1016/j.jaac.2010.06.008"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -2546,7 +1557,7 @@
     "description": "The Victorian Parenting Centre Family Intervention Service (FIS) conducts brief group and individual parent training programs (Triple P) intended as preventative interventions for families of children",
     "document_type": "fact",
     "tags": [
-      "intervention_(counseling)",
+      "intervention",
       "psychology",
       "anxiety",
       "psychological_intervention",
@@ -2619,7 +1630,7 @@
       "psychology",
       "executive_functions",
       "attention_deficit",
-      "training_(meteorology)"
+      "training"
     ],
     "age_range": [
       "school_age"
@@ -2799,74 +1810,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W111106947",
-    "name": "Social Relationships",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychological_intervention",
-      "psychology",
-      "conversation",
-      "peer_group",
-      "developmental_psychology"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Judith Wiener et al. (2012)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Judith Wiener et al. (2012)",
-        "detail": "10.1016/b978-0-12-388409-1.00004-7"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W1986211748",
-    "name": "Oxidative stress in psychiatric disorders: evidence base and therapeutic implications",
-    "description": "Oxidative stress has been implicated in the pathogenesis of diverse disease states, and may be a common pathogenic mechanism underlying many major psychiatric disorders, as the brain has comparatively",
-    "document_type": "fact",
-    "tags": [
-      "oxidative_stress",
-      "schizophrenia_(object-oriented_programming)",
-      "psychiatry",
-      "medicine",
-      "bipolar_disorder"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Felicity Ng et al. (2008)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Felicity Ng et al. (2008)",
-        "detail": "10.1017/s1461145707008401"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Oxidative stress has been implicated in the pathogenesis of diverse disease states, and may be a common pathogenic mechanism underlying many major psychiatric disorders, as the brain has comparatively greater vulnerability to oxidative damage.",
-      "This review aims to examine the current evidence for the role of oxidative stress in psychiatric disorders, and its academic and clinical implications.",
-      "A literature search was conducted using the Medline, Pubmed, PsycINFO, CINAHL PLUS, BIOSIS Preview, and Cochrane databases, with a time-frame extending to September 2007.",
-      "The broadest data for oxidative stress mechanisms have been derived from studies conducted in schizophrenia, where evidence is available from different areas of oxidative research, including oxidative marker assays, psychopharmacology studies, and clinical trials of antioxidants.",
-      "For bipolar disorder and depression, a solid foundation for oxidative stress hypotheses has been provided by biochemical, genetic, pharmacological, preclinical therapeutic studies and one clinical trial.",
-      "Oxidative pathophysiology in anxiety disorders is strongly supported by animal models, and also by human biochemical data.",
-      "Pilot studies have suggested efficacy of N-acetylcysteine in cocaine dependence, while early evidence is accumulating for oxidative mechanisms in autism and attention deficit hyperactivity disorder.",
-      "In conclusion, multi-dimensional data support the role of oxidative stress in diverse psychiatric disorders.",
-      "These data not only suggest that oxidative mechanisms may form unifying common pathogenic pathways in psychiatric disorders, but also introduce new targets for the development of therapeutic interventions."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W26282643",
     "name": "[Genetic background of ADHD: population studies, genes of the catecholamine system].",
     "description": "Attention-deficit hyperactivity disorder (ADHD) begins in early childhood. In this article we review the studies supporting a genetic background of this disorder. ADHD occurs in 3-10% of the general p",
@@ -2907,42 +1850,13 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W1229448081",
-    "name": "Neurofeedback Assessment and Treatment for Attention Deficit/Hyperactivity Disorders",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "attention_deficit_hyperactivity_disorder",
-      "psychology",
-      "neurofeedback",
-      "hyperkinesis",
-      "attention_deficit"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Joel F. Lubar et al. (1999)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Joel F. Lubar et al. (1999)",
-        "detail": "10.1016/b978-012243790-8/50006-7"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W4361282823",
     "name": "State Variation Regarding Other Health Impairment Eligibility Criteria for Attention Deficit Hyperactivity Disorder",
     "description": "Abstract The special education eligibility category that has come to be most commonly associated with Attention-Deficit Hyperactivity Disorder (ADHD) in recent years is Other Health Impairment (OHI).",
     "document_type": "fact",
     "tags": [
       "attention_deficit_hyperactivity_disorder",
-      "variation_(astronomy)",
+      "variation",
       "medicine",
       "special_education",
       "psychology"
@@ -3115,35 +2029,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W3011027367",
-    "name": "Clinical Subtypes in Children with Attention-Deficit Hyperactivity Disorder According to Their Child Behavior Checklist Profile",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "cbcl",
-      "psychology",
-      "child_behavior_checklist",
-      "psychopathology",
-      "attention_deficit_hyperactivity_disorder"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Daisuke Katsuki et al. (2020)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Daisuke Katsuki et al. (2020)",
-        "detail": "10.1007/s10578-020-00977-8"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2024010904",
     "name": "Multivariate genomewide linkage scan of neurocognitive traits and ADHD symptoms: Suggestive linkage to 3q13",
     "description": "Family and twin studies suggest that a range of neurocognitive traits index the inherited liability to ADHD; however, the utility of such measures as endophenotypes in molecular genetic studies remain",
@@ -3153,7 +2038,7 @@
       "endophenotype",
       "psychology",
       "stroop_effect",
-      "linkage_(software)"
+      "linkage"
     ],
     "age_range": [
       "all"
@@ -3191,7 +2076,7 @@
     "tags": [
       "attention_deficit_hyperactivity_disorder",
       "medicine",
-      "intervention_(counseling)",
+      "intervention",
       "randomized_controlled_trial",
       "rating_scale"
     ],
@@ -3224,35 +2109,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2047601130",
-    "name": "Genetics of attention-deficit hyperactivity disorder (ADHD)",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "bipolar_disorder",
-      "attention_deficit_hyperactivity_disorder",
-      "psychology",
-      "endophenotype",
-      "dopamine_transporter"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Sally I. Sharp et al. (2009)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Sally I. Sharp et al. (2009)",
-        "detail": "10.1016/j.neuropharm.2009.08.011"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W3088203024",
     "name": "Cognitive Training Deep Dive: The Impact of Child, Training Behavior and Environmental Factors within a Controlled Trial of Cogmed for Fragile X Syndrome",
     "description": "Children with fragile X syndrome (FXS) exhibit deficits in a variety of cognitive processes within the executive function domain. As working memory (WM) is known to support a wide range of cognitive,",
@@ -3261,7 +2117,7 @@
       "cognitive_training",
       "cognition",
       "psychology",
-      "intervention_(counseling)",
+      "intervention",
       "fragile_x_syndrome"
     ],
     "age_range": [
@@ -3324,35 +2180,6 @@
       "These results demonstrate, first, that the bilingual advantage is neither confounded with nor limited by socioeconomic and cultural factors and, second, that separable aspects of executive functioning are differentially affected by bilingualism.",
       "The bilingual advantage lies in control but not in visuospatial representational processes."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2070722924",
-    "name": "An Analysis of Teacher Investment in the Context of a Family\u2013School Intervention for Children with ADHD",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychological_intervention",
-      "context_(archaeology)",
-      "intervention_(counseling)",
-      "psychology",
-      "clinical_psychology"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Thomas J. Power et al. (2009)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Thomas J. Power et al. (2009)",
-        "detail": "10.1007/s12310-009-9005-x"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -3472,141 +2299,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2908444276",
-    "name": "Innovations and changes in the ICD\u201011 classification of mental, behavioural and neurodevelopmental disorders",
-    "description": "Following approval of the ICD-11 by the World Health Assembly in May 2019, World Health Organization (WHO) member states will transition from the ICD-10 to the ICD-11, with reporting of health statist",
-    "document_type": "fact",
-    "tags": [
-      "mental_health",
-      "medicine",
-      "icd-10",
-      "psychiatry",
-      "comorbidity"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Geoffrey M. Reed et al. (2019)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Geoffrey M. Reed et al. (2019)",
-        "detail": "10.1002/wps.20611"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Following approval of the ICD-11 by the World Health Assembly in May 2019, World Health Organization (WHO) member states will transition from the ICD-10 to the ICD-11, with reporting of health statistics based on the new system to begin on January 1, 2022.",
-      "The WHO Department of Mental Health and Substance Abuse will publish Clinical Descriptions and Diagnostic Guidelines (CDDG) for ICD-11 Mental, Behavioural and Neurodevelopmental Disorders following ICD-11's approval.",
-      "The development of the ICD-11 CDDG over the past decade, based on the principles of clinical utility and global applicability, has been the most broadly international, multilingual, multidisciplinary and participative revision process ever implemented for a classification of mental disorders.",
-      "Innovations in the ICD-11 include the provision of consistent and systematically characterized information, the adoption of a lifespan approach, and culture-related guidance for each disorder.",
-      "Dimensional approaches have been incorporated into the classification, particularly for personality disorders and primary psychotic disorders, in ways that are consistent with current evidence, are more compatible with recovery-based approaches, eliminate artificial comorbidity, and more effectively capture changes over time.",
-      "Here we describe major changes to the structure of the ICD-11 classification of mental disorders as compared to the ICD-10, and the development of two new ICD-11 chapters relevant to mental health practice.",
-      "We illustrate a set of new categories that have been added to the ICD-11 and present the rationale for their inclusion.",
-      "Finally, we provide a description of the important changes that have been made in each ICD-11 disorder grouping.",
-      "This information is intended to be useful for both clinicians and researchers in orienting themselves to the ICD-11 and in preparing for implementation in their own professional contexts."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2073115157",
-    "name": "Overdose of Drugs for Attention-Deficit Hyperactivity Disorder: Clinical Presentation, Mechanisms of Toxicity, and Management",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "methylphenidate",
-      "modafinil",
-      "serotonin_syndrome",
-      "guanfacine",
-      "attention_deficit_hyperactivity_disorder"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Henry A. Spiller et al. (2013)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Henry A. Spiller et al. (2013)",
-        "detail": "10.1007/s40263-013-0084-8"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2610875716",
-    "name": "Clock Genes and Altered Sleep\u2013Wake Rhythms: Their Role in the Development of Psychiatric Disorders",
-    "description": "In mammals, the circadian clocks network (central and peripheral oscillators) controls circadian rhythms and orchestrates the expression of a range of downstream genes, allowing the organism to antici",
-    "document_type": "fact",
-    "tags": [
-      "clock",
-      "rhythm",
-      "psychiatry",
-      "sleep_(system_call)",
-      "circadian_rhythm"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Anna\u00eblle Charrier et al. (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Anna\u00eblle Charrier et al. (2017)",
-        "detail": "10.3390/ijms18050938"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "In mammals, the circadian clocks network (central and peripheral oscillators) controls circadian rhythms and orchestrates the expression of a range of downstream genes, allowing the organism to anticipate and adapt to environmental changes.",
-      "Beyond their role in circadian rhythms, several studies have highlighted that circadian clock genes may have a more widespread physiological effect on cognition, mood, and reward-related behaviors.",
-      "Furthermore, single nucleotide polymorphisms in core circadian clock genes have been associated with psychiatric disorders (such as autism spectrum disorder, schizophrenia, anxiety disorders, major depressive disorder, bipolar disorder, and attention deficit hyperactivity disorder).",
-      "However, the underlying mechanisms of these associations remain to be ascertained and the cause-effect relationships are not clearly established.",
-      "The objective of this article is to clarify the role of clock genes and altered sleep-wake rhythms in the development of psychiatric disorders (sleep problems are often observed at early onset of psychiatric disorders).",
-      "First, the molecular mechanisms of circadian rhythms are described.",
-      "Then, the relationships between disrupted circadian rhythms, including sleep-wake rhythms, and psychiatric disorders are discussed.",
-      "Further research may open interesting perspectives with promising avenues for early detection and therapeutic intervention in psychiatric disorders."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W3183349377",
-    "name": "European clinical guidelines for Tourette syndrome and other tic disorders\u2014version 2.0. Part II: psychological interventions",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "child_and_adolescent_psychiatry",
-      "tourette_syndrome",
-      "psychological_intervention",
-      "psychology",
-      "psychiatry"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Per Andr\u00e9n et al. (2021)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Per Andr\u00e9n et al. (2021)",
-        "detail": "10.1007/s00787-021-01845-z"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W4392915492",
     "name": "A systematic review of the benefits and mechanisms of family-based mind-body therapy programs targeting families of children and adolescents with attention-deficit/hyperactivity disorder",
     "description": "Growing evidence indicates that family-based mind-body therapy programs (FMBTs) act as an important alternative for attention-deficit/hyperactivity disorder (ADHD) treatment in the youth with minimal",
@@ -3643,40 +2335,6 @@
       "Additionally, parents experienced positive changes in ADHD traits/symptoms, mental health, and parenting behaviors.",
       "Furthermore, FMBTs were found to enhance family functioning by delivering mindful strategies to family, restoring psychological capacity and interpersonal skills in family members, and improving parent\u2013child relationships.",
       "The reviewed FMBTs demonstrated high levels of feasibility and participant satisfaction."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2562199918",
-    "name": "Enhancing Our Lives with Immersive Virtual Reality",
-    "description": "OPINION article Front. Robot. AI, 19 December 2016Sec. Virtual Environments Volume 3 - 2016 | https://doi.org/10.3389/frobt.2016.00074",
-    "document_type": "fact",
-    "tags": [
-      "computer_science",
-      "virtual_reality",
-      "human\u2013computer_interaction",
-      "augmented_reality",
-      "multimedia"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Mel Slater et al. (2016)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Mel Slater et al. (2016)",
-        "detail": "10.3389/frobt.2016.00074"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "OPINION article Front.",
-      "Robot.",
-      "AI, 19 December 2016Sec.",
-      "Virtual Environments Volume 3 - 2016 | https://doi.org/10.3389/frobt.2016.00074"
     ],
     "contraindications": [],
     "related_ids": []
@@ -3752,35 +2410,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2891070637",
-    "name": "Live fast, die young? A review on the developmental trajectories of ADHD across the lifespan",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "comorbidity",
-      "anxiety",
-      "psychology",
-      "persistence_(discontinuity)",
-      "psychiatry"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Barbara Franke et al. (2018)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Barbara Franke et al. (2018)",
-        "detail": "10.1016/j.euroneuro.2018.08.001"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2147235373",
     "name": "The Management of Courtesy Stigma in the Lives of Families With Teenagers With ADHD",
     "description": "This qualitative study investigates how parents of adolescents with attention deficit hyperactivity disorder (ADHD) manage courtesy stigma in their lives. Focus groups are conducted with mothers and f",
@@ -3788,8 +2417,8 @@
     "tags": [
       "courtesy",
       "psychology",
-      "stigma_(botany)",
-      "coping_(psychology)",
+      "stigma",
+      "coping",
       "developmental_psychology"
     ],
     "age_range": [
@@ -3856,129 +2485,13 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W4309413641",
-    "name": "Variation in attitudes toward diagnosis and medication of ADHD: a survey among clinicians in the Norwegian child and adolescent mental health services",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "norwegian",
-      "child_and_adolescent_psychiatry",
-      "mental_health",
-      "medicine",
-      "psychiatry"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Ingvild Lyhmann et al. (2022)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Ingvild Lyhmann et al. (2022)",
-        "detail": "10.1007/s00787-022-02110-7"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W1989444430",
-    "name": "The quality of life of children with attention deficit/hyperactivity disorder: a systematic review",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "quality_of_life_(healthcare)",
-      "psychosocial",
-      "attention_deficit_hyperactivity_disorder",
-      "psychology",
-      "stressor"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "strong",
-    "source": "Marina Danckaerts et al. (2009)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Marina Danckaerts et al. (2009)",
-        "detail": "10.1007/s00787-009-0046-3"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2589617319",
-    "name": "Parent training for children with ADHD",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "training_(meteorology)",
-      "developmental_psychology",
-      "geography",
-      "meteorology"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "\u82f1\u5df3 \u5ca9\u5742 et al. (2014)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "\u82f1\u5df3 \u5ca9\u5742 et al. (2014)",
-        "detail": "W2589617319"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W4379278593",
-    "name": "The stability and persistence of symptoms in childhood-onset ADHD",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "persistence_(discontinuity)",
-      "child_and_adolescent_psychiatry",
-      "psychology",
-      "developmental_psychology",
-      "psychiatry"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Anna Van Meter et al. (2023)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Anna Van Meter et al. (2023)",
-        "detail": "10.1007/s00787-023-02235-3"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2142938886",
     "name": "Conceptualizing adhd as a contextual response to parental attachment",
     "description": "Abstract This article suggests that attention deficit hyperactivity disorder is frequently misdiagnosed, even overdiagnosed, and provides an alternative way of viewing such problem behaviors in childr",
     "document_type": "fact",
     "tags": [
       "psychology",
-      "context_(archaeology)",
+      "context",
       "psychological_intervention",
       "attachment_theory",
       "developmental_psychology"
@@ -4089,7 +2602,7 @@
       "psychological_intervention",
       "psycinfo",
       "cognition",
-      "intervention_(counseling)",
+      "intervention",
       "clinical_psychology"
     ],
     "age_range": [
@@ -4108,35 +2621,6 @@
     "key_points": [
       "CRD42017082505."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2789248713",
-    "name": "Early life exposure to air pollution particulate matter (PM) as risk factor for attention deficit/hyperactivity disorder (ADHD): Need for novel strategies for mechanisms and causalities",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "environmental_health",
-      "attention_deficit_hyperactivity_disorder",
-      "epidemiology",
-      "air_pollution",
-      "risk_factor"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Oddvar Myhre et al. (2018)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Oddvar Myhre et al. (2018)",
-        "detail": "10.1016/j.taap.2018.03.015"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -4172,35 +2656,6 @@
       "Here, we unpack the aberrant precision account of autism.",
       "Specifically, we consider how empirical findings-that speak directly or indirectly to neurobiological mechanisms-are consistent with the aberrant encoding of precision in autism; in particular, an imbalance of the precision ascribed to sensory evidence relative to prior beliefs."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2911487850",
-    "name": "Genome-wide meta-analysis of depression identifies 102 independent variants and highlights the importance of the prefrontal brain regions",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "anhedonia",
-      "genome-wide_association_study",
-      "depression_(economics)",
-      "genetic_architecture",
-      "prefrontal_cortex"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "David M. Howard et al. (2019)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "David M. Howard et al. (2019)",
-        "detail": "10.1038/s41593-018-0326-7"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -4287,7 +2742,6 @@
     "document_type": "fact",
     "tags": [
       "psychology",
-      "computer_science",
       "mathematics_education"
     ],
     "age_range": [
@@ -4324,7 +2778,7 @@
     "tags": [
       "impulsivity",
       "attention_deficit_hyperactivity_disorder",
-      "intervention_(counseling)",
+      "intervention",
       "medicine",
       "attention_deficit"
     ],
@@ -4354,35 +2808,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2902839803",
-    "name": "Inhibitory control in toddlerhood \u2013 the role of parental co-regulation and self-efficacy beliefs",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "self-control",
-      "developmental_psychology",
-      "psychology",
-      "inhibitory_control",
-      "self-efficacy"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Kim Angeles G\u00e4rtner et al. (2018)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Kim Angeles G\u00e4rtner et al. (2018)",
-        "detail": "10.1007/s11409-018-9184-7"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2792850175",
     "name": "Inhibition, Updating Working Memory, and Shifting Predict Reading Disability Symptoms in a Hybrid Model: Project KIDS",
     "description": "Recent achievement research suggests that executive function (EF), a set of regulatory processes that control both thought and action necessary for goal-directed behavior, is related to typical and at",
@@ -4390,7 +2815,7 @@
     "tags": [
       "psychology",
       "working_memory",
-      "reading_(process)",
+      "reading",
       "reading_comprehension",
       "developmental_psychology"
     ],
@@ -4419,131 +2844,6 @@
       "The question of whether any one EF component would emerge as a superior predictor was also examined and results showed that Inhibition, Updating Working Memory, and Shifting were equally valuable as predictors of the hybrid model of RD.",
       "In total, all EF components were significant and equally effective predictors of RD when RD was operationalized using the hybrid model."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2803240020",
-    "name": "Associations between abuse/neglect and ADHD from childhood to young adulthood: A prospective nationally-representative twin study",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "neglect",
-      "psychology",
-      "psychiatry",
-      "child_abuse",
-      "longitudinal_study"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Adi Stern et al. (2018)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Adi Stern et al. (2018)",
-        "detail": "10.1016/j.chiabu.2018.04.025"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W1989938121",
-    "name": "Barriers to detection, help-seeking, and service use for children with ADHD symptoms",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "ethnic_group",
-      "health_psychology",
-      "help-seeking",
-      "attention_deficit_hyperactivity_disorder",
-      "odds"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Regina Bussing et al. (2003)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Regina Bussing et al. (2003)",
-        "detail": "10.1007/bf02289806"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2620820141",
-    "name": "Virtual Reality in Pediatric Psychology",
-    "description": "Virtual reality (VR) technologies allow for controlled simulations of affectively engaging background narratives. These virtual environments offer promise for enhancing emotionally relevant experience",
-    "document_type": "fact",
-    "tags": [
-      "psychological_intervention",
-      "virtual_reality",
-      "context_(archaeology)",
-      "medicine",
-      "anxiety"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "strong",
-    "source": "Thomas D. Parsons et al. (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Thomas D. Parsons et al. (2017)",
-        "detail": "10.1542/peds.2016-1758i"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Virtual reality (VR) technologies allow for controlled simulations of affectively engaging background narratives.",
-      "These virtual environments offer promise for enhancing emotionally relevant experiences and social interactions.",
-      "Within this context, VR can allow instructors, therapists, neuropsychologists, and service providers to offer safe, repeatable, and diversifiable interventions that can benefit assessments and learning in both typically developing children and children with disabilities.",
-      "Research has also pointed to VR's capacity to reduce children's experience of aversive stimuli and reduce anxiety levels.",
-      "Although there are a number of purported advantages of VR technologies, challenges have emerged.",
-      "One challenge for this field of study is the lack of consensus on how to do trials.",
-      "A related issue is the need for establishing the psychometric properties of VR assessments and interventions.",
-      "This review investigates the advantages and challenges inherent in the application of VR technologies to pediatric assessments and interventions."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2042792092",
-    "name": "Moderators of Neuropsychological Mechanism in Attention-Deficit Hyperactivity Disorder",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "endophenotype",
-      "psychology",
-      "comorbidity",
-      "moderation",
-      "neuropsychology"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Molly A. Nikolas et al. (2014)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Molly A. Nikolas et al. (2014)",
-        "detail": "10.1007/s10802-014-9904-7"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -4579,35 +2879,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2473421829",
-    "name": "Executive function in the first three years of life: Precursors, predictors and patterns",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "cognitive_flexibility",
-      "psychology",
-      "executive_functions",
-      "cognition",
-      "flexibility_(engineering)"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Alexandra Hendry et al. (2016)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Alexandra Hendry et al. (2016)",
-        "detail": "10.1016/j.dr.2016.06.005"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2988513208",
     "name": "Studying Executive Function Skills in Young Children in Low- and Middle-Income Countries: Progress and Directions",
     "description": "Abstract As a culturally universal set of cognitive skills that promote goal-directed behaviors, executive functions (EFs) support milestones of early childhood development, such as learning and formi",
@@ -4617,7 +2888,7 @@
       "developmental_psychology",
       "psychological_intervention",
       "early_childhood",
-      "set_(abstract_data_type)"
+      "set"
     ],
     "age_range": [
       "preschool",
@@ -4642,98 +2913,6 @@
       "Assessments of EF can address these needs.",
       "Research on emergent EFs in low- and middle-income countries can also support the design and evaluation of multisector programs and policies."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W4220919894",
-    "name": "Perceptions d\u2019efficacit\u00e9 des services de soutien et des mesures d\u2019accommodements des \u00e9tudiants ayant un TDAH \u00e0 l\u2019\u00e9ducation postsecondaire",
-    "description": "Cette \u00e9tude a pour but d\u2019examiner l\u2019utilisation des services de soutien et des mesures d\u2019accommodements chez les \u00e9tudiants ayant un TDAH \u00e0 l\u2019\u00e9ducation postsecondaire, ainsi que les perceptions d\u2019effic",
-    "document_type": "fact",
-    "tags": [
-      "humanities",
-      "political_science",
-      "art"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Jeanne Lagac\u00e9-Leblanc et al. (2022)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Jeanne Lagac\u00e9-Leblanc et al. (2022)",
-        "detail": "10.53967/cje-rce.v45i1.5087"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Cette \u00e9tude a pour but d\u2019examiner l\u2019utilisation des services de soutien et des mesures d\u2019accommodements chez les \u00e9tudiants ayant un TDAH \u00e0 l\u2019\u00e9ducation postsecondaire, ainsi que les perceptions d\u2019efficacit\u00e9 de ces ressources.",
-      "Des entrevues semi-structur\u00e9es ont \u00e9t\u00e9 r\u00e9alis\u00e9es aupr\u00e8s de 29 \u00e9tudiants ayant un TDAH, provenant de coll\u00e8ges (n = 10) et d\u2019universit\u00e9s (n = 19) du Qu\u00e9bec.",
-      "Les r\u00e9sultats montrent que les participants utilisent une vari\u00e9t\u00e9 de services de soutien et de mesures d\u2019accommodements.",
-      "Le suppl\u00e9ment de temps et le local adapt\u00e9 pour les examens ressortent comme les mesures d\u2019accommodements les plus utilis\u00e9es.",
-      "Les perceptions d\u2019efficacit\u00e9 sont plut\u00f4t partag\u00e9es, puisque plusieurs obstacles nuisent \u00e0 la pleine efficacit\u00e9 de certaines mesures.",
-      "Le v\u00e9cu des participants informe les \u00e9tablissements postsecondaires des probl\u00e8mes qui doivent \u00eatre abord\u00e9s pour maximiser l\u2019efficacit\u00e9 de leurs services et pour offrir aux \u00e9tudiants un environnement leur permettant de performer \u00e0 la hauteur de leur potentiel."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2058189433",
-    "name": "Bayesian hypothesis testing for psychologists: A tutorial on the Savage\u2013Dickey method",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "generality",
-      "bayesian_probability",
-      "statistical_hypothesis_testing",
-      "prior_probability",
-      "bayes_factor"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Eric\u2010Jan Wagenmakers et al. (2010)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Eric\u2010Jan Wagenmakers et al. (2010)",
-        "detail": "10.1016/j.cogpsych.2009.12.001"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2594936582",
-    "name": "Intervention for peer mediation and mother-child interaction: The effects on children\u2019s mediated learning strategies and cognitive modifiability",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "mediation",
-      "developmental_psychology",
-      "cognition",
-      "structural_equation_modeling"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "David Tzuriel et al. (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "David Tzuriel et al. (2017)",
-        "detail": "10.1016/j.cedpsych.2017.03.005"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -4836,96 +3015,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2008162944",
-    "name": "Adolescents With d-Transposition of the Great Arteries Corrected With the Arterial Switch Procedure",
-    "description": "URL: http://www.clinicaltrials.gov. Unique identifier: NCT00000470.",
-    "document_type": "fact",
-    "tags": [
-      "great_arteries",
-      "medicine",
-      "heart_disease",
-      "transposition_(logic)",
-      "neuropsychology"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "David C. Bellinger et al. (2011)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "David C. Bellinger et al. (2011)",
-        "detail": "10.1161/circulationaha.111.026963"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "URL: http://www.clinicaltrials.gov.",
-      "Unique identifier: NCT00000470."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2082584587",
-    "name": "Parent attributions for inattentive-overactive and oppositional-defiant child behaviors",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "attribution",
-      "psychology",
-      "quality_of_life_research",
-      "developmental_psychology",
-      "clinical_psychology"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Charlotte Johnston et al. (1994)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Charlotte Johnston et al. (1994)",
-        "detail": "10.1007/bf02357779"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W4401053493",
-    "name": "Oppositional Defiant Disorder in Autism and ADHD",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "autism",
-      "psychology",
-      "conduct_disorder",
-      "attention_deficit_hyperactivity_disorder",
-      "developmental_disorder"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Susan Dickerson Mayes et al. (2024)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Susan Dickerson Mayes et al. (2024)",
-        "detail": "10.1007/s10803-024-06437-9"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2018416286",
     "name": "The Influence of Parent Behaviors on Positive Illusory Bias in Children With ADHD",
     "description": "Objective: To explore the relationship between parental feedback and the accuracy of children\u2019s self-perceptions. Children with ADHD have been demonstrated to overestimate their own competence, a phen",
@@ -4935,7 +3024,7 @@
       "developmental_psychology",
       "praise",
       "psychological_intervention",
-      "competence_(human_resources)"
+      "competence"
     ],
     "age_range": [
       "school_age"
@@ -4961,32 +3050,6 @@
       "Parent praise was associated with lower PIB about behavioral conduct in comparison children.",
       "Conclusion: Results support the self-protective hypothesis of PIB, and implications for interventions are discussed."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W1852006749",
-    "name": "\u00bfQu\u00e9 es la hiperactividad y c\u00f3mo ven el problema los padres?",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "humanities",
-      "philosophy"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Rafael V\u00e1squez et al. (2011)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Rafael V\u00e1squez et al. (2011)",
-        "detail": "10.1016/s0034-7450(14)60142-6"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -5072,7 +3135,7 @@
     "document_type": "fact",
     "tags": [
       "human_multitasking",
-      "set_(abstract_data_type)",
+      "set",
       "psychology",
       "commit",
       "attention_deficit_hyperactivity_disorder"
@@ -5102,35 +3165,6 @@
       "C-SET total tasks tried also correlated with all subscales of the Conner's Parent Rating Scale-Revised (Short Version).",
       "The C-SET appears to be a useful measure of rule-governed multitasking behavior in children."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2026025181",
-    "name": "Delivering Evidence-Based Treatments for Child Attention-Deficit/Hyperactivity Disorder (ADHD) in the Context of Parental ADHD",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "attention_deficit_hyperactivity_disorder",
-      "stimulant",
-      "context_(archaeology)",
-      "parent_training",
-      "psychology"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "strong",
-    "source": "Christine H. Wang et al. (2014)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Christine H. Wang et al. (2014)",
-        "detail": "10.1007/s11920-014-0474-8"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -5181,9 +3215,9 @@
     "document_type": "fact",
     "tags": [
       "dyslexia",
-      "diversity_(politics)",
-      "space_(punctuation)",
-      "function_(biology)",
+      "diversity",
+      "space",
+      "function",
       "psychology"
     ],
     "age_range": [
@@ -5216,7 +3250,7 @@
     "description": "Attention deficit hyperactivity disorder (ADHD) is a common neurodevelopmental disorder, starting in early childhood and persisting into adulthood in the majority of cases. Family and twin studies hav",
     "document_type": "fact",
     "tags": [
-      "association_(psychology)",
+      "association",
       "attention_deficit_hyperactivity_disorder",
       "gene",
       "psychology",
@@ -5325,46 +3359,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2107022859",
-    "name": "Harnessing neuroplasticity for clinical applications",
-    "description": "Neuroplasticity can be defined as the ability of the nervous system to respond to intrinsic or extrinsic stimuli by reorganizing its structure, function and connections. Major advances in the understa",
-    "document_type": "fact",
-    "tags": [
-      "neuroplasticity",
-      "neuroscience",
-      "psychology",
-      "psychological_intervention",
-      "brain_stimulation"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Steven C. Cramer et al. (2011)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Steven C. Cramer et al. (2011)",
-        "detail": "10.1093/brain/awr039"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Neuroplasticity can be defined as the ability of the nervous system to respond to intrinsic or extrinsic stimuli by reorganizing its structure, function and connections.",
-      "Major advances in the understanding of neuroplasticity have to date yielded few established interventions.",
-      "To advance the translation of neuroplasticity research towards clinical applications, the National Institutes of Health Blueprint for Neuroscience Research sponsored a workshop in 2009.",
-      "Basic and clinical researchers in disciplines from central nervous system injury/stroke, mental/addictive disorders, paediatric/developmental disorders and neurodegeneration/ageing identified cardinal examples of neuroplasticity, underlying mechanisms, therapeutic implications and common denominators.",
-      "Promising therapies that may enhance training-induced cognitive and motor learning, such as brain stimulation and neuropharmacological interventions, were identified, along with questions of how best to use this body of information to reduce human disability.",
-      "Improved understanding of adaptive mechanisms at every level, from molecules to synapses, to networks, to behaviour, can be gained from iterative collaborations between basic and clinical researchers.",
-      "Lessons can be gleaned from studying fields related to plasticity, such as development, critical periods, learning and response to disease.",
-      "Improved means of assessing neuroplasticity in humans, including biomarkers for predicting and monitoring treatment response, are needed.",
-      "Neuroplasticity occurs with many variations, in many forms, and in many contexts.",
-      "However, common themes in plasticity that emerge across diverse central nervous system conditions include experience dependence, time sensitivity and the importance of motivation and attention."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W1956214535",
     "name": "Commentary: Replication, replication, replication: the continued need to substantiate GxE effects in child psychopathology \u2013 a response to Laucht et\u00a0al. (2012)",
     "description": "Family, twin and adoption studies demonstrate that most behavioural phenotypes are influenced by genetic variation and some substantially. This includes phenotypes where environmental influences are t",
@@ -5405,35 +3399,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2604389957",
-    "name": "Delivering Diagnoses: Parents as Translators and Withholders of Children\u2019s Mental Health Diagnoses",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "medical_diagnosis",
-      "mental_health",
-      "psychiatry",
-      "psychology",
-      "clinical_psychology"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Elizabeth H. Bringewatt (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Elizabeth H. Bringewatt (2017)",
-        "detail": "10.1007/s10826-017-0709-5"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W3160027706",
     "name": "\u201cI just want to stay out there all day\u201d: A Case Study of Two Special Educators and Five Autistic Children Learning Outside at School",
     "description": "School is often stressful for autistic students. Similarly, special educators are susceptible to burnout because of the unique demands of their jobs. There is ample evidence that spending time outside",
@@ -5443,7 +3408,7 @@
       "psychology",
       "affordance",
       "special_education",
-      "class_(philosophy)"
+      "class"
     ],
     "age_range": [
       "school_age"
@@ -5467,74 +3432,6 @@
       "Moreover, there were also notable positive effects for the special educators.",
       "We found that even with little prior experience, learning outside is possible and beneficial to everyone involved."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W3160067548",
-    "name": "Clinical Profiles and Socio-Demographic Characteristics of Adults with Specific Learning Disorder in Northern Greece",
-    "description": "The manifestation of Specific Learning Disorder (SLD) during adulthood is one of the least examined research areas among the relevant literature. Therefore, the adult population with SLD is considered",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "population",
-      "comorbidity",
-      "social_skills",
-      "developmental_psychology"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Eleni Bonti et al. (2021)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Eleni Bonti et al. (2021)",
-        "detail": "10.3390/brainsci11050602"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The manifestation of Specific Learning Disorder (SLD) during adulthood is one of the least examined research areas among the relevant literature.",
-      "Therefore, the adult population with SLD is considered a \"rare\" and \"unique\" population of major scientific interest.",
-      "The aim of the current study was to investigate, describe, and analyze the clinical, academic, and socio-demographic characteristics, and other everyday functioning life-skills of adults with SLD, in an attempt to shed more light on this limited field of research.",
-      "The overall sample consisted of 318 adults, who were assessed for possible SLD.",
-      "The diagnostic procedure included self-report records (clinical interview), psychometric/cognitive, and learning assessments.",
-      "The main finding of the study was that SLD, even during adulthood, continues to affect the individuals' well-being and functionality in all of their life domains.",
-      "There is an ongoing struggle of this population to obtain academic qualifications in order to gain vocational rehabilitation, as well as a difficulty to create a family, possibly resulting from their unstable occupational status, their financial insecurity, and the emotional/self-esteem issues they usually encounter, due to their ongoing learning problems.",
-      "Moreover, the various interpersonal characteristics, the comorbidity issues, and the different developmental backgrounds observed in the clinical, academic, personal, social, and occupational profiles of the participants, highlight the enormous heterogeneity and the continuum that characterizes SLD during adulthood.",
-      "We conclude that there is an imperative need for further research and the construction of more sufficient tools for the assessment and diagnosis of SLD during adulthood, which will take into account the developmental challenges and milestones in a series of domains, in order to assist this \"vulnerable\" population with their life struggles."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2479069490",
-    "name": "Atomoxetine and Parent Training for Children With Autism and Attention-Deficit/Hyperactivity Disorder: A 24-Week Extension Study",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "atomoxetine",
-      "attention_deficit_hyperactivity_disorder",
-      "placebo",
-      "autism_spectrum_disorder",
-      "randomized_controlled_trial"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Tristram Smith et al. (2016)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Tristram Smith et al. (2016)",
-        "detail": "10.1016/j.jaac.2016.06.015"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -5579,35 +3476,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2520198258",
-    "name": "The Burden of Atopic Dermatitis: Summary of a Report for the National Eczema Association",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "atopic_dermatitis",
-      "quality_of_life_(healthcare)",
-      "medicine",
-      "burden_of_disease",
-      "environmental_health"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Aaron M. Drucker et al. (2016)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Aaron M. Drucker et al. (2016)",
-        "detail": "10.1016/j.jid.2016.07.012"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2937124463",
     "name": "0750 Effects of a Brief Parent-based Sleep Intervention on Sleep and Clinical Symptoms in Children with Attention Deficit Hyperactivity Disorder, and Parental Sleep and Mental Health",
     "description": "Sleep problems are common in children with attention deficit hyperactivity disorder (ADHD), with a prevalence rate as high as 73%. Sleep difficulties are strongly associated with increased behavioural",
@@ -5615,8 +3483,8 @@
     "tags": [
       "cbcl",
       "attention_deficit_hyperactivity_disorder",
-      "intervention_(counseling)",
-      "sleep_(system_call)",
+      "intervention",
+      "sleep",
       "child_behavior_checklist"
     ],
     "age_range": [
@@ -5737,7 +3605,7 @@
       "psychology",
       "socioeconomic_status",
       "cognition",
-      "intervention_(counseling)"
+      "intervention"
     ],
     "age_range": [
       "school_age"
@@ -5800,70 +3668,12 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2688695367",
-    "name": "Randomized Clinical Trial of Mindfulness Skills Augmentation in Parent Training",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "mindfulness",
-      "psychology",
-      "feeling",
-      "parent_training",
-      "positive_parenting"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Naama Gershy et al. (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Naama Gershy et al. (2017)",
-        "detail": "10.1007/s10566-017-9411-4"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2596040452",
-    "name": "Facilitating Transition from High School and Special Education to Adult Life",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "transition_(genetics)",
-      "special_education",
-      "psychology",
-      "emotional_and_behavioral_disorders",
-      "postsecondary_education"
-    ],
-    "age_range": [
-      "adolescent"
-    ],
-    "evidence_level": "strong",
-    "source": "Lee I. Ascherman et al. (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Lee I. Ascherman et al. (2017)",
-        "detail": "10.1016/j.chc.2016.12.009"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2320729812",
     "name": "Overcoming ADHD: Helping Your Child Become Calm, Engaged, and Focused\u2014Without a Pill",
     "description": "by Stanley I. Greenspan and Jacob Greenspan, Cambridge, MA, Da Capo Press, 2009, 198 pp, Hardcover, $25.00. In the midst of ongoing media coverage of the risks of attention deficit hyperactivity disor",
     "document_type": "fact",
     "tags": [
-      "context_(archaeology)",
+      "context",
       "psychology",
       "attention_deficit_hyperactivity_disorder",
       "developmental_psychology",
@@ -5907,8 +3717,8 @@
       "attendance",
       "psychology",
       "psychological_intervention",
-      "context_(archaeology)",
-      "intervention_(counseling)"
+      "context",
+      "intervention"
     ],
     "age_range": [
       "school_age"
@@ -5983,7 +3793,7 @@
       "feeling",
       "learning_environment",
       "psychology",
-      "flexibility_(engineering)",
+      "flexibility",
       "perception"
     ],
     "age_range": [
@@ -6015,45 +3825,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W4206841239",
-    "name": "Metabolic Syndrome: Updates on Pathophysiology and Management in 2021",
-    "description": "Metabolic syndrome (MetS) forms a cluster of metabolic dysregulations including insulin resistance, atherogenic dyslipidemia, central obesity, and hypertension. The pathogenesis of MetS encompasses mu",
-    "document_type": "fact",
-    "tags": [
-      "metabolic_syndrome",
-      "dyslipidemia",
-      "insulin_resistance",
-      "medicine",
-      "disease"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Gracia Fahed et al. (2022)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Gracia Fahed et al. (2022)",
-        "detail": "10.3390/ijms23020786"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Metabolic syndrome (MetS) forms a cluster of metabolic dysregulations including insulin resistance, atherogenic dyslipidemia, central obesity, and hypertension.",
-      "The pathogenesis of MetS encompasses multiple genetic and acquired entities that fall under the umbrella of insulin resistance and chronic low-grade inflammation.",
-      "If left untreated, MetS is significantly associated with an increased risk of developing diabetes and cardiovascular diseases (CVDs).",
-      "Given that CVDs constitute by far the leading cause of morbidity and mortality worldwide, it has become essential to investigate the role played by MetS in this context to reduce the heavy burden of the disease.",
-      "As such, and while MetS relatively constitutes a novel clinical entity, the extent of research about the disease has been exponentially growing in the past few decades.",
-      "However, many aspects of this clinical entity are still not completely understood, and many questions remain unanswered to date.",
-      "In this review, we provide a historical background and highlight the epidemiology of MetS.",
-      "We also discuss the current and latest knowledge about the histopathology and pathophysiology of the disease.",
-      "Finally, we summarize the most recent updates about the management and the prevention of this clinical syndrome."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2914108393",
     "name": "A new machine learning model based on induction of rules for autism detection",
     "description": "Autism spectrum disorder is a developmental disorder that describes certain challenges associated with communication (verbal and non-verbal), social skills, and repetitive behaviors. Typically, autism",
@@ -6062,8 +3833,7 @@
       "autism_spectrum_disorder",
       "machine_learning",
       "artificial_intelligence",
-      "autism",
-      "computer_science"
+      "autism"
     ],
     "age_range": [
       "school_age"
@@ -6126,43 +3896,6 @@
       "Future research must focus on the relationship between inflammation and illness-related malnutrition.",
       "We anticipate that the definition of malnutrition will continue to evolve with improved understanding of the processes that lead to and complicate the treatment of this condition.",
       "A uniform definition should permit future research to focus on the impact of pediatric malnutrition on functional outcomes and help solidify the scientific basis for evidence-based nutrition practices."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2095418643",
-    "name": "The implementation of inclusive education in South Africa: Reflections arising from a workshop for teachers and therapists to introduce Universal Design for Learning",
-    "description": "South Africa has adopted an inclusive education policy in order to address barriers to learning in the education system. However, the implementation of this policy is hampered by the lack of teachers'",
-    "document_type": "fact",
-    "tags": [
-      "universal_design_for_learning",
-      "curriculum",
-      "context_(archaeology)",
-      "inclusion_(mineral)",
-      "pedagogy"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Elizabeth Dalton et al. (2012)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Elizabeth Dalton et al. (2012)",
-        "detail": "10.4102/ajod.v1i1.13"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "South Africa has adopted an inclusive education policy in order to address barriers to learning in the education system.",
-      "However, the implementation of this policy is hampered by the lack of teachers' skills and knowledge in differentiating the curriculum to address a wide range of learning needs.",
-      "In this paper we provided a background to inclusive education policy in South Africa and a brief exposition of an instructional design approach, Universal Design for Learning (UDL) that addresses a wide range of learning needs in a single classroom.",
-      "We reported on a workshop conducted with teachers and therapists in South Africa as a first attempt to introduce UDL in this context.",
-      "Knowledge of UDL was judged to be appropriate and useful by the course participants in the South African context as a strategy for curriculum differentiation in inclusive classrooms.",
-      "Furthermore, knowledge of the UDL framework facilitates dialogue between teachers and therapists and provides a relatively simple and comprehensive approach for curriculum differentiation.",
-      "We therefore conclude that there is potential for this approach that can be expanded through further teacher training."
     ],
     "contraindications": [],
     "related_ids": []
@@ -6244,7 +3977,7 @@
     "tags": [
       "serendipity",
       "psychology",
-      "perspective_(graphical)",
+      "perspective",
       "attention_deficit_hyperactivity_disorder",
       "psychotherapist"
     ],
@@ -6277,45 +4010,16 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2134361504",
-    "name": "Probing Compulsive and Impulsive Behaviors, from Animal Models to Endophenotypes: A Narrative Review",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "impulsivity",
-      "psychology",
-      "neuroscience",
-      "nucleus_accumbens",
-      "orbitofrontal_cortex"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Naomi Fineberg et al. (2009)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Naomi Fineberg et al. (2009)",
-        "detail": "10.1038/npp.2009.185"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W2092528718",
     "name": "Efficacy of the Incredible Years Basic parent training programme as an early intervention for children with conduct problems and ADHD",
     "description": "Findings from this study indicate that the IY PT programme is a valuable intervention for many pre-school children displaying early signs of ADHD.",
     "document_type": "fact",
     "tags": [
-      "intervention_(counseling)",
+      "intervention",
       "psychology",
       "clinical_psychology",
       "parent_training",
-      "deviance_(statistics)"
+      "deviance"
     ],
     "age_range": [
       "preschool",
@@ -6344,8 +4048,8 @@
     "document_type": "fact",
     "tags": [
       "higher_education",
-      "inclusion_(mineral)",
-      "transition_(genetics)",
+      "inclusion",
+      "transition",
       "pedagogy",
       "sociology"
     ],
@@ -6488,7 +4192,7 @@
       "occupational_therapy",
       "confusion",
       "psychological_intervention",
-      "intervention_(counseling)"
+      "intervention"
     ],
     "age_range": [
       "school_age"
@@ -6520,10 +4224,9 @@
     "description": "Negli ultimi anni la diffusione dei parent training nell\u2019ADHD e\u0300 stata accompagnata dallo sforzo di validazione dei modelli d\u2019intervento, con l\u2019obiettivo di verificarne l\u2019efficacia clinica e sul siste",
     "document_type": "fact",
     "tags": [
-      "training_(meteorology)",
+      "training",
       "psychology",
-      "geography",
-      "meteorology"
+      "geography"
     ],
     "age_range": [
       "all"
@@ -6579,35 +4282,6 @@
       "Mental health professionals working with families today apply a wide range of approaches to a variety of situations and clients using techniques based on their clinically and empirically proven effectiveness, their focus on specific individual and relational disorders, their applicability in various contexts, and their prominence in the field.In this accessible and comprehensive text, each chapter covers specific problems, the theoretical and practical elements of the treatment approach, recommended intervention strategies, special considerations, supporting research, and clinical examples.",
       "The contributors provide step-by-step guidelines for implementing the approaches described and discuss particular issues that arise in different couple, family, and cultural contexts.Handbook of Clinical Family Therapy covers treatment strategies for the most common problems encountered in family therapy, including: Domestic violence Adolescent defiance, anxiety, and depression Trauma-induced problems Stepfamily conflicts ADHD disruption Substance abuse in adults and adolescents Couple conflict and divorce Chronic illnessA detailed reference for today's best treatment strategies, the Handbook of Clinical Family Therapy brings together the top practitioners and scholars to produce an innovative and user-friendly guide for clinicians and students alike."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2999274216",
-    "name": "Attention-Deficit Hyperactivity Disorder and Anxiety in Children",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "attention_deficit_hyperactivity_disorder",
-      "anxiety",
-      "psychology",
-      "clinical_psychology",
-      "attention_deficit"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Laura Nabors (2020)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Laura Nabors (2020)",
-        "detail": "10.1007/978-3-030-35606-4_7"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -6765,100 +4439,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W4312215341",
-    "name": "The Influence of Technology in Educating English Language Learners at-risk or with Disabilities: A Systematic Review",
-    "description": "With the development of technology, the quantity and quality of electronic devices for students learning English as a second or foreign language (ESL/EFL) are on the rise, especially since the outbrea",
-    "document_type": "fact",
-    "tags": [
-      "class_(philosophy)",
-      "language_acquisition",
-      "psychology",
-      "english_language",
-      "quality_(philosophy)"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "strong",
-    "source": "Yizhe Jiang et al. (2022)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Yizhe Jiang et al. (2022)",
-        "detail": "10.26529/cepsj.1426"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "With the development of technology, the quantity and quality of electronic devices for students learning English as a second or foreign language (ESL/EFL) are on the rise, especially since the outbreak of the Covid-19 pandemic.",
-      "To facilitate practices in English language education for students with special needs, the researchers conducted a systematic review of the empirical studies of technology tools for ESL/EFL students with learning difficulties published in the previous two decades.",
-      "This paper presents the study selection process and findings of the review based on 16 peer-reviewed journal articles and one book chapter.",
-      "The paper reveals the frequent mental and physical difficulties of English language learning and the typical technology tools employed in and out of class.",
-      "More importantly, this paper discusses the roles of these technology tools in students' English language acquisition, specifically their effects on student learning outcomes and the students' perceptions toward them.",
-      "With limited primary sources, this paper calls for more attention to the use of technology in English language learning of ESL/EFL students identified as at-risk and with learning disabilities and raises some implications for future research and instructional practices."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2894320401",
-    "name": "Increased risk of ADHD in families with ASD",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "proband",
-      "gee",
-      "autism_spectrum_disorder",
-      "attention_deficit_hyperactivity_disorder",
-      "sibling"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Mathilde Septier et al. (2018)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Mathilde Septier et al. (2018)",
-        "detail": "10.1007/s00787-018-1206-0"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W1988168144",
-    "name": "The Effects of Individual Upper Alpha Neurofeedback in ADHD: An Open-Label Pilot Study",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "neurofeedback",
-      "impulsivity",
-      "electroencephalography",
-      "psychology",
-      "audiology"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Carlos Escolano et al. (2014)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Carlos Escolano et al. (2014)",
-        "detail": "10.1007/s10484-014-9257-6"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W4394928726",
     "name": "Peer mentoring for students with learning disabilities: the importance of shared experience on students\u2019 social and emotional development",
     "description": "Students with Learning Disabilities (LDs) can experience classroom challenges that may negatively impact their social and emotional development, and these struggles can put them at risk for mental hea",
@@ -6866,7 +4446,6 @@
     "tags": [
       "social_emotional_learning",
       "psychology",
-      "computer_science",
       "mathematics_education",
       "knowledge_management"
     ],
@@ -6897,45 +4476,13 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W3038741217",
-    "name": "Genetic Counseling for Neurofibromatosis 1, Neurofibromatosis 2, and Schwannomatosis\u2014Practice Resource of the National Society of Genetic Counselors",
-    "description": "The goal of this practice resource is to provide genetic counselors and other healthcare professionals with a resource to reference when providing genetic counseling services to individuals and famili",
-    "document_type": "fact",
-    "tags": [
-      "genetic_counseling",
-      "neurofibromatosis",
-      "neurofibromatoses",
-      "resource_(disambiguation)",
-      "medicine"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "Heather B. Radtke et al. (2020)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Heather B. Radtke et al. (2020)",
-        "detail": "10.1002/jgc4.1303"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The goal of this practice resource is to provide genetic counselors and other healthcare professionals with a resource to reference when providing genetic counseling services to individuals and families undergoing evaluation for neurofibromatosis (NF) or who have received a diagnosis of NF, including NF1, NF2, and schwannomatosis.",
-      "This resource represents the opinions of a multi-center working group of Certified Genetic Counselors with experience in the care of individuals with NF, providing topics to be considered for the incorporation into a clinical genetic counseling session."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W4311995018",
     "name": "The Impact of Maternal Depression on Internet-Parent\u2013Child Interaction Therapy for Child Attention-Deficit/Hyperactivity Disorder: A Case Study",
     "description": "Conduct disorders and attention-deficit/hyperactivity disorder (ADHD) are highly comorbid, with an estimated prevalence rate of 51.5% for children between 2\u201317 years of age (Centers for Disease Contro",
     "document_type": "fact",
     "tags": [
       "attention_deficit_hyperactivity_disorder",
-      "depression_(economics)",
+      "depression",
       "psychology",
       "attention_deficit",
       "clinical_psychology"
@@ -7003,35 +4550,6 @@
       "After the training, most parents (75%) reported improvements in their children's behaviors.",
       "Clinical implications and limitations of this study are discussed."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2076971890",
-    "name": "Lack of an association between a dopamine-4 receptor polymorphism and attention-deficit/hyperactivity disorder: genetic and brain morphometric analyses",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "attention_deficit_hyperactivity_disorder",
-      "allele",
-      "etiology",
-      "polymorphism_(computer_science)",
-      "dopamine"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "emerging",
-    "source": "F. Xavier Castellanos et al. (1998)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "F. Xavier Castellanos et al. (1998)",
-        "detail": "10.1038/sj.mp.4000430"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -7225,104 +4743,6 @@
     "related_ids": []
   },
   {
-    "id": "oalex_W2503642044",
-    "name": "Cognitive Therapy across the Lifespan: Evidence and Practice",
-    "description": "1. Cognitive therapy across the lifespan: conceptual horizons Mark A. Reinecke and David A. Clark 2. Cognitive theory and therapy of depression Ari Solomon and David A. F. Haaga 3. Cognitive theory an",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "panic_disorder",
-      "cognition",
-      "psychotherapist",
-      "psychological_intervention"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Mark A. Reinecke et al. (2003)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Mark A. Reinecke et al. (2003)",
-        "detail": "W2503642044"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "1.",
-      "Cognitive therapy across the lifespan: conceptual horizons Mark A. Reinecke and David A. Clark 2.",
-      "Cognitive theory and therapy of depression Ari Solomon and David A. F. Haaga 3.",
-      "Cognitive theory and therapy of bipolar disorders Jan Scott 4.",
-      "Regulation of emotion in generalized anxiety disorder Douglas S. Mennin, Cynthia L. Turk, Richard G. Heimberg and Cheryl N. Carmin 5.",
-      "Cognitive theory and therapy of obsessions and compulsions David A. Clark and Christine Purdon 6.",
-      "The cognitive model of panic Stefan G. Hofmann 7.",
-      "Cognitive-behavioral interventions in obsessional problems Paul M. Salkovskis and Karina Wahl 8.",
-      "Narcissistic personality disorder Cory F. Newman and Christine L. Ratto 9.",
-      "Cognitive therapy and the self David L. DuBois, Cristy Lopez and Gilbert R. Parra 10."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2067994761",
-    "name": "Longitudinal prediction of the one-year course of preschool ADHD symptoms: Implications for models of temperament\u2013ADHD associations",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "psychology",
-      "temperament",
-      "longitudinal_study",
-      "developmental_psychology",
-      "clinical_psychology"
-    ],
-    "age_range": [
-      "preschool"
-    ],
-    "evidence_level": "emerging",
-    "source": "Michelle M. Martel et al. (2014)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Michelle M. Martel et al. (2014)",
-        "detail": "10.1016/j.paid.2014.02.018"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2765732015",
-    "name": "A comparison of the clinical effectiveness and cost of specialised individually delivered parent training for preschool attention-deficit/hyperactivity disorder and a generic, group-based programme: a multi-centre, randomised controlled trial of the New Forest Parenting Programme versus Incredible Years",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "attention_deficit_hyperactivity_disorder",
-      "child_and_adolescent_psychiatry",
-      "parent_training",
-      "randomized_controlled_trial",
-      "psychological_intervention"
-    ],
-    "age_range": [
-      "preschool"
-    ],
-    "evidence_level": "emerging",
-    "source": "Edmund Sonuga\u2010Barke et al. (2017)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Edmund Sonuga\u2010Barke et al. (2017)",
-        "detail": "10.1007/s00787-017-1054-3"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "oalex_W3041152692",
     "name": "The ADHD teen integrative data analysis longitudinal (TIDAL) dataset: background, methodology, and aims",
     "description": "The ADHD TIDAL Dataset will be openly shared with the field to maximize its utility.",
@@ -7360,7 +4780,7 @@
     "document_type": "fact",
     "tags": [
       "headline",
-      "set_(abstract_data_type)",
+      "set",
       "psychology",
       "mental_health",
       "attention_deficit_hyperactivity_disorder"
@@ -7403,7 +4823,7 @@
       "generalizability_theory",
       "fidelity",
       "attendance",
-      "intervention_(counseling)"
+      "intervention"
     ],
     "age_range": [
       "school_age"
@@ -7472,9 +4892,9 @@
     "tags": [
       "psychology",
       "pandemic",
-      "coronavirus_disease_2019_(covid-19)",
-      "task_(project_management)",
-      "closure_(psychology)"
+      "coronavirus_disease_2019",
+      "task",
+      "closure"
     ],
     "age_range": [
       "school_age",
@@ -7510,7 +4930,7 @@
     "document_type": "fact",
     "tags": [
       "psychology",
-      "interface_(matter)",
+      "interface",
       "emotional_development",
       "developmental_psychology",
       "user_interface"
@@ -7536,35 +4956,6 @@
       "Younger students struggled to understand complex interactions and occasionally struggled to use the interface, however they were still able to use MindfulNest to regulate their emotions when guided by their teacher.",
       "Older students did not struggle to use MindfulNest or understand complex interactions and were able to successfully regulate their emotions by themselves and with teacher guidance."
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "oalex_W2908614362",
-    "name": "Predicting Child Behavior: A Comparative Analysis between Autism Spectrum Disorder and Attention Deficit/Hyperactivity Disorder",
-    "description": "",
-    "document_type": "fact",
-    "tags": [
-      "autism_spectrum_disorder",
-      "psychology",
-      "cbcl",
-      "developmental_psychology",
-      "attention_deficit_hyperactivity_disorder"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "emerging",
-    "source": "Elizabeth McRae et al. (2019)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Elizabeth McRae et al. (2019)",
-        "detail": "10.1007/s10826-018-1299-6"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   }

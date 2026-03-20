@@ -48,7 +48,12 @@
     "name": "Transferability of cognitive training in children with ADHD: Comparison of remediation and compensation approaches.",
     "description": "This study evaluates the effectiveness of two cognitive training interventions-Attentive Rehabilitation of Attention and Memory (ARAM) and the Program for Executive Function Training (PETRA)- in impro",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "executive_function",
+      "intervention",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -128,7 +133,15 @@
     "name": "Sleep problems and parental stress among caregivers of children and adolescents enrolled in a digital mental health intervention.",
     "description": "INTRODUCTION: Caregivers of children with mental health problems such as anxiety, depression, and attention-deficit/hyperactivity disorder often experience heightened sleep problems, largely due to th",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "hyperactivity",
+      "intervention",
+      "anxiety",
+      "depression",
+      "sleep",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -162,7 +175,13 @@
     "name": "Cross-cultural variations in executive function impairments among children with attention deficit/hyperactivity disorder.",
     "description": "BACKGROUND: Executive function (EF) impairments are heterogeneous in children with attention deficit/hyperactivity disorder (ADHD). Culture has a significant impact on EF development in typically deve",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "executive_function",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -282,7 +301,13 @@
     "name": "Structural integrity of the anterior thalamic radiation predicts alpha oscillations and inattention during visual encoding.",
     "description": "Attention deficit/hyperactivity disorder (ADHD) is typically associated with working memory deficits, which are thought to arise from impaired attentional control. Previous research has highlighted ab",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity",
+      "working_memory",
+      "inattention"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -307,100 +332,6 @@
       "Importantly, ATR microstructure significantly predicted alpha ERD, suggesting a key role for anterior thalamic pathways in modulating neural oscillations during working memory encoding.",
       "In contrast, SLF2 and OR microstructure did not significantly influence alpha modulation.",
       "These findings support a thalamus-mediated model of alpha modulation, where disruptions in anterior thalamic microstructural integrity contribute to attentional impairments in ADHD."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_31753052",
-    "name": "Maternal mental health and internalizing and externalizing psychopathology in extremely low birth weight adults.",
-    "description": "The mental health of adult extremely low birth weight (ELBW) (<1000 g) survivors is poorer than their normal birth weight (NBW) peers. An understanding of the modifiable factors that affect this risk",
-    "document_type": "fact",
-    "tags": [
-      "adult",
-      "anxiety",
-      "attention_deficit_disorder_with_hyperactivity",
-      "depression",
-      "female",
-      "follow-up_studies",
-      "humans",
-      "infant,_extremely_low_birth_weight",
-      "infant,_newborn",
-      "longitudinal_studies",
-      "male",
-      "mental_health",
-      "ontario",
-      "pregnancy",
-      "pregnancy_complications",
-      "prenatal_exposure_delayed_effects",
-      "prevalence",
-      "prospective_studies",
-      "psychiatric_status_rating_scales",
-      "risk_factors",
-      "self_report",
-      "survivors",
-      "young_adult"
-    ],
-    "age_range": [
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "Rangan Meena et al. (2020)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Rangan Meena et al. (2020)",
-        "detail": "10.1017/S2040174419000771"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The mental health of adult extremely low birth weight (ELBW) (<1000 g) survivors is poorer than their normal birth weight (NBW) peers.",
-      "An understanding of the modifiable factors that affect this risk could provide targets for intervention.",
-      "We set out to determine the extent to which a maternal history of mental health problems influenced mental health in ELBW and NBW offspring in adulthood.",
-      "A total of 85 ELBW and 88 NBW individuals born between 1977 and 1982 in central west Ontario, Canada self-reported on internalizing (depression, anxiety) and externalizing (attention-deficit hyperactivity and antisocial) problems using the Diagnostic and Statistical Manual of Mental Disorders (DSM) scales of the Young Adult Self-Report at ages 22-26 and 30-35.",
-      "They also reported on their mother's maternal mental health using the Family History Screen.",
-      "An interaction was found between birth weight status and maternal history of an anxiety disorder such that ELBW survivors showed a greater increase in internalizing scores than NBW participants at 22-26 (\u03b2 = 10.27, p = 0.002) and at 30-35 years of age (\u03b2 = 12.65, p = 0.002).",
-      "An interaction was also observed between birth weight and maternal history of mood disorder, with higher externalizing scores in ELBW survivors than NBW adults at 22-26 (\u03b2 = 7.21, p < 0.0001).",
-      "ELBW adults appear to be more susceptible to the adverse mental health effects of exposure to maternal mood and anxiety disorders than those born at NBW.",
-      "These links further highlight the importance of detecting and treating mental health problems in the parents of preterm survivors as a means of attempting to reduce the burden of psychopathology in this population."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_35180386",
-    "name": "Gambling disorder in the UK: key research priorities and the urgent need for independent research funding.",
-    "description": "Gambling in the modern era is pervasive owing to the variety of gambling opportunities available, including those that use technology (eg, online applications on smartphones). Although many people gam",
-    "document_type": "fact",
-    "tags": [
-      "behavior,_addictive",
-      "gambling",
-      "humans",
-      "prevalence",
-      "research",
-      "united_kingdom"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Bowden-Jones Henrietta et al. (2022)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Bowden-Jones Henrietta et al. (2022)",
-        "detail": "10.1016/S2215-0366(21)00356-4"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Gambling in the modern era is pervasive owing to the variety of gambling opportunities available, including those that use technology (eg, online applications on smartphones).",
-      "Although many people gamble recreationally without undue negative effects, a sizeable subset of individuals develop disordered gambling, which is associated with marked functional impairment including other mental health problems, relationship problems, bankruptcy, suicidality, and criminality.",
-      "The National UK Research Network for Behavioural Addictions (NUK-BA) was established to promote understanding of, research into, and treatments for behavioural addictions including gambling disorder, which is the only formally recognised behavioural addiction.",
-      "In this Health Policy paper, we outline the status of research and treatment for disordered gambling in the UK (including funding issues) and key research that should be conducted to establish the magnitude of the problem, vulnerability and resilience factors, the underlying neurobiology, long-term consequences, and treatment opportunities.",
-      "In particular, we emphasise the need to: (1) conduct independent longitudinal research into the prevalence of disordered gambling (including gambling disorder and at-risk gambling), and gambling harms, including in vulnerable and minoritised groups; (2) select and refine the most suitable pragmatic measurement tools; (3) identify predictors (eg, vulnerability and resilience markers) of disordered gambling in people who gamble recreationally, including in vulnerable and minoritised groups; (4) conduct randomised controlled trials on psychological interventions and pharmacotherapy for gambling disorder; (5) improve understanding of the neurobiological basis of gambling disorder, including impulsivity and compulsivity, genetics, and biomarkers; and (6) develop clinical guidelines based on the best contemporary research evidence to guide effective clinical interventions.",
-      "We also highlight the need to consider what can be learnt from approaches towards mitigating gambling-related harm in other countries."
     ],
     "contraindications": [],
     "related_ids": []
@@ -458,7 +389,9 @@
     "name": "Indirect genetic effects of siblings.",
     "description": "BACKGROUND: Within-family designs are increasingly used to decompose genotype-trait associations into direct and indirect genetic effects. Many such designs, including trio designs or within-sibship d",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "family"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -539,7 +472,11 @@
     "name": "Effectiveness of Virtual Reality-Based Cognitive Control Training Game for Children With Attention-Deficit/Hyperactivity Disorder Symptoms: Preliminary Effectiveness Study.",
     "description": "BACKGROUND: Recent advancements in digital technologies hold promise for psychological interventions. Virtual reality (VR) has emerged as a particularly innovative tool, and its application expanded d",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "hyperactivity",
+      "intervention",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -965,7 +902,10 @@
     "name": "Childhood autism spectrum disorder: insights from a tertiary hospital cohort in Kenya.",
     "description": "INTRODUCTION: Autism spectrum disorder (ASD) is characterized by impairments in behavior, social communication, and interaction. There is little data on ASD from sub-Saharan Africa (SSA) describing cl",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "behavior",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -1373,7 +1313,10 @@
     "name": "Effectiveness of sensory integration therapy in children, focusing on Korean children: A systematic review and meta-analysis.",
     "description": "BACKGROUND: Sensory integration intervention is highly related to the child's effective interaction with the environment and the child's development. Currently, various sensory integration interventio",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "intervention",
+      "child"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -1407,7 +1350,14 @@
     "name": "Associations of lamplight exposure during sleep and sleep duration with attention-deficit/hyperactivity disorder among preschool children in China.",
     "description": "INTRODUCTION: This study aimed to examine the associations of exposure to light while sleeping at night and different sleep durations with attention-deficit/hyperactivity disorder (ADHD) among prescho",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "hyperactivity",
+      "school",
+      "sleep",
+      "preschool",
+      "child"
+    ],
     "age_range": [
       "preschool",
       "school_age"
@@ -1494,7 +1444,11 @@
     "name": "It's Not You, \"It's Me\": Sexual Experiences and Sexual Satisfaction in an ADHD Sample.",
     "description": "Individuals with attention deficit hyperactivity disorder (ADHD) display increased difficulty with navigating intimate relationships, including experiencing lower levels of sexual satisfaction compare",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "adhd",
+      "attention_deficit",
+      "hyperactivity"
+    ],
     "age_range": [
       "all"
     ],
@@ -1527,7 +1481,12 @@
     "name": "Tic severity and executive functioning in children and adolescents: a moderated mediation model of premonitory urges and comorbidity.",
     "description": "BACKGROUND: The severity of tics may influence executive function in children and adolescents diagnosed with tic disorders. The underlying mechanism is still inadequately researched. This study invest",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "executive_function",
+      "comorbidity",
+      "adolescent",
+      "child"
+    ],
     "age_range": [
       "all"
     ],
@@ -1879,7 +1838,12 @@
     "name": "Verification of the Effectiveness of a Token Economy Method Through Digital Intervention Content for Children with Attention-Deficit/Hyperactivity Disorder.",
     "description": "Recently, cognitive training programs using digital content with visuoperceptual stimulation have been developed and commercialized. In particular, digital intervention content for children with atten",
     "document_type": "fact",
-    "tags": [],
+    "tags": [
+      "hyperactivity",
+      "intervention",
+      "child",
+      "token_economy"
+    ],
     "age_range": [
       "school_age"
     ],
@@ -1904,58 +1868,6 @@
       "The developed digital intervention content implemented a user-centered token economy based on points within the program.",
       "In the CAT Flanker Task, the experimental group (0.84 \u00b1 0.40) showed significantly higher sensitivity factor scores than the control group (0.72 \u00b1 0.59) after 4 weeks, with a large effect size (F = 4.76, p = 0.038, partial \u03b72 = 0.150).",
       "Additionally, the rate of change in externalizing behavior scores on the K-CBCL showed a significant difference between the two groups (t = 2.35, p = 0.026, Cohen's d = 0.860), demonstrating greater improvement in externalizing symptoms in the experimental group than in the control group."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "pm_30744507",
-    "name": "Psychiatric research in the Northern Finland Birth Cohort 1986 - a systematic review.",
-    "description": "The Northern Finland Birth Cohort 1986 is a large population-based birth cohort, which aims to promote health and wellbeing of the population. In this paper, we systematically review the psychiatric r",
-    "document_type": "fact",
-    "tags": [
-      "adolescent",
-      "adolescent_behavior",
-      "adult",
-      "arctic_regions",
-      "attention_deficit_disorder_with_hyperactivity",
-      "child",
-      "child_behavior_disorders",
-      "child,_preschool",
-      "finland",
-      "humans",
-      "infant",
-      "mental_disorders",
-      "mental_health",
-      "risk_factors",
-      "socioeconomic_factors",
-      "substance-related_disorders",
-      "young_adult"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "Miettunen Jouko et al. (2019)",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "Miettunen Jouko et al. (2019)",
-        "detail": "10.1111/eip.12479"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "The Northern Finland Birth Cohort 1986 is a large population-based birth cohort, which aims to promote health and wellbeing of the population.",
-      "In this paper, we systematically review the psychiatric research performed in the cohort until today, i.e.",
-      "at the age of 32\u00a0years of the cohort (2018).",
-      "We conducted a systematic literature search using the databases of PubMed and Scopus and complemented it with a manual search.",
-      "We found a total of 94 articles, which were classified as examining ADHD, emotional and behavioural problems, psychosis risk or other studies relating to psychiatric subjects.",
-      "The articles are mainly based on two large comprehensive follow-up studies of the cohort and several substudies.",
-      "The studies have often used also nationwide register data.",
-      "The studies have found several early predictors for the aforementioned psychiatric outcomes, such as problems at pregnancy and birth, family factors in childhood, physical inactivity and substance use in adolescence.",
-      "There are also novel findings relating to brain imaging and cognition, for instance regarding familial risk of psychosis in relation to resting state functional MRI.",
-      "The Northern Finland Birth Cohort 1986 has been utilised frequently in psychiatric research and future data collections are likely to lead to new scientifically important findings."
     ],
     "contraindications": [],
     "related_ids": []

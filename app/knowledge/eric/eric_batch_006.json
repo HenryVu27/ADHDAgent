@@ -21,7 +21,7 @@
       "interaction",
       "help_seeking",
       "social_attitudes",
-      "self_disclosure_(individuals)",
+      "self_disclosure",
       "intervention"
     ],
     "age_range": [
@@ -53,7 +53,7 @@
     "description": "Based upon recent trends among college students with attention deficit/hyperactivity disorder, an alternative model of assessment that transcends test-centered approaches is proposed. Differential dia",
     "document_type": "guidance",
     "tags": [
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "attention_deficit_disorders",
       "clinical_diagnosis",
       "college_students",
@@ -62,7 +62,7 @@
       "postsecondary_education",
       "psychological_evaluation",
       "student_evaluation",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "transitional_programs"
     ],
     "age_range": [
@@ -139,10 +139,10 @@
       "marijuana",
       "drug_use",
       "attention_deficit_hyperactivity_disorder",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "adults",
       "pain",
-      "severity_(of_disability)",
+      "severity",
       "individual_characteristics"
     ],
     "age_range": [
@@ -187,7 +187,7 @@
       "outcomes_of_treatment",
       "drug_abuse",
       "adolescents",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "pharmacology"
     ],
     "age_range": [
@@ -536,7 +536,7 @@
       "student_attitudes",
       "predictor_variables",
       "academic_support_services",
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "academic_achievement"
     ],
     "age_range": [
@@ -929,7 +929,7 @@
       "inhibition",
       "responses",
       "comparative_analysis",
-      "interference_(learning)",
+      "interference",
       "behavior",
       "stimuli",
       "executive_function",
@@ -1127,7 +1127,7 @@
     "document_type": "guidance",
     "tags": [
       "achievement_need",
-      "adjustment_(to_environment)",
+      "adjustment",
       "adolescents",
       "family_environment",
       "family_influence",
@@ -1316,7 +1316,7 @@
       "attention_deficit_disorders",
       "rating_scales",
       "hyperactivity",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "males",
       "adolescents",
       "interviews",
@@ -1324,7 +1324,7 @@
       "children",
       "comparative_analysis",
       "aggression",
-      "severity_(of_disability)",
+      "severity",
       "delinquency",
       "child_rearing",
       "parent_influence",
@@ -1362,51 +1362,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_EJ1338130",
-    "name": "Implicit Theories, Social Support, and Hope as Serial Mediators for Predicting Academic Self-Efficacy among Higher Education Students",
-    "description": "This study examined the predictive role of learning difficulties in the academic self-efficacy of students enrolled in higher education institutions and the serial multiple mediation of inner and exte",
-    "document_type": "guidance",
-    "tags": [
-      "social_support_groups",
-      "learning_problems",
-      "college_students",
-      "students_with_disabilities",
-      "learning_disabilities",
-      "attention_deficit_hyperactivity_disorder",
-      "psychological_patterns",
-      "self_efficacy",
-      "beliefs",
-      "student_attitudes",
-      "expectation",
-      "foreign_countries",
-      "testing_accommodations"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ1338130"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "This study examined the predictive role of learning difficulties in the academic self-efficacy of students enrolled in higher education institutions and the serial multiple mediation of inner and external resources.",
-      "The sample consisted of 2,113 students (age range = 18-35 years) at 25 higher education institutions in Israel.",
-      "Participants were divided into four groups: (1) 668 typical students (without learning difficulties or attention-deficit-hyperactivity disorder [ADHD]); (2) 370 students with self-reported but undiagnosed academic difficulties; (3) 372 students diagnosed with specific learning disabilities (SLDs); and (4) 703 students diagnosed with attention-deficit disorders (ADHD).",
-      "Implicit theories on accommodations, perceptions of social support, hope, and academic self-efficacy were examined.",
-      "Results demonstrated that students with SLD and ADHD had higher beliefs in the value of expectations, yet they experienced lower levels of academic self-efficacy than their typical peers.",
-      "These implicit theories did not predict directly the academic self-efficacy, but external resources (perceptions of support) and internal resources (hope) mediated these relationships.",
-      "The results focused on the accommodations and beliefs in their value for predicting academic self-efficacy, and the importance of social support and hope."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ1178049",
     "name": "Using the Karplus Learning Cycle to Teach Learners with ADHD Introductory Computer Programming",
     "description": "Many learners find the study of introductory computer programming difficult. This is also true of children with attention deficit hyperactivity disorder (ADHD) and, in order to support them, we need a",
@@ -1419,7 +1374,7 @@
       "children",
       "action_research",
       "grounded_theory",
-      "constructivism_(learning)",
+      "constructivism",
       "special_schools",
       "high_school_students",
       "males",
@@ -1463,7 +1418,7 @@
       "attention_deficit_hyperactivity_disorder",
       "adult_students",
       "disability_identification",
-      "self_evaluation_(individuals)",
+      "self_evaluation",
       "self_concept"
     ],
     "age_range": [
@@ -1490,98 +1445,6 @@
       "Additionally, noncredible responders reported greater overall functional impairment relative to credible responders, and a greater proportion of noncredible responders endorsed clinically impaired levels of functional impairment.",
       "While noncredible presentations significantly moderated the association between self-reported functional impairment and hyperactive-impulsive symptoms in Study 1, there was less consistent support for a moderating effect of noncredible presentations on the relationship between symptoms and impairment in Study 2.",
       "These results suggest that, in adult ADHD evaluations, noncredible presentations can significantly impact measures of perceived functional impairment."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "eric_EJ396558",
-    "name": "Biomedical and Social Aspects of Pediatric AIDS.",
-    "description": "This paper presents the concept of pediatric Acquired Immune Deficiency Syndrome (AIDS) as a complex bio-ecological problem; reviews its biomedical aspects; explores relevant economic, political, and",
-    "document_type": "guidance",
-    "tags": [
-      "acquired_immune_deficiency_syndrome",
-      "children",
-      "early_intervention",
-      "economic_factors",
-      "intervention",
-      "medicine",
-      "political_influences",
-      "public_policy",
-      "social_influences"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ396558"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "This paper presents the concept of pediatric Acquired Immune Deficiency Syndrome (AIDS) as a complex bio-ecological problem; reviews its biomedical aspects; explores relevant economic, political, and social issues; and examines early intervention options.",
-      "Society is urged to stress mutual aid and voluntary cooperation in its social policy and intervention practices.",
-      "(Author/JDD)"
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "eric_ED544608",
-    "name": "Our Kids: A McREL Report Prepared for Stupski Foundation&apos;s Learning System",
-    "description": "This document is one of eight reports prepared to support the development of a new learning system, a development effort that is the first step in a major initiative undertaken by the Stupski Foundati",
-    "document_type": "guidance",
-    "tags": [
-      "urban_education",
-      "disadvantaged_youth",
-      "minority_group_children",
-      "at_risk_persons",
-      "cognitive_development",
-      "school_readiness",
-      "academic_achievement",
-      "interpersonal_competence",
-      "emotional_intelligence",
-      "achievement_gap",
-      "early_childhood_education",
-      "social_environment",
-      "caregiver_child_relationship",
-      "child_rearing",
-      "executive_function",
-      "scaffolding_(teaching_technique)",
-      "intervention",
-      "educational_research",
-      "parent_education",
-      "self_management",
-      "child_care",
-      "preschool_education",
-      "educational_change",
-      "literature_reviews"
-    ],
-    "age_range": [
-      "preschool",
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "ED544608"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "This document is one of eight reports prepared to support the development of a new learning system, a development effort that is the first step in a major initiative undertaken by the Stupski Foundation.",
-      "This document synthesizes recent research and theoretical literature on the special learning needs of urban, underserved students, whom are referred to as &quot;our kids.&quot; The report identifies six ways to address their needs: (1) Provide executive function interventions; (2) Invest in the research and design of brain-based early childhood interventions; (3) Integrate the evidence-based components of effective early care centers into all early childhood programs; (4) Scaffold self-regulation in early childhood; (5) Support parent scaffolding of children&apos;s self-regulation skills; and (6) Adopt and scale-up effective parent support programs.",
-      "The literature review method is appended.",
-      "(Contains 5 tables, 4 figures, and 2 footnotes.)",
-      "[A list of references that were reviewed but not cited in this report are included.]"
     ],
     "contraindications": [],
     "related_ids": []
@@ -1639,7 +1502,7 @@
       "attention_deficit_disorders",
       "meta_analysis",
       "neurological_impairments",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "drug_therapy",
       "outcomes_of_treatment"
     ],
@@ -1676,7 +1539,7 @@
       "counties",
       "factor_structure",
       "parent_attitudes",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "longitudinal_studies",
       "developmental_stages",
       "measurement"
@@ -1713,9 +1576,9 @@
     "tags": [
       "group_membership",
       "attention_deficit_hyperactivity_disorder",
-      "severity_(of_disability)",
+      "severity",
       "behavior_problems",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "parents",
       "parent_participation",
       "clinical_diagnosis",
@@ -1795,7 +1658,7 @@
       "cognitive_processes",
       "brain",
       "neurological_impairments",
-      "aging_(individuals)",
+      "aging",
       "brain_hemisphere_functions",
       "planning",
       "correlation",
@@ -1957,7 +1820,7 @@
       "psychometrics",
       "females",
       "risk",
-      "depression_(psychology)",
+      "depression",
       "attention_deficit_hyperactivity_disorder",
       "longitudinal_studies",
       "perception",
@@ -1967,7 +1830,7 @@
       "psychopathology",
       "scores",
       "control_groups",
-      "measures_(individuals)",
+      "measures",
       "elementary_school_students"
     ],
     "age_range": [
@@ -2006,7 +1869,7 @@
     "tags": [
       "attention_deficit_hyperactivity_disorder",
       "short_term_memory",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "behavior_disorders",
       "parent_attitudes",
       "ability",
@@ -2018,7 +1881,7 @@
       "behavior_problems",
       "teacher_attitudes",
       "student_attitudes",
-      "measures_(individuals)",
+      "measures",
       "foreign_countries"
     ],
     "age_range": [
@@ -2150,7 +2013,7 @@
     "description": "Objective: To describe child- and family-focused cognitive-behavioral therapy (CFF-CBT), a new developmentally sensitive psychosocial intervention for pediatric bipolar disorder (PBD) that is intended",
     "document_type": "guidance",
     "tags": [
-      "severity_(of_disability)",
+      "severity",
       "therapy",
       "psychiatry",
       "patients",
@@ -2209,7 +2072,7 @@
       "questionnaires",
       "parent_attitudes",
       "screening_tests",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "school_age"
@@ -2550,7 +2413,7 @@
       "college_bound_students",
       "high_school_students",
       "attention_deficit_hyperactivity_disorder",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "longitudinal_studies",
       "academic_achievement",
       "standardized_tests",
@@ -2593,7 +2456,7 @@
       "control_groups",
       "attention_deficit_disorders",
       "neurological_impairments",
-      "family_(sociological_unit)",
+      "family",
       "age",
       "clinical_diagnosis",
       "neurology",
@@ -2641,7 +2504,7 @@
       "child_rearing",
       "peer_relationship",
       "family_environment",
-      "depression_(psychology)",
+      "depression",
       "males",
       "at_risk_persons",
       "children",
@@ -2649,7 +2512,7 @@
       "child_behavior",
       "academic_achievement",
       "family_relationship",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "parent_attitudes",
       "teacher_attitudes",
       "interpersonal_competence",
@@ -2693,14 +2556,14 @@
     "document_type": "guidance",
     "tags": [
       "hyperactivity",
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "attention_deficit_disorders",
       "identification",
       "rating_scales",
       "college_students",
       "clinical_diagnosis",
       "drug_therapy",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "deception",
       "evaluation_criteria",
       "evaluation_methods"
@@ -2746,7 +2609,7 @@
       "multiple_disabilities",
       "psychological_patterns",
       "student_characteristics",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "school_age"
@@ -2817,7 +2680,7 @@
     "description": "This introductory packet provides an introduction to anxiety problems, framing the discussion within the classification scheme developed by the American Pediatric Association. The variations in degree",
     "document_type": "guidance",
     "tags": [
-      "adjustment_(to_environment)",
+      "adjustment",
       "anxiety",
       "behavior_modification",
       "counseling_techniques",
@@ -2922,7 +2785,7 @@
       "psychopathology",
       "rating_scales",
       "risk",
-      "depression_(psychology)",
+      "depression",
       "factor_structure",
       "structural_equation_models",
       "attention_deficit_hyperactivity_disorder",
@@ -3039,7 +2902,7 @@
       "attention_deficit_hyperactivity_disorder",
       "drug_abuse",
       "correlation",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "children",
       "longitudinal_studies",
       "behavior_problems",
@@ -3179,7 +3042,7 @@
     "tags": [
       "cognitive_ability",
       "correlation",
-      "feedback_(response)",
+      "feedback",
       "intervention",
       "drug_abuse",
       "addictive_behavior",
@@ -3189,7 +3052,7 @@
       "executive_function",
       "undergraduate_students",
       "color",
-      "interference_(learning)",
+      "interference",
       "reaction_time",
       "visual_stimuli",
       "accuracy",
@@ -3405,7 +3268,7 @@
       "at_risk_persons",
       "physiology",
       "coping",
-      "resilience_(psychology)",
+      "resilience",
       "skill_development",
       "program_evaluation",
       "program_effectiveness",
@@ -3460,10 +3323,10 @@
       "cognitive_processes",
       "preschool_children",
       "visual_stimuli",
-      "interference_(learning)",
+      "interference",
       "statistical_analysis",
       "correlation",
-      "regression_(statistics)"
+      "regression"
     ],
     "age_range": [
       "preschool",
@@ -3677,11 +3540,11 @@
     "document_type": "guidance",
     "tags": [
       "mothers",
-      "depression_(psychology)",
+      "depression",
       "parent_child_relationship",
       "interaction",
       "executive_function",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "age_differences",
       "infants",
       "toddlers",
@@ -3695,9 +3558,9 @@
       "attention",
       "questionnaires",
       "video_technology",
-      "measures_(individuals)",
+      "measures",
       "color",
-      "interference_(learning)",
+      "interference",
       "reaction_time",
       "visual_stimuli",
       "inhibition",
@@ -3784,7 +3647,7 @@
       "intervals",
       "persistence",
       "mental_health",
-      "severity_(of_disability)",
+      "severity",
       "clinics",
       "health_insurance",
       "drug_therapy",
@@ -3881,7 +3744,7 @@
       "creativity",
       "etiology",
       "hyperactivity",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "all"
@@ -3915,7 +3778,7 @@
       "child_behavior",
       "adolescents",
       "patients",
-      "measures_(individuals)",
+      "measures",
       "foreign_countries",
       "screening_tests",
       "children",
@@ -3955,7 +3818,7 @@
     "tags": [
       "students_with_disabilities",
       "college_students",
-      "coaching_(performance)",
+      "coaching",
       "executive_function",
       "educational_technology",
       "technology_uses_in_education",
@@ -4097,8 +3960,8 @@
       "learning_disabilities",
       "academic_libraries",
       "information_seeking",
-      "user_needs_(information)",
-      "users_(information)",
+      "user_needs",
+      "users",
       "access_to_information",
       "emotional_experience",
       "online_searching",
@@ -4135,7 +3998,7 @@
     "description": "This study investigated the different characteristics of nine fourth-grade boys, three boys with attention deficit hyperactivity disorder (ADHD), three boys with giftedness, and three boys with ADHD a",
     "document_type": "guidance",
     "tags": [
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "academic_achievement",
       "academically_gifted",
       "attention_deficit_disorders",
@@ -4224,12 +4087,12 @@
       "thinking_skills",
       "attention_deficit_hyperactivity_disorder",
       "comparative_analysis",
-      "association_(psychology)",
+      "association",
       "telecommunications",
       "handheld_devices",
       "questionnaires",
       "undergraduate_students",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "statistical_analysis",
       "multivariate_analysis"
     ],
@@ -4362,7 +4225,7 @@
       "control_groups",
       "multiple_regression_analysis",
       "mathematics_achievement",
-      "measures_(individuals)"
+      "measures"
     ],
     "age_range": [
       "school_age"
@@ -4559,7 +4422,7 @@
       "behavior_problems",
       "child_rearing",
       "child_behavior",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "mothers",
       "parent_influence",
       "parent_education",
@@ -4602,10 +4465,10 @@
     "document_type": "guidance",
     "tags": [
       "correlation",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "attention_deficit_hyperactivity_disorder",
       "comparative_analysis",
-      "severity_(of_disability)",
+      "severity",
       "etiology",
       "biochemistry",
       "rating_scales",
@@ -4706,7 +4569,7 @@
       "preschool_children",
       "elementary_school_students",
       "student_adjustment",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "anxiety_disorders",
       "quality_of_life",
       "teacher_attitudes",
@@ -4767,7 +4630,7 @@
       "preservice_teachers",
       "student_attitudes",
       "experience",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "school_age"
@@ -4887,8 +4750,8 @@
       "randomized_controlled_trials",
       "intervention",
       "attention_deficit_hyperactivity_disorder",
-      "symptoms_(individual_disorders)",
-      "severity_(of_disability)",
+      "symptoms",
+      "severity",
       "daily_living_skills",
       "elementary_school_students",
       "program_effectiveness",
@@ -4907,7 +4770,7 @@
       "behavior_problems",
       "behavior_modification",
       "anxiety_disorders",
-      "measures_(individuals)",
+      "measures",
       "statistical_analysis"
     ],
     "age_range": [
@@ -4950,7 +4813,7 @@
       "psychological_patterns",
       "adults",
       "hyperactivity",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "neurological_impairments",
       "comparative_analysis",
       "attention_deficit_disorders",
@@ -5040,7 +4903,7 @@
       "language_usage",
       "error_patterns",
       "syntax",
-      "morphology_(languages)",
+      "morphology",
       "individual_characteristics",
       "foreign_countries"
     ],
@@ -5163,7 +5026,7 @@
       "mental_disorders",
       "young_children",
       "behavior_disorders",
-      "depression_(psychology)",
+      "depression",
       "family_structure",
       "divorce",
       "family_influence",
@@ -5208,7 +5071,7 @@
       "attention_deficit_hyperactivity_disorder",
       "intelligence",
       "hospitals",
-      "measures_(individuals)",
+      "measures",
       "referral",
       "children",
       "simulation",
@@ -5344,7 +5207,7 @@
       "children",
       "adolescents",
       "outcomes_of_treatment",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "all"
@@ -5658,11 +5521,11 @@
       "psychiatry",
       "child_health",
       "classroom_environment",
-      "depression_(psychology)",
+      "depression",
       "behavior_disorders",
       "learning_problems",
       "classroom_techniques",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "school_age"
@@ -5705,7 +5568,7 @@
       "memory",
       "phonology",
       "speech_skills",
-      "measures_(individuals)",
+      "measures",
       "language_processing",
       "cognitive_processes"
     ],
@@ -5868,15 +5731,15 @@
       "feasibility_studies",
       "outcomes_of_treatment",
       "counseling_techniques",
-      "depression_(psychology)",
+      "depression",
       "intervention",
       "cognitive_restructuring",
       "behavior_modification",
       "drug_therapy",
       "children",
       "adolescents",
-      "symptoms_(individual_disorders)",
-      "measures_(individuals)"
+      "symptoms",
+      "measures"
     ],
     "age_range": [
       "school_age"
@@ -5961,7 +5824,7 @@
     "description": "This research explored the impact of online parenting programs and guidance on mothers' sense of competency in supporting their twice-exceptional (2e) children. Trained professionals in strength-based",
     "document_type": "guidance",
     "tags": [
-      "coaching_(performance)",
+      "coaching",
       "parent_education",
       "online_courses",
       "mothers",
@@ -6011,7 +5874,7 @@
       "psychometrics",
       "screening_tests",
       "attention_deficit_hyperactivity_disorder",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "children",
       "test_validity",
       "test_reliability",
@@ -6138,7 +6001,7 @@
       "foreign_countries",
       "behavior_problems",
       "drug_therapy",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "stress_variables",
       "parent_education"
     ],
@@ -6181,8 +6044,8 @@
       "comorbidity",
       "diseases",
       "anxiety",
-      "depression_(psychology)",
-      "symptoms_(individual_disorders)",
+      "depression",
+      "symptoms",
       "elementary_school_students",
       "school_health_services",
       "literature_reviews",
@@ -6315,7 +6178,7 @@
     "description": "Background: Previous research on the etiology of ADHD symptoms suggests that neuropsychological differences may be present as early as birth; however, the diagnosis is typically not given until school",
     "document_type": "guidance",
     "tags": [
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "attention_deficit_hyperactivity_disorder",
       "effect_size",
       "neuropsychology",
@@ -6331,7 +6194,7 @@
       "infants",
       "toddlers",
       "evaluators",
-      "measures_(individuals)",
+      "measures",
       "young_children"
     ],
     "age_range": [
@@ -6363,44 +6226,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_EJ1343875",
-    "name": "Self-Determination in Autistic Transition-Aged Youth without Intellectual Disability",
-    "description": "Self-determination refers to an individual's capacity and opportunities to act as a causal agent in their own lives to make choices, decisions, and set goals. The current study examined self- and pare",
-    "document_type": "guidance",
-    "tags": [
-      "self_determination",
-      "autism",
-      "pervasive_developmental_disorders",
-      "youth",
-      "depression_(psychology)",
-      "executive_function",
-      "interpersonal_competence"
-    ],
-    "age_range": [
-      "school_age",
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ1343875"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Self-determination refers to an individual's capacity and opportunities to act as a causal agent in their own lives to make choices, decisions, and set goals.",
-      "The current study examined self- and parent-reports of the AIR Self-Determination Scale in transition-aged autistic youth (Based on stakeholder preferences, we use identity-first(autistic) or neutral language (on the autism spectrum) (Bottema-Beutel in JAMA 3:18-29, 2020).",
-      "Autistic youth completed depression and executive function measures, and parents rated their child's social-communication and executive function difficulties.",
-      "Despite differences between youth and parent reports, both youth and their parents reported lower self-determination skills (capacity) than opportunities to practice self-determined behaviors.",
-      "Both depression and executive function skills were related to self-determination capacity, highlighting potential intervention targets for transition-aged youth to facilitate increased self-determination and potentially improved adult outcomes."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ793294",
     "name": "Teacher Ratings of Young Children with and without ADHD: Construct Validity of Two Child Behavior Rating Scales",
     "description": "This study examined teachers' behavioral ratings of young children (ages 5 and 6) with and without attention-deficit/hyperactivity disorder (ADHD). A study group consisting of 30 children with formal",
@@ -6413,7 +6238,7 @@
       "young_children",
       "child_behavior",
       "behavior_rating_scales",
-      "measures_(individuals)",
+      "measures",
       "student_behavior",
       "teacher_attitudes",
       "comparative_analysis",
@@ -6492,7 +6317,7 @@
       "covid-19",
       "pandemics",
       "attention_deficit_hyperactivity_disorder",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "behavior_problems",
       "electronic_learning"
     ],
@@ -6524,7 +6349,7 @@
     "description": "The article describes children with attention deficit hyperactivity disorder (ADHD), noting it can contribute to school underachievement, learning disabilities, difficulties in social adjustment, and",
     "document_type": "guidance",
     "tags": [
-      "adaptive_behavior_(of_disabled)",
+      "adaptive_behavior",
       "attention_deficit_disorders",
       "behavior_modification",
       "child_health",
@@ -6579,7 +6404,7 @@
       "parent_child_relationship",
       "stress_variables",
       "counseling_effectiveness",
-      "measures_(individuals)"
+      "measures"
     ],
     "age_range": [
       "school_age"
@@ -6659,15 +6484,15 @@
       "attention_deficit_disorders",
       "questionnaires",
       "young_adults",
-      "adjustment_(to_environment)",
-      "rejection_(psychology)",
+      "adjustment",
+      "rejection",
       "males",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "interpersonal_relationship",
       "social_adjustment",
       "personality_traits",
       "self_esteem",
-      "dating_(social)",
+      "dating",
       "peer_relationship",
       "sexuality",
       "intimacy",
@@ -6710,7 +6535,7 @@
       "attention_deficit_disorders",
       "children",
       "predictor_variables",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "child_development",
       "clinical_diagnosis"
     ],
@@ -6794,7 +6619,7 @@
       "attention_deficit_hyperactivity_disorder",
       "autism_spectrum_disorders",
       "comorbidity",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "empathy",
       "self_esteem",
       "psychological_patterns",
@@ -7064,7 +6889,7 @@
       "program_descriptions",
       "faculty_development",
       "clinical_diagnosis",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "academic_achievement",
       "learning_strategies",
       "teacher_student_relationship",
@@ -7187,44 +7012,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_EJ895647",
-    "name": "Medicating Our Youth: Who Determines Rules of Evidence?",
-    "description": "There is increased use of medications with troubled youth and a corresponding increase in research about these drugs. However, even the most exhaustive efforts to demonstrate the effectiveness of medi",
-    "document_type": "guidance",
-    "tags": [
-      "attention_deficit_hyperactivity_disorder",
-      "special_needs_students",
-      "drug_therapy",
-      "literature_reviews",
-      "depression_(psychology)",
-      "mental_disorders",
-      "child_health",
-      "behavior_modification",
-      "symptoms_(individual_disorders)"
-    ],
-    "age_range": [
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ895647"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "There is increased use of medications with troubled youth and a corresponding increase in research about these drugs.",
-      "However, even the most exhaustive efforts to demonstrate the effectiveness of medication strategies have resulted in less than robust outcomes.",
-      "A critical review of the most prominent studies highlights this questionable trend in the common diagnoses of attention deficit hyperactivity disorder and pediatric bipolar disorder.",
-      "(Contains 1 figure and 2 tables.)"
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ786215",
     "name": "Achievement Goals of Students with ADHD",
     "description": "Although achievement goal theory is currently one of the dominant theoretical frameworks used to understand and improve student motivation (Brophy, 2004), little work has been done to evaluate the ach",
@@ -7236,7 +7023,7 @@
       "attention_deficit_disorders",
       "goal_orientation",
       "hyperactivity",
-      "measures_(individuals)",
+      "measures",
       "grade_6",
       "middle_school_students"
     ],
@@ -7280,7 +7067,7 @@
       "grade_4",
       "elementary_school_students",
       "foreign_countries",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "learning_problems",
       "reading_skills",
       "writing_skills",
@@ -7599,9 +7386,9 @@
       "hyperactivity",
       "genetics",
       "attention_deficit_disorders",
-      "measures_(individuals)",
+      "measures",
       "check_lists",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "screening_tests",
       "scores"
     ],
@@ -7888,9 +7675,9 @@
       "employed_parents",
       "mothers",
       "attention_deficit_hyperactivity_disorder",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "case_studies",
-      "depression_(psychology)",
+      "depression",
       "part_time_employment",
       "unemployment",
       "career_counseling",
@@ -7900,7 +7687,7 @@
       "family_work_relationship",
       "surveys",
       "stress_variables",
-      "measures_(individuals)",
+      "measures",
       "statistical_analysis"
     ],
     "age_range": [
@@ -7939,7 +7726,7 @@
       "comorbidity",
       "drug_therapy",
       "gender_differences",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "outcomes_of_treatment"
     ],
     "age_range": [
@@ -7971,47 +7758,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_ED614971",
-    "name": "Assessment of Sluggish Cognitive Tempo over the Past Decade",
-    "description": "Objective: To conduct a systematic review of the measures designed to assess sluggish cognitive tempo (SCT) since the first SCT scale using careful test-construction procedures was published in 2009.",
-    "document_type": "guidance",
-    "tags": [
-      "conceptual_tempo",
-      "test_reliability",
-      "test_validity",
-      "attention_deficit_hyperactivity_disorder",
-      "rating_scales"
-    ],
-    "age_range": [
-      "school_age",
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "ED614971"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Objective: To conduct a systematic review of the measures designed to assess sluggish cognitive tempo (SCT) since the first SCT scale using careful test-construction procedures was published in 2009.",
-      "Methods: The MEDLINE (PubMed), Embase, PsychINFO, and Web of Science databases were searched from September 2009 through December 2019.",
-      "Articles reporting on the reliability (internal consistency, test-retest, and inter-rater reliability), structural validity (an aspect of construct validity focused on items' convergent and discriminant validity), concurrent and longitudinal external validity, invariance, or intervention/experimental findings were included.",
-      "Results: Seventy-six studies met full criteria for data extraction and inclusion.",
-      "Nine measures for assessing SCT were identified (seven assessing parent-, teacher-, and/or self-report in children and two assessing self- and/or collateral-informant report in adults).",
-      "Each measure has demonstrated acceptable to excellent reliability.",
-      "All or at least the majority of SCT items on each measure also had structural validity (high loadings on an SCT factor and low loadings on an ADHD inattention factor).",
-      "Studies have supported the invariance of SCT across sex and time, and there is also initial evidence of invariance across informants, ADHD and non-ADHD youth, and ADHD presentations.",
-      "The Child and Adolescent Behavior Inventory (CABI), Child Concentration Inventory, Second Edition (CCI-2), and the Barkley Adult ADHD Rating Scale-IV (BAARS-IV) have particularly strong support for assessing parent/teacher-reported, youth self-reported, and adult self-reported SCT, respectively.",
-      "Conclusion: The SCT measures included in this review share numerous positive properties, have promising psychometric support, and have proven useful for examining the external correlates of SCT across the life span."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ950487",
     "name": "Infrequent, but Not Frequent, Reinforcers Produce More Variable Responding and Deficient Sustained Attention in Young Children with Attention-Deficit/Hyperactivity Disorder (ADHD)",
     "description": "Background: The underlying behavioral/psychological processes of attention-deficit/hyperactivity disorder are unclear. Motivational factors, related to dopamine dysfunction, may play an important role",
@@ -8022,7 +7768,7 @@
       "young_children",
       "reinforcement",
       "geometric_concepts",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "behavior_problems",
       "responses",
       "computers",
@@ -8190,12 +7936,12 @@
     "description": "The purpose of this study was to examine the severity of behavioral and emotional problems among adolescents with poor and typical single word reading ability (N = 188) recruited from public schools a",
     "document_type": "guidance",
     "tags": [
-      "severity_(of_disability)",
+      "severity",
       "economically_disadvantaged",
       "emotional_problems",
       "reading_ability",
       "health_personnel",
-      "depression_(psychology)",
+      "depression",
       "delinquency",
       "anxiety",
       "adolescents",
@@ -8240,7 +7986,7 @@
       "parents",
       "knowledge_level",
       "correlation",
-      "resilience_(psychology)",
+      "resilience",
       "grade_8",
       "grade_9",
       "grade_10",
@@ -8270,41 +8016,6 @@
       "The findings delineate the roles of risk and protective factors associated with the progression from experimentation to alcohol use disorder among adolescents with ADHD.",
       "[This is the online version of an article published in &quot;Psychology of Addictive Behaviors&quot; (ISSN 0893-164X).]"
     ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "eric_EJ125984",
-    "name": "Psychiatric Screening and Brief Intervention in a Pediatric Program Utilizing Allied Health Personnel",
-    "description": "",
-    "document_type": "guidance",
-    "tags": [
-      "allied_health_personnel",
-      "behavior_problems",
-      "cooperative_programs",
-      "emotional_disturbances",
-      "exceptional_child_research",
-      "health_personnel",
-      "intervention",
-      "parents",
-      "psychiatry",
-      "social_work",
-      "staff_development"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ125984"
-      }
-    ],
-    "steps": [],
-    "key_points": [],
     "contraindications": [],
     "related_ids": []
   },
@@ -8501,7 +8212,7 @@
       "stress_variables",
       "coping",
       "family_programs",
-      "depression_(psychology)",
+      "depression",
       "mental_health",
       "services",
       "communicable_diseases",
@@ -8565,51 +8276,6 @@
     "key_points": [
       "Analysis of the data from a genetics study of children with attention-deficit/hyperactivity disorder (ADHD) and their affected or unaffected siblings finds that ADHD-affected children had significantly more motor problems than their unaffected siblings.",
       "It is concluded that there is a common basis between ADHD and motor problems that may be due to genetic factors."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "eric_EJ914235",
-    "name": "Structure and Etiology of Co-Occurring Internalizing and Externalizing Disorders in Adolescents",
-    "description": "Several studies suggest that a two-factor model positing internalizing and externalizing factors explains the interrelationships among psychiatric disorders. However, it is unclear whether the covaria",
-    "document_type": "guidance",
-    "tags": [
-      "twins",
-      "attention_deficit_hyperactivity_disorder",
-      "psychopathology",
-      "adolescents",
-      "etiology",
-      "separation_anxiety",
-      "behavior_disorders",
-      "models",
-      "depression_(psychology)",
-      "anxiety_disorders",
-      "genetics",
-      "environmental_influences",
-      "siblings"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ914235"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Several studies suggest that a two-factor model positing internalizing and externalizing factors explains the interrelationships among psychiatric disorders.",
-      "However, it is unclear whether the covariation between internalizing and externalizing disorders is due to common genetic or environmental influences.",
-      "We examined whether a model positing two latent factors, internalizing and externalizing, explained the interrelationships among six psychiatric disorders (major depressive disorder, generalized anxiety disorder, separation anxiety disorder, attention-deficit/hyperactivity disorder, oppositional defiant disorder, and conduct disorder) in adolescents, and whether there are common genetic and environmental influences on internalizing and externalizing latent factors.",
-      "Multivariate behavior genetic analyses of data from 1162 twin pairs and 426 siblings ascertained from the general population via the Colorado Center for Antisocial Drug Dependence (CADD) were conducted.",
-      "We found support for a model positing two latent factors (internalizing and externalizing).",
-      "These factors were moderately heritable and influenced by significant common genetic and nonshared environmental influences.",
-      "These findings suggest that co-occurrence of internalizing and externalizing psychopathology in adolescents results from both genetic and environmental influences."
     ],
     "contraindications": [],
     "related_ids": []
@@ -8712,7 +8378,7 @@
       "developmental_stages",
       "children",
       "child_behavior",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "neurological_impairments",
       "behavior_problems",
       "parent_attitudes",
@@ -8723,9 +8389,9 @@
       "racial_differences",
       "comparative_analysis",
       "anxiety",
-      "depression_(psychology)",
+      "depression",
       "interpersonal_competence",
-      "withdrawal_(psychology)"
+      "withdrawal"
     ],
     "age_range": [
       "school_age"
@@ -9029,10 +8695,10 @@
       "scores",
       "control_groups",
       "behavior_disorders",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "correlation",
-      "adjustment_(to_environment)",
-      "depression_(psychology)",
+      "adjustment",
+      "depression",
       "interpersonal_competence",
       "females",
       "attention_deficit_hyperactivity_disorder"
@@ -9193,9 +8859,9 @@
       "patients",
       "foreign_countries",
       "therapy",
-      "symptoms_(individual_disorders)",
-      "measures_(individuals)",
-      "severity_(of_disability)",
+      "symptoms",
+      "measures",
+      "severity",
       "drug_therapy",
       "profiles",
       "psychoeducational_methods",
@@ -9249,10 +8915,10 @@
       "language_skills",
       "barriers",
       "adolescents",
-      "depression_(psychology)",
+      "depression",
       "inhibition",
       "child_behavior",
-      "adjustment_(to_environment)"
+      "adjustment"
     ],
     "age_range": [
       "school_age",
@@ -9296,7 +8962,7 @@
       "college_graduates",
       "mental_health",
       "social_networks",
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "skill_development",
       "student_motivation",
       "academic_support_services"
@@ -9376,17 +9042,17 @@
       "children",
       "expressive_language",
       "control_groups",
-      "writing_(composition)",
+      "writing",
       "young_adults",
       "story_grammar",
       "writing_skills",
       "syntax",
-      "morphology_(languages)",
+      "morphology",
       "psychological_patterns",
       "behavior_problems",
       "comparative_analysis",
       "correlation",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "all"
@@ -9519,7 +9185,7 @@
       "reading_comprehension",
       "short_term_memory",
       "oral_language",
-      "decoding_(reading)",
+      "decoding",
       "early_adolescents",
       "secondary_school_students"
     ],
@@ -9556,7 +9222,7 @@
       "attention_deficit_disorders",
       "foreign_countries",
       "measurement_techniques",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "elementary_school_students",
       "gender_differences",
       "parent_attitudes",
@@ -9599,7 +9265,7 @@
       "beliefs",
       "questionnaires",
       "interviews",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "etiology",
       "intervention",
       "mixed_methods_research",
@@ -9634,51 +9300,6 @@
       "The results indicated that the teachers knew more about the characteristics of ADHD than they knew about its related causes and treatment.",
       "Overall, the findings indicated that these teachers had some knowledge about general characteristics of ADHD, but they had little understanding of causes and possible interventions.",
       "These results suggest an important need for more formal teacher training regarding all aspects of ADHD in school-age children."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "eric_EJ1065181",
-    "name": "Psychophysiological Correlates of Developmental Changes in Healthy and Autistic Boys",
-    "description": "This study investigated neurodevelopmental changes in sound processing by recording mismatch negativity (MMN) in response to various degrees of sound complexity in 18 mildly to moderately autistic ver",
-    "document_type": "guidance",
-    "tags": [
-      "males",
-      "autism",
-      "intelligence_quotient",
-      "children",
-      "adolescents",
-      "executive_function",
-      "interpersonal_competence",
-      "age_differences",
-      "child_development",
-      "developmental_stages",
-      "verbal_communication",
-      "individual_characteristics",
-      "neurological_organization",
-      "acoustics",
-      "auditory_perception",
-      "comparative_analysis"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ1065181"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "This study investigated neurodevelopmental changes in sound processing by recording mismatch negativity (MMN) in response to various degrees of sound complexity in 18 mildly to moderately autistic versus 15 healthy boys aged between 6 and 15\u00a0years.",
-      "Autistic boys presented with lower IQ and poor performance on a range of executive and social function measures when compared to their healthy counterparts.",
-      "We found that MMN in response to duration deviants was less lateralized in the clinical group whereas larger amplitudes correlated with advanced age, thus capturing neurodevelopmental changes.",
-      "Larger MMN in response to speech-like sound deviants was associated with better verbal fluency and executive function performance, respectively, but did not reliably discriminate the two groups."
     ],
     "contraindications": [],
     "related_ids": []
@@ -9736,10 +9357,10 @@
       "psychotherapy",
       "adolescents",
       "learning_disabilities",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "improvement",
       "outcomes_of_treatment",
-      "severity_(of_disability)",
+      "severity",
       "inhibition",
       "self_control",
       "intervention",
@@ -9783,7 +9404,7 @@
     "document_type": "guidance",
     "tags": [
       "attention_deficit_hyperactivity_disorder",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "drug_therapy",
       "etiology",
       "adults",
@@ -9902,7 +9523,7 @@
       "behavior_problems",
       "academic_ability",
       "intelligence_quotient",
-      "severity_(of_disability)"
+      "severity"
     ],
     "age_range": [
       "preschool",
@@ -9946,7 +9567,7 @@
       "child_behavior",
       "behavior_problems",
       "behavior_disorders",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "twins",
       "children",
       "molecular_structure",
@@ -10204,10 +9825,10 @@
       "adolescents",
       "short_term_memory",
       "attention_deficit_disorders",
-      "measures_(individuals)",
+      "measures",
       "teacher_attitudes",
       "parent_attitudes",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "outcomes_of_treatment",
       "intervention",
       "children"
@@ -10336,9 +9957,9 @@
       "attention_deficit_disorders",
       "clinical_diagnosis",
       "scores",
-      "measures_(individuals)",
+      "measures",
       "incidence",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "drug_therapy",
       "interviews",
       "longitudinal_studies"
@@ -10378,7 +9999,7 @@
       "age_differences",
       "age",
       "clinical_diagnosis",
-      "regression_(statistics)",
+      "regression",
       "undergraduate_students",
       "incidence",
       "career_planning",
@@ -10435,7 +10056,7 @@
       "pragmatics",
       "statistical_analysis",
       "foreign_countries",
-      "measures_(individuals)",
+      "measures",
       "check_lists"
     ],
     "age_range": [
@@ -10518,7 +10139,6 @@
       "executive_function",
       "parent_child_relationship",
       "elementary_school_students",
-      "mathematics",
       "homework",
       "grade_2",
       "grade_3",
@@ -10558,14 +10178,14 @@
     "tags": [
       "child_rearing",
       "structural_equation_models",
-      "depression_(psychology)",
+      "depression",
       "elementary_school_students",
       "middle_school_students",
       "parent_child_relationship",
       "parenting_styles",
       "parent_attitudes",
       "negative_attitudes",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "positive_reinforcement"
     ],
     "age_range": [
@@ -10657,7 +10277,7 @@
       "family_influence",
       "cultural_influences",
       "altruism",
-      "regression_(statistics)"
+      "regression"
     ],
     "age_range": [
       "all"
@@ -10831,7 +10451,7 @@
       "longitudinal_studies",
       "surveys",
       "child_development",
-      "regression_(statistics)",
+      "regression",
       "kindergarten",
       "preschool_children",
       "academic_achievement"
@@ -10874,7 +10494,7 @@
       "textbooks",
       "classroom_environment",
       "classroom_techniques",
-      "time_factors_(learning)",
+      "time_factors",
       "handwriting",
       "assignments",
       "grading",
@@ -10885,7 +10505,7 @@
       "special_needs_students",
       "federal_legislation",
       "guidelines",
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "testing_accommodations",
       "assistive_technology",
       "technical_assistance"
@@ -10936,10 +10556,10 @@
       "surveys",
       "family_characteristics",
       "community",
-      "regression_(statistics)",
+      "regression",
       "empowerment",
       "parent_attitudes",
-      "depression_(psychology)",
+      "depression",
       "stress_variables",
       "predictor_variables",
       "neighborhoods",
@@ -11023,7 +10643,7 @@
       "attention_deficit_hyperactivity_disorder",
       "children",
       "child_behavior",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "parent_attitudes",
       "rating_scales",
       "behavior_problems",
@@ -11069,7 +10689,7 @@
     "tags": [
       "hyperactivity",
       "attention_deficit_disorders",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "children",
       "questionnaires",
       "behavior_problems",
@@ -11380,7 +11000,7 @@
     "document_type": "guidance",
     "tags": [
       "academic_achievement",
-      "adjustment_(to_environment)",
+      "adjustment",
       "behavior_problems",
       "child_rearing",
       "children",
@@ -11463,7 +11083,7 @@
       "elementary_secondary_education",
       "referral",
       "student_characteristics",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "teacher_collaboration",
       "teaching_methods"
     ],
@@ -11498,7 +11118,7 @@
       "attention_deficit_disorders",
       "behavior_change",
       "case_studies",
-      "compliance_(legal)",
+      "compliance",
       "content_area_reading",
       "drug_therapy",
       "educational_environment",
@@ -11539,48 +11159,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_EJ1312925",
-    "name": "Um Compasso Para Aprender: A Randomized Trial of a Social-Emotional Learning Program in Homicide-Affected Communities in Brazil",
-    "description": "Despite global demand, the large-scale effects of social-emotional learning (SEL) programming in developing countries remain underexplored. Using a randomized control trial, this study examined the ef",
-    "document_type": "guidance",
-    "tags": [
-      "foreign_countries",
-      "social_emotional_learning",
-      "program_effectiveness",
-      "student_diversity",
-      "elementary_school_students",
-      "executive_function",
-      "emotional_development",
-      "behavior_problems",
-      "inhibition",
-      "self_control",
-      "homicide",
-      "at_risk_students"
-    ],
-    "age_range": [
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ1312925"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Despite global demand, the large-scale effects of social-emotional learning (SEL) programming in developing countries remain underexplored.",
-      "Using a randomized control trial, this study examined the effectiveness of a school-wide SEL intervention--&quot;Programa Compasso&quot; (PC)--among 3,018 sociodemographically diverse, Portuguese-speaking children (M[subscript age]\u00a0=\u00a09.85\u00a0years) attending 90 public primary schools across Rio de Janeiro, Brazil in 2017.",
-      "Average impacts of PC on children's executive function, emotion knowledge, and behavior problems after one school year were null.",
-      "Moderation analyses did, however, reveal evidence for positive impacts of PC on children's labeling of emotional expressions and inhibitory control within low-homicide communities (d\u00a0=\u00a00.15\u00a0SDs), and null effects on these same outcomes in high-violence areas.",
-      "Implementation and cultural considerations are discussed."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ796624",
     "name": "An Innovative Treatment Approach for Children with Anxiety Disorders and Medically Unexplained Somatic Complaints",
     "description": "Anxiety disorders in children and adolescents are largely undetected and the majority of youth do not receive services. Given the deleterious consequences of anxiety disorders, early identification an",
@@ -11593,7 +11171,7 @@
       "anxiety",
       "identification",
       "incidence",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "cognitive_restructuring",
       "behavior_modification",
       "case_studies"
@@ -11676,7 +11254,7 @@
       "test_reviews",
       "questionnaires",
       "attention_deficit_hyperactivity_disorder",
-      "measures_(individuals)",
+      "measures",
       "item_analysis",
       "test_construction",
       "test_reliability",
@@ -11721,8 +11299,8 @@
       "children",
       "autism_spectrum_disorders",
       "attention_deficit_hyperactivity_disorder",
-      "severity_(of_disability)",
-      "symptoms_(individual_disorders)",
+      "severity",
+      "symptoms",
       "emotional_response",
       "self_control"
     ],
@@ -11896,7 +11474,7 @@
       "student_characteristics",
       "student_evaluation",
       "student_participation",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "teaching_methods"
     ],
     "age_range": [
@@ -11984,7 +11562,7 @@
       "goal_orientation",
       "academic_achievement",
       "self_concept",
-      "resilience_(psychology)",
+      "resilience",
       "student_attitudes",
       "learning_motivation",
       "student_surveys",
@@ -12108,9 +11686,9 @@
     "tags": [
       "mental_disorders",
       "attention_deficit_disorders",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "hyperactivity",
-      "severity_(of_disability)",
+      "severity",
       "identification",
       "clinical_diagnosis",
       "correlation",
@@ -12159,7 +11737,7 @@
       "validity",
       "attention_deficit_disorders",
       "social_adjustment",
-      "measures_(individuals)",
+      "measures",
       "psychometrics",
       "questionnaires",
       "scores",
@@ -12250,7 +11828,7 @@
       "attention_deficit_hyperactivity_disorder",
       "students",
       "females",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "identification",
       "regular_and_special_education_relationship",
       "general_education"
@@ -12344,7 +11922,7 @@
       "national_surveys",
       "risk",
       "children",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "identification",
       "genetics",
       "role",
@@ -12388,9 +11966,9 @@
       "coping",
       "behavior_problems",
       "stress_variables",
-      "depression_(psychology)",
+      "depression",
       "parent_child_relationship",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "correlation",
       "child_behavior",
       "autism_spectrum_disorders",
@@ -12439,7 +12017,7 @@
       "genealogy",
       "interpersonal_competence",
       "interaction",
-      "feedback_(response)",
+      "feedback",
       "males",
       "behavior_problems",
       "psychiatry",
@@ -12541,7 +12119,7 @@
       "classroom_techniques",
       "classroom_environment",
       "academic_support_services",
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "student_participation",
       "computer_assisted_instruction",
       "cognitive_restructuring",
@@ -12584,14 +12162,14 @@
     "tags": [
       "nonverbal_communication",
       "psychological_patterns",
-      "recognition_(psychology)",
+      "recognition",
       "children",
       "adolescents",
       "mental_disorders",
       "psychopathology",
       "attention_deficit_hyperactivity_disorder",
       "anxiety",
-      "depression_(psychology)",
+      "depression",
       "behavior_disorders"
     ],
     "age_range": [
@@ -12689,7 +12267,7 @@
       "english",
       "spanish",
       "learning_strategies",
-      "modeling_(psychology)",
+      "modeling",
       "parenting_styles",
       "mothers"
     ],
@@ -12726,7 +12304,7 @@
       "attention_deficit_hyperactivity_disorder",
       "autism",
       "pervasive_developmental_disorders",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "cognitive_ability",
       "questionnaires",
       "comparative_analysis",
@@ -12892,59 +12470,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_EJ840415",
-    "name": "Adolescent Substance Abuse and Suicide",
-    "description": "Adolescent substance abuse is a major public health concern. It is associated with an increased incidence of various psychiatric disorders like depressive disorders, anxiety disorders, attention defic",
-    "document_type": "guidance",
-    "tags": [
-      "substance_abuse",
-      "emotional_disturbances",
-      "public_health",
-      "behavior_disorders",
-      "attention_deficit_hyperactivity_disorder",
-      "suicide",
-      "at_risk_persons",
-      "anxiety",
-      "adolescents",
-      "mental_disorders",
-      "depression_(psychology)",
-      "anxiety_disorders",
-      "prevention",
-      "intervention",
-      "drug_therapy",
-      "counseling_techniques",
-      "biology",
-      "psychiatry",
-      "child_development",
-      "child_rearing",
-      "parent_influence",
-      "mass_media_effects",
-      "psychopathology"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ840415"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Adolescent substance abuse is a major public health concern.",
-      "It is associated with an increased incidence of various psychiatric disorders like depressive disorders, anxiety disorders, attention deficit hyperactivity disorder, and conduct disorders and the relationship between mental and behavioral disorders and the substance use  problems seems to be bi-directional.",
-      "Adolescent suicide and substance abuse have a number of risk factors in common.",
-      "Prevention of suicide requires an individualized comprehensive assessment and management plan aimed at substance use and psychiatric disorders.",
-      "This would involve a multidisciplinary collaboration and use of pharmacological, psychological and social interventions."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ873725",
     "name": "Developmental Coordination Disorder and Other Motor Control Problems in Girls with Autism Spectrum Disorder and/or Attention-Deficit/Hyperactivity Disorder",
     "description": "Examine the rate, predictors, and effect on daily life skills of developmental coordination disorder (DCD) and other motor control difficulties in school age girls with autism spectrum disorder (ASD)",
@@ -12968,7 +12493,7 @@
       "comparative_analysis",
       "clinical_diagnosis",
       "age_differences",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "preschool",
@@ -13016,7 +12541,7 @@
       "elementary_education",
       "student_evaluation",
       "age_differences",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "school_age"
@@ -13101,7 +12626,7 @@
       "adolescents",
       "error_patterns",
       "task_analysis",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "adolescent"
@@ -13225,7 +12750,7 @@
     "description": "Objective: In adolescents with substance use disorder (SUD), comorbid attention-deficit/hyperactivity disorder (ADHD) is associated with greater severity of substance abuse, conduct problems, and wors",
     "document_type": "guidance",
     "tags": [
-      "severity_(of_disability)",
+      "severity",
       "safety",
       "psychiatry",
       "adolescents",
@@ -13308,7 +12833,7 @@
       "attention_deficit_hyperactivity_disorder",
       "predictor_variables",
       "self_control",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "preschool_children",
       "inhibition",
       "grade_3",
@@ -13319,7 +12844,7 @@
       "correlation",
       "child_development",
       "behavior_problems",
-      "regression_(statistics)"
+      "regression"
     ],
     "age_range": [
       "preschool",
@@ -13394,7 +12919,7 @@
     "tags": [
       "attention_deficit_hyperactivity_disorder",
       "clinical_diagnosis",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "behavior",
       "barriers",
       "coping",
@@ -13530,7 +13055,7 @@
       "behavior_modification",
       "behavior_problems",
       "attention_span",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "adolescents",
       "young_adults",
       "career_development",
@@ -13676,7 +13201,7 @@
       "foreign_countries",
       "statistical_analysis",
       "definitions",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "etiology",
       "intervention",
       "multivariate_analysis"
@@ -13707,67 +13232,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_ED555730",
-    "name": "Resources on Social and Emotional Development and Early Learning Standards. CEELO FastFacts",
-    "description": "In this &quot;FastFacts,&quot; a state's Department of Education requests information from the Center on Enhancing Early Learning Outcomes (CEELO) on how the research defines skills in social-emotiona",
-    "document_type": "guidance",
-    "tags": [
-      "social_development",
-      "emotional_development",
-      "executive_function",
-      "child_development",
-      "young_children",
-      "alignment_(education)",
-      "language_arts",
-      "learning",
-      "preschool_children",
-      "elementary_school_students",
-      "grade_1",
-      "grade_2",
-      "grade_3",
-      "kindergarten",
-      "state_standards",
-      "parent_education",
-      "educational_quality",
-      "professional_development",
-      "educational_policy",
-      "self_concept",
-      "self_management",
-      "interpersonal_competence",
-      "decision_making",
-      "short_term_memory",
-      "cognitive_processes",
-      "inhibition",
-      "language_usage",
-      "early_childhood_education",
-      "elementary_secondary_education"
-    ],
-    "age_range": [
-      "preschool",
-      "school_age"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "ED555730"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "In this &quot;FastFacts,&quot; a state's Department of Education requests information from the Center on Enhancing Early Learning Outcomes (CEELO) on how the research defines skills in social-emotional development, approaches to learning, and executive function, to inform planned revisions to the early childhood indicators of progress for children birth to three and three to five years old, including examples of how other states have identified these domains/constructs in their standards documents.",
-      "In this case, the state's Departments of Education, Human Services, and Health are working together to ensure that standards for children ages birth through grade three are aligned across ages/grades, and address all domains of development key to children's learning and success in school.",
-      "State leaders are putting in place a long-term plan for regular revisions to each of the relevant documents.",
-      "In late May, a revisions team will begin to revise standards for children birth through age five in the language arts, social-emotional, and approaches to learning domains.",
-      "In response, CEELO staff refer to two primary sources of information and research on social and emotional learning and executive function: the Collaborative for Social, Emotional and Academic Learning and the Harvard Center on the Developing Child.",
-      "A state example of professional development on executive function, additional selected state examples, recommendations for next steps, and a list of additional resources are provided."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ997312",
     "name": "A Structural Analysis of Executive Functions and Socioeconomic Status in School-Age Children: Cognitive Factors as Effect Mediators",
     "description": "Socioeconomic status (SES) is a well-known predictor of cognitive achievement and executive functioning, although the underlying cognitive mediating processes remain unclear. The authors analyze the a",
@@ -13785,7 +13249,7 @@
       "executive_function",
       "predictor_variables",
       "correlation",
-      "regression_(statistics)",
+      "regression",
       "scores",
       "mothers",
       "educational_attainment",
@@ -13828,7 +13292,7 @@
       "behavior_problems",
       "children",
       "classroom_techniques",
-      "depression_(psychology)",
+      "depression",
       "discipline",
       "elementary_secondary_education",
       "hyperactivity",
@@ -13873,7 +13337,7 @@
       "young_adults",
       "executive_function",
       "self_control",
-      "depression_(psychology)",
+      "depression",
       "income",
       "aspiration",
       "educational_attainment",
@@ -13881,8 +13345,8 @@
       "academic_achievement",
       "reading",
       "well_being",
-      "measures_(individuals)",
-      "symptoms_(individual_disorders)"
+      "measures",
+      "symptoms"
     ],
     "age_range": [
       "school_age",
@@ -14121,7 +13585,7 @@
       "mental_health",
       "adolescents",
       "executive_function",
-      "coaching_(performance)",
+      "coaching",
       "intervention",
       "program_effectiveness",
       "interpersonal_relationship",
@@ -14211,10 +13675,10 @@
       "longitudinal_studies",
       "learning_strategies",
       "study_skills",
-      "measures_(individuals)",
+      "measures",
       "intelligence_tests",
       "adults",
-      "depression_(psychology)",
+      "depression",
       "anxiety"
     ],
     "age_range": [
@@ -14241,53 +13705,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_EJ1269574",
-    "name": "Reliability and Validity of the Pediatric Anxiety Rating Scale Modified for Autism Spectrum Disorder",
-    "description": "Anxiety often co-occurs with autism spectrum disorder, yet there are few valid and reliable instruments for measuring anxiety in youth with autism spectrum disorder. This article describes the modific",
-    "document_type": "guidance",
-    "tags": [
-      "anxiety",
-      "children",
-      "adolescents",
-      "rating_scales",
-      "autism",
-      "pervasive_developmental_disorders",
-      "test_reliability",
-      "test_validity",
-      "behavior_problems",
-      "psychometrics",
-      "symptoms_(individual_disorders)"
-    ],
-    "age_range": [
-      "school_age",
-      "adolescent"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ1269574"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Anxiety often co-occurs with autism spectrum disorder, yet there are few valid and reliable instruments for measuring anxiety in youth with autism spectrum disorder.",
-      "This article describes the modification of the Pediatric Anxiety Rating Scale for youth with autism spectrum disorder and systematic psychometric evaluation in a well-characterized sample of 116 youth (age: 5-17 years) with autism spectrum disorder and a range of anxiety symptoms.",
-      "The clinician-administered-Pediatric Anxiety Rating Scale for youth with autism spectrum disorder was modified with input from parents of children with autism spectrum disorder and an expert panel.",
-      "Unlike many other anxiety measures, the Pediatric Anxiety Rating Scale for youth with autism spectrum disorder is more focused on behavioral manifestations of anxiety versus verbal expression.",
-      "Results provide preliminary support for the psychometric properties of the Pediatric Anxiety Rating Scale for youth with autism spectrum disorder.",
-      "The internal consistency of the Pediatric Anxiety Rating Scale for youth with autism spectrum disorder was 0.90.",
-      "The Pediatric Anxiety Rating Scale for youth with autism spectrum disorder was strongly correlated with parent-report anxiety measures (rs=0.62-0.68), supporting convergent validity.",
-      "In support of divergent validity, correlations between the Pediatric Anxiety Rating Scale for youth with autism spectrum disorder and parent ratings of autism spectrum disorder symptoms, social withdrawal, stereotypy, hyperactivity, inappropriate speech, and repetitive behaviors were low (rs=0.13-0.32).",
-      "The Pediatric Anxiety Rating Scale for youth with autism spectrum disorder was moderately correlated with parent-reported irritability (r=0.52).",
-      "The Pediatric Anxiety Rating Scale for youth with autism spectrum disorder showed good test-retest reliability (intraclass correlation coefficient=0.75-0.82) and inter-rater reliability (ICCs=0.70-0.92)."
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ1311124",
     "name": "Genetic and Environmental Contributions to Co-Occurring ADHD and Emotional Problems in School-Aged Children",
     "description": "Children with attention deficit hyperactivity disorder (ADHD) often experience co-occurring emotional problems. ADHD with this comorbidity is associated with poorer outcomes than ADHD without comorbid",
@@ -14299,11 +13716,11 @@
       "twins",
       "siblings",
       "children",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "genetics",
       "environmental_influences",
       "anxiety",
-      "depression_(psychology)",
+      "depression",
       "correlation",
       "family_influence",
       "foreign_countries"
@@ -14350,20 +13767,19 @@
       "task_analysis",
       "short_term_memory",
       "inhibition",
-      "measures_(individuals)",
+      "measures",
       "prediction",
       "performance",
       "language_processing",
       "language_tests",
       "language_proficiency",
-      "english_(second_language)",
+      "english",
       "second_language_learning",
       "native_language",
       "correlation",
       "evaluation_methods",
       "behavior_patterns",
       "undergraduate_students",
-      "english",
       "student_characteristics",
       "age_differences",
       "literacy",
@@ -14463,7 +13879,7 @@
       "clinical_diagnosis",
       "internet",
       "addictive_behavior",
-      "measures_(individuals)",
+      "measures",
       "behavior_disorders",
       "screening_tests"
     ],
@@ -14553,8 +13969,8 @@
       "academic_achievement",
       "emergent_literacy",
       "comprehension",
-      "decoding_(reading)",
-      "writing_(composition)",
+      "decoding",
+      "writing",
       "mathematics_skills",
       "skill_development",
       "child_development",
@@ -14675,7 +14091,7 @@
     "tags": [
       "autism",
       "attention_deficit_hyperactivity_disorder",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "cognitive_ability",
       "behavior_problems",
       "self_control",
@@ -14722,9 +14138,9 @@
       "professional_training",
       "quality_control",
       "credibility",
-      "institutes_(training_programs)",
+      "institutes",
       "credentials",
-      "coaching_(performance)",
+      "coaching",
       "specialists",
       "adults",
       "adolescents"
@@ -14816,7 +14232,7 @@
       "metacognition",
       "anxiety",
       "drug_therapy",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "stress_management",
       "coping",
       "early_adolescents",
@@ -14952,7 +14368,7 @@
       "pharmacology",
       "stimulants",
       "student_behavior",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "school_age"
@@ -15115,12 +14531,12 @@
       "autism",
       "hyperactivity",
       "attention_deficit_disorders",
-      "regression_(statistics)",
+      "regression",
       "twins",
       "clinical_diagnosis",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "scores",
-      "measures_(individuals)"
+      "measures"
     ],
     "age_range": [
       "school_age"
@@ -15165,13 +14581,13 @@
       "clinical_diagnosis",
       "prediction",
       "academic_achievement",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "drug_use",
       "intervention",
       "achievement_tests",
       "children",
       "intelligence_tests",
-      "regression_(statistics)",
+      "regression",
       "scores",
       "reading_skills"
     ],
@@ -15345,7 +14761,7 @@
       "hyperactivity",
       "multiple_disabilities",
       "outcomes_of_treatment",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "school_age"
@@ -15527,7 +14943,7 @@
       "emergent_literacy",
       "comparative_analysis",
       "correlation",
-      "writing_(composition)",
+      "writing",
       "reading_skills",
       "foreign_countries",
       "video_technology",
@@ -15580,7 +14996,7 @@
       "postsecondary_education",
       "late_adolescents",
       "college_students",
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "referral",
       "age_differences",
       "enrollment_trends",
@@ -15757,7 +15173,7 @@
       "attention_deficit_hyperactivity_disorder",
       "patients",
       "drug_therapy",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "outcomes_of_treatment",
       "children",
       "research"
@@ -15850,7 +15266,7 @@
       "attention_deficit_hyperactivity_disorder",
       "barriers",
       "student_behavior",
-      "compliance_(psychology)",
+      "compliance",
       "student_attitudes"
     ],
     "age_range": [
@@ -15969,13 +15385,13 @@
     "description": "Background: We addressed if immaturity relative to peers reflected in birth month increases the likelihood of ADHD diagnosis and treatment. Methods: We linked nationwide Patient and Prescribed Drug Re",
     "document_type": "guidance",
     "tags": [
-      "maturity_(individuals)",
+      "maturity",
       "attention_deficit_hyperactivity_disorder",
       "children",
       "adults",
       "parents",
       "twins",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "clinical_diagnosis",
       "drug_therapy",
       "measurement_techniques",
@@ -16070,7 +15486,7 @@
       "children",
       "early_adolescents",
       "correlation",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "child_development",
       "foreign_countries"
     ],
@@ -16105,7 +15521,7 @@
     "description": "Objective: To examine precursors of adolescent conduct disorder (CD) in children with attention-deficit/hyperactivity disorder (ADHD), investigating the significance of childhood oppositional defiant",
     "document_type": "guidance",
     "tags": [
-      "severity_(of_disability)",
+      "severity",
       "adolescents",
       "identification",
       "multiple_regression_analysis",
@@ -16159,14 +15575,14 @@
       "interpersonal_competence",
       "children",
       "age_differences",
-      "severity_(of_disability)",
+      "severity",
       "correlation",
       "reading_skills",
       "writing_skills",
       "mathematics_skills",
       "teacher_attitudes",
       "parent_attitudes",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "peer_relationship",
       "student_participation",
       "behavior_problems",
@@ -16210,7 +15626,7 @@
       "secondary_school_teachers",
       "elementary_school_teachers",
       "teacher_attitudes",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "instructional_effectiveness",
       "metacognition",
       "faculty_development",
@@ -16479,9 +15895,9 @@
       "interdisciplinary_approach",
       "neurosciences",
       "behavioral_sciences",
-      "family_(sociological_unit)",
-      "replication_(evaluation)",
-      "resilience_(psychology)"
+      "family",
+      "replication",
+      "resilience"
     ],
     "age_range": [
       "preschool",
@@ -16527,7 +15943,7 @@
       "instructional_design",
       "short_term_memory",
       "comparative_analysis",
-      "word_problems_(mathematics)",
+      "word_problems",
       "problem_solving",
       "mathematics_instruction",
       "outcomes_of_education",
@@ -16569,7 +15985,7 @@
       "preschool_children",
       "predictor_variables",
       "behavior_disorders",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "interviews",
       "clinical_diagnosis",
       "age_differences"
@@ -16689,7 +16105,7 @@
     "tags": [
       "drug_therapy",
       "attention_deficit_hyperactivity_disorder",
-      "compliance_(psychology)",
+      "compliance",
       "children",
       "evaluation_methods",
       "parent_attitudes"
@@ -16780,7 +16196,7 @@
       "outcomes_of_treatment",
       "adolescents",
       "aggression",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "interpersonal_relationship",
       "knowledge_level",
       "childhood_attitudes",
@@ -16937,7 +16353,7 @@
       "rating_scales",
       "test_validity",
       "questionnaires",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "children",
       "drug_therapy",
       "scores",
@@ -16972,7 +16388,7 @@
     "document_type": "guidance",
     "tags": [
       "cognitive_processes",
-      "scaffolding_(teaching_technique)",
+      "scaffolding",
       "executive_function",
       "learning_disabilities",
       "mixed_methods_research",
@@ -17058,7 +16474,7 @@
     "description": "This checklist assists in adapting and structuring all aspects of classroom life to better meet the needs of students with attention deficit hyperactivity disorder (ADHD). The checklist is divided int",
     "document_type": "guidance",
     "tags": [
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "attention_deficit_disorders",
       "behavior_change",
       "check_lists",
@@ -17206,7 +16622,7 @@
       "learning_disabilities",
       "attention_deficit_hyperactivity_disorder",
       "sex",
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "academic_achievement",
       "disabilities",
       "students_with_disabilities",
@@ -17378,12 +16794,12 @@
     "description": "This manual outlines fundamental principles and actual clinical and administrative procedures for evaluating, documenting, and accommodating a wide range of mental and physical impairments. An initial",
     "document_type": "guidance",
     "tags": [
-      "academic_accommodations_(disabilities)",
-      "accessibility_(for_disabled)",
+      "academic_accommodations",
+      "accessibility",
       "attention_deficit_disorders",
       "civil_rights_legislation",
       "college_students",
-      "compliance_(legal)",
+      "compliance",
       "court_litigation",
       "disabilities",
       "disability_identification",
@@ -17563,7 +16979,7 @@
       "attention_deficit_hyperactivity_disorder",
       "neuropsychology",
       "structured_interviews",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "questionnaires",
       "inhibition",
       "executive_function",
@@ -17572,11 +16988,11 @@
       "risk",
       "preschool_children",
       "medical_evaluation",
-      "records_(forms)",
+      "records",
       "prenatal_influences",
       "correlation",
       "foreign_countries",
-      "regression_(statistics)"
+      "regression"
     ],
     "age_range": [
       "preschool",
@@ -17899,7 +17315,7 @@
       "elementary_school_teachers",
       "knowledge_level",
       "attention_deficit_hyperactivity_disorder",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "clinical_diagnosis",
       "intervention",
       "teaching_experience",
@@ -17976,7 +17392,7 @@
     "tags": [
       "attention_deficit_hyperactivity_disorder",
       "patients",
-      "depression_(psychology)",
+      "depression",
       "clinical_diagnosis",
       "adults",
       "drug_therapy",
@@ -18051,7 +17467,7 @@
     "description": "One method for addressing barriers disabled college students face is by increasing access to academic accommodations. However, for college students with ADHD, little is known about the associations be",
     "document_type": "guidance",
     "tags": [
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "students_with_disabilities",
       "college_students",
       "attention_deficit_hyperactivity_disorder",
@@ -18060,9 +17476,9 @@
       "student_behavior",
       "psychological_patterns",
       "grade_point_average",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "executive_function",
-      "depression_(psychology)",
+      "depression",
       "mental_health",
       "drinking"
     ],
@@ -18103,7 +17519,7 @@
       "attention_deficit_hyperactivity_disorder",
       "victims",
       "anxiety",
-      "depression_(psychology)",
+      "depression",
       "incidence",
       "correlation",
       "adolescents",
@@ -18184,46 +17600,6 @@
     "related_ids": []
   },
   {
-    "id": "eric_EJ518031",
-    "name": "Reliability and Validity of the Conners Teacher Rating Scale-28 (CTRS-28).",
-    "description": "Internal consistency and construct and criterion-related validity of the Conners Teacher Rating Scale were studied with 540 students (ages 5-10), with emphasis on its utility as a measure of attention",
-    "document_type": "guidance",
-    "tags": [
-      "attention_deficit_disorders",
-      "behavior_disorders",
-      "disability_identification",
-      "elementary_education",
-      "hyperactivity",
-      "rating_scales",
-      "screening_tests",
-      "student_evaluation",
-      "teacher_attitudes",
-      "test_reliability",
-      "test_validity"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ518031"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Internal consistency and construct and criterion-related validity of the Conners Teacher Rating Scale were studied with 540 students (ages 5-10), with emphasis on its utility as a measure of attention deficit-hyperactivity disorder and other disruptive behavior disorders.",
-      "Internal consistency of factors ranged from .87 to .94.",
-      "Convergent validity studies suggested adequate but not strong relationships.",
-      "(Author/DB)"
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
     "id": "eric_EJ1032105",
     "name": "Comorbidities in Preschool Children at Family Risk of Dyslexia",
     "description": "Background: Comorbidity among developmental disorders such as dyslexia, language impairment, attention deficit/hyperactivity disorder and developmental coordination disorder is common. This study expl",
@@ -18283,7 +17659,7 @@
       "testing_accommodations",
       "measurement",
       "academic_achievement",
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "disabilities",
       "value_added_models",
       "incidence",
@@ -18297,8 +17673,7 @@
       "grade_7",
       "grade_8",
       "correlation",
-      "special_education",
-      "mathematics"
+      "special_education"
     ],
     "age_range": [
       "all"
@@ -18370,7 +17745,7 @@
     "tags": [
       "attention_deficit_hyperactivity_disorder",
       "intelligence",
-      "measures_(individuals)",
+      "measures",
       "spatial_ability",
       "psychomotor_skills",
       "cognitive_processes",
@@ -18381,7 +17756,7 @@
       "preadolescents",
       "children",
       "comparative_analysis",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "school_age"
@@ -18417,7 +17792,7 @@
     "tags": [
       "disabilities",
       "special_education",
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "assignments",
       "individualized_education_programs",
       "teamwork",
@@ -18426,7 +17801,7 @@
       "classroom_environment",
       "teaching_methods",
       "handwriting",
-      "time_factors_(learning)",
+      "time_factors",
       "grading",
       "testing_accommodations",
       "student_behavior",
@@ -18470,10 +17845,10 @@
       "daily_living_skills",
       "elementary_school_students",
       "attention_deficit_hyperactivity_disorder",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "outcomes_of_treatment",
       "behavior_problems",
-      "severity_(of_disability)",
+      "severity",
       "academic_achievement"
     ],
     "age_range": [
@@ -18718,7 +18093,7 @@
       "health_behavior",
       "cognitive_processes",
       "therapy",
-      "futures_(of_society)"
+      "futures"
     ],
     "age_range": [
       "all"
@@ -18759,7 +18134,7 @@
       "parent_child_relationship",
       "phonological_awareness",
       "chinese",
-      "english_(second_language)",
+      "english",
       "second_language_learning",
       "linguistic_input",
       "social_differences",
@@ -18771,14 +18146,14 @@
       "educational_attainment",
       "statistical_analysis",
       "foreign_countries",
-      "measures_(individuals)",
+      "measures",
       "syllables",
       "cognitive_tests",
       "short_term_memory",
       "tests",
       "visual_perception",
       "achievement_tests",
-      "regression_(statistics)",
+      "regression",
       "multivariate_analysis",
       "factor_analysis"
     ],
@@ -18867,7 +18242,7 @@
       "teacher_attitudes",
       "grade_1",
       "emotional_response",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "interpersonal_competence",
       "behavior_problems",
       "prediction"
@@ -18905,7 +18280,7 @@
     "tags": [
       "attention_deficit_hyperactivity_disorder",
       "gender_differences",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "clinical_diagnosis",
       "misconceptions",
       "special_education",
@@ -19127,7 +18502,6 @@
     "document_type": "guidance",
     "tags": [
       "executive_function",
-      "english_(second_language)",
       "english",
       "monolingualism",
       "bilingualism",
@@ -19389,7 +18763,7 @@
       "attention_deficit_disorders",
       "autism",
       "behavior_disorders",
-      "depression_(psychology)",
+      "depression",
       "elementary_secondary_education",
       "emotional_disturbances",
       "hyperactivity",
@@ -19439,7 +18813,7 @@
       "foreign_countries",
       "check_lists",
       "age_differences",
-      "severity_(of_disability)",
+      "severity",
       "attention_deficit_hyperactivity_disorder"
     ],
     "age_range": [
@@ -19466,49 +18840,6 @@
       "On a composite scale of all items, there was no significant effect of gender.",
       "We discuss possible explanations for the lesser effect of gender in children with ID.",
       "(Contains 3 tables.)"
-    ],
-    "contraindications": [],
-    "related_ids": []
-  },
-  {
-    "id": "eric_EJ324041",
-    "name": "Curriculum Guidelines for Predoctoral Pediatric Dentistry.",
-    "description": "Guidelines for development of a pedodontics curriculum describe the interrelationships of this and other dental fields, give an overview of the curriculum and its primary educational objectives, and o",
-    "document_type": "guidance",
-    "tags": [
-      "behavioral_objectives",
-      "core_curriculum",
-      "course_content",
-      "course_descriptions",
-      "curriculum_design",
-      "curriculum_development",
-      "curriculum_guides",
-      "dental_schools",
-      "educational_facilities",
-      "educational_objectives",
-      "higher_education",
-      "medical_school_faculty",
-      "pediatrics",
-      "prerequisites",
-      "professional_education",
-      "undergraduate_study"
-    ],
-    "age_range": [
-      "all"
-    ],
-    "evidence_level": "moderate",
-    "source": "eric",
-    "citations": [
-      {
-        "source_file": "",
-        "source_name": "eric",
-        "detail": "EJ324041"
-      }
-    ],
-    "steps": [],
-    "key_points": [
-      "Guidelines for development of a pedodontics curriculum describe the interrelationships of this and other dental fields, give an overview of the curriculum and its primary educational objectives, and outline the suggested prerequisites, core content, specific behavioral objectives, sequencing, and faculty requirements.",
-      "(MSE)"
     ],
     "contraindications": [],
     "related_ids": []
@@ -19619,7 +18950,7 @@
       "children",
       "parent_attitudes",
       "rating_scales",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "clinical_diagnosis"
     ],
     "age_range": [
@@ -19751,7 +19082,7 @@
       "pervasive_developmental_disorders",
       "attention_deficit_hyperactivity_disorder",
       "genetics",
-      "family_(sociological_unit)",
+      "family",
       "comorbidity",
       "siblings",
       "identification"
@@ -19832,7 +19163,7 @@
     "document_type": "guidance",
     "tags": [
       "attention_deficit_hyperactivity_disorder",
-      "coaching_(performance)",
+      "coaching",
       "counseling",
       "poisoning",
       "childrens_literature"
@@ -19959,7 +19290,7 @@
       "autism",
       "pervasive_developmental_disorders",
       "behavior_change",
-      "adjustment_(to_environment)",
+      "adjustment",
       "child_behavior",
       "children",
       "adolescents",
@@ -20185,9 +19516,9 @@
       "autism",
       "pervasive_developmental_disorders",
       "reinforcement",
-      "compliance_(psychology)",
+      "compliance",
       "predictor_variables",
-      "adjustment_(to_environment)",
+      "adjustment",
       "attitudes",
       "child_behavior",
       "foreign_countries"
@@ -20370,7 +19701,7 @@
       "psychoeducational_methods",
       "student_characteristics",
       "student_evaluation",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "school_age"
@@ -20426,7 +19757,7 @@
       "short_term_memory",
       "visual_perception",
       "cognitive_ability",
-      "family_(sociological_unit)",
+      "family",
       "attribution_theory"
     ],
     "age_range": [
@@ -20469,7 +19800,7 @@
       "children",
       "mental_health",
       "responses",
-      "depression_(psychology)",
+      "depression",
       "predictor_variables"
     ],
     "age_range": [
@@ -20585,10 +19916,10 @@
       "prediction",
       "task_analysis",
       "inhibition",
-      "measures_(individuals)",
+      "measures",
       "correlation",
       "identification",
-      "scaffolding_(teaching_technique)"
+      "scaffolding"
     ],
     "age_range": [
       "preschool",
@@ -20705,8 +20036,8 @@
     "document_type": "guidance",
     "tags": [
       "attention_deficit_disorders",
-      "depression_(psychology)",
-      "symptoms_(individual_disorders)",
+      "depression",
+      "symptoms",
       "substance_abuse",
       "at_risk_students",
       "grade_point_average",
@@ -20762,7 +20093,7 @@
       "emotional_response",
       "children",
       "child_behavior",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "correlation",
       "males",
       "mothers",
@@ -20937,10 +20268,10 @@
     "tags": [
       "attention_deficit_hyperactivity_disorder",
       "suicide",
-      "depression_(psychology)",
+      "depression",
       "emotional_response",
       "psychopathology",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "correlation",
       "youth",
       "children",
@@ -21080,7 +20411,7 @@
       "interviews",
       "learning_disabilities",
       "resource_materials",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "transitional_programs",
       "vocational_rehabilitation"
     ],
@@ -21115,17 +20446,17 @@
     "tags": [
       "administrator_role",
       "attention_deficit_disorders",
-      "compliance_(legal)",
+      "compliance",
       "drug_therapy",
       "educational_legislation",
       "evaluation",
       "hyperactivity",
       "intervention",
-      "measures_(individuals)",
+      "measures",
       "parent_school_relationship",
       "principals",
       "student_characteristics",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "teacher_administrator_relationship",
       "therapy"
     ],
@@ -21173,7 +20504,7 @@
       "comparative_analysis",
       "adolescents",
       "goodness_of_fit",
-      "symptoms_(individual_disorders)"
+      "symptoms"
     ],
     "age_range": [
       "school_age"
@@ -21211,7 +20542,7 @@
       "attention_deficit_hyperactivity_disorder",
       "gender_differences",
       "case_studies",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "best_practices",
       "clinical_diagnosis",
       "behavioral_science_research",
@@ -21295,7 +20626,7 @@
       "pervasive_developmental_disorders",
       "attention_deficit_hyperactivity_disorder",
       "comorbidity",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "brain",
       "neurological_impairments",
       "hypothesis_testing",
@@ -21423,8 +20754,8 @@
       "attention_deficit_disorders",
       "behavior_problems",
       "children",
-      "compliance_(psychology)",
-      "depression_(psychology)",
+      "compliance",
+      "depression",
       "family_relationship",
       "hyperactivity",
       "interpersonal_competence",
@@ -21459,7 +20790,7 @@
     "description": "This book is intended for professionals who are responsible for designing and implementing educational programs for children with attention deficit disorders and attention deficit/hyperactivity disord",
     "document_type": "guidance",
     "tags": [
-      "academic_accommodations_(disabilities)",
+      "academic_accommodations",
       "attention_deficit_disorders",
       "behavior_modification",
       "behavior_problems",
@@ -21517,7 +20848,7 @@
       "partial_vision",
       "blindness",
       "disabilities",
-      "regression_(statistics)",
+      "regression",
       "visually_impaired_mobility",
       "child_behavior",
       "questionnaires",
@@ -21695,7 +21026,7 @@
       "rating_scales",
       "fathers",
       "parent_attitudes",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "correlation",
       "stress_variables",
       "prediction",
@@ -21875,7 +21206,7 @@
       "conceptual_tempo",
       "young_adults",
       "college_students",
-      "symptoms_(individual_disorders)",
+      "symptoms",
       "clinical_diagnosis"
     ],
     "age_range": [
@@ -22188,11 +21519,11 @@
     "tags": [
       "high_schools",
       "student_attitudes",
-      "academic_accommodations_(disabilities)",
-      "accessibility_(for_disabled)",
+      "academic_accommodations",
+      "accessibility",
       "barriers",
       "college_students",
-      "related_services_(special_education)",
+      "related_services",
       "student_surveys",
       "participant_characteristics",
       "use_studies",
