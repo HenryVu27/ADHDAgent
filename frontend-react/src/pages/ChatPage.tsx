@@ -32,7 +32,7 @@ export function ChatPage() {
     latestTrace, typewriterResetRef, onStreamComplete, sendMessage, stopStreaming, clearMessages, loadMessages, summaryText,
   } = useChat(sessionId)
   const { session, refresh } = useSession(sessionId)
-  const { getOnboarding } = useAuth()
+  const { user, getOnboarding } = useAuth()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [showChips, setShowChips] = useState(true)
   const initialized = useRef(false)
@@ -53,7 +53,7 @@ export function ChatPage() {
           // New session — seed with onboarding data
           const onboarding = getOnboarding()
           if (onboarding) {
-            pendingSeed.current = api.seedSession(sessionId, onboarding)
+            pendingSeed.current = api.seedSession(sessionId, onboarding, user?.name ?? "")
               .catch((err) => console.warn("[seed] Failed to seed session:", err))
           }
         } else {
@@ -87,13 +87,13 @@ export function ChatPage() {
           challenges: p.challenge_areas,
           triedStrategies: p.attempted_strategies,
           goals: prev.goals.filter((g) => g.status === "active").map((g) => g.description),
-        })
+        }, user?.name ?? "")
       })
       .catch(() => {
         // Previous session not found (e.g. first ever session) — fall back to onboarding
         const onboarding = getOnboarding()
         if (onboarding) {
-          return api.seedSession(newId, onboarding)
+          return api.seedSession(newId, onboarding, user?.name ?? "")
         }
       })
       .catch((err) => console.warn("[seed] Failed to seed session:", err))
