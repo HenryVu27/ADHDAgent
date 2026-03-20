@@ -18,12 +18,13 @@ from scripts.ingest.sources.openalex import OpenAlexConnector
 from scripts.ingest.sources.semantic_scholar import SemanticScholarConnector
 from scripts.ingest.sources.eric import ERICConnector
 from scripts.ingest.sources.government import GovernmentConnector
+from scripts.ingest.sources.practitioner import PractitionerConnector
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
 # Source processing order (priority for dedup)
-SOURCE_ORDER = ["pubmed", "pubmed_abstract", "semantic_scholar", "openalex", "eric", "government"]
+SOURCE_ORDER = ["pubmed", "pubmed_abstract", "semantic_scholar", "openalex", "eric", "government", "practitioner"]
 
 
 def build_connectors(config: IngestConfig) -> dict:
@@ -34,6 +35,7 @@ def build_connectors(config: IngestConfig) -> dict:
         "semantic_scholar": SemanticScholarConnector(api_key=config.s2_api_key, rps=config.s2_rps),
         "eric": ERICConnector(rps=config.eric_rps),
         "government": GovernmentConnector(rps=config.gov_rps),
+        "practitioner": PractitionerConnector(rps=config.gov_rps),
     }
 
 
@@ -185,7 +187,8 @@ async def run(args: argparse.Namespace) -> None:
         for doc in deduped:
             prefix = doc["id"].split("_")[0]
             source_map = {"pmc": "pubmed", "pm": "pubmed_abstract", "oalex": "openalex",
-                          "s2": "semantic_scholar", "eric": "eric", "gov": "government"}
+                          "s2": "semantic_scholar", "eric": "eric", "gov": "government",
+                          "pract": "practitioner"}
             src = source_map.get(prefix, prefix)
             source_groups.setdefault(src, []).append(doc)
         for src, docs in source_groups.items():
@@ -197,7 +200,7 @@ async def run(args: argparse.Namespace) -> None:
 def main():
     parser = argparse.ArgumentParser(description="Ingest ADHD knowledge documents")
     parser.add_argument("--source", required=True,
-                        choices=["pubmed", "pubmed_abstract", "openalex", "semantic_scholar", "eric", "government", "all"],
+                        choices=["pubmed", "pubmed_abstract", "openalex", "semantic_scholar", "eric", "government", "practitioner", "all"],
                         help="Source to ingest from")
     parser.add_argument("--query", type=str, default=None,
                         help="Search query (overrides defaults)")

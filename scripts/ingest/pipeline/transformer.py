@@ -50,8 +50,9 @@ class SchemaTransformer:
         work_type: str = "",
         peer_reviewed: bool = False,
         is_government: bool = False,
+        is_practitioner: bool = False,
     ) -> str:
-        if is_government:
+        if is_government or is_practitioner:
             return "expert_consensus"
 
         pub_lower = publication_type.lower()
@@ -66,7 +67,7 @@ class SchemaTransformer:
         return "emerging"
 
     def _infer_document_type(self, parsed: ParsedDocument) -> str:
-        if parsed.source_name == "government":
+        if parsed.source_name in ("government", "practitioner"):
             return "strategy" if parsed.has_lists else "guidance"
         if parsed.source_name == "eric":
             terms_lower = {t.lower() for t in parsed.subject_terms}
@@ -100,6 +101,14 @@ class SchemaTransformer:
             if "nimh" in parsed.url.lower():
                 return "NIMH"
             return "NIH"
+        if parsed.source_name == "practitioner":
+            if "chadd" in parsed.url.lower():
+                return "CHADD"
+            if "additudemag" in parsed.url.lower():
+                return "ADDitude"
+            if "understood" in parsed.url.lower():
+                return "Understood"
+            return parsed.source_name
         if parsed.authors:
             first = parsed.authors[0]
             suffix = " et al." if len(parsed.authors) > 1 else ""
@@ -108,7 +117,7 @@ class SchemaTransformer:
         return parsed.source_name
 
     def _build_key_points(self, parsed: ParsedDocument) -> list[str]:
-        if parsed.source_name == "government" and not parsed.has_lists:
+        if parsed.source_name in ("government", "practitioner") and not parsed.has_lists:
             # Split HTML content into paragraphs
             text = parsed.html_content or parsed.abstract
             if not text:
@@ -132,6 +141,7 @@ class SchemaTransformer:
             "semantic_scholar": "s2_",
             "eric": "eric_",
             "government": "gov_",
+            "practitioner": "pract_",
         }
         prefix = prefixes.get(parsed.source_name, "")
         return f"{prefix}{parsed.source_id}"
@@ -155,6 +165,7 @@ class SchemaTransformer:
                 work_type=parsed.work_type,
                 peer_reviewed=parsed.peer_reviewed,
                 is_government=parsed.source_name == "government",
+                is_practitioner=parsed.source_name == "practitioner",
             ),
             "source": self._build_source(parsed),
             "citations": [
