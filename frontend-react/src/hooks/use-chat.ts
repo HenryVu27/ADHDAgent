@@ -2,32 +2,36 @@ import { useState, useCallback, useRef } from "react"
 import type { Attachment, ChatMessage, PipelineTrace, StreamDoneEvent } from "@/types"
 import { api } from "@/lib/api"
 
+// Throttle interval for flushing accumulated tokens to React state.
+// ~50ms ≈ 20 updates/sec — fast enough to look real-time, slow enough
+// to avoid excessive re-renders. Production apps (ChatGPT, Claude.ai)
+// use similar batching rather than per-token state updates.
+const FLUSH_INTERVAL_MS = 50
+
 export function useChat(sessionId: string) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)       // waiting for first token
   const [isStreaming, setIsStreaming] = useState(false)    // tokens arriving
   const [statusText, setStatusText] = useState("")         // current pipeline stage label
   const [summaryText, setSummaryText] = useState("")  // Contextual summary from parallel Flash call
-  const [streamingContent, setStreamingContent] = useState("") // drives typewriter display
+  const [streamingContent, setStreamingContent] = useState("") // displayed during streaming
   const [latestTrace, setLatestTrace] = useState<PipelineTrace | null>(null)
   const idCounter = useRef(0)
   const abortRef = useRef<AbortController | null>(null)
-  // accumulatedRef: source of truth for token accumulation (avoids stale closure on done)
+  // accumulatedRef: source of truth for token accumulation (avoids stale closure issues)
   const accumulatedRef = useRef("")
-  // Exposed so ChatContainer can call typewriter.reset() on replace events
-  const typewriterResetRef = useRef<((text: string) => void) | null>(null)
-  // Buffer the done payload so finalization waits for the typewriter to catch up
-  const pendingDoneRef = useRef<{ event: StreamDoneEvent; finalize: (e: StreamDoneEvent) => void } | null>(null)
+  // Throttled flush: tokens accumulate in the ref, a timer flushes to state
+  const flushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Called by useTypewriter when displayed text catches up to all received tokens.
-  // If a done event is already buffered, finalize now.
-  const onStreamComplete = useCallback(() => {
-    const pending = pendingDoneRef.current
-    if (pending) {
-      pendingDoneRef.current = null
-      pending.finalize(pending.event)
-    }
+  const _flushTokens = useCallback(() => {
+    flushTimerRef.current = null
+    setStreamingContent(accumulatedRef.current)
   }, [])
+
+  const _scheduleFlush = useCallback(() => {
+    if (flushTimerRef.current !== null) return  // already scheduled
+    flushTimerRef.current = setTimeout(_flushTokens, FLUSH_INTERVAL_MS)
+  }, [_flushTokens])
 
   const sendMessage = useCallback(async (content: string, attachments?: Attachment[]) => {
     const userMsg: ChatMessage = {
@@ -65,19 +69,19 @@ export function useChat(sessionId: string) {
             setIsLoading(false)
             setIsStreaming(true)
             setStatusText("")
-            // Yield to event loop so React renders the streaming block
-            // before processing subsequent tokens/done in the same SSE chunk
-            await new Promise(resolve => setTimeout(resolve, 0))
           }
           accumulatedRef.current += event.text
-          setStreamingContent(prev => prev + event.text)
+          _scheduleFlush()
 
         } else if (event.type === "reset") {
           // Agent is calling a tool — clear intermediate reasoning so only
           // the final post-tool response is displayed
           accumulatedRef.current = ""
+          if (flushTimerRef.current !== null) {
+            clearTimeout(flushTimerRef.current)
+            flushTimerRef.current = null
+          }
           setStreamingContent("")
-          typewriterResetRef.current?.("")
           firstToken = true
           setIsStreaming(false)
           setIsLoading(true)
@@ -85,24 +89,14 @@ export function useChat(sessionId: string) {
         } else if (event.type === "replace") {
           accumulatedRef.current = event.text
           setStreamingContent(event.text)
-          typewriterResetRef.current?.(event.text)
 
         } else if (event.type === "done") {
-          // If no tokens were streamed (e.g. blocked input), finalize immediately.
-          // Otherwise buffer the done event and let the typewriter's onComplete trigger it.
-          if (!accumulatedRef.current) {
-            _finalize(event)
-          } else {
-            pendingDoneRef.current = { event, finalize: _finalize }
-            // Safety: finalize after 5s even if typewriter hasn't caught up
-            setTimeout(() => {
-              if (pendingDoneRef.current) {
-                const p = pendingDoneRef.current
-                pendingDoneRef.current = null
-                p.finalize(p.event)
-              }
-            }, 5000)
+          // Flush any remaining buffered tokens, then finalize
+          if (flushTimerRef.current !== null) {
+            clearTimeout(flushTimerRef.current)
+            flushTimerRef.current = null
           }
+          _finalize(event)
 
         } else if (event.type === "error") {
           setMessages(prev => [...prev, {
@@ -153,9 +147,12 @@ export function useChat(sessionId: string) {
       setStreamingContent("")
       setSummaryText("")
       accumulatedRef.current = ""
-      pendingDoneRef.current = null
+      if (flushTimerRef.current !== null) {
+        clearTimeout(flushTimerRef.current)
+        flushTimerRef.current = null
+      }
     }
-  }, [sessionId])  // sessionId only — no state in deps (local vars + refs used instead)
+  }, [sessionId, _scheduleFlush, _flushTokens])
 
   const stopStreaming = useCallback(() => {
     abortRef.current?.abort()
@@ -200,8 +197,6 @@ export function useChat(sessionId: string) {
     summaryText,
     streamingContent,
     latestTrace,
-    typewriterResetRef,
-    onStreamComplete,
     sendMessage,
     stopStreaming,
     clearMessages,

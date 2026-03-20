@@ -13,8 +13,6 @@ interface ChatContainerProps {
   statusText: string
   summaryText: string
   streamingContent: string
-  typewriterResetRef: React.MutableRefObject<((text: string) => void) | null>
-  onStreamComplete: () => void
 }
 
 export function ChatContainer({
@@ -24,8 +22,6 @@ export function ChatContainer({
   statusText,
   summaryText,
   streamingContent,
-  typewriterResetRef,
-  onStreamComplete,
 }: ChatContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -105,11 +101,7 @@ export function ChatContainer({
                 {summaryText}
               </div>
             )}
-            <StreamingContent
-              content={streamingContent}
-              typewriterResetRef={typewriterResetRef}
-              onComplete={onStreamComplete}
-            />
+            <StreamingContent content={streamingContent} />
           </div>
         </motion.div>
       )}

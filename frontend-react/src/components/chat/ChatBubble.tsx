@@ -1,6 +1,5 @@
 import { motion } from "framer-motion"
 import { Sprout, User, FileText } from "lucide-react"
-import { useTypewriter } from "@/hooks/use-typewriter"
 import type { ChatMessage } from "@/types"
 
 function formatMarkdown(text: string): string {
@@ -13,35 +12,26 @@ function formatMarkdown(text: string): string {
     .replace(/^(.+)$/s, "<p>$1</p>")
 }
 
+const markdownClasses = "text-sm leading-relaxed [&_ul]:ml-4 [&_ul]:list-disc [&_ul]:space-y-1 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-semibold"
+
 interface Props {
   message: ChatMessage
 }
 
-interface StreamingBubbleProps {
+interface StreamingContentProps {
   content: string
-  typewriterResetRef: React.MutableRefObject<((text: string) => void) | null>
-  onComplete?: () => void
 }
 
 /**
- * Content-only streaming component during SSE streaming.
- * Uses useTypewriter for smooth character-by-character animation.
- * onComplete fires when the typewriter catches up to all received content,
- * signaling the done handler that it's safe to finalize.
- * The avatar/wrapper is provided by ChatContainer.
+ * Renders streamed tokens directly as they arrive — no artificial animation.
+ * Appends a blinking cursor to signal that more text is incoming.
  */
-export function StreamingContent({ content, typewriterResetRef, onComplete }: StreamingBubbleProps) {
-  const { displayedText, reset } = useTypewriter(content, onComplete)
-
-  if (typewriterResetRef.current !== reset) {
-    typewriterResetRef.current = reset
-  }
-
+export function StreamingContent({ content }: StreamingContentProps) {
   return (
-    <div
-      className="text-sm leading-relaxed [&_ul]:ml-4 [&_ul]:list-disc [&_ul]:space-y-1 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-semibold"
-      dangerouslySetInnerHTML={{ __html: formatMarkdown(displayedText) }}
-    />
+    <div className={markdownClasses}>
+      <span dangerouslySetInnerHTML={{ __html: formatMarkdown(content) }} />
+      <span className="inline-block w-[2px] h-[1em] bg-current ml-0.5 align-text-bottom animate-[cursor-blink_1s_step-end_infinite]" />
+    </div>
   )
 }
 
@@ -102,7 +92,7 @@ export function ChatBubble({ message }: Props) {
           </div>
         )}
         <div
-          className="text-sm leading-relaxed [&_ul]:ml-4 [&_ul]:list-disc [&_ul]:space-y-1 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-semibold"
+          className={markdownClasses}
           dangerouslySetInnerHTML={{ __html: formatMarkdown(message.content) }}
         />
       </div>
