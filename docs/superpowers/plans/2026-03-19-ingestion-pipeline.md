@@ -6,7 +6,9 @@
 
 **Architecture:** Each source has its own async connector module. A shared pipeline handles transformation (to JSON schema), LLM-based relevance filtering, and cross-source deduplication. Output is JSON files in `app/knowledge/<source>/` subdirectories. The pipeline is fully isolated from the app runtime -- no `app.*` imports.
 
-**Tech Stack:** Python 3.12, aiohttp, LlamaIndex (web readers), google-genai (Gemini Flash), nltk (sentence tokenization), beautifulsoup4
+**Tech Stack:** Python 3.12, aiohttp, google-genai (Gemini Flash), nltk (sentence tokenization), beautifulsoup4
+
+**Spec deviations:** The spec references LlamaIndex for parsing and a separate `pipeline/parser.py`. The plan simplifies this: parsing is co-located in each source connector's `parse()` method using stdlib `xml.etree.ElementTree` (PubMed) and `BeautifulSoup` (government), which avoids heavy LlamaIndex dependencies for straightforward XML/HTML extraction.
 
 **Spec:** `docs/superpowers/specs/2026-03-19-ingestion-pipeline-design.md`
 
@@ -72,8 +74,6 @@ touch scripts/__init__.py scripts/ingest/__init__.py scripts/ingest/sources/__in
 - [ ] **Step 2: Write `scripts/ingest/requirements.txt`**
 
 ```
-llama-index-core>=0.12.0
-llama-index-readers-web>=0.3.0
 beautifulsoup4>=4.12.0
 aiohttp>=3.9.0
 tenacity>=9.0.0
@@ -184,7 +184,7 @@ class RateLimiter:
 
     async def acquire(self):
         await self._semaphore.acquire()
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         loop.call_later(self._interval, self._semaphore.release)
 ```
 
@@ -800,6 +800,13 @@ class Deduplicator:
                 return detail
         return ""
 
+    def _extract_year(self, doc: dict) -> int:
+        source = doc.get("source", "")
+        # Source format: "Author et al. (2023)" or "CDC"
+        import re
+        match = re.search(r"\((\d{4})\)", source)
+        return int(match.group(1)) if match else 0
+
     def deduplicate(self, docs: list[dict]) -> list[dict]:
         """Remove duplicates. Input should be ordered by source priority
         (PubMed first, then Semantic Scholar, OpenAlex, ERIC, CDC/NIH)
@@ -808,7 +815,7 @@ class Deduplicator:
             return []
 
         seen_dois: set[str] = set()
-        seen_titles: list[tuple[str, str]] = []  # (normalized_title_str, id)
+        seen_titles: list[tuple[str, int, str]] = []  # (title, year, id)
         kept: list[dict] = []
 
         for doc in docs:
@@ -818,16 +825,19 @@ class Deduplicator:
                     continue
                 seen_dois.add(doi)
 
-            # Title similarity check
+            # Title similarity check with year as secondary filter
             title = doc.get("name", "")
+            year = self._extract_year(doc)
             is_dup = False
-            for seen_title, _ in seen_titles:
+            for seen_title, seen_year, _ in seen_titles:
                 if self._jaccard_similarity(title, seen_title) >= self._title_threshold:
-                    is_dup = True
-                    break
+                    # Only consider it a duplicate if years match or one is unknown
+                    if seen_year == 0 or year == 0 or seen_year == year:
+                        is_dup = True
+                        break
 
             if not is_dup:
-                seen_titles.append((title, doc["id"]))
+                seen_titles.append((title, year, doc["id"]))
                 kept.append(doc)
 
         return kept
@@ -961,11 +971,12 @@ class BatchWriter:
             shutil.rmtree(source_dir)
         source_dir.mkdir(parents=True, exist_ok=True)
 
+        if not docs:
+            return []
+
         written_files = []
-        for i in range(0, max(len(docs), 1), self._batch_size):
+        for i in range(0, len(docs), self._batch_size):
             batch = docs[i:i + self._batch_size]
-            if not batch:
-                break
             batch_num = (i // self._batch_size) + 1
             file_path = source_dir / f"{source_name}_batch_{batch_num:03d}.json"
             with open(file_path, "w") as f:
@@ -1289,6 +1300,12 @@ class PubMedConnector:
                     for kwd in kwd_group.findall("kwd"):
                         if kwd.text:
                             mesh_terms.append(kwd.text.strip())
+
+            # Publication type (e.g., "Randomized Controlled Trial", "Review")
+            for at in meta.findall(".//article-categories//subj-group/subject"):
+                if at.text:
+                    pub_type = at.text.strip()
+                    break
 
         return ParsedDocument(
             source_id=raw.source_id,
@@ -1954,15 +1971,25 @@ class GovernmentConnector:
             format="html",
         ))
 
-        # Find links within the same domain scope
+        # Find links within the same path scope (not just domain)
         soup = BeautifulSoup(html, "html.parser")
         base_domain = urlparse(url).netloc
+        # Find which root URL this crawl belongs to
+        root_path = ""
+        for root in CRAWL_ROOTS:
+            if url.startswith(root):
+                root_path = urlparse(root).path
+                break
+
         for link in soup.find_all("a", href=True):
             href = link["href"]
             if href.startswith("/"):
                 href = f"{parsed_url.scheme}://{base_domain}{href}"
-            link_domain = urlparse(href).netloc
-            if link_domain == base_domain and href not in visited:
+            link_parsed = urlparse(href)
+            # Only follow links within the same domain AND path scope
+            if (link_parsed.netloc == base_domain
+                    and link_parsed.path.startswith(root_path)
+                    and href not in visited):
                 await self._crawl(session, href, raw_docs, visited, max_docs, depth + 1, max_depth)
 
     def parse(self, raw: RawDocument) -> ParsedDocument:
@@ -2080,20 +2107,12 @@ async def ingest_source(
     """Fetch, parse, transform, filter, and write docs for one source."""
     logger.info(f"[{source_name}] Starting ingestion...")
 
-    # Fetch
+    # Fetch (skip already-cached IDs when resuming)
+    seen_ids: set[str] = set()
     all_raw: list[RawDocument] = []
-    for query in queries:
-        logger.info(f"[{source_name}] Fetching query: {query}")
-        raw_docs = await connector.fetch(query, max_docs=max_docs)
-        for raw in raw_docs:
-            if resume and cache.has(source_name, raw.source_id):
-                continue
-            cache.save(source_name, raw.source_id, raw.raw_data)
-            all_raw.append(raw)
-        logger.info(f"[{source_name}] Fetched {len(raw_docs)} docs for '{query}'")
 
     if resume:
-        # Load all cached docs
+        # Load previously cached docs first
         cached_ids = cache.list_ids(source_name)
         for cid in cached_ids:
             data = cache.load(source_name, cid)
@@ -2104,6 +2123,21 @@ async def ingest_source(
                     raw_data=data,
                     format="json",
                 ))
+                seen_ids.add(cid)
+        logger.info(f"[{source_name}] Loaded {len(all_raw)} cached docs")
+
+    for query in queries:
+        logger.info(f"[{source_name}] Fetching query: {query}")
+        raw_docs = await connector.fetch(query, max_docs=max_docs)
+        new_count = 0
+        for raw in raw_docs:
+            if raw.source_id in seen_ids:
+                continue
+            seen_ids.add(raw.source_id)
+            cache.save(source_name, raw.source_id, raw.raw_data)
+            all_raw.append(raw)
+            new_count += 1
+        logger.info(f"[{source_name}] Fetched {len(raw_docs)} docs for '{query}' ({new_count} new)")
 
     logger.info(f"[{source_name}] Total raw documents: {len(all_raw)}")
 
@@ -2191,9 +2225,9 @@ async def run(args: argparse.Namespace) -> None:
                 cache=cache,
                 transformer=transformer,
                 relevance_filter=relevance_filter,
-                writer=writer if not args.source == "all" else BatchWriter(config.output_dir, config.batch_size),
+                writer=writer,
                 resume=args.resume,
-                dry_run=args.dry_run,
+                dry_run=args.dry_run or args.source == "all",  # Skip per-source writes when doing all (dedup writes later)
             )
             all_docs.extend(docs)
 
