@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     # Gemini
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-2.5-flash"
-    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-001"
+    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-2-preview"
 
     # RAG
     RAG_TOP_K: int = 5

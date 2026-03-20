@@ -8,6 +8,7 @@ extraction, and embedding vectors for RAG.
 import asyncio
 import json
 import logging
+import math
 from typing import Any
 
 from google import genai
@@ -36,10 +37,15 @@ try:
     _RETRYABLE = (*_RETRYABLE, ResourceExhausted, ServiceUnavailable, DeadlineExceeded, InternalServerError)
 except ImportError:
     pass
+try:
+    from google.genai.errors import ClientError as GenAIClientError
+    _RETRYABLE = (*_RETRYABLE, GenAIClientError)
+except ImportError:
+    pass
 
 _retry_policy = retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=1, max=10),
+    stop=stop_after_attempt(5),
+    wait=wait_exponential(multiplier=2, min=2, max=60),
     retry=retry_if_exception_type(_RETRYABLE),
     before_sleep=before_sleep_log(logger, logging.WARNING),
     reraise=True,
@@ -157,18 +163,21 @@ class GeminiClient:
 
         MAX_BATCH = 100
         all_embeddings: list[list[float]] = []
+        # Per-batch timeout must be generous to accommodate rate-limit retries
+        per_batch_timeout = max(timeout or 120, 120)
+        num_batches = math.ceil(len(texts) / MAX_BATCH)
 
-        for start in range(0, len(texts), MAX_BATCH):
+        for i, start in enumerate(range(0, len(texts), MAX_BATCH)):
             batch = texts[start : start + MAX_BATCH]
             coro = asyncio.to_thread(
                 _retry_policy(self._client.models.embed_content),
                 model=self._embedding_model,
                 contents=batch,
             )
-            if timeout is not None:
-                result = await asyncio.wait_for(coro, timeout=timeout)
-            else:
-                result = await coro
+            result = await asyncio.wait_for(coro, timeout=per_batch_timeout)
             all_embeddings.extend(list(e.values) for e in result.embeddings)
+            # Throttle to stay under 3,000 RPM (30 batches of 100/min = 1 every 2s)
+            if i < num_batches - 1:
+                await asyncio.sleep(2.0)
 
         return all_embeddings
