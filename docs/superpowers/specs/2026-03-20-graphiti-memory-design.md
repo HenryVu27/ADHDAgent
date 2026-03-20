@@ -120,6 +120,11 @@ async def _sync_profile(self, session_id: str, user_id: int) -> None:
            c.diagnosis_status AS diagnosis_status, c.adhd_subtype AS adhd_subtype
     ORDER BY c.created_at DESC LIMIT 1
     """
+    # Note: Graphiti exposes the Neo4j AsyncDriver as graphiti.driver (public attribute).
+    # Wrap this call in graphiti_client.py as a helper to isolate from internal API changes.
+    # Entity nodes may not carry group_id directly -- if so, traverse through episodes:
+    #   MATCH (e:EpisodicNode {group_id: $group_id})-[:MENTIONS]->(c:Child) RETURN c...
+    # Validate against actual Graphiti schema during implementation.
     result = await self._graphiti.driver.execute_query(query, {"group_id": str(user_id)})
     if not result.records:
         return
@@ -142,7 +147,7 @@ async def _sync_profile(self, session_id: str, user_id: int) -> None:
 
 **Deleted.** The current `end_of_session_tasks` generates a `UserSummary` longitudinal summary for returning users. With Graphiti, the graph persists across sessions partitioned by `group_id=str(user_id)`. A `graphiti.search()` call with the user's `group_id` naturally returns cross-session facts without needing a separate longitudinal summary.
 
-The associated store methods (`get_user_summary`, `save_user_summary`) are removed from `SessionStoreBase`. `get_user_episodes` and `get_user_outcomes` remain (used by observability routes).
+The associated store methods (`get_user_summary`, `save_user_summary`) are removed from `SessionStoreBase`. `get_user_episodes` and `get_user_outcomes` are also removed -- they return empty/stale data post-migration since episodes are no longer written to SQLite. No observability routes reference them.
 
 ## Retrieval
 
@@ -278,7 +283,7 @@ else:
     graphiti_client = None
 ```
 
-Shutdown: `await graphiti_client.close()` in FastAPI shutdown handler.
+Shutdown: `await graphiti_client.close()` in FastAPI shutdown handler. `Graphiti.close()` handles Neo4j driver cleanup internally.
 
 Graph partitioned by `group_id=str(user_id)` so families do not leak context.
 
@@ -292,10 +297,11 @@ Graph partitioned by `group_id=str(user_id)` so families do not leak context.
 | `app/main.py` | Initialize Graphiti client, pass to MemoryManager and tool factory, add shutdown handler |
 | `app/agent/memory.py` | Gut internals: `post_turn_tasks` calls `graphiti.add_episode()`. Delete `_update_summary`, `_extract_facts`, `_create_episode`, `_create_goal_episode`, `_run_emotional_shift_check`, `_infer_emotion`, `_link_episode`, `end_of_session_tasks`. Add `_sync_profile`. |
 | `app/agent/hooks.py` | `prepare_context` queries `graphiti.search()` instead of SQLite summaries/episodes. Remove `<prior-sessions>` special-casing. |
-| `app/agent/tools.py` | Add `search_memory` tool |
+| `app/agent/orchestrator.py` | Add `user_id` to `RunnableConfig.configurable`: `{"configurable": {"session_id": session_id, "user_id": user_id}}` so tools can extract it via `config.get("configurable", {}).get("user_id")` |
+| `app/agent/tools.py` | Add `search_memory` tool. Add `_get_user_id(config)` helper alongside existing `_get_session_id`. |
 | `app/agent/prompts.py` | Update system prompt: replace summary/episodes section with graph memory context. Add `search_memory` tool description. |
 | `app/agent/graph.py` | Add `search_memory` to tool list |
-| `app/agent/store_protocol.py` | Remove: `get_latest_summary`, `save_summary`, `add_episode`, `get_recent_episodes`, `get_episodes_with_ids`, `add_episode_link`, `get_episode_links`, `get_user_summary`, `save_user_summary` |
+| `app/agent/store_protocol.py` | Remove: `get_latest_summary`, `save_summary`, `add_episode`, `get_recent_episodes`, `get_episodes_with_ids`, `add_episode_link`, `get_episode_links`, `get_user_summary`, `save_user_summary`, `get_user_episodes`, `get_user_outcomes` |
 | `app/agent/sqlite_store.py` | Remove implementations of deleted protocol methods |
 | `app/agent/session_store.py` | Remove in-memory implementations of deleted protocol methods |
 | `app/models/schemas.py` | `SessionSummary`, `EpisodicMemory`, `EpisodeLink` become unused. Add custom entity/edge Pydantic models for Graphiti. |
@@ -311,7 +317,7 @@ Graph partitioned by `group_id=str(user_id)` so families do not leak context.
 - `app/rag/*` -- entire Qdrant retrieval pipeline
 - `app/guardrails/*`
 - `app/api/*` -- observability routes (`observability_routes.py`) read traces/analyses from SQLite, not episodes or summaries directly. No changes needed. The `SessionDetailResponse` schema includes `events` from `EventBus` which will now contain Graphiti events instead of memory events.
-- `app/agent/analyzer.py`
+- `app/agent/analyzer.py` -- `search_memory` tool calls appear in `ConversationAnalyzer` traces automatically via the LangGraph event stream. No changes needed.
 - `app/agent/event_bus.py`
 - `app/db.py` -- no migration to drop tables (keep for data safety), just stop writing to `session_summaries`, `episodes`, `episode_links`
 
