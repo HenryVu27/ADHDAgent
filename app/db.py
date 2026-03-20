@@ -216,6 +216,36 @@ CREATE TABLE IF NOT EXISTS attachments (
 CREATE INDEX IF NOT EXISTS idx_attachments_session ON attachments(session_id);
 """
 
+SCHEMA_V7 = """
+CREATE TABLE IF NOT EXISTS user_profiles (
+    user_id INTEGER PRIMARY KEY REFERENCES users(id),
+    child_name TEXT,
+    child_age TEXT,
+    diagnosis_status TEXT,
+    adhd_subtype TEXT,
+    challenge_areas TEXT NOT NULL DEFAULT '[]',
+    attempted_strategies TEXT NOT NULL DEFAULT '[]',
+    good_day_description TEXT,
+    hardest_situations TEXT NOT NULL DEFAULT '[]',
+    updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS user_summaries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    summary TEXT NOT NULL,
+    covers_through_session TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_user_summaries_user ON user_summaries(user_id);
+"""
+
+SCHEMA_V8 = """
+ALTER TABLE users ADD COLUMN name TEXT;
+ALTER TABLE family_profiles ADD COLUMN parent_name TEXT;
+ALTER TABLE user_profiles ADD COLUMN parent_name TEXT;
+"""
+
 MIGRATIONS = {
     1: SCHEMA_V1,
     2: SCHEMA_V2,
@@ -223,6 +253,8 @@ MIGRATIONS = {
     4: SCHEMA_V4,
     5: SCHEMA_V5,
     6: SCHEMA_V6,
+    7: SCHEMA_V7,
+    8: SCHEMA_V8,
 }
 
 
