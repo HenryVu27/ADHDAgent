@@ -18,6 +18,11 @@ def _get_session_id(config: RunnableConfig) -> str:
     return config.get("configurable", {}).get("session_id", "default")
 
 
+def _get_user_id(config: RunnableConfig) -> int | None:
+    """Extract user_id from LangGraph config."""
+    return config.get("configurable", {}).get("user_id")
+
+
 def _age_to_range(age_str: str) -> str | None:
     """Map a child's age string to an age_range filter value."""
     try:
@@ -123,6 +128,7 @@ def _format_result(i: int, result: RetrievalResult) -> str:
 def create_tools(
     retriever: HybridRetriever,
     session_store: SessionStoreBase,
+    graphiti_client=None,
 ) -> list:
     """Create the 7 agent tools, bound to the given retriever and session store.
 
@@ -502,7 +508,7 @@ def create_tools(
             logger.exception("manage_goals failed")
             return f"Error: could not manage goals ({type(e).__name__}). Try again."
 
-    return [
+    all_tools = [
         search_knowledge_base,
         get_document_details,
         get_related_documents,
@@ -511,3 +517,50 @@ def create_tools(
         track_outcome,
         manage_goals,
     ]
+
+    if graphiti_client is not None:
+        from app.config import settings
+
+        @tool
+        async def search_memory(
+            query: str,
+            config: RunnableConfig = None,
+        ) -> str:
+            """Search conversation memory for what this family has shared,
+            tried, or experienced. Use when you need to recall past
+            discussions, strategy outcomes, emotional patterns, or
+            family context from previous turns or sessions."""
+            user_id = _get_user_id(config)
+            group_ids = [str(user_id)] if user_id is not None else None
+
+            try:
+                edges = await graphiti_client.search(
+                    query,
+                    group_ids=group_ids,
+                    num_results=settings.GRAPHITI_SEARCH_RESULTS,
+                )
+            except Exception as e:
+                logger.error("search_memory failed: %s", e)
+                return "Memory search is temporarily unavailable."
+
+            if not edges:
+                return "No relevant memories found for this query."
+
+            lines = []
+            for i, edge in enumerate(edges, 1):
+                fact = getattr(edge, "fact", str(edge))
+                valid_at = getattr(edge, "valid_at", None)
+                invalid_at = getattr(edge, "invalid_at", None)
+                status = ""
+                if invalid_at is not None:
+                    status = " [no longer active]"
+                date_str = ""
+                if valid_at:
+                    date_str = f" (since {valid_at.strftime('%b %Y')})"
+                lines.append(f"[{i}] {fact}{date_str}{status}")
+
+            return f"{len(edges)} memories found:\n\n" + "\n".join(lines)
+
+        all_tools.append(search_memory)
+
+    return all_tools
