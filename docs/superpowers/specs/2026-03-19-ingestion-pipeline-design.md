@@ -10,13 +10,26 @@ A standalone CLI tool that downloads documents from authoritative sources (PubMe
 - Only ingest peer-reviewed research and official government sources
 - Output documents in the exact same JSON schema used by existing curated content
 - Run on-demand via CLI, with resumability for large ingestions
-- Keep dependencies isolated from the main app
+- Keep dependencies fully isolated from the main app
 
 ## Non-Goals
 
 - Chunking, embedding, or Qdrant indexing (handled by existing app pipeline)
 - Real-time or scheduled ingestion (run manually)
 - Community content (Reddit, StackExchange)
+
+---
+
+## Prerequisites
+
+Before running the ingestion pipeline, the following app-side change is required:
+
+**Update `app/rag/knowledge_store.py` glob pattern**: The current `_load_documents()` method globs `*.json` in `app/knowledge/`. This must change to `**/*.json` to pick up subdirectory files written by the pipeline. Without this change, ingested documents will silently not appear in search results.
+
+**Incremental indexing**: The current `KnowledgeStore` loads all documents into memory and re-embeds the entire collection if the point count changes. At 100k+ documents this will not work -- startup would take hours and consume significant API budget. Before scaling past ~5k documents, the app needs incremental indexing (only embed new/changed documents). This is an app-side concern outside the scope of this pipeline, but is a hard prerequisite for production use at scale. Options:
+- Track document hashes in Qdrant payloads; on startup, only embed documents whose hash is missing or changed
+- Run a separate batch indexing script that builds the Qdrant collection offline
+- Lazy-load documents and embed on first query (not recommended for latency reasons)
 
 ---
 
@@ -27,6 +40,7 @@ scripts/ingest/
   requirements.txt          # LlamaIndex + source-specific deps (isolated from app)
   config.py                 # API keys, output paths, filter thresholds
   main.py                   # CLI entry point
+  gemini_client.py          # Standalone Gemini Flash wrapper (no app imports)
 
   sources/                  # One module per data source
     base.py                 # SourceConnector protocol
@@ -45,6 +59,8 @@ scripts/ingest/
   output/
     writer.py               # Writes JSON files to app/knowledge/<source>/
 ```
+
+The pipeline has its own `gemini_client.py` for Gemini Flash calls (relevance scoring). It does **not** import from `app.*`, keeping dependencies fully isolated.
 
 ### Pipeline Flow
 
@@ -82,8 +98,12 @@ class SourceConnector(Protocol):
 ### OpenAlex
 
 - REST API with cursor pagination, `mailto` param for polite pool (faster rate)
-- Reconstructs abstracts from `abstract_inverted_index` field
-- Extracts: title, abstract, concepts (top 5 -> tags), cited_by_count, DOI, publication year
+- Reconstructs abstracts from `abstract_inverted_index` field using position-sorted word reconstruction:
+  ```python
+  # abstract_inverted_index: {"word": [pos1, pos2, ...], ...}
+  # Sort all (position, word) pairs by position, join words
+  ```
+- Extracts: title, abstract, concepts (top 5 -> tags), type (journal-article, review, etc.), DOI, publication year
 - Highest volume source (~200k+ ADHD-related works)
 
 ### Semantic Scholar
@@ -120,11 +140,11 @@ All source documents map to the existing knowledge base schema:
 | `document_type` | `"fact"` or `"guidance"` based on publication type | `"fact"` | `"fact"` | `"guidance"` or `"strategy"` based on subject terms | `"guidance"` |
 | `tags` | MeSH terms (normalized) | Concepts (top 5) | Fields of study | Subject terms | Derived from URL path |
 | `age_range` | Inferred from MeSH age groups + keyword scan | Keyword scan on title/abstract | Keyword scan | Keyword scan | Keyword scan |
-| `evidence_level` | By publication type: RCT/review = `"strong"`, observational = `"moderate"`, case study = `"emerging"` | Citation count heuristic: >50 = `"strong"`, >10 = `"moderate"`, else `"emerging"` | Same as OpenAlex | `peer_reviewed` = `"moderate"`, else `"emerging"` | `"expert_consensus"` |
+| `evidence_level` | By publication type: RCT/review = `"strong"`, observational = `"moderate"`, case study = `"emerging"` | By work `type` field: `"review"` = `"strong"`, `"journal-article"` = `"moderate"`, other = `"emerging"` | Same type-based heuristic as OpenAlex | `peer_reviewed` = `"moderate"`, else `"emerging"` | `"expert_consensus"` |
 | `source` | `"{first_author} et al. ({year})"` | Same | Same | Same | `"CDC"` / `"NIH"` / `"NIMH"` |
 | `citations` | `[{"source_file": "", "source_name": "{source}", "detail": "{DOI}"}]` | Same pattern | Same pattern | Same with ERIC ID | Same with URL |
 | `steps` | `[]` | `[]` | `[]` | `[]` | Extracted if page has ordered/unordered lists |
-| `key_points` | Abstract split into sentences | Abstract split into sentences | TLDR as single point + abstract sentences | Description split into sentences | Page content split into bullets by paragraph |
+| `key_points` | Abstract split into sentences (via `nltk.sent_tokenize` for handling abbreviations and decimals) | Same sentence splitting | TLDR as single point + abstract sentences | Description split into sentences | Page content split into bullets by paragraph |
 | `contraindications` | `[]` | `[]` | `[]` | `[]` | `[]` |
 | `related_ids` | `[]` | `[]` | `[]` | `[]` | `[]` |
 
@@ -149,39 +169,46 @@ Keyword scan on title + abstract:
 
 ### Gemini Flash Relevance Scoring
 
-Each parsed document is scored by Gemini Flash:
+Documents are scored in batches of 20 per Gemini Flash call:
 
 ```
-Rate this document's relevance to an ADHD parenting coaching chatbot (0-10):
+Rate each document's relevance to an ADHD parenting coaching chatbot (0-10):
 - 9-10: Directly about ADHD parenting strategies, child behavior management, or family support
 - 7-8: About ADHD in children/adolescents with practical implications for parents
 - 5-6: About ADHD generally (neuroscience, adult ADHD, pharmacology) or general parenting
 - 3-4: Tangentially related (general child psychology, education theory)
 - 0-2: Not relevant
 
-Title: {title}
-Abstract: {abstract}
-Tags: {tags}
+Documents:
+[1] Title: {title_1} | Abstract: {abstract_1} | Tags: {tags_1}
+[2] Title: {title_2} | Abstract: {abstract_2} | Tags: {tags_2}
+...
+[20] Title: {title_20} | Abstract: {abstract_20} | Tags: {tags_20}
 
-Return JSON: {"score": int, "reason": str}
+Return JSON array: [{"index": 1, "score": int, "reason": str}, ...]
 ```
 
 - Default threshold: discard score < 6
-- Batch processing: 20 documents per Flash call to reduce API overhead
-- Uses the app's existing `app/llm/client.py` Gemini wrapper
+- Batch size of 20 keeps each call well within Flash context limits while reducing API overhead by 20x vs single-doc calls
+- Uses the pipeline's own `gemini_client.py` (standalone, no app imports)
 - Estimated cost: ~$1-2 per 100k abstracts at Flash pricing
 
 ### Cross-Source Deduplication
 
-The same paper often appears in PubMed, OpenAlex, and Semantic Scholar:
+The same paper often appears in PubMed, OpenAlex, and Semantic Scholar. Sources are processed in priority order to ensure the richest version is kept:
 
-1. **DOI exact match**: If two documents share a DOI, keep the richest version
-2. **Title similarity fallback**: Normalized title comparison (lowercase, strip punctuation). Jaccard token similarity > 0.85 = duplicate.
-3. **Source priority** (when merging): PubMed > Semantic Scholar > OpenAlex > ERIC > CDC/NIH. Higher-priority source's version is kept because it tends to have richer metadata.
+1. **Processing order**: PubMed first, then Semantic Scholar, OpenAlex, ERIC, CDC/NIH
+2. **DOI exact match**: If a document's DOI already exists in the dedup index, skip it
+3. **Title similarity fallback**: For docs without DOIs, normalized title comparison (lowercase, strip punctuation). Jaccard token similarity > 0.85 = duplicate. Secondary check: matching publication year to reduce false positive dedup on similar-titled but different papers.
+4. **Source priority** (when merging): PubMed > Semantic Scholar > OpenAlex > ERIC > CDC/NIH. Higher-priority source's version is kept because it tends to have richer metadata.
 
 ---
 
 ## Output
+
+### Re-run Semantics
+
+Re-running the pipeline for a source **overwrites** that source's output directory entirely. For example, re-running `--source pubmed` deletes `app/knowledge/pubmed/` and writes fresh batch files. This ensures no stale or duplicate data accumulates across runs. Existing curated files in `app/knowledge/` root are never touched.
 
 ### File Organization
 
@@ -212,10 +239,6 @@ app/knowledge/
 
 500 documents per JSON file. Existing curated files are never modified by the pipeline.
 
-### Loader Update
-
-The existing knowledge store loader (`app/rag/knowledge_store.py`) globs `*.json` in `app/knowledge/`. This needs a one-line update to glob `**/*.json` to pick up subdirectory files.
-
 ---
 
 ## CLI Interface
@@ -237,6 +260,8 @@ python -m scripts.ingest --source pubmed --resume
 python -m scripts.ingest --filter-only --threshold 7
 ```
 
+The `--filter-only` flag re-runs the Gemini Flash filter on cached raw responses (in `.cache/`), re-transforms, and writes new output JSON. It does not re-fetch from APIs.
+
 ### Default Queries Per Source
 
 Each source has a default set of ADHD-relevant queries:
@@ -250,6 +275,23 @@ Each source has a default set of ADHD-relevant queries:
 
 ---
 
+## Rate Limiting
+
+Rate limiting is implemented using `asyncio.Semaphore` with timed release per source. Each source connector wraps its API calls in a rate limiter:
+
+```python
+class RateLimiter:
+    def __init__(self, rps: float):
+        self._semaphore = asyncio.Semaphore(int(rps))
+        self._interval = 1.0 / rps
+
+    async def acquire(self):
+        await self._semaphore.acquire()
+        asyncio.get_event_loop().call_later(self._interval, self._semaphore.release)
+```
+
+---
+
 ## Configuration
 
 ```python
@@ -259,11 +301,13 @@ Each source has a default set of ADHD-relevant queries:
 NCBI_API_KEY: str              # Free from https://www.ncbi.nlm.nih.gov/account/settings/
 S2_API_KEY: str                # Free from https://www.semanticscholar.org/product/api
 OPENALEX_EMAIL: str            # For polite pool (faster rate limits)
+GEMINI_API_KEY: str            # For Flash relevance scoring
 
 # Pipeline settings
 RELEVANCE_THRESHOLD: int = 6   # Gemini Flash score 0-10, discard below
 BATCH_SIZE: int = 500           # Documents per output JSON file
 DEDUP_TITLE_THRESHOLD: float = 0.85  # Jaccard similarity for title dedup
+FILTER_BATCH_SIZE: int = 20    # Documents per Gemini Flash scoring call
 
 # Rate limiting
 PUBMED_RPS: float = 10.0
@@ -279,23 +323,25 @@ RAW_CACHE_DIR: str = "scripts/ingest/.cache"  # Gitignored, for resumability
 
 ### Raw Cache for Resumability
 
-The pipeline caches raw API responses in `scripts/ingest/.cache/<source>/` so interrupted runs can resume without re-fetching. This directory is gitignored. Only the final filtered JSON files in `app/knowledge/` get committed.
+The pipeline caches raw API responses in `scripts/ingest/.cache/<source>/` so interrupted runs can resume without re-fetching. The `--filter-only` flag operates on this cache to re-score and re-transform without hitting source APIs. This directory is gitignored. Only the final filtered JSON files in `app/knowledge/` get committed.
 
 ---
 
 ## Dependencies
 
 ```
-# scripts/ingest/requirements.txt (isolated from app)
+# scripts/ingest/requirements.txt (fully isolated from app)
 llama-index-core>=0.12.0
 llama-index-readers-web>=0.3.0
 llama-index-readers-papers>=0.2.0
 beautifulsoup4>=4.12.0
 aiohttp>=3.9.0
 tenacity>=9.0.0
+google-genai>=1.0.0
+nltk>=3.9.0
 ```
 
-No changes to the app's `requirements.txt`. The ingestion scripts use the app's `app/llm/client.py` for Gemini Flash calls (relevance scoring) but otherwise have no dependency on the app runtime.
+Fully isolated from the app's `requirements.txt`. The pipeline has its own Gemini client (`gemini_client.py`) and does not import from `app.*`.
 
 ---
 
@@ -307,5 +353,5 @@ No changes to the app's `requirements.txt`. The ingestion scripts use the app's 
 | OpenAlex | 200k+ | ~60-80k | ~20-30k (heavy overlap with PubMed) |
 | Semantic Scholar | 200k+ | ~60-80k | ~10-15k (after PubMed + OAlex dedup) |
 | ERIC | 15-50k | ~8-20k | ~8-20k (low overlap) |
-| CDC/NIH/NIMM | 500-1k | ~400-800 | ~400-800 |
+| CDC/NIH/NIMH | 500-1k | ~400-800 | ~400-800 |
 | **Total** | | | **~70-120k unique documents** |
