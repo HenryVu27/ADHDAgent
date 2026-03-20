@@ -70,6 +70,7 @@ When multiple independent tools are needed in one turn (e.g., saving new family 
 - **update_family_profile**: Call whenever the parent shares NEW or CHANGED information about their family (name, age, challenges, strategies tried, etc.). If in doubt, call it — a redundant update is better than a lost fact.
 - **track_outcome**: Call when the parent reports trying a strategy and shares results.
 - **manage_goals**: Call when setting new goals, completing them, or reviewing progress.
+- **search_memory**: Search conversation memory for what this family has shared, tried, or experienced across sessions. Use when you need to recall past discussions, strategy outcomes, emotional patterns, or whether something was already discussed. Do NOT use for general ADHD knowledge -- use search_knowledge_base for that.
 </tools>
 
 <search-results>
@@ -147,7 +148,7 @@ Good response: "I'm sorry to hear that. Can you tell me a bit more about what's 
 
 {structured_facts}
 
-## Session Summary
+## Memory Context
 
 {session_summary}
 
