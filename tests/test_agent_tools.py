@@ -2,6 +2,7 @@
 
 import pytest
 from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import patch as sync_patch
 
 from app.agent.session_store import create_in_memory_store
 from app.agent.tools import (
@@ -504,8 +505,8 @@ class TestGetRelatedDocuments:
 
 class TestCreateTools:
 
-    def test_returns_7_tools(self, tools):
-        assert len(tools) == 7
+    def test_returns_8_tools(self, tools):
+        assert len(tools) == 8
 
 
 class TestToolErrorHandling:
@@ -608,3 +609,127 @@ class TestToolErrorHandling:
         # Each retriever was called exactly once — no cross-contamination
         retriever_a.retrieve.assert_called_once()
         retriever_b.retrieve.assert_called_once()
+
+
+class TestSearchWeb:
+
+    @pytest.fixture
+    async def mock_gemini(self):
+        client = AsyncMock()
+        client.search_web = AsyncMock(return_value=(
+            "Recent research shows ADHD screen time effects vary.",
+            [{"title": "ADHD Study 2026", "url": "https://example.com/study"}],
+        ))
+        return client
+
+    @pytest.fixture
+    async def web_tool_set(self, mock_retriever, session_store, mock_gemini):
+        tools_list = create_tools(
+            retriever=mock_retriever,
+            session_store=session_store,
+            gemini_client=mock_gemini,
+        )
+        return {t.name: t for t in tools_list}
+
+    async def test_returns_formatted_results_with_sources(self, web_tool_set, mock_gemini):
+        result = await web_tool_set["search_web"].ainvoke(
+            {"query": "ADHD screen time research"},
+            config=_config(),
+        )
+        assert "[Web Search Results]" in result
+        assert "screen time" in result.lower()
+        assert "Sources:" in result
+        assert "ADHD Study 2026" in result
+        assert "https://example.com/study" in result
+        # Verify query was scoped with "ADHD: " prefix
+        call_query = mock_gemini.search_web.call_args[1].get("query") or mock_gemini.search_web.call_args[0][0]
+        assert call_query.startswith("ADHD: ")
+
+    async def test_returns_answer_without_sources_section(self, mock_retriever, session_store):
+        no_sources_gemini = AsyncMock()
+        no_sources_gemini.search_web = AsyncMock(return_value=(
+            "General ADHD information.",
+            [],
+        ))
+        tools_list = create_tools(
+            retriever=mock_retriever,
+            session_store=session_store,
+            gemini_client=no_sources_gemini,
+        )
+        ts = {t.name: t for t in tools_list}
+        result = await ts["search_web"].ainvoke(
+            {"query": "ADHD general"},
+            config=_config(),
+        )
+        assert "[Web Search Results]" in result
+        assert "General ADHD information" in result
+        assert "Sources:" not in result
+
+    async def test_disabled_when_setting_false(self, mock_retriever, session_store, mock_gemini):
+        tools_list = create_tools(
+            retriever=mock_retriever,
+            session_store=session_store,
+            gemini_client=mock_gemini,
+        )
+        ts = {t.name: t for t in tools_list}
+        with sync_patch("app.agent.tools.settings") as mock_settings:
+            mock_settings.WEB_SEARCH_ENABLED = False
+            mock_settings.WEB_SEARCH_TIMEOUT_S = 15.0
+            mock_settings.WEB_SEARCH_MAX_PER_SESSION = 3
+            result = await ts["search_web"].ainvoke(
+                {"query": "anything"},
+                config=_config(),
+            )
+        assert "not available" in result.lower() or "disabled" in result.lower()
+
+    async def test_disabled_when_no_gemini_client(self, mock_retriever, session_store):
+        tools_list = create_tools(
+            retriever=mock_retriever,
+            session_store=session_store,
+            gemini_client=None,
+        )
+        ts = {t.name: t for t in tools_list}
+        result = await ts["search_web"].ainvoke(
+            {"query": "anything"},
+            config=_config(),
+        )
+        assert "not available" in result.lower() or "disabled" in result.lower()
+
+    async def test_returns_error_on_exception(self, mock_retriever, session_store):
+        failing_gemini = AsyncMock()
+        failing_gemini.search_web = AsyncMock(side_effect=TimeoutError("timed out"))
+        tools_list = create_tools(
+            retriever=mock_retriever,
+            session_store=session_store,
+            gemini_client=failing_gemini,
+        )
+        ts = {t.name: t for t in tools_list}
+        result = await ts["search_web"].ainvoke(
+            {"query": "test"},
+            config=_config(),
+        )
+        assert "Error:" in result or "error" in result.lower()
+        assert "Traceback" not in result
+
+    async def test_per_session_limit(self, mock_retriever, session_store, mock_gemini):
+        tools_list = create_tools(
+            retriever=mock_retriever,
+            session_store=session_store,
+            gemini_client=mock_gemini,
+        )
+        ts = {t.name: t for t in tools_list}
+        with sync_patch("app.agent.tools.settings") as mock_settings:
+            mock_settings.WEB_SEARCH_ENABLED = True
+            mock_settings.WEB_SEARCH_TIMEOUT_S = 15.0
+            mock_settings.WEB_SEARCH_MAX_PER_SESSION = 2
+            # First two calls succeed
+            r1 = await ts["search_web"].ainvoke({"query": "q1"}, config=_config("limit_test"))
+            r2 = await ts["search_web"].ainvoke({"query": "q2"}, config=_config("limit_test"))
+            assert "[Web Search Results]" in r1
+            assert "[Web Search Results]" in r2
+            # Third call hits the limit
+            r3 = await ts["search_web"].ainvoke({"query": "q3"}, config=_config("limit_test"))
+            assert "limit" in r3.lower()
+            # Different session is unaffected
+            r4 = await ts["search_web"].ainvoke({"query": "q4"}, config=_config("other_session"))
+            assert "[Web Search Results]" in r4
