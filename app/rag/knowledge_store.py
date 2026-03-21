@@ -415,7 +415,7 @@ class KnowledgeStore:
             indices=sparse_emb.indices.tolist(),
             values=sparse_emb.values.tolist(),
         )
-        prefetch_limit = min(top_k * 3, len(self.chunks))
+        prefetch_limit = max(min(top_k * 3, len(self.chunks)) if self.chunks else top_k * 3, 1)
 
         prefetches = [
             Prefetch(
