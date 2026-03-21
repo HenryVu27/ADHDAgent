@@ -363,17 +363,19 @@ class HybridRetriever:
     def _deduplicate_by_parent(
         self, candidates: list[RetrievalResult]
     ) -> list[RetrievalResult]:
-        """Keep only the highest-scoring chunk per parent document."""
+        """Keep top N chunks per parent document (N = RAG_PARENT_DEDUP_MAX)."""
         if not settings.RAG_PARENT_DEDUP:
             return candidates
 
-        best: dict[str, RetrievalResult] = {}
+        max_per_doc = settings.RAG_PARENT_DEDUP_MAX
+        doc_counts: dict[str, int] = {}
+        deduped: list[RetrievalResult] = []
         for r in candidates:
-            if r.document_id not in best or r.score > best[r.document_id].score:
-                best[r.document_id] = r
+            count = doc_counts.get(r.document_id, 0)
+            if count < max_per_doc:
+                deduped.append(r)
+                doc_counts[r.document_id] = count + 1
 
-        deduped = list(best.values())
-        deduped.sort(key=lambda r: r.score, reverse=True)
         return deduped
 
     # --- Embedding-based query cache ---

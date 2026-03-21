@@ -317,6 +317,8 @@ class KnowledgeStore:
                         "document_type": chunk["document_type"],
                         "age_range": chunk["age_range"],
                         "citations": chunk["citations"],
+                        "chunk_id": chunk.get("chunk_id", ""),
+                        "chunk_type": chunk.get("chunk_type", ""),
                     },
                 ))
 

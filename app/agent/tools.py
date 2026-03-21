@@ -56,12 +56,14 @@ def _format_summary(i: int, result: RetrievalResult) -> str:
     # Document ID
     lines.append(f"    ID: {result.document_id}")
 
-    # Truncated description (~150 chars)
+    # Show matched chunk text when available, fall back to description
+    content = result.content or ""
     doc = result.full_doc
     description = doc.get("description", "") if doc else ""
-    if description:
-        truncated = description[:150].rstrip()
-        if len(description) > 150:
+    display_text = content if content and content != description else description
+    if display_text:
+        truncated = display_text[:150].rstrip()
+        if len(display_text) > 150:
             truncated += "..."
         lines.append(f"    {truncated}")
 
@@ -91,9 +93,16 @@ def _format_result(i: int, result: RetrievalResult) -> str:
         lines.append(f"    Tags: {', '.join(result.tags)}")
     lines.append(f"    ID: {result.document_id}")
 
-    # Description
+    # Show matched chunk text, then full doc details as supplementary context
+    content = result.content or ""
     description = doc.get("description", "") if doc else ""
-    if description:
+
+    # If chunk differs from description, show the matched chunk prominently
+    if content and content != description:
+        lines.append(f"    Matched: {content}")
+        if description:
+            lines.append(f"    Description: {description}")
+    elif description:
         lines.append(f"    {description}")
 
     # Steps (numbered list for strategy docs)

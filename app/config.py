@@ -29,12 +29,13 @@ class Settings(BaseSettings):
     RAG_OUTCOME_JACCARD_THRESHOLD: float = 0.3
 
     # Chunking
-    RAG_CHUNKING_STRATEGY: str = "none"  # "recursive_contextual" | "semantic" | "none"
+    RAG_CHUNKING_STRATEGY: str = "semantic"  # "recursive_contextual" | "semantic" | "none"
     RAG_CHUNK_SIZE_TOKENS: int = 512
     RAG_CHUNK_OVERLAP_TOKENS: int = 64
     RAG_SEMANTIC_SIMILARITY_THRESHOLD: float = 0.75
     RAG_CONTEXTUAL_HEADERS: bool = True
     RAG_PARENT_DEDUP: bool = True
+    RAG_PARENT_DEDUP_MAX: int = 2  # max chunks per parent doc in results
 
     # Qdrant
     QDRANT_URL: str = ":memory:"

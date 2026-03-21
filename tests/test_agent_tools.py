@@ -389,7 +389,7 @@ class TestFormatSummary:
         result = RetrievalResult(
             document_id="s1",
             document_name="Timer Strategy",
-            content="...",
+            content="A timer-based approach for managing homework time effectively.",
             score=0.85,
             tags=["homework", "focus"],
             evidence_level="strong",
