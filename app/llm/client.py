@@ -139,6 +139,56 @@ class GeminiClient:
             logger.error(f"Gemini extract_json failed: {e}")
             raise
 
+    async def search_web(
+        self,
+        query: str,
+        timeout: float | None = None,
+    ) -> tuple[str, list[dict]]:
+        """Perform a grounded web search via Gemini Flash + GoogleSearch.
+
+        Returns (answer_text, sources) where sources is a list of
+        {"title": str, "url": str} dicts from grounding metadata.
+        """
+        try:
+            from google.genai import types
+
+            config = GenerateContentConfig(
+                tools=[types.Tool(google_search=types.GoogleSearch())],
+                temperature=0.3,
+                max_output_tokens=1024,
+            )
+            coro = asyncio.to_thread(
+                _retry_policy(self._client.models.generate_content),
+                model=self._model,
+                contents=query,
+                config=config,
+            )
+            if timeout is not None:
+                response = await asyncio.wait_for(coro, timeout=timeout)
+            else:
+                response = await coro
+
+            # Extract answer text
+            answer = response.text or ""
+
+            # Extract grounding sources from response.candidates[0].grounding_metadata.grounding_chunks
+            # Each chunk has a .web attribute with .uri and .title fields
+            sources: list[dict] = []
+            if response.candidates:
+                metadata = response.candidates[0].grounding_metadata
+                if metadata and metadata.grounding_chunks:
+                    for chunk in metadata.grounding_chunks:
+                        if hasattr(chunk, "web") and chunk.web:
+                            sources.append({
+                                "title": getattr(chunk.web, "title", "") or "",
+                                "url": getattr(chunk.web, "uri", "") or "",
+                            })
+
+            return answer, sources
+        except Exception as e:
+            logger.error(f"Gemini search_web failed: {e}")
+            raise
+
     async def embed(self, text: str, timeout: float | None = None) -> list[float]:
         """Get embedding vector for a single text."""
         coro = asyncio.to_thread(

@@ -7,6 +7,7 @@ from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
 
 from app.agent.store_protocol import SessionStoreBase
+from app.config import settings
 from app.models.schemas import RetrievalResult
 from app.rag.retriever import HybridRetriever
 
@@ -137,13 +138,16 @@ def _format_result(i: int, result: RetrievalResult) -> str:
 def create_tools(
     retriever: HybridRetriever,
     session_store: SessionStoreBase,
+    gemini_client=None,
     graphiti_client=None,
 ) -> list:
-    """Create the 7 agent tools, bound to the given retriever and session store.
+    """Create the 8 agent tools, bound to the given retriever and session store.
 
     Each tool closes over the provided dependencies — no module-level globals.
     Multiple calls with different dependencies produce independent tool sets.
     """
+    # Per-session web search counter (keyed by session_id)
+    _web_search_counts: dict[str, int] = {}
 
     @tool
     async def search_knowledge_base(
@@ -517,6 +521,61 @@ def create_tools(
             logger.exception("manage_goals failed")
             return f"Error: could not manage goals ({type(e).__name__}). Try again."
 
+    @tool
+    async def search_web(
+        query: str,
+        config: RunnableConfig = None,
+    ) -> str:
+        """Search the web for current information about ADHD, parenting, or child development.
+
+        Use this ONLY when the knowledge base does not have what you need — for recent
+        research, current events, local resources, or topics not covered by curated documents.
+        Always try search_knowledge_base first.
+
+        Use specific search terms, not full questions.
+        Good: "IEP accommodation guidelines 2026", "ADHD support groups Austin TX"
+        Bad: "What should I do about my child's school?"
+
+        Args:
+            query: Specific search query using topic keywords
+        """
+        if not settings.WEB_SEARCH_ENABLED or gemini_client is None:
+            return "Web search is not available. Answer from your own knowledge instead."
+
+        session_id = _get_session_id(config)
+        count = _web_search_counts.get(session_id, 0)
+        if count >= settings.WEB_SEARCH_MAX_PER_SESSION:
+            return (
+                f"Web search limit reached ({settings.WEB_SEARCH_MAX_PER_SESSION} per session). "
+                "Answer from your own knowledge instead."
+            )
+
+        try:
+            scoped_query = f"ADHD: {query}"
+            answer, sources = await gemini_client.search_web(
+                query=scoped_query,
+                timeout=settings.WEB_SEARCH_TIMEOUT_S,
+            )
+            _web_search_counts[session_id] = count + 1
+
+            if not answer:
+                return "Web search returned no results. Try a different query or answer from your own knowledge."
+
+            parts = ["[Web Search Results]", "", answer]
+
+            if sources:
+                parts.append("")
+                parts.append("Sources:")
+                for i, src in enumerate(sources, 1):
+                    title = src.get("title", "Untitled")
+                    url = src.get("url", "")
+                    parts.append(f"[{i}] {title} — {url}")
+
+            return "\n".join(parts)
+        except Exception as e:
+            logger.exception("search_web failed")
+            return f"Error: web search failed ({type(e).__name__}). Answer from your own knowledge instead."
+
     all_tools = [
         search_knowledge_base,
         get_document_details,
@@ -525,6 +584,7 @@ def create_tools(
         update_family_profile,
         track_outcome,
         manage_goals,
+        search_web,
     ]
 
     if graphiti_client is not None:

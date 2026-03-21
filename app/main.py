@@ -172,6 +172,7 @@ async def build_dependencies() -> dict:
     tools = create_tools(
         retriever=retriever,
         session_store=session_store,
+        gemini_client=gemini,
         graphiti_client=graphiti_client,
     )
 

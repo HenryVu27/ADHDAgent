@@ -62,6 +62,7 @@ class Settings(BaseSettings):
     AGENT_MAX_TOOL_STEPS: int = 8
     WEB_SEARCH_ENABLED: bool = True
     WEB_SEARCH_TIMEOUT_S: float = 15.0
+    WEB_SEARCH_MAX_PER_SESSION: int = 3
 
     # Guardrails
     GUARDRAILS_TIMEOUT_S: float = 10.0
