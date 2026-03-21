@@ -113,6 +113,9 @@ class Settings(BaseSettings):
     GRAPHITI_SEARCH_RESULTS: int = 10
     GRAPHITI_INGESTION_TIMEOUT_S: float = 30.0
 
+    # Human-in-the-loop (future)
+    REQUIRE_CONFIRMATION: bool = False
+
     # Observability
     ANALYZER_ENABLED: bool = True
     EVENT_BUFFER_SIZE: int = 200

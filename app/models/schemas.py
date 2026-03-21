@@ -182,6 +182,91 @@ class StoredToolResult(BaseModel):
     turn: int = 0
 
 
+# --- Tool Result Models ---
+
+class ToolResultStatus(str, Enum):
+    success = "success"
+    error = "error"
+    no_results = "no_results"
+
+
+class SearchResult(BaseModel):
+    document_id: str
+    document_name: str
+    score: float
+    evidence_level: str = ""
+    age_range: list[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
+    summary: str = ""
+
+
+class SearchToolResult(BaseModel):
+    status: ToolResultStatus
+    results: list[SearchResult] = Field(default_factory=list)
+    result_count: int = 0
+    error_message: str = ""
+
+    def to_agent_string(self) -> str:
+        if self.status == ToolResultStatus.error:
+            return f"Error: {self.error_message}"
+        if self.status == ToolResultStatus.no_results:
+            return "No relevant documents found for this query."
+        lines = [f"Found {self.result_count} relevant document(s):"]
+        for r in self.results:
+            ages = ", ".join(r.age_range) if r.age_range else "all ages"
+            tags = ", ".join(r.tags) if r.tags else "none"
+            summary = r.summary[:200] + "..." if len(r.summary) > 200 else r.summary
+            lines.append(
+                f"\n[{r.document_name}] (score: {r.score:.2f}, evidence: {r.evidence_level}, "
+                f"ages: {ages}, tags: {tags}, id: {r.document_id})\n{summary}"
+            )
+        return "\n".join(lines)
+
+
+class ProfileUpdateResult(BaseModel):
+    status: ToolResultStatus
+    updated_fields: list[str] = Field(default_factory=list)
+    total_populated: int = 0
+    error_message: str = ""
+
+    def to_agent_string(self) -> str:
+        if self.status == ToolResultStatus.error:
+            return f"Error: {self.error_message}"
+        fields = ", ".join(self.updated_fields) if self.updated_fields else "none"
+        return f"Profile updated: {fields}. Current profile has {self.total_populated} fields populated."
+
+
+class OutcomeResult(BaseModel):
+    status: ToolResultStatus
+    strategy_name: str = ""
+    outcome: str = ""
+    error_message: str = ""
+
+    def to_agent_string(self) -> str:
+        if self.status == ToolResultStatus.error:
+            return f"Error: {self.error_message}"
+        return f"Outcome recorded: '{self.strategy_name}' -> {self.outcome}."
+
+
+class GoalResult(BaseModel):
+    status: ToolResultStatus
+    goals: list[dict] = Field(default_factory=list)
+    total: int = 0
+    error_message: str = ""
+
+    def to_agent_string(self) -> str:
+        if self.status == ToolResultStatus.error:
+            return f"Error: {self.error_message}"
+        if not self.goals:
+            return "No goals found."
+        lines = [f"Goals ({self.total} total):"]
+        for g in self.goals:
+            status_marker = "[done]" if g.get("status") == "completed" else "[active]"
+            description = g.get("description", "")
+            lines.append(f"  {status_marker} {description}")
+        return "\n".join(lines)
+
+
 class AgentResponse(BaseModel):
     """Structured response from the coaching agent.
 
@@ -205,6 +290,20 @@ class AgentResponse(BaseModel):
         default=False,
         description="True if the agent needs more information to help effectively",
     )
+
+
+class Concern(BaseModel):
+    """A single parent concern extracted from a multi-concern message."""
+    description: str = Field(description="What the parent is asking about or struggling with")
+    intent: str = Field(description="'strategy_request' | 'venting' | 'outcome_report' | 'question' | 'greeting'")
+    search_query: str = Field(default="", description="Suggested search query if retrieval is needed")
+
+
+class DecomposedMessage(BaseModel):
+    """Result of decomposing a parent's message into addressable concerns."""
+    concerns: list[Concern] = Field(default_factory=list)
+    is_multi_concern: bool = False
+    original_message: str = ""
 
 
 class SessionState(BaseModel):
@@ -445,6 +544,17 @@ class MessagesResponse(BaseModel):
     total: int = 0
     offset: int = 0
     limit: int = 50
+
+
+# --- Human-in-the-Loop ---
+
+class ProposedChange(BaseModel):
+    """A proposed state mutation awaiting parent confirmation."""
+    change_id: str
+    change_type: str  # "profile_update" | "goal_add" | "goal_complete" | "outcome"
+    description: str  # Human-readable description of what will change
+    details: dict = Field(default_factory=dict)  # The actual mutation kwargs
+    status: str = "pending"  # "pending" | "confirmed" | "rejected"
 
 
 # --- Eval Results ---
