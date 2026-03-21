@@ -19,7 +19,7 @@ import threading
 import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
@@ -28,7 +28,6 @@ from app.agent.memory import MemoryManager
 from app.agent.session_store import InMemorySessionStore
 from app.agent.sqlite_store import SQLiteSessionStore
 from app.db import get_connection, init_db
-from app.models.schemas import SessionSummary
 
 
 # ---------------------------------------------------------------------------
@@ -492,35 +491,28 @@ class TestBackgroundTaskLifecycle:
 
     async def test_memory_post_turn_tasks_completes(self):
         """MemoryManager.post_turn_tasks should complete as a background task."""
-        store = InMemorySessionStore()
-        mock_gemini = AsyncMock()
-        mock_gemini.generate = AsyncMock(return_value="Summary of conversation.")
-        mock_gemini.extract_json = AsyncMock(return_value={"child_name": "Test"})
+        mock_graphiti = AsyncMock()
+        mock_graphiti.add_episode = AsyncMock(return_value=None)
+        mock_graphiti.driver = MagicMock()
+        mock_graphiti.driver.execute_query = AsyncMock(return_value=[])
 
-        memory = MemoryManager(store, mock_gemini)
-
-        # Populate enough conversation for a summary
-        session_id = "bg-test"
-        for i in range(5):
-            store.increment_turn(session_id)
-            store.add_message(session_id, "user", f"User message turn {i+1}", i + 1)
-            store.add_message(session_id, "assistant", f"Response turn {i+1}", i + 1)
+        mock_store = AsyncMock()
+        memory = MemoryManager(session_store=mock_store, graphiti_client=mock_graphiti)
 
         # Fire as a background task (the pattern from orchestrator.py)
         task = asyncio.create_task(memory.post_turn_tasks(
-            session_id=session_id,
+            session_id="bg-test",
             turn=5,
             user_message="My son Alex is 8 and struggles with homework every night after school",
             assistant_response="I understand that can be challenging.",
+            user_id=1,
         ))
 
         # Wait for completion
         await asyncio.wait_for(task, timeout=10.0)
 
-        # Summary should have been generated
-        summary = store.get_latest_summary(session_id)
-        assert summary is not None, "Summary should be generated"
-        assert summary.covers_through_turn == 5
+        # Graphiti should have ingested the episode
+        mock_graphiti.add_episode.assert_called_once()
 
     @pytest.mark.asyncio
     async def test_pending_tasks_tracked(self):

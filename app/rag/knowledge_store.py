@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 from pathlib import Path
@@ -233,25 +234,26 @@ class KnowledgeStore:
         # Async chunk enrichment (semantic re-chunking or contextual headers)
         await self._async_enrich_chunks(gemini_client)
 
-        texts = [chunk["text"] for chunk in self.chunks]
-        logger.info(f"Embedding {len(texts)} chunks...")
-        raw_embeddings = await gemini_client.embed_batch(texts, timeout=settings.RAG_EMBED_TIMEOUT_S)
-        dim = len(raw_embeddings[0])
+        UPSERT_BATCH = 100  # matches embed_batch internal size
+        total = len(self.chunks)
+        logger.info(f"Streaming {total} chunks to Qdrant in batches of {UPSERT_BATCH}...")
 
-        # BM25 sparse embeddings (batch)
-        sparse_embeddings = list(self._bm25_model.embed(texts))
+        # Probe embedding dimension from first chunk
+        first_emb = await gemini_client.embed_batch(
+            [self.chunks[0]["text"]], timeout=settings.RAG_EMBED_TIMEOUT_S,
+        )
+        dim = len(first_emb[0])
 
-        # ColBERT multi-vector embeddings (optional)
-        colbert_embeddings: list[list[list[float]]] | None = None
-        if colbert_index is not None:
-            logger.info("Generating ColBERT per-token embeddings for %d chunks...", len(self.chunks))
-            colbert_embeddings = colbert_index.embed_chunks(self.chunks)
+        # ColBERT setup (optional)
+        use_colbert = colbert_index is not None
+        if use_colbert:
+            logger.info("ColBERT enabled — will generate per-token embeddings per batch")
 
         # Build collection schema
         vectors_config: dict = {
             "dense": VectorParams(size=dim, distance=Distance.COSINE),
         }
-        if colbert_embeddings is not None:
+        if use_colbert:
             from app.rag.colbert_index import ColBERTIndex as _CI
             vectors_config["colbert"] = VectorParams(
                 size=_CI.DIM,
@@ -267,47 +269,77 @@ class KnowledgeStore:
             },
         )
 
-        points = []
-        for i, (embedding, chunk) in enumerate(zip(raw_embeddings, self.chunks)):
-            sparse_emb = sparse_embeddings[i]
-            sparse_vec = SparseVector(
-                indices=sparse_emb.indices.tolist(),
-                values=sparse_emb.values.tolist(),
+        # Stream: embed batch -> sparse batch -> build points -> upsert -> discard
+        upserted = 0
+        for batch_start in range(0, total, UPSERT_BATCH):
+            batch_chunks = self.chunks[batch_start : batch_start + UPSERT_BATCH]
+            batch_texts = [c["text"] for c in batch_chunks]
+
+            # Dense embeddings (API call with built-in throttle)
+            dense_embs = await gemini_client.embed_batch(
+                batch_texts, timeout=settings.RAG_EMBED_TIMEOUT_S,
             )
-            vectors: dict = {
-                "dense": embedding,
-                "sparse": sparse_vec,
-            }
-            if colbert_embeddings is not None:
-                vectors["colbert"] = colbert_embeddings[i]
 
-            points.append(PointStruct(
-                id=i,
-                vector=vectors,
-                payload={
-                    "document_id": chunk["document_id"],
-                    "document_name": chunk["document_name"],
-                    "text": chunk["text"],
-                    "tags": chunk["tags"],
-                    "source": chunk["source"],
-                    "evidence_level": chunk["evidence_level"],
-                    "document_type": chunk["document_type"],
-                    "age_range": chunk["age_range"],
-                    "citations": chunk["citations"],
-                },
-            ))
+            # BM25 sparse embeddings (local, fast)
+            sparse_embs = list(self._bm25_model.embed(batch_texts))
 
-        self._client.upsert(
-            collection_name=self._collection,
-            points=points,
-        )
+            # ColBERT multi-vectors (optional, local)
+            colbert_embs = None
+            if use_colbert:
+                colbert_embs = colbert_index.embed_chunks(batch_chunks)
+
+            # Build points for this batch
+            points = []
+            for j, (emb, sparse_emb, chunk) in enumerate(
+                zip(dense_embs, sparse_embs, batch_chunks)
+            ):
+                sparse_vec = SparseVector(
+                    indices=sparse_emb.indices.tolist(),
+                    values=sparse_emb.values.tolist(),
+                )
+                vectors: dict = {
+                    "dense": emb,
+                    "sparse": sparse_vec,
+                }
+                if colbert_embs is not None:
+                    vectors["colbert"] = colbert_embs[j]
+
+                points.append(PointStruct(
+                    id=batch_start + j,
+                    vector=vectors,
+                    payload={
+                        "document_id": chunk["document_id"],
+                        "document_name": chunk["document_name"],
+                        "text": chunk["text"],
+                        "tags": chunk["tags"],
+                        "source": chunk["source"],
+                        "evidence_level": chunk["evidence_level"],
+                        "document_type": chunk["document_type"],
+                        "age_range": chunk["age_range"],
+                        "citations": chunk["citations"],
+                        "chunk_id": chunk.get("chunk_id", ""),
+                        "chunk_type": chunk.get("chunk_type", ""),
+                    },
+                ))
+
+            self._client.upsert(
+                collection_name=self._collection,
+                points=points,
+            )
+            upserted += len(points)
+            if upserted % 1000 < UPSERT_BATCH:
+                logger.info(f"  Indexed {upserted}/{total} chunks")
+
+            # Throttle to stay under embedding API rate limit (3,000 RPM)
+            if batch_start + UPSERT_BATCH < total:
+                await asyncio.sleep(2.0)
 
         self._create_payload_indexes()
         self._indexed = True
         logger.info(
-            f"Qdrant collection built: {len(points)} vectors, "
+            f"Qdrant collection built: {upserted} vectors, "
             f"dim={dim}, sparse=bm25, "
-            f"colbert={'yes' if colbert_embeddings else 'no'}"
+            f"colbert={'yes' if use_colbert else 'no'}"
         )
 
     # Check if collection exists with correct schema and point count

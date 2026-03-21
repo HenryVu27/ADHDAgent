@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     # Gemini
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-2.5-flash"
-    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-001"
+    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-2-preview"
 
     # RAG
     RAG_TOP_K: int = 5
@@ -29,12 +29,13 @@ class Settings(BaseSettings):
     RAG_OUTCOME_JACCARD_THRESHOLD: float = 0.3
 
     # Chunking
-    RAG_CHUNKING_STRATEGY: str = "none"  # "recursive_contextual" | "semantic" | "none"
+    RAG_CHUNKING_STRATEGY: str = "semantic"  # "recursive_contextual" | "semantic" | "none"
     RAG_CHUNK_SIZE_TOKENS: int = 512
     RAG_CHUNK_OVERLAP_TOKENS: int = 64
     RAG_SEMANTIC_SIMILARITY_THRESHOLD: float = 0.75
     RAG_CONTEXTUAL_HEADERS: bool = True
     RAG_PARENT_DEDUP: bool = True
+    RAG_PARENT_DEDUP_MAX: int = 2  # max chunks per parent doc in results
 
     # Qdrant
     QDRANT_URL: str = ":memory:"
@@ -98,6 +99,20 @@ class Settings(BaseSettings):
     SQLITE_DB_PATH: str = "adhd_agent.db"
     SQLITE_ENABLED: bool = True
 
+    # Neo4j (for Graphiti memory graph)
+    NEO4J_URI: str = "bolt://localhost:7687"
+    NEO4J_USER: str = "neo4j"
+    NEO4J_PASSWORD: str = ""
+    NEO4J_DATABASE: str = "neo4j"
+
+    # Graphiti memory
+    GRAPHITI_ENABLED: bool = True
+    GRAPHITI_LLM_MODEL: str = ""
+    GRAPHITI_EMBEDDING_MODEL: str = ""
+    GRAPHITI_CONTEXT_RESULTS: int = 10
+    GRAPHITI_SEARCH_RESULTS: int = 10
+    GRAPHITI_INGESTION_TIMEOUT_S: float = 30.0
+
     # Observability
     ANALYZER_ENABLED: bool = True
     EVENT_BUFFER_SIZE: int = 200
@@ -116,6 +131,10 @@ class Settings(BaseSettings):
             self.GEMINI_UTILITY_MODEL = self.GEMINI_MODEL
         if not self.GEMINI_FAST_MODEL:
             self.GEMINI_FAST_MODEL = self.GEMINI_UTILITY_MODEL
+        if not self.GRAPHITI_LLM_MODEL:
+            self.GRAPHITI_LLM_MODEL = self.GEMINI_UTILITY_MODEL
+        if not self.GRAPHITI_EMBEDDING_MODEL:
+            self.GRAPHITI_EMBEDDING_MODEL = self.GEMINI_EMBEDDING_MODEL
         return self
 
 
