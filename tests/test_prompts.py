@@ -202,7 +202,7 @@ class TestBuildSystemPrompt:
             outcomes=[],
         )
         assert "## What You Know About This Family" in result
-        assert "## Session Summary" in result
+        assert "## Memory Context" in result
         assert "## Goals and Progress" in result
 
     def test_no_old_session_context_placeholder(self):
@@ -240,7 +240,7 @@ class TestPromptEnhancements:
     def test_has_xml_structure(self):
         prompt = self._build_prompt()
         for tag in [
-            "<role>", "<boundaries>", "<family-context>",
+            "<identity>", "<boundaries>", "<family-context>",
             "<tools>", "<examples>", "<reasoning>", "<response-guide>",
         ]:
             assert tag in prompt, f"Missing XML tag: {tag}"

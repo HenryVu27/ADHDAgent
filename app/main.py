@@ -144,6 +144,17 @@ async def build_dependencies() -> dict:
     event_bus = EventBus(buffer_size=settings.EVENT_BUFFER_SIZE, conn=db_conn)
     logger.info("EventBus initialized (buffer_size=%d)", settings.EVENT_BUFFER_SIZE)
 
+    # 6b. Initialize Graphiti memory graph (optional)
+    graphiti_client = None
+    if settings.GRAPHITI_ENABLED and settings.NEO4J_PASSWORD and settings.GEMINI_API_KEY:
+        from app.agent.graphiti_client import create_graphiti_client
+        try:
+            graphiti_client = await create_graphiti_client()
+            if graphiti_client:
+                logger.info("Graphiti memory graph initialized")
+        except Exception as e:
+            logger.error("Graphiti init failed — continuing without graph memory: %s", e)
+
     reranker = None
     if settings.RAG_RERANKER == "cross_encoder":
         from app.rag.reranker import FastEmbedReranker
@@ -158,22 +169,29 @@ async def build_dependencies() -> dict:
         colbert_index=colbert,
         event_bus=event_bus,
     )
-    tools = create_tools(retriever=retriever, session_store=session_store)
+    tools = create_tools(
+        retriever=retriever,
+        session_store=session_store,
+        graphiti_client=graphiti_client,
+    )
 
     # 7. Create context preparation hook
     from app.agent.hooks import create_prepare_context
     prepare_context = create_prepare_context(
         session_store=session_store,
         event_bus=event_bus,
+        graphiti_client=graphiti_client,
     )
 
-    # 8. Create memory manager (optional, requires Gemini)
+    # 8. Create memory manager (optional, requires Graphiti or Gemini)
     from app.agent.memory import MemoryManager
     memory_manager = MemoryManager(
-        session_store=session_store, gemini_client=gemini, event_bus=event_bus,
-    ) if gemini else None
+        session_store=session_store,
+        graphiti_client=graphiti_client,
+        event_bus=event_bus,
+    ) if graphiti_client else None
     if memory_manager:
-        logger.info("MemoryManager initialized (summary_interval=%d)", settings.SUMMARY_INTERVAL_TURNS)
+        logger.info("MemoryManager initialized (Graphiti-backed)")
 
     # 9. Create conversation analyzer (optional, requires Gemini)
     analyzer = None
@@ -217,6 +235,7 @@ async def build_dependencies() -> dict:
         "analyzer": analyzer,
         "db_conn": db_conn,
         "knowledge_base": store,
+        "graphiti_client": graphiti_client,
     }
 
 
@@ -243,6 +262,9 @@ async def lifespan(app: FastAPI):
 
     if hasattr(deps["orchestrator"], 'shutdown'):
         await deps["orchestrator"].shutdown()
+    graphiti_client = deps.get("graphiti_client")
+    if graphiti_client:
+        await graphiti_client.close()
     if deps.get("db_conn"):
         await deps["db_conn"].close()
     if getattr(app.state, "eval_db", None):

@@ -98,6 +98,20 @@ class Settings(BaseSettings):
     SQLITE_DB_PATH: str = "adhd_agent.db"
     SQLITE_ENABLED: bool = True
 
+    # Neo4j (for Graphiti memory graph)
+    NEO4J_URI: str = "bolt://localhost:7687"
+    NEO4J_USER: str = "neo4j"
+    NEO4J_PASSWORD: str = ""
+    NEO4J_DATABASE: str = "neo4j"
+
+    # Graphiti memory
+    GRAPHITI_ENABLED: bool = True
+    GRAPHITI_LLM_MODEL: str = ""
+    GRAPHITI_EMBEDDING_MODEL: str = ""
+    GRAPHITI_CONTEXT_RESULTS: int = 10
+    GRAPHITI_SEARCH_RESULTS: int = 10
+    GRAPHITI_INGESTION_TIMEOUT_S: float = 30.0
+
     # Observability
     ANALYZER_ENABLED: bool = True
     EVENT_BUFFER_SIZE: int = 200
@@ -116,6 +130,10 @@ class Settings(BaseSettings):
             self.GEMINI_UTILITY_MODEL = self.GEMINI_MODEL
         if not self.GEMINI_FAST_MODEL:
             self.GEMINI_FAST_MODEL = self.GEMINI_UTILITY_MODEL
+        if not self.GRAPHITI_LLM_MODEL:
+            self.GRAPHITI_LLM_MODEL = self.GEMINI_UTILITY_MODEL
+        if not self.GRAPHITI_EMBEDDING_MODEL:
+            self.GRAPHITI_EMBEDDING_MODEL = self.GEMINI_EMBEDDING_MODEL
         return self
 
 

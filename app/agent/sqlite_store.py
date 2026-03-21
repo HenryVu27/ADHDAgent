@@ -16,8 +16,6 @@ import aiosqlite
 from app.agent.store_protocol import SessionStoreBase
 from app.models.schemas import (
     EnrichedTrace,
-    EpisodeLink,
-    EpisodicMemory,
     FamilyProfile,
     Goal,
     Outcome,
@@ -25,7 +23,6 @@ from app.models.schemas import (
     SeedSessionRequest,
     SessionListItem,
     SessionState,
-    SessionSummary,
     StoredToolResult,
     TurnAnalysis,
     UserSummary,
@@ -557,29 +554,6 @@ class SQLiteSessionStore(SessionStoreBase):
         rows = await cursor.fetchall()
         return [r["strategy_name"] for r in rows]
 
-    async def get_latest_summary(self, session_id: str) -> SessionSummary | None:
-        """Return the most recent session summary, or None."""
-        cursor = await self._conn.execute(
-            "SELECT summary, covers_through_turn FROM session_summaries WHERE session_id = ? ORDER BY id DESC LIMIT 1",
-            (session_id,),
-        )
-        row = await cursor.fetchone()
-        if not row:
-            return None
-        return SessionSummary(
-            summary=row["summary"],
-            covers_through_turn=row["covers_through_turn"],
-        )
-
-    async def save_summary(self, session_id: str, summary: SessionSummary) -> None:
-        """Persist a rolling session summary."""
-        await self._ensure_session(session_id)
-        await self._conn.execute(
-            "INSERT INTO session_summaries (session_id, summary, covers_through_turn) VALUES (?, ?, ?)",
-            (session_id, summary.summary, summary.covers_through_turn),
-        )
-        await self._touch_updated(session_id)
-
     async def get_profile_changelog(self, session_id: str) -> list[ProfileChange]:
         """Return all profile field changes, oldest first."""
         cursor = await self._conn.execute(
@@ -594,97 +568,6 @@ class SQLiteSessionStore(SessionStoreBase):
                 old_value=r["old_value"],
                 new_value=r["new_value"],
                 turn=r["turn"],
-                created_at=r["created_at"] or "",
-            )
-            for r in rows
-        ]
-
-    async def add_episode(self, session_id: str, episode: EpisodicMemory) -> int:
-        """Persist an episodic memory. Returns the new episode's row ID."""
-        await self._ensure_session(session_id)
-        cursor = await self._conn.execute(
-            "INSERT INTO episodes (session_id, event_type, summary, outcome, strategies_involved, emotional_context, turn_range_start, turn_range_end) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            (
-                session_id,
-                episode.event_type,
-                episode.summary,
-                episode.outcome,
-                json.dumps(episode.strategies_involved),
-                episode.emotional_context,
-                episode.turn_range_start,
-                episode.turn_range_end,
-            ),
-        )
-        await self._touch_updated(session_id)
-        return cursor.lastrowid
-
-    async def get_recent_episodes(self, session_id: str, limit: int = 5) -> list[EpisodicMemory]:
-        """Return the most recent episodic memories."""
-        cursor = await self._conn.execute(
-            "SELECT event_type, summary, outcome, strategies_involved, emotional_context, turn_range_start, turn_range_end FROM episodes WHERE session_id = ? ORDER BY id DESC LIMIT ?",
-            (session_id, limit),
-        )
-        rows = await cursor.fetchall()
-        return [
-            EpisodicMemory(
-                event_type=r["event_type"],
-                summary=r["summary"],
-                outcome=r["outcome"],
-                strategies_involved=json.loads(r["strategies_involved"]),
-                emotional_context=r["emotional_context"],
-                turn_range_start=r["turn_range_start"],
-                turn_range_end=r["turn_range_end"],
-            )
-            for r in reversed(rows)
-        ]
-
-    async def get_episodes_with_ids(self, session_id: str, limit: int = 20) -> list[tuple[int, EpisodicMemory]]:
-        """Return (id, EpisodicMemory) tuples for recent episodes, for linking purposes."""
-        cursor = await self._conn.execute(
-            "SELECT id, event_type, summary, outcome, strategies_involved, emotional_context, "
-            "turn_range_start, turn_range_end FROM episodes WHERE session_id = ? ORDER BY id DESC LIMIT ?",
-            (session_id, limit),
-        )
-        rows = await cursor.fetchall()
-        return [
-            (
-                r["id"],
-                EpisodicMemory(
-                    event_type=r["event_type"],
-                    summary=r["summary"],
-                    outcome=r["outcome"],
-                    strategies_involved=json.loads(r["strategies_involved"]),
-                    emotional_context=r["emotional_context"],
-                    turn_range_start=r["turn_range_start"],
-                    turn_range_end=r["turn_range_end"],
-                ),
-            )
-            for r in reversed(rows)
-        ]
-
-    async def add_episode_link(self, session_id: str, link: EpisodeLink) -> None:
-        """Persist a link between two episodes."""
-        await self._ensure_session(session_id)
-        await self._conn.execute(
-            "INSERT OR IGNORE INTO episode_links (session_id, source_id, target_id, link_type, link_reason) "
-            "VALUES (?, ?, ?, ?, ?)",
-            (session_id, link.source_id, link.target_id, link.link_type, link.link_reason),
-        )
-
-    async def get_episode_links(self, session_id: str) -> list[EpisodeLink]:
-        """Return all episode links for a session."""
-        cursor = await self._conn.execute(
-            "SELECT source_id, target_id, link_type, link_reason, created_at "
-            "FROM episode_links WHERE session_id = ? ORDER BY id",
-            (session_id,),
-        )
-        rows = await cursor.fetchall()
-        return [
-            EpisodeLink(
-                source_id=r["source_id"],
-                target_id=r["target_id"],
-                link_type=r["link_type"],
-                link_reason=r["link_reason"],
                 created_at=r["created_at"] or "",
             )
             for r in rows
@@ -961,65 +844,3 @@ class SQLiteSessionStore(SessionStoreBase):
         # Re-read and return
         return await self.get_user_profile(user_id)  # type: ignore[return-value]
 
-    async def get_user_summary(self, user_id: int) -> UserSummary | None:
-        """Return the most recent longitudinal summary, or None."""
-        cursor = await self._conn.execute(
-            "SELECT summary, covers_through_session FROM user_summaries WHERE user_id = ? ORDER BY id DESC LIMIT 1",
-            (user_id,),
-        )
-        row = await cursor.fetchone()
-        if not row:
-            return None
-        return UserSummary(
-            summary=row["summary"],
-            covers_through_session=row["covers_through_session"],
-        )
-
-    async def save_user_summary(self, user_id: int, summary: UserSummary) -> None:
-        """Persist a longitudinal user summary. No commit."""
-        await self._conn.execute(
-            "INSERT INTO user_summaries (user_id, summary, covers_through_session) VALUES (?, ?, ?)",
-            (user_id, summary.summary, summary.covers_through_session),
-        )
-
-    async def get_user_episodes(self, user_id: int, limit: int = 5) -> list[EpisodicMemory]:
-        """Return recent episodes across all sessions for this user."""
-        cursor = await self._conn.execute(
-            "SELECT e.event_type, e.summary, e.outcome, e.strategies_involved, "
-            "e.emotional_context, e.turn_range_start, e.turn_range_end "
-            "FROM episodes e JOIN sessions s ON e.session_id = s.session_id "
-            "WHERE s.user_id = ? ORDER BY e.id DESC LIMIT ?",
-            (user_id, limit),
-        )
-        rows = await cursor.fetchall()
-        return [
-            EpisodicMemory(
-                event_type=r["event_type"],
-                summary=r["summary"],
-                outcome=r["outcome"],
-                strategies_involved=json.loads(r["strategies_involved"]),
-                emotional_context=r["emotional_context"],
-                turn_range_start=r["turn_range_start"],
-                turn_range_end=r["turn_range_end"],
-            )
-            for r in reversed(rows)
-        ]
-
-    async def get_user_outcomes(self, user_id: int, limit: int = 5) -> list[Outcome]:
-        """Return recent outcomes across all sessions for this user."""
-        cursor = await self._conn.execute(
-            "SELECT o.strategy_name, o.signal, o.detail, o.turn "
-            "FROM outcomes o JOIN sessions s ON o.session_id = s.session_id "
-            "WHERE s.user_id = ? ORDER BY o.id DESC LIMIT ?",
-            (user_id, limit),
-        )
-        rows = await cursor.fetchall()
-        return [
-            Outcome(
-                strategy_name=r["strategy_name"],
-                signal=r["signal"],
-                detail=r["detail"],
-                turn=r["turn"],
-            )
-            for r in reversed(rows)
-        ]

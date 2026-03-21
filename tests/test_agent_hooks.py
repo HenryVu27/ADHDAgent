@@ -67,7 +67,7 @@ class TestPrepareContext:
 
     @pytest.mark.asyncio
     async def test_includes_conversation_state_block(self):
-        """System prompt should start with <conversation_state> block."""
+        """Conversation state block is appended to the last HumanMessage."""
         store = await create_in_memory_store()
         await store.increment_turn("state1")
         await store.increment_turn("state1")
@@ -80,11 +80,13 @@ class TestPrepareContext:
         }
 
         result = await prepare(state)
-        system_content = result["llm_input_messages"][0].content
-        assert "<conversation_state>" in system_content
-        assert "<turn>2</turn>" in system_content
-        assert "<phase>" in system_content
-        assert "<focus>" in system_content
+        # conversation_state is appended to the last HumanMessage
+        last_human = result["llm_input_messages"][-1]
+        assert isinstance(last_human, HumanMessage)
+        assert "<conversation_state>" in last_human.content
+        assert "<turn>2</turn>" in last_human.content
+        assert "<phase>" in last_human.content
+        assert "<focus>" in last_human.content
 
     @pytest.mark.asyncio
     async def test_char_budget_trims_long_messages(self, monkeypatch):
@@ -281,3 +283,54 @@ class TestPrepareContext:
         event_bus.emit.assert_called()
         calls_flat = " ".join(str(c) for c in event_bus.emit.call_args_list)
         assert "memory_usage" in calls_flat
+
+
+class TestGraphitiContextAssembly:
+
+    @pytest.mark.asyncio
+    async def test_prepare_context_queries_graphiti(self):
+        """When graphiti_client is provided, context assembly should query it."""
+        from datetime import datetime
+        from unittest.mock import MagicMock
+
+        mock_graphiti = AsyncMock()
+        edge = MagicMock()
+        edge.fact = "Alex struggles with homework initiation"
+        edge.valid_at = datetime(2026, 1, 1)
+        edge.invalid_at = None
+        mock_graphiti.search = AsyncMock(return_value=[edge])
+
+        store = await create_in_memory_store()
+
+        prepare = create_prepare_context(
+            session_store=store,
+            graphiti_client=mock_graphiti,
+        )
+
+        state = {
+            "messages": [HumanMessage(content="Help with homework struggles")],
+            "session_id": "test-session",
+            "user_id": 1,
+        }
+
+        result = await prepare(state)
+        mock_graphiti.search.assert_called_once()
+        system_msg = result["llm_input_messages"][0]
+        assert isinstance(system_msg, SystemMessage)
+        assert "homework initiation" in system_msg.content
+
+    @pytest.mark.asyncio
+    async def test_prepare_context_without_graphiti_uses_default(self):
+        """When graphiti_client is None, context assembly uses default summary text."""
+        store = await create_in_memory_store()
+        prepare = create_prepare_context(session_store=store, graphiti_client=None)
+
+        state = {
+            "messages": [HumanMessage(content="Hello")],
+            "session_id": "test-session",
+        }
+
+        result = await prepare(state)
+        system_msg = result["llm_input_messages"][0]
+        assert isinstance(system_msg, SystemMessage)
+        assert "beginning of the conversation" in system_msg.content

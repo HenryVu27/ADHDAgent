@@ -230,8 +230,6 @@ class AgentOrchestrator:
         from app.config import settings
 
         stored_messages = await self._session_store.get_messages(session_id)
-        latest_summary = await self._session_store.get_latest_summary(session_id)
-        summary_through_turn = latest_summary.covers_through_turn if latest_summary else 0
 
         history_att_ids: list[str] = []
         history_entries_with_atts: dict[int, list[str]] = {}
@@ -241,9 +239,6 @@ class AgentOrchestrator:
 
         for entry in stored_messages:
             if entry.get("blocked"):
-                continue
-            msg_turn = entry.get("turn", 0)
-            if summary_through_turn > 0 and msg_turn <= summary_through_turn:
                 continue
             filtered_entries.append(entry)
 
@@ -380,7 +375,7 @@ class AgentOrchestrator:
         return enriched
 
     @traceable(name="orchestrator.process")
-    async def process(self, message: str, session_id: str, attachment_ids: list[str] | None = None) -> StreamDonePayload:
+    async def process(self, message: str, session_id: str, user_id: int | None = None, attachment_ids: list[str] | None = None) -> StreamDonePayload:
         """Run the ReAct agent for a single parent message."""
         turn = await self._session_store.increment_turn(session_id)
         logger.info(
@@ -399,13 +394,13 @@ class AgentOrchestrator:
 
         start = time.time()
         config = {
-            "configurable": {"session_id": session_id},
+            "configurable": {"session_id": session_id, "user_id": user_id},
             "recursion_limit": settings.AGENT_MAX_TOOL_STEPS * 2 + 5,
         }
 
         try:
             result = await self._agent.ainvoke(
-                {"messages": messages, "session_id": session_id},
+                {"messages": messages, "session_id": session_id, "user_id": user_id},
                 config=config,
             )
         except Exception as e:
@@ -464,6 +459,7 @@ class AgentOrchestrator:
         await self._fire_background_tasks(
             session_id, turn, message, response_text,
             tool_calls_made, enriched, force_summary, total_ms,
+            user_id=user_id,
         )
 
         logger.info(
@@ -502,16 +498,6 @@ class AgentOrchestrator:
             session_id, turn, message,
         )
 
-        # Trigger longitudinal summary for returning users on first turn
-        if turn == 1 and user_id is not None and self._memory:
-            user_sessions = await self._session_store.get_all_sessions(user_id=user_id)
-            previous = [s for s in user_sessions if s.session_id != session_id]
-            if previous:
-                self._track_task(
-                    self._memory.end_of_session_tasks(user_id, previous[0].session_id),
-                    "longitudinal_summary",
-                )
-
         if self._event_bus:
             await self._event_bus.emit("agent", "turn_start", session_id, turn,
                                        detail={"message_preview": message[:80]})
@@ -524,7 +510,7 @@ class AgentOrchestrator:
 
         start = time.time()
         config = {
-            "configurable": {"session_id": session_id},
+            "configurable": {"session_id": session_id, "user_id": user_id},
             "recursion_limit": settings.AGENT_MAX_TOOL_STEPS * 2 + 5,
         }
         input_data = {
@@ -618,6 +604,10 @@ class AgentOrchestrator:
                         elif tool_name == "get_family_profile":
                             logger.info("[agent] tool: get_family_profile")
                             status = "Reviewing your family's info..."
+                        elif tool_name == "search_memory":
+                            query = tool_input.get("query", "")
+                            logger.info("[agent] tool: search_memory(%.70s)", query)
+                            status = f"Recalling '{query[:50]}'..."
                         elif tool_name == "search_web":
                             query = tool_input.get("query", "")
                             logger.info("[agent] tool: search_web(%.70s)", query)
@@ -876,6 +866,7 @@ class AgentOrchestrator:
         await self._fire_background_tasks(
             session_id, turn, message, response_text,
             tool_calls_made, enriched, force_summary, total_ms,
+            user_id=user_id,
         )
 
     async def _fire_background_tasks(
@@ -888,6 +879,7 @@ class AgentOrchestrator:
         enriched: EnrichedTrace,
         force_summary: bool,
         total_ms: float,
+        user_id: int | None = None,
     ) -> None:
         """Fire non-blocking memory, analyzer, and event_bus tasks."""
         if self._memory:
@@ -897,8 +889,7 @@ class AgentOrchestrator:
                     turn=turn,
                     user_message=message,
                     assistant_response=response_text,
-                    tool_calls=[tc for tc in tool_calls_made],
-                    force_summary=force_summary,
+                    user_id=user_id,
                 ),
                 "memory",
             )

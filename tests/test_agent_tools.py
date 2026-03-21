@@ -608,3 +608,46 @@ class TestToolErrorHandling:
         # Each retriever was called exactly once — no cross-contamination
         retriever_a.retrieve.assert_called_once()
         retriever_b.retrieve.assert_called_once()
+
+
+class TestSearchMemory:
+
+    @pytest.mark.asyncio
+    async def test_search_memory_returns_formatted_facts(self):
+        """search_memory should format Graphiti edges as readable facts."""
+        from datetime import datetime
+
+        mock_retriever = MagicMock()
+        mock_store = AsyncMock()
+        mock_graphiti = AsyncMock()
+
+        edge = MagicMock()
+        edge.fact = "Parent tried timer system for homework"
+        edge.valid_at = datetime(2026, 1, 15)
+        edge.invalid_at = None
+        edge.source_node_uuid = "uuid1"
+        edge.target_node_uuid = "uuid2"
+        mock_graphiti.search = AsyncMock(return_value=[edge])
+
+        tools = create_tools(
+            retriever=mock_retriever,
+            session_store=mock_store,
+            graphiti_client=mock_graphiti,
+        )
+        search_mem = next(t for t in tools if t.name == "search_memory")
+
+        config = {"configurable": {"session_id": "test", "user_id": 1}}
+        result = await search_mem.ainvoke({"query": "homework strategies"}, config=config)
+        assert "timer system" in result
+        mock_graphiti.search.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_search_memory_not_added_when_no_graphiti(self):
+        """When graphiti_client is None, search_memory tool should not exist."""
+        tools = create_tools(
+            retriever=MagicMock(),
+            session_store=AsyncMock(),
+            graphiti_client=None,
+        )
+        tool_names = [t.name for t in tools]
+        assert "search_memory" not in tool_names

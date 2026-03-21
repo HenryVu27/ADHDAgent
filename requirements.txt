@@ -14,6 +14,7 @@ structlog>=24.0.0
 langchain-core>=0.3.0
 langchain-google-genai>=2.1.0
 langgraph>=0.2.0
+graphiti-core[google-genai]>=0.28.0
 slowapi>=0.1.9
 aiosqlite>=0.20.0
 langsmith>=0.3.0
