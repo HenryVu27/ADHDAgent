@@ -1,6 +1,11 @@
 # Shared test fixtures
 
+import os
+
 import pytest
+
+# Force in-memory Qdrant for all tests (prevent .env remote URL from leaking in)
+os.environ.setdefault("QDRANT_URL", ":memory:")
 
 from app.models.schemas import (
     ConversationPhase,

@@ -80,8 +80,14 @@ class KnowledgeStore:
                 logger.error(f"Failed to load {json_file}: {e}")
 
         self._build_doc_index()
-        self._create_chunks()
-        logger.info(f"Knowledge store: {len(self.documents)} documents, {len(self.chunks)} chunks")
+
+        # For in-memory mode, create chunks eagerly (needed before build_index).
+        # For remote Qdrant, defer chunking until build_index confirms a rebuild is needed.
+        if settings.QDRANT_URL == ":memory:":
+            self._create_chunks()
+            logger.info(f"Knowledge store: {len(self.documents)} documents, {len(self.chunks)} chunks")
+        else:
+            logger.info(f"Knowledge store: {len(self.documents)} documents loaded (remote Qdrant)")
 
     # Build O(1) lookup index by document ID
     def _build_doc_index(self):
@@ -211,8 +217,8 @@ class KnowledgeStore:
         gemini_client,
         colbert_index: ColBERTIndex | None = None,
     ):
-        if not self.chunks:
-            logger.warning("No chunks to index")
+        if not self.documents:
+            logger.warning("No documents to index")
             return
 
         if settings.QDRANT_URL == ":memory:":
@@ -225,11 +231,12 @@ class KnowledgeStore:
 
         if self._collection_is_current():
             self._indexed = True
-            logger.info(
-                f"Collection '{self._collection}' already exists with "
-                f"{len(self.chunks)} points — skipping rebuild"
-            )
             return
+
+        # Only create chunks when we actually need to rebuild
+        if not self.chunks:
+            self._create_chunks()
+        logger.info(f"Created {len(self.chunks)} chunks from {len(self.documents)} documents")
 
         # Async chunk enrichment (semantic re-chunking or contextual headers)
         await self._async_enrich_chunks(gemini_client)
@@ -342,7 +349,7 @@ class KnowledgeStore:
             f"colbert={'yes' if use_colbert else 'no'}"
         )
 
-    # Check if collection exists with correct schema and point count
+    # Check if collection exists with correct schema and has points
     def _collection_is_current(self) -> bool:
         try:
             collections = self._client.get_collections().collections
@@ -362,13 +369,14 @@ class KnowledgeStore:
                 logger.info(f"Collection '{self._collection}' missing sparse vectors — rebuilding")
                 return False
 
-            if info.points_count == len(self.chunks):
+            if info.points_count > 0:
+                logger.info(
+                    f"Collection '{self._collection}' exists with "
+                    f"{info.points_count} points — skipping rebuild"
+                )
                 return True
 
-            logger.info(
-                f"Collection point count ({info.points_count}) differs "
-                f"from chunk count ({len(self.chunks)}) — rebuilding"
-            )
+            logger.info(f"Collection '{self._collection}' is empty — rebuilding")
             return False
         except Exception as e:
             logger.debug(f"Collection check failed: {e}")
