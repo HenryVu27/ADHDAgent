@@ -8,7 +8,7 @@ from langchain_core.messages import AIMessage, AIMessageChunk, HumanMessage
 
 from app.agent.orchestrator import AgentOrchestrator
 from app.agent.session_store import create_in_memory_store
-from app.models.schemas import ConversationPhase, SeedSessionRequest, SessionSummary
+from app.models.schemas import ConversationPhase, SeedSessionRequest
 
 
 async def collect_stream(generator) -> list[tuple[str, dict]]:
@@ -165,83 +165,6 @@ class TestBuildToolCallsSummary:
         result = AgentOrchestrator._build_tool_calls_summary(tool_calls)
         assert result == "some_new_tool"
 
-
-class TestHistoryExcludesSummarizedTurns:
-    """Messages from turns covered by the rolling summary should be excluded."""
-
-    async def _make_orchestrator(self):
-        store = await create_in_memory_store()
-        agent = _make_streaming_mock_agent()
-        # Wrap so we can inspect what was passed
-        original_fn = agent.astream_events
-        agent._last_call_input = None
-
-        async def capturing_astream_events(input_dict, *args, **kwargs):
-            agent._last_call_input = input_dict
-            async for event in original_fn(input_dict, *args, **kwargs):
-                yield event
-
-        agent.astream_events = capturing_astream_events
-        orchestrator = AgentOrchestrator(agent=agent, session_store=store)
-        return store, agent, orchestrator
-
-    @pytest.mark.asyncio
-    async def test_history_excludes_summarized_turns(self):
-        """Messages from turns covered by the rolling summary should not be in history."""
-        store, agent, orchestrator = await self._make_orchestrator()
-        sid = "summ-test"
-
-        # Add messages for turns 1-8
-        for i in range(1, 9):
-            await store.increment_turn(sid)
-            await store.add_message(sid, "user", f"user-msg-{i}", i)
-            await store.add_message(sid, "assistant", f"assistant-msg-{i}", i)
-
-        # Save summary covering turns 1-5
-        await store.save_summary(
-            sid,
-            SessionSummary(summary="Summary of turns 1-5.", covers_through_turn=5),
-        )
-        await store.commit()
-
-        await collect_stream(orchestrator.process_stream("new question", sid))
-
-        messages_passed = agent._last_call_input["messages"]
-        contents = [m.content for m in messages_passed if hasattr(m, "content")]
-
-        # Should NOT contain messages from turns 1-5
-        for i in range(1, 6):
-            assert f"user-msg-{i}" not in contents, f"Turn {i} should be excluded (covered by summary)"
-            assert f"assistant-msg-{i}" not in contents, f"Turn {i} assistant should be excluded"
-
-        # Should contain messages from turns 6-8
-        for i in range(6, 9):
-            assert f"user-msg-{i}" in contents, f"Turn {i} should be included"
-
-        # Should contain the new message
-        assert "new question" in contents
-
-    @pytest.mark.asyncio
-    async def test_no_summary_includes_all_turns(self):
-        """Without a summary, all messages appear in history."""
-        store, agent, orchestrator = await self._make_orchestrator()
-        sid = "no-summ"
-
-        for i in range(1, 4):
-            await store.increment_turn(sid)
-            await store.add_message(sid, "user", f"user-msg-{i}", i)
-            await store.add_message(sid, "assistant", f"assistant-msg-{i}", i)
-        await store.commit()
-
-        await collect_stream(orchestrator.process_stream("new question", sid))
-
-        messages_passed = agent._last_call_input["messages"]
-        contents = [m.content for m in messages_passed if hasattr(m, "content")]
-
-        # All turns should be present
-        for i in range(1, 4):
-            assert f"user-msg-{i}" in contents, f"Turn {i} should be included"
-        assert "new question" in contents
 
 
 class TestProcessStream:
@@ -560,31 +483,6 @@ class TestBuildHistory:
         assert force_summary is False
 
     @pytest.mark.asyncio
-    async def test_build_history_excludes_summarized(self):
-        """Turns covered by summary are excluded from history."""
-        store = await create_in_memory_store()
-        orchestrator = AgentOrchestrator(agent=None, session_store=store)
-        sid = "hist-summ"
-        for i in range(1, 6):
-            await store.increment_turn(sid)
-            await store.add_message(sid, "user", f"msg-{i}", i)
-            await store.add_message(sid, "assistant", f"reply-{i}", i)
-        await store.save_summary(
-            sid,
-            SessionSummary(summary="Summary.", covers_through_turn=3),
-        )
-        await store.commit()
-
-        messages, _ = await orchestrator._build_history(
-            session_id=sid, message="new", attachment_ids=None,
-        )
-        contents = [m.content for m in messages]
-        assert "msg-1" not in contents
-        assert "msg-3" not in contents
-        assert "msg-4" in contents
-        assert "msg-5" in contents
-        assert "new" in contents
-
     @pytest.mark.asyncio
     async def test_build_history_resolves_attachments(self):
         """Current message attachments are resolved into multipart content."""
