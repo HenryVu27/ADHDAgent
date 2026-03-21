@@ -182,6 +182,31 @@ class StoredToolResult(BaseModel):
     turn: int = 0
 
 
+class AgentResponse(BaseModel):
+    """Structured response from the coaching agent.
+
+    The agent fills this to ensure every response includes metadata
+    the frontend and output gate can consume reliably.
+    """
+    response_text: str = Field(description="The coaching response to show the parent")
+    concerns_addressed: list[str] = Field(
+        default_factory=list,
+        description="List of parent concerns this response addresses",
+    )
+    strategies_referenced: list[str] = Field(
+        default_factory=list,
+        description="Document IDs of strategies referenced in the response",
+    )
+    follow_up_question: str = Field(
+        default="",
+        description="Follow-up question asked to the parent, if any",
+    )
+    needs_more_info: bool = Field(
+        default=False,
+        description="True if the agent needs more information to help effectively",
+    )
+
+
 class SessionState(BaseModel):
     session_id: str
     phase: ConversationPhase = ConversationPhase.intake
@@ -294,6 +319,7 @@ class StreamDonePayload(BaseModel):
     pipeline_trace: PipelineTrace | None = None
     response: str | None = None            # Only populated on input-blocked path
     summary: str | None = None             # Contextual one-liner from parallel Flash call
+    structured_response: AgentResponse | None = None
 
 
 class SessionResponse(BaseModel):
