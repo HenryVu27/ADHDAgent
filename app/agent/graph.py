@@ -25,6 +25,7 @@ def build_agent(
     prepare_context,
     input_gate: InputGate,
     output_gate=None,  # kept for API compat; no longer wired into graph
+    gemini_client=None,
 ):
     """Build the pipeline graph with input gate + ReAct agent.
 
@@ -119,10 +120,51 @@ def build_agent(
 
         return {"trace_steps": [trace_step], "route": check.route}
 
-    # Route after input gate: blocked -> END, simple -> flash, complex -> pro
+    # Route after input gate: blocked -> END, simple/complex -> decompose
     def route_after_input_gate(state: CoachingState):
         if state.get("input_blocked"):
             return END
+        if state.get("route") == "flash":
+            return "flash_react_agent"
+        return "pro_react_agent"
+
+    async def decompose_node(state: CoachingState):
+        """Decompose multi-concern messages into explicit concern list."""
+        if state.get("input_blocked"):
+            return {}
+
+        from app.agent.decomposer import decompose_message
+        from app.agent.orchestrator import _extract_text
+        import time
+
+        latest_human = None
+        for msg in reversed(state["messages"]):
+            if isinstance(msg, HumanMessage):
+                latest_human = msg
+                break
+        if not latest_human:
+            return {}
+
+        user_text = _extract_text(latest_human.content)
+
+        t0 = time.time()
+        result = await decompose_message(user_text, gemini_client)
+        duration_ms = (time.time() - t0) * 1000
+
+        return {
+            "concerns": [c.model_dump() for c in result.concerns],
+            "is_multi_concern": result.is_multi_concern,
+            "trace_steps": [{
+                "name": "decompose",
+                "duration_ms": duration_ms,
+                "detail": {
+                    "concern_count": len(result.concerns),
+                    "is_multi_concern": result.is_multi_concern,
+                },
+            }],
+        }
+
+    def route_after_decompose(state: CoachingState):
         if state.get("route") == "flash":
             return "flash_react_agent"
         return "pro_react_agent"
@@ -131,12 +173,17 @@ def build_agent(
     graph = StateGraph(CoachingState)
 
     graph.add_node("input_gate", input_gate_node)
+    graph.add_node("decompose", decompose_node)
     graph.add_node("pro_react_agent", pro_react_agent)
     graph.add_node("flash_react_agent", flash_react_agent)
 
     graph.set_entry_point("input_gate")
     graph.add_conditional_edges("input_gate", route_after_input_gate, {
         END: END,
+        "pro_react_agent": "decompose",
+        "flash_react_agent": "decompose",
+    })
+    graph.add_conditional_edges("decompose", route_after_decompose, {
         "pro_react_agent": "pro_react_agent",
         "flash_react_agent": "flash_react_agent",
     })

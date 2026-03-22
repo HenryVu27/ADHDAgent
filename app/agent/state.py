@@ -23,3 +23,5 @@ class CoachingState(MessagesState):
     route: str = "pro"
     trace_steps: Annotated[list[dict], lambda a, b: a + b] = []
     structured_response: AgentResponse | None = None
+    concerns: list[dict] = []  # Decomposed concerns (serialized Concern dicts)
+    is_multi_concern: bool = False

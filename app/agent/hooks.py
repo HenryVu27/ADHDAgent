@@ -161,6 +161,20 @@ def create_prepare_context(
                 evidence_block = "\n\n<prior-search-evidence>\n" + "\n---\n".join(evidence_lines) + "\n</prior-search-evidence>"
                 system_prompt += evidence_block
 
+            concerns = state.get("concerns", [])
+            if concerns and state.get("is_multi_concern"):
+                concern_lines = []
+                for i, c in enumerate(concerns, 1):
+                    concern_lines.append(f"{i}. {c.get('description', '')} (intent: {c.get('intent', '')})")
+                concern_block = (
+                    "\n\n<parent-concerns>\n"
+                    "The parent's message contains multiple concerns. Address ALL of them:\n"
+                    + "\n".join(concern_lines)
+                    + "\n\nStructure your response with a clear section for each concern. "
+                    "Do not skip any concern.\n</parent-concerns>"
+                )
+                system_prompt += concern_block
+
             # Cache the prompt
             _prompt_cache[cache_key] = system_prompt
             # Evict old entries (keep max 10)

@@ -210,6 +210,7 @@ async def build_dependencies() -> dict:
         prepare_context=prepare_context,
         input_gate=input_gate,
         output_gate=output_gate,
+        gemini_client=gemini,
     )
     orchestrator = AgentOrchestrator(
         agent=agent,
