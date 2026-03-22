@@ -445,8 +445,25 @@ class AgentOrchestrator:
         new_messages = all_messages[last_human_idx + 1:] if last_human_idx >= 0 else []
 
         from app.agent.response_structurer import structure_response
+        from app.agent.completeness import check_completeness
+        from app.models.schemas import Concern
 
         response_text, tool_calls_made = self._extract_response(new_messages)
+
+        # Check completeness for multi-concern messages
+        concerns_raw = result.get("concerns", [])
+        is_multi = result.get("is_multi_concern", False)
+        if is_multi and concerns_raw and self._gemini:
+            concerns = [Concern(**c) for c in concerns_raw]
+            completeness = await check_completeness(
+                response_text, concerns, self._gemini
+            )
+            if not completeness.all_addressed and completeness.supplement:
+                response_text += completeness.supplement
+                logger.info(
+                    "[agent] Completeness supplement added: missed=%s",
+                    completeness.missed,
+                )
 
         # Run structuring + output gate in parallel
         structure_task = asyncio.create_task(
@@ -858,6 +875,23 @@ class AgentOrchestrator:
         )
 
         response_text, tool_calls_made = self._extract_response(new_messages, streamed_text=streamed_text)
+
+        # Check completeness for multi-concern messages
+        concerns_raw = result.get("concerns", [])
+        is_multi = result.get("is_multi_concern", False)
+        if is_multi and concerns_raw and self._gemini:
+            from app.agent.completeness import check_completeness
+            from app.models.schemas import Concern
+            concerns = [Concern(**c) for c in concerns_raw]
+            completeness = await check_completeness(
+                response_text, concerns, self._gemini
+            )
+            if not completeness.all_addressed and completeness.supplement:
+                response_text += completeness.supplement
+                logger.info(
+                    "[agent] Completeness supplement added: missed=%s",
+                    completeness.missed,
+                )
 
         enriched = await self._persist_turn(
             session_id, turn, message, response_text,
