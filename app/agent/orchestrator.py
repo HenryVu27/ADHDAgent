@@ -916,10 +916,17 @@ class AgentOrchestrator:
         # never shown).
         await asyncio.sleep(0.05)
 
-        # Fire suggestion generation early so it runs during the flush
+        # Fire suggestion + structuring in parallel during the flush
         suggestions_task = asyncio.create_task(
             self._generate_suggestions(message, response_text, session_id)
         )
+        structured = None
+        if self._gemini:
+            from app.agent.response_structurer import structure_response
+            try:
+                structured = await structure_response(response_text, message, self._gemini)
+            except Exception:
+                structured = None
 
         yield (
             "done",
@@ -930,6 +937,7 @@ class AgentOrchestrator:
                 pipeline_trace=trace,
                 session_id=session_id,
                 summary=summary_text,
+                structured_response=structured,
             ).model_dump(),
         )
 
