@@ -444,10 +444,23 @@ class AgentOrchestrator:
                 break
         new_messages = all_messages[last_human_idx + 1:] if last_human_idx >= 0 else []
 
+        from app.agent.response_structurer import structure_response
+
         response_text, tool_calls_made = self._extract_response(new_messages)
 
-        # Run output gate (outside graph to avoid blocking streaming)
+        # Run structuring + output gate in parallel
+        structure_task = asyncio.create_task(
+            structure_response(response_text, message, self._gemini)
+        ) if self._gemini else None
+
         response_text, result = await self._run_output_gate(response_text, result)
+
+        structured = None
+        if structure_task:
+            try:
+                structured = await structure_task
+            except Exception:
+                structured = None
 
         enriched = await self._persist_turn(
             session_id, turn, message, response_text,
@@ -476,6 +489,7 @@ class AgentOrchestrator:
             phase=await self._infer_phase(session_id),
             pipeline_trace=trace,
             session_id=session_id,
+            structured_response=structured,
         )
 
     @traceable(name="orchestrator.process_stream")

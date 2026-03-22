@@ -5,6 +5,8 @@ from typing import Annotated
 from langgraph.graph import MessagesState
 from langgraph.managed.is_last_step import RemainingStepsManager
 
+from app.models.schemas import AgentResponse
+
 
 class CoachingState(MessagesState):
     """Extends MessagesState with coaching-specific fields.
@@ -20,3 +22,4 @@ class CoachingState(MessagesState):
     block_response: str = ""
     route: str = "pro"
     trace_steps: Annotated[list[dict], lambda a, b: a + b] = []
+    structured_response: AgentResponse | None = None
