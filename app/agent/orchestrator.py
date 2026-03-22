@@ -544,6 +544,15 @@ class AgentOrchestrator:
             token_count = 0
             token_start = None
             streamed_text = ""  # accumulate all streamed tokens for fallback
+
+            from app.agent.output_buffer import OutputBuffer
+
+            output_buffer = OutputBuffer(buffer_size=settings.OUTPUT_GATE_BUFFER_CHARS) if (
+                settings.OUTPUT_GATE_BUFFER_ENABLED and self._output_gate
+            ) else None
+            gate_checked = False
+            gate_rejected = False
+
             async with asyncio.timeout(settings.CHAT_TIMEOUT_S):
                 async for event in self._agent.astream_events(
                     input_data, config=config, version="v2"
@@ -690,7 +699,25 @@ class AgentOrchestrator:
                                     token_count,
                                     (now - token_start) * 1000,
                                 )
-                                yield ("token", {"text": text})
+                                # Buffer-aware token emission
+                                if gate_rejected:
+                                    pass
+                                elif output_buffer and not gate_checked:
+                                    output_buffer.add(text)
+                                    if output_buffer.is_full:
+                                        buffered = output_buffer.flush()
+                                        gate_result = await self._output_gate.check(buffered)
+                                        gate_checked = True
+                                        if not gate_result.is_valid:
+                                            from app.agent.prompts import SAFE_OUTPUT_FALLBACK
+                                            logger.info("[agent] Output gate violation in buffer: %s", gate_result.violation_type)
+                                            yield ("replace", {"text": SAFE_OUTPUT_FALLBACK})
+                                            streamed_text = SAFE_OUTPUT_FALLBACK
+                                            gate_rejected = True
+                                        else:
+                                            yield ("token", {"text": buffered})
+                                else:
+                                    yield ("token", {"text": text})
 
                     # Capture final state from the last chain-end with messages
                     elif kind == "on_chain_end":
@@ -701,6 +728,20 @@ class AgentOrchestrator:
                             and "messages" in output
                         ):
                             result = output
+
+            # Flush remaining buffer if response was shorter than buffer size
+            if output_buffer and not gate_checked and not gate_rejected:
+                buffered = output_buffer.flush()
+                if buffered:
+                    gate_result = await self._output_gate.check(buffered)
+                    gate_checked = True
+                    if not gate_result.is_valid:
+                        from app.agent.prompts import SAFE_OUTPUT_FALLBACK
+                        yield ("replace", {"text": SAFE_OUTPUT_FALLBACK})
+                        streamed_text = SAFE_OUTPUT_FALLBACK
+                        gate_rejected = True
+                    else:
+                        yield ("token", {"text": buffered})
 
         except TimeoutError:
             if not summary_task.done():
@@ -872,7 +913,7 @@ class AgentOrchestrator:
             yield ("suggestions", {"suggestions": suggestions})
 
         # Background tasks (fire after done so they don't block the response)
-        if self._output_gate:
+        if self._output_gate and not gate_checked:
             self._track_task(
                 self._run_output_gate_background(session_id, turn, response_text),
                 "output_gate",

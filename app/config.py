@@ -67,6 +67,10 @@ class Settings(BaseSettings):
     # Guardrails
     GUARDRAILS_TIMEOUT_S: float = 10.0
 
+    # Output gate buffering
+    OUTPUT_GATE_BUFFER_CHARS: int = 200
+    OUTPUT_GATE_BUFFER_ENABLED: bool = True
+
     # Semantic fast path
     SEMANTIC_FAST_PATH_ENABLED: bool = True
     SEMANTIC_FAST_PATH_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
