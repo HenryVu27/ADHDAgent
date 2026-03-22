@@ -8,7 +8,15 @@ from langchain_core.tools import tool
 
 from app.agent.store_protocol import SessionStoreBase
 from app.config import settings
-from app.models.schemas import RetrievalResult
+from app.models.schemas import (
+    GoalResult,
+    OutcomeResult,
+    ProfileUpdateResult,
+    RetrievalResult,
+    SearchResult,
+    SearchToolResult,
+    ToolResultStatus,
+)
 from app.rag.retriever import HybridRetriever
 
 logger = logging.getLogger(__name__)
@@ -192,20 +200,34 @@ def create_tools(
             )
 
             if not response.results:
-                return "No relevant documents found. Try a different search query."
+                return SearchToolResult(
+                    status=ToolResultStatus.no_results,
+                ).to_agent_string()
 
-            # Quality summary line
-            scores = [r.score for r in response.results]
-            quality_line = f"{len(response.results)} results (top: {max(scores):.2f}, lowest: {min(scores):.2f})"
+            search_results = [
+                SearchResult(
+                    document_id=r.document_id,
+                    document_name=r.document_name,
+                    score=r.score,
+                    evidence_level=r.evidence_level,
+                    age_range=r.age_range,
+                    tags=r.tags,
+                    summary=r.content or (r.full_doc.get("description", "") if r.full_doc else ""),
+                )
+                for r in response.results
+            ]
 
-            parts = [quality_line, ""]
-            for i, result in enumerate(response.results, 1):
-                parts.append(_format_summary(i, result))
-
-            return "\n\n".join(parts)
+            return SearchToolResult(
+                status=ToolResultStatus.success,
+                results=search_results,
+                result_count=len(search_results),
+            ).to_agent_string()
         except Exception as e:
             logger.exception("search_knowledge_base failed")
-            return f"Error: knowledge base search failed ({type(e).__name__}). Try a simpler query or different terms."
+            return SearchToolResult(
+                status=ToolResultStatus.error,
+                error_message=f"knowledge base search failed ({type(e).__name__}). Try a simpler query or different terms.",
+            ).to_agent_string()
 
     @tool
     async def get_document_details(
@@ -435,11 +457,17 @@ def create_tools(
 
             profile = await session_store.update_profile(session_id, **updates)
 
-            updated_fields = list(updates.keys())
-            return f"Profile updated: {', '.join(updated_fields)}. Current profile has {len([f for f in profile.model_dump().values() if f])} fields populated."
+            return ProfileUpdateResult(
+                status=ToolResultStatus.success,
+                updated_fields=list(updates.keys()),
+                total_populated=len([f for f in profile.model_dump().values() if f]),
+            ).to_agent_string()
         except Exception as e:
             logger.exception("update_family_profile failed")
-            return f"Error: could not update family profile ({type(e).__name__}). Try again with fewer fields."
+            return ProfileUpdateResult(
+                status=ToolResultStatus.error,
+                error_message=f"could not update family profile ({type(e).__name__}). Try again with fewer fields.",
+            ).to_agent_string()
 
     @tool
     async def track_outcome(
@@ -474,10 +502,17 @@ def create_tools(
             if outcome == "positive":
                 await session_store.add_active_strategy(session_id, strategy_name)
 
-            return f"Outcome recorded: '{strategy_name}' -> {outcome}." + (f" Notes: {notes}" if notes else "")
+            return OutcomeResult(
+                status=ToolResultStatus.success,
+                strategy_name=strategy_name,
+                outcome=outcome,
+            ).to_agent_string() + (f" Notes: {notes}" if notes else "")
         except Exception as e:
             logger.exception("track_outcome failed")
-            return f"Error: could not record outcome ({type(e).__name__}). Try again."
+            return OutcomeResult(
+                status=ToolResultStatus.error,
+                error_message=f"could not record outcome ({type(e).__name__}). Try again.",
+            ).to_agent_string()
 
     @tool
     async def manage_goals(
@@ -509,17 +544,23 @@ def create_tools(
             )
 
             if not goals:
-                return "No goals set yet."
+                return GoalResult(
+                    status=ToolResultStatus.success,
+                    goals=[],
+                    total=0,
+                ).to_agent_string()
 
-            lines = []
-            for g in goals:
-                status_marker = "[done]" if g.status == "completed" else "[active]"
-                lines.append(f"  {status_marker} {g.description}")
-
-            return f"Goals ({len(goals)} total):\n" + "\n".join(lines)
+            return GoalResult(
+                status=ToolResultStatus.success,
+                goals=[{"description": g.description, "status": g.status} for g in goals],
+                total=len(goals),
+            ).to_agent_string()
         except Exception as e:
             logger.exception("manage_goals failed")
-            return f"Error: could not manage goals ({type(e).__name__}). Try again."
+            return GoalResult(
+                status=ToolResultStatus.error,
+                error_message=f"could not manage goals ({type(e).__name__}). Try again.",
+            ).to_agent_string()
 
     @tool
     async def search_web(
@@ -588,7 +629,7 @@ def create_tools(
     ]
 
     if graphiti_client is not None:
-        from app.config import settings
+        _graphiti_settings = settings  # avoid re-import that shadows closure variable
 
         @tool
         async def search_memory(
@@ -606,7 +647,7 @@ def create_tools(
                 edges = await graphiti_client.search(
                     query,
                     group_ids=group_ids,
-                    num_results=settings.GRAPHITI_SEARCH_RESULTS,
+                    num_results=_graphiti_settings.GRAPHITI_SEARCH_RESULTS,
                 )
             except Exception as e:
                 logger.error("search_memory failed: %s", e)

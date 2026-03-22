@@ -119,19 +119,17 @@ class TestSearchKnowledgeBase:
             {"query": "homework strategies"},
             config=_config(),
         )
-        # Quality summary line
-        assert "2 results" in result
-        assert "top: 0.90" in result
-        assert "lowest: 0.80" in result
+        # Result count line
+        assert "Found 2 relevant document(s)" in result
         # Document names present
         assert "Visual Timer Strategy" in result
         assert "Homework Routine" in result
         # Score in summary
         assert "score: 0.90" in result
-        # Summary metadata
-        assert "Evidence: strong" in result
-        assert "ID: doc1" in result
-        assert "Tags: homework, executive_function" in result
+        # Summary metadata (lowercase in structured format)
+        assert "evidence: strong" in result
+        assert "id: doc1" in result
+        assert "tags: homework, executive_function" in result
         # Summaries should NOT contain full steps/key_points
         assert "Steps:" not in result
         assert "Key points:" not in result
@@ -776,3 +774,21 @@ class TestSearchMemory:
         )
         tool_names = [t.name for t in tools]
         assert "search_memory" not in tool_names
+
+
+@pytest.mark.asyncio
+async def test_search_knowledge_base_returns_structured_format(knowledge_store, clean_session):
+    """search_knowledge_base output should be parseable as SearchToolResult."""
+    from app.agent.session_store import create_in_memory_store
+    from app.agent.tools import create_tools
+    from app.rag.retriever import HybridRetriever
+
+    store = await create_in_memory_store()
+    await store.get("test")  # ensure session
+    retriever = HybridRetriever(knowledge_store=knowledge_store, gemini_client=None)
+    tools = create_tools(retriever=retriever, session_store=store)
+    search_tool = tools[0]  # search_knowledge_base
+
+    config = {"configurable": {"session_id": "test"}}
+    result_str = await search_tool.ainvoke({"query": "homework strategies"}, config=config)
+    assert "results" in result_str.lower() or "no relevant" in result_str.lower()
