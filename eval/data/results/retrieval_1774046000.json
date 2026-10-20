@@ -1,0 +1,94 @@
+{
+  "n_questions": 36,
+  "k_values": [
+    1,
+    3,
+    5
+  ],
+  "overall": {
+    "mrr": 0.7083,
+    "recall@1": 0.6667,
+    "precision@1": 0.6667,
+    "ndcg@1": 0.6667,
+    "recall@3": 0.75,
+    "precision@3": 0.25,
+    "ndcg@3": 0.7192,
+    "recall@5": 0.75,
+    "precision@5": 0.15,
+    "ndcg@5": 0.7192
+  },
+  "by_question_type": {
+    "fact_single": {
+      "mrr": 0.8571,
+      "recall@1": 0.7857,
+      "precision@1": 0.7857,
+      "ndcg@1": 0.7857,
+      "recall@3": 0.9286,
+      "precision@3": 0.3095,
+      "ndcg@3": 0.8758,
+      "recall@5": 0.9286,
+      "precision@5": 0.1857,
+      "ndcg@5": 0.8758
+    },
+    "multi_context": {
+      "mrr": 0.9444,
+      "recall@1": 0.8889,
+      "precision@1": 0.8889,
+      "ndcg@1": 0.8889,
+      "recall@3": 1.0,
+      "precision@3": 0.3333,
+      "ndcg@3": 0.959,
+      "recall@5": 1.0,
+      "precision@5": 0.2,
+      "ndcg@5": 0.959
+    },
+    "reasoning": {
+      "mrr": 0.2,
+      "recall@1": 0.2,
+      "precision@1": 0.2,
+      "ndcg@1": 0.2,
+      "recall@3": 0.2,
+      "precision@3": 0.0667,
+      "ndcg@3": 0.2,
+      "recall@5": 0.2,
+      "precision@5": 0.04,
+      "ndcg@5": 0.2
+    },
+    "out_of_scope": {
+      "mrr": 0.0,
+      "recall@1": 0.0,
+      "precision@1": 0.0,
+      "ndcg@1": 0.0,
+      "recall@3": 0.0,
+      "precision@3": 0.0,
+      "ndcg@3": 0.0,
+      "recall@5": 0.0,
+      "precision@5": 0.0,
+      "ndcg@5": 0.0
+    },
+    "procedure": {
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "precision@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "precision@3": 0.3333,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "precision@5": 0.2,
+      "ndcg@5": 1.0
+    },
+    "comparative": {
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "precision@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "precision@3": 0.3333,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "precision@5": 0.2,
+      "ndcg@5": 1.0
+    }
+  }
+}

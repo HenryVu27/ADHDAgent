@@ -1,0 +1,180 @@
+{
+  "cross_encoder": {
+    "overall": {
+      "mrr": 0.7083,
+      "recall@1": 0.6667,
+      "precision@1": 0.6667,
+      "ndcg@1": 0.6667,
+      "recall@3": 0.75,
+      "precision@3": 0.25,
+      "ndcg@3": 0.7192,
+      "recall@5": 0.75,
+      "precision@5": 0.15,
+      "ndcg@5": 0.7192
+    },
+    "by_question_type": {
+      "fact_single": {
+        "mrr": 0.9286,
+        "recall@1": 0.8571,
+        "precision@1": 0.8571,
+        "ndcg@1": 0.8571,
+        "recall@3": 1.0,
+        "precision@3": 0.3333,
+        "ndcg@3": 0.9473,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "ndcg@5": 0.9473
+      },
+      "multi_context": {
+        "mrr": 0.8333,
+        "recall@1": 0.7778,
+        "precision@1": 0.7778,
+        "ndcg@1": 0.7778,
+        "recall@3": 0.8889,
+        "precision@3": 0.2963,
+        "ndcg@3": 0.8479,
+        "recall@5": 0.8889,
+        "precision@5": 0.1778,
+        "ndcg@5": 0.8479
+      },
+      "reasoning": {
+        "mrr": 0.2,
+        "recall@1": 0.2,
+        "precision@1": 0.2,
+        "ndcg@1": 0.2,
+        "recall@3": 0.2,
+        "precision@3": 0.0667,
+        "ndcg@3": 0.2,
+        "recall@5": 0.2,
+        "precision@5": 0.04,
+        "ndcg@5": 0.2
+      },
+      "out_of_scope": {
+        "mrr": 0.0,
+        "recall@1": 0.0,
+        "precision@1": 0.0,
+        "ndcg@1": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "ndcg@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "ndcg@5": 0.0
+      },
+      "procedure": {
+        "mrr": 1.0,
+        "recall@1": 1.0,
+        "precision@1": 1.0,
+        "ndcg@1": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333,
+        "ndcg@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "ndcg@5": 1.0
+      },
+      "comparative": {
+        "mrr": 1.0,
+        "recall@1": 1.0,
+        "precision@1": 1.0,
+        "ndcg@1": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333,
+        "ndcg@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "ndcg@5": 1.0
+      }
+    },
+    "n_questions": 36
+  },
+  "colbert": {
+    "overall": {
+      "mrr": 0.7963,
+      "recall@1": 0.75,
+      "precision@1": 0.75,
+      "ndcg@1": 0.75,
+      "recall@3": 0.8611,
+      "precision@3": 0.287,
+      "ndcg@3": 0.8128,
+      "recall@5": 0.8611,
+      "precision@5": 0.1722,
+      "ndcg@5": 0.8128
+    },
+    "by_question_type": {
+      "fact_single": {
+        "mrr": 0.9643,
+        "recall@1": 0.9286,
+        "precision@1": 0.9286,
+        "ndcg@1": 0.9286,
+        "recall@3": 1.0,
+        "precision@3": 0.3333,
+        "ndcg@3": 0.9736,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "ndcg@5": 0.9736
+      },
+      "multi_context": {
+        "mrr": 0.8148,
+        "recall@1": 0.7778,
+        "precision@1": 0.7778,
+        "ndcg@1": 0.7778,
+        "recall@3": 0.8889,
+        "precision@3": 0.2963,
+        "ndcg@3": 0.8333,
+        "recall@5": 0.8889,
+        "precision@5": 0.1778,
+        "ndcg@5": 0.8333
+      },
+      "reasoning": {
+        "mrr": 0.8667,
+        "recall@1": 0.8,
+        "precision@1": 0.8,
+        "ndcg@1": 0.8,
+        "recall@3": 1.0,
+        "precision@3": 0.3333,
+        "ndcg@3": 0.9,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "ndcg@5": 0.9
+      },
+      "out_of_scope": {
+        "mrr": 0.0,
+        "recall@1": 0.0,
+        "precision@1": 0.0,
+        "ndcg@1": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "ndcg@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "ndcg@5": 0.0
+      },
+      "procedure": {
+        "mrr": 0.8333,
+        "recall@1": 0.6667,
+        "precision@1": 0.6667,
+        "ndcg@1": 0.6667,
+        "recall@3": 1.0,
+        "precision@3": 0.3333,
+        "ndcg@3": 0.877,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "ndcg@5": 0.877
+      },
+      "comparative": {
+        "mrr": 1.0,
+        "recall@1": 1.0,
+        "precision@1": 1.0,
+        "ndcg@1": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333,
+        "ndcg@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "ndcg@5": 1.0
+      }
+    },
+    "n_questions": 36
+  }
+}

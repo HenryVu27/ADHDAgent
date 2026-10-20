@@ -1,0 +1,470 @@
+[
+  {
+    "question": "What role does parent training play in the overall treatment plan for a child with ADHD?",
+    "question_type": "fact_single",
+    "reference_answer": "Parent training is a crucial component of multimodal treatment for ADHD.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Parent training is a crucial component of multimodal treatment for ADHD.",
+    "source_doc_id": "importance_of_parent_training_engagement",
+    "source_doc_name": "Importance of Parent Training Engagement",
+    "expected_doc_ids": [
+      "importance_of_parent_training_engagement"
+    ]
+  },
+  {
+    "question": "Given that parent training is a crucial component of multimodal treatment for ADHD, what are the key benefits for parents and children, and how does it effectively integrate with other common interventions such as medication and school accommodations to achieve the best long-term outcomes?",
+    "question_type": "multi_context",
+    "reference_answer": "Parent training equips parents with effective strategies for managing challenging behaviors, improving communication, and fostering a positive home environment, which directly contributes to reduced ADHD symptoms and improved child functioning. As a crucial component of multimodal treatment, it synergizes with medication, which targets core neurobiological symptoms, and school accommodations, which support academic and social success, creating a comprehensive and mutually reinforcing approach for optimal long-term outcomes.",
+    "additional_context_needed": "Specific examples of evidence-based parent training programs, detailed mechanisms of how parent training impacts child brain development or executive functions, and practical advice on coordinating care between medical professionals, educators, and therapists.",
+    "why_out_of_scope": "",
+    "source_statement": "Parent training is a crucial component of multimodal treatment for ADHD.",
+    "source_doc_id": "importance_of_parent_training_engagement",
+    "source_doc_name": "Importance of Parent Training Engagement",
+    "expected_doc_ids": [
+      "importance_of_parent_training_engagement"
+    ]
+  },
+  {
+    "question": "If parents are less engaged in training when they receive medication first, should we be concerned that the medication itself might be hindering their ability to participate fully?",
+    "question_type": "reasoning",
+    "reference_answer": "The medication might have immediate side effects, such as drowsiness or reduced focus, making it harder for parents to concentrate and actively participate in the training immediately afterward.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "A significant reduction in parent engagement was observed when medication was provided before parent training.",
+    "source_doc_id": "importance_of_parent_training_engagement",
+    "source_doc_name": "Importance of Parent Training Engagement",
+    "expected_doc_ids": [
+      "importance_of_parent_training_engagement"
+    ]
+  },
+  {
+    "question": "Would starting my child's ADHD medication before I begin parent training affect how much I engage with the program?",
+    "question_type": "fact_single",
+    "reference_answer": "A significant reduction in parent engagement was observed when medication was provided before parent training.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "A significant reduction in parent engagement was observed when medication was provided before parent training.",
+    "source_doc_id": "importance_of_parent_training_engagement",
+    "source_doc_name": "Importance of Parent Training Engagement",
+    "expected_doc_ids": [
+      "importance_of_parent_training_engagement"
+    ]
+  },
+  {
+    "question": "What are the potential consequences if I don't consistently attend parent training, especially since my child is already taking medication for ADHD?",
+    "question_type": "fact_single",
+    "reference_answer": "Low attendance in parent training, especially when medication is given first, is associated with presumably worse functioning.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Low attendance in parent training, especially when medication is given first, is associated with presumably worse functioning.",
+    "source_doc_id": "importance_of_parent_training_engagement",
+    "source_doc_name": "Importance of Parent Training Engagement",
+    "expected_doc_ids": [
+      "importance_of_parent_training_engagement"
+    ]
+  },
+  {
+    "question": "My child just started medication for ADHD; is it still important for me to attend parent training sessions?",
+    "question_type": "fact_single",
+    "reference_answer": "Low attendance in parent training, especially when medication is given first, is associated with presumably worse functioning.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Low attendance in parent training, especially when medication is given first, is associated with presumably worse functioning.",
+    "source_doc_id": "importance_of_parent_training_engagement",
+    "source_doc_name": "Importance of Parent Training Engagement",
+    "expected_doc_ids": [
+      "importance_of_parent_training_engagement"
+    ]
+  },
+  {
+    "question": "As a parent, how can the 'ADHD Predominately Hyperactive-Impulsive Symptoms' document be useful for me?",
+    "question_type": "fact_single",
+    "reference_answer": "The document 'ADHD Predominately Hyperactive-Impulsive Symptoms' is intended to help parents identify potential signs of this specific ADHD presentation in their child.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "The document 'ADHD Predominately Hyperactive-Impulsive Symptoms' is intended to help parents identify potential signs of this specific ADHD presentation in their child.",
+    "source_doc_id": "adhd_predominately_hyperactiveimpulsive_symptoms",
+    "source_doc_name": "ADHD Predominately Hyperactive-Impulsive Symptoms",
+    "expected_doc_ids": [
+      "adhd_predominately_hyperactiveimpulsive_symptoms"
+    ]
+  },
+  {
+    "question": "Is there a resource that helps parents recognize the indicators of predominately hyperactive-impulsive ADHD in their child?",
+    "question_type": "fact_single",
+    "reference_answer": "The document 'ADHD Predominately Hyperactive-Impulsive Symptoms' is intended to help parents identify potential signs of this specific ADHD presentation in their child.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "The document 'ADHD Predominately Hyperactive-Impulsive Symptoms' is intended to help parents identify potential signs of this specific ADHD presentation in their child.",
+    "source_doc_id": "adhd_predominately_hyperactiveimpulsive_symptoms",
+    "source_doc_name": "ADHD Predominately Hyperactive-Impulsive Symptoms",
+    "expected_doc_ids": [
+      "adhd_predominately_hyperactiveimpulsive_symptoms"
+    ]
+  },
+  {
+    "question": "My child's ADHD symptoms are so intense that I constantly feel overwhelmed and resentful, and I'm worried it's irreparably damaging my marriage and my own mental health; how do I fix this complex family dynamic?",
+    "question_type": "out_of_scope",
+    "reference_answer": "",
+    "additional_context_needed": "",
+    "why_out_of_scope": "This question addresses deep personal emotional distress, marital issues, and complex family dynamics that require therapeutic intervention from a mental health professional, not general coaching advice.",
+    "source_statement": "A characteristic symptom of the Hyperactive-Impulsive type of ADHD is having difficulty staying seated.",
+    "source_doc_id": "adhd_predominately_hyperactiveimpulsive_symptoms",
+    "source_doc_name": "ADHD Predominately Hyperactive-Impulsive Symptoms",
+    "expected_doc_ids": [
+      "adhd_predominately_hyperactiveimpulsive_symptoms"
+    ]
+  },
+  {
+    "question": "Given that difficulty staying seated is a characteristic symptom of Hyperactive-Impulsive ADHD, what are effective strategies for parents and teachers to help a child with this specific challenge improve their focus and manage their energy in a classroom setting?",
+    "question_type": "multi_context",
+    "reference_answer": "Indeed, difficulty staying seated is a hallmark symptom of Hyperactive-Impulsive ADHD. To help a child with this challenge improve focus and manage energy in a classroom, effective strategies often involve a combination of environmental modifications, behavioral techniques, and direct teaching of coping skills. For instance, providing frequent movement breaks, using alternative seating options like wobble stools, implementing structured routines, employing positive reinforcement for periods of sustained attention, and teaching self-regulation techniques can be beneficial.",
+    "additional_context_needed": "Specific examples of various classroom accommodations, detailed behavioral management techniques (e.g., token systems, visual schedules), methods for effective parent-teacher collaboration, and guidance on when to consider professional evaluation or medication as part of a comprehensive management plan.",
+    "why_out_of_scope": "",
+    "source_statement": "A characteristic symptom of the Hyperactive-Impulsive type of ADHD is having difficulty staying seated.",
+    "source_doc_id": "adhd_predominately_hyperactiveimpulsive_symptoms",
+    "source_doc_name": "ADHD Predominately Hyperactive-Impulsive Symptoms",
+    "expected_doc_ids": [
+      "adhd_predominately_hyperactiveimpulsive_symptoms"
+    ]
+  },
+  {
+    "question": "My child with ADHD frequently blurts out answers and interrupts conversations; what are the underlying reasons for this behavior and what strategies can I use to help them improve their conversational turn-taking?",
+    "question_type": "multi_context",
+    "reference_answer": "One significant reason for your child's tendency to blurt out answers or finish other people’s sentences is that it's a common characteristic of the Hyperactive-Impulsive type of ADHD, reflecting difficulty with impulse control.",
+    "additional_context_needed": "Further explanation of ADHD's impact on executive functions beyond just impulse control (e.g., working memory, processing speed), and a range of practical, evidence-based behavioral strategies and communication techniques for parents to teach conversational turn-taking and self-regulation skills.",
+    "why_out_of_scope": "",
+    "source_statement": "Individuals with the Hyperactive-Impulsive type of ADHD may blurt out answers to questions or finish other people’s sentences.",
+    "source_doc_id": "adhd_predominately_hyperactiveimpulsive_symptoms",
+    "source_doc_name": "ADHD Predominately Hyperactive-Impulsive Symptoms",
+    "expected_doc_ids": [
+      "adhd_predominately_hyperactiveimpulsive_symptoms"
+    ]
+  },
+  {
+    "question": "What kinds of communication challenges might I observe in my child who has the Hyperactive-Impulsive type of ADHD?",
+    "question_type": "fact_single",
+    "reference_answer": "Individuals with the Hyperactive-Impulsive type of ADHD may blurt out answers to questions or finish other people’s sentences.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Individuals with the Hyperactive-Impulsive type of ADHD may blurt out answers to questions or finish other people’s sentences.",
+    "source_doc_id": "adhd_predominately_hyperactiveimpulsive_symptoms",
+    "source_doc_name": "ADHD Predominately Hyperactive-Impulsive Symptoms",
+    "expected_doc_ids": [
+      "adhd_predominately_hyperactiveimpulsive_symptoms"
+    ]
+  },
+  {
+    "question": "My 15-year-old with ADHD still forgets assignments and struggles to manage their time, even though their neurotypical friends seem to handle it easily; should I assume they're just not trying hard enough, or is there another reason for this persistent gap?",
+    "question_type": "reasoning",
+    "reference_answer": "It's highly unlikely to be about effort or intelligence; instead, their executive function skills, which include planning and time management, are developing in the same sequence as their peers but are typically delayed by about 2-3 years, meaning a 15-year-old with ADHD might be operating with the executive function maturity of a 12 or 13-year-old.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Executive function development in individuals with ADHD follows the same sequence as typical development but lags by approximately 2-3 years.",
+    "source_doc_id": "ef_development_trajectory",
+    "source_doc_name": "Executive Function Development Trajectory in ADHD: What to Expect by Age",
+    "expected_doc_ids": [
+      "ef_development_trajectory"
+    ]
+  },
+  {
+    "question": "My teenager with ADHD frequently expresses feelings of hopelessness about their future academic and career prospects; how do I address these profound existential anxieties and potential signs of depression?",
+    "question_type": "out_of_scope",
+    "reference_answer": "",
+    "additional_context_needed": "",
+    "why_out_of_scope": "This question delves into complex psychological and emotional issues, including potential depression and existential anxiety, which require the expertise of a licensed mental health professional, not a general ADHD coach or chatbot. It requires clinical assessment and therapeutic intervention.",
+    "source_statement": "Executive function development in individuals with ADHD follows the same sequence as typical development but lags by approximately 2-3 years.",
+    "source_doc_id": "ef_development_trajectory",
+    "source_doc_name": "Executive Function Development Trajectory in ADHD: What to Expect by Age",
+    "expected_doc_ids": [
+      "ef_development_trajectory"
+    ]
+  },
+  {
+    "question": "At what age do children with ADHD typically experience the most significant functional challenges with executive functions?",
+    "question_type": "fact_single",
+    "reference_answer": "Children with ADHD show the greatest functional gap in executive functions during middle childhood (ages 6-11), a period when academic demands rise sharply.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Children with ADHD show the greatest functional gap in executive functions during middle childhood (ages 6-11), a period when academic demands rise sharply.",
+    "source_doc_id": "ef_development_trajectory",
+    "source_doc_name": "Executive Function Development Trajectory in ADHD: What to Expect by Age",
+    "expected_doc_ids": [
+      "ef_development_trajectory"
+    ]
+  },
+  {
+    "question": "My child with ADHD seemed to cope reasonably well in kindergarten and first grade, but now that they're in third grade, why does it feel like their struggles with focus and organization have suddenly become so much more pronounced and difficult?",
+    "question_type": "reasoning",
+    "reference_answer": "As academic demands sharply increase in middle childhood, requiring more independent planning, sustained attention, and organizational skills, the existing executive function deficits in children with ADHD become far more apparent and challenging, creating a significant functional gap between what's expected and their current abilities.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Children with ADHD show the greatest functional gap in executive functions during middle childhood (ages 6-11), a period when academic demands rise sharply.",
+    "source_doc_id": "ef_development_trajectory",
+    "source_doc_name": "Executive Function Development Trajectory in ADHD: What to Expect by Age",
+    "expected_doc_ids": [
+      "ef_development_trajectory"
+    ]
+  },
+  {
+    "question": "My 10-year-old with ADHD struggles with tasks their peers handle easily; how should I adjust my expectations for their executive functions?",
+    "question_type": "fact_single",
+    "reference_answer": "Chronological age is a poor guide for appropriate executive function expectations in a child with ADHD; expectations should be based on the child's functional executive function capacity.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Chronological age is a poor guide for appropriate executive function expectations in a child with ADHD; expectations should be based on the child's functional executive function capacity.",
+    "source_doc_id": "ef_development_trajectory",
+    "source_doc_name": "Executive Function Development Trajectory in ADHD: What to Expect by Age",
+    "expected_doc_ids": [
+      "ef_development_trajectory"
+    ]
+  },
+  {
+    "question": "Considering that my child's chronological age isn't a reliable indicator for their executive function abilities due to ADHD, what practical strategies can I use to understand their actual functional capacity and then effectively tailor daily routines and responsibilities to both support their current needs and foster their development?",
+    "question_type": "multi_context",
+    "reference_answer": "Chronological age is a poor guide for appropriate executive function expectations in a child with ADHD; expectations should be based on the child's functional executive function capacity.",
+    "additional_context_needed": "Specific methods for assessing a child's functional executive function capacity (e.g., observation checklists, professional assessments), practical strategies for adapting daily routines and responsibilities based on that assessment, and evidence-based techniques for scaffolding executive function development in children with ADHD.",
+    "why_out_of_scope": "",
+    "source_statement": "Chronological age is a poor guide for appropriate executive function expectations in a child with ADHD; expectations should be based on the child's functional executive function capacity.",
+    "source_doc_id": "ef_development_trajectory",
+    "source_doc_name": "Executive Function Development Trajectory in ADHD: What to Expect by Age",
+    "expected_doc_ids": [
+      "ef_development_trajectory"
+    ]
+  },
+  {
+    "question": "Considering behavior therapy is an effective treatment for ADHD in young children, what factors should parents evaluate when deciding whether to add medication, and how do these combined approaches impact long-term outcomes and school performance?",
+    "question_type": "multi_context",
+    "reference_answer": "Behavior therapy is an effective treatment for ADHD in young children.",
+    "additional_context_needed": "Information on the criteria and timing for introducing medication in young children with ADHD, details on the specific benefits and potential side effects of different medications, evidence regarding the synergistic effects of combined therapy, and practical strategies for supporting academic achievement and social-emotional development in school settings.",
+    "why_out_of_scope": "",
+    "source_statement": "Behavior therapy is an effective treatment for ADHD in young children.",
+    "source_doc_id": "behavior_therapy_for_young_children_with_adhd",
+    "source_doc_name": "Behavior Therapy for Young Children with ADHD",
+    "expected_doc_ids": [
+      "behavior_therapy_for_young_children_with_adhd"
+    ]
+  },
+  {
+    "question": "Is behavior therapy an effective treatment for young children with ADHD?",
+    "question_type": "fact_single",
+    "reference_answer": "Behavior therapy is an effective treatment for ADHD in young children.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Behavior therapy is an effective treatment for ADHD in young children.",
+    "source_doc_id": "behavior_therapy_for_young_children_with_adhd",
+    "source_doc_name": "Behavior Therapy for Young Children with ADHD",
+    "expected_doc_ids": [
+      "behavior_therapy_for_young_children_with_adhd"
+    ]
+  },
+  {
+    "question": "How can I secure funding for a specialized, out-of-state residential program for my teenager with severe ADHD and co-occurring anxiety that costs $10,000 per month and is not covered by insurance?",
+    "question_type": "out_of_scope",
+    "reference_answer": "",
+    "additional_context_needed": "",
+    "why_out_of_scope": "This question requires specific financial planning advice and knowledge of specialized funding mechanisms, which is beyond the scope of general ADHD coaching or a chatbot.",
+    "source_statement": "Behavior therapy for young children with ADHD focuses on improving a child's behavior, self-control, and self-esteem.",
+    "source_doc_id": "behavior_therapy_for_young_children_with_adhd",
+    "source_doc_name": "Behavior Therapy for Young Children with ADHD",
+    "expected_doc_ids": [
+      "behavior_therapy_for_young_children_with_adhd"
+    ]
+  },
+  {
+    "question": "My ex-partner is threatening to take me to court to revoke my child's ADHD diagnosis and discontinue their medication, what legal steps should I take?",
+    "question_type": "out_of_scope",
+    "reference_answer": "",
+    "additional_context_needed": "",
+    "why_out_of_scope": "This question requires specific legal advice regarding family law and child custody, which is outside the scope of ADHD coaching.",
+    "source_statement": "Behavior therapy for young children with ADHD focuses on improving a child's behavior, self-control, and self-esteem.",
+    "source_doc_id": "behavior_therapy_for_young_children_with_adhd",
+    "source_doc_name": "Behavior Therapy for Young Children with ADHD",
+    "expected_doc_ids": [
+      "behavior_therapy_for_young_children_with_adhd"
+    ]
+  },
+  {
+    "question": "Given that parent-trained behavior therapy is most effective for young children with ADHD, what are the best ways for parents to access this training, and how does it integrate with other potential supports like school accommodations or medication management?",
+    "question_type": "multi_context",
+    "reference_answer": "Parent-trained behavior therapy is indeed the most effective first-line treatment for young children with ADHD, providing parents with strategies like positive reinforcement and consistent routines. Parents can access this training through specialized clinics, community mental health centers, private therapists, and sometimes online programs. This therapy integrates with other supports by forming the foundation; for school-aged children, it works synergistically with school accommodations like IEPs or 504 plans (e.g., preferential seating, extended time). While medication (like stimulants) may be considered for children typically aged 6 and older if behavioral therapy alone is insufficient, it is generally used as an adjunct to, not a replacement for, behavioral interventions, always under strict medical supervision.",
+    "additional_context_needed": "Specific examples of parent training programs (e.g., PCIT, Triple P), detailed descriptions of common school accommodations for ADHD, the age guidelines and considerations for initiating medication for ADHD in children, and the evidence base for combined treatment approaches.",
+    "why_out_of_scope": "",
+    "source_statement": "Behavior therapy for young children with ADHD is most effective when parents are trained to implement the strategies.",
+    "source_doc_id": "behavior_therapy_for_young_children_with_adhd",
+    "source_doc_name": "Behavior Therapy for Young Children with ADHD",
+    "expected_doc_ids": [
+      "behavior_therapy_for_young_children_with_adhd"
+    ]
+  },
+  {
+    "question": "What is the most effective way to ensure behavior therapy succeeds for my young child with ADHD?",
+    "question_type": "fact_single",
+    "reference_answer": "Behavior therapy for young children with ADHD is most effective when parents are trained to implement the strategies.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Behavior therapy for young children with ADHD is most effective when parents are trained to implement the strategies.",
+    "source_doc_id": "behavior_therapy_for_young_children_with_adhd",
+    "source_doc_name": "Behavior Therapy for Young Children with ADHD",
+    "expected_doc_ids": [
+      "behavior_therapy_for_young_children_with_adhd"
+    ]
+  },
+  {
+    "question": "Considering that graduated warning sequences and pre-taught transition scripts are structured verbal and visual strategies designed to ease activity transitions for children with ADHD, how do these strategies specifically address the underlying neurobiological challenges of ADHD, and what are practical tips for consistent implementation at home?",
+    "question_type": "multi_context",
+    "reference_answer": "Graduated warning sequences and pre-taught transition scripts are structured verbal and visual strategies specifically designed to ease activity transitions for children with ADHD by providing clear, predictable cues and instructions, helping to mitigate the difficulties they often experience with shifting focus and managing expectations.",
+    "additional_context_needed": "Information on the specific neurobiological mechanisms in ADHD that make transitions challenging (e.g., executive dysfunction, difficulty with shifting attention, impaired working memory), and practical, evidence-based tips for parents to consistently implement these strategies effectively in daily routines, including troubleshooting common challenges.",
+    "why_out_of_scope": "",
+    "source_statement": "Graduated warning sequences and pre-taught transition scripts are structured verbal and visual strategies designed to ease activity transitions for children with ADHD.",
+    "source_doc_id": "transition_warnings_scripts",
+    "source_doc_name": "Transition Warnings and Transition Scripts",
+    "expected_doc_ids": [
+      "transition_warnings_scripts"
+    ]
+  },
+  {
+    "question": "What are the concrete steps I can take to effectively implement graduated warning sequences and pre-taught transition scripts to help my child with ADHD transition smoothly between activities?",
+    "question_type": "procedure",
+    "reference_answer": "The strategies involve using structured verbal and visual graduated warning sequences and pre-taught transition scripts to ease activity transitions for children with ADHD.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Graduated warning sequences and pre-taught transition scripts are structured verbal and visual strategies designed to ease activity transitions for children with ADHD.",
+    "source_doc_id": "transition_warnings_scripts",
+    "source_doc_name": "Transition Warnings and Transition Scripts",
+    "expected_doc_ids": [
+      "transition_warnings_scripts"
+    ]
+  },
+  {
+    "question": "When my child with ADHD has intense meltdowns during transitions from preferred activities, what combination of strategies, including giving them a sense of control, can I use to make these shifts smoother and reduce emotional outbursts?",
+    "question_type": "multi_context",
+    "reference_answer": "One highly effective strategy, as you've noted, is offering a child a brief sense of agency within a transition, such as asking 'Do you want to finish this level or find a good stopping point in your book?', which can significantly reduce power struggles and ease the shift for your child with ADHD.",
+    "additional_context_needed": "Strategies for preparing for transitions (e.g., visual timers, verbal warnings, transition rituals), emotional regulation techniques (e.g., co-regulation, deep breathing, identifying triggers), positive reinforcement for successful transitions, and understanding individual sensory sensitivities that might impact transition difficulty.",
+    "why_out_of_scope": "",
+    "source_statement": "Offering a child a brief sense of agency within a transition, such as asking 'Do you want to finish this level or find a good stopping point in your book?', can reduce power struggles.",
+    "source_doc_id": "transition_warnings_scripts",
+    "source_doc_name": "Transition Warnings and Transition Scripts",
+    "expected_doc_ids": [
+      "transition_warnings_scripts"
+    ]
+  },
+  {
+    "question": "My child always resists when I tell them it's time to stop playing and do something else; how can I make transitions smoother without constant arguments?",
+    "question_type": "fact_single",
+    "reference_answer": "Offering a child a brief sense of agency within a transition, such as asking 'Do you want to finish this level or find a good stopping point in your book?', can reduce power struggles.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Offering a child a brief sense of agency within a transition, such as asking 'Do you want to finish this level or find a good stopping point in your book?', can reduce power struggles.",
+    "source_doc_id": "transition_warnings_scripts",
+    "source_doc_name": "Transition Warnings and Transition Scripts",
+    "expected_doc_ids": [
+      "transition_warnings_scripts"
+    ]
+  },
+  {
+    "question": "Given that coordinating transition warning sequences with school teachers ensures a consistent approach for children with ADHD across home and school environments, what are the most impactful additional strategies parents can implement at home and advocate for at school to effectively manage daily transitions and reduce related meltdowns?",
+    "question_type": "multi_context",
+    "reference_answer": "Beyond the essential step of coordinating transition warning sequences with school teachers to ensure consistency across environments, parents should also focus on teaching emotional regulation techniques, implementing visual schedules and timers, fostering executive function skills through routine, and advocating for school accommodations like predictable routines and sensory breaks to manage daily transitions and prevent meltdowns.",
+    "additional_context_needed": "Specific examples of emotional regulation techniques, detailed guidance on creating and using visual schedules, strategies for teaching executive function skills, and practical advice for effective parent-teacher advocacy regarding school accommodations for ADHD.",
+    "why_out_of_scope": "",
+    "source_statement": "Coordinating transition warning sequences with school teachers ensures a consistent approach for children with ADHD across home and school environments.",
+    "source_doc_id": "transition_warnings_scripts",
+    "source_doc_name": "Transition Warnings and Transition Scripts",
+    "expected_doc_ids": [
+      "transition_warnings_scripts"
+    ]
+  },
+  {
+    "question": "What steps should I take to effectively coordinate with my child's school teacher on transition warning sequences, so we can maintain a consistent approach for his ADHD across both home and school environments?",
+    "question_type": "procedure",
+    "reference_answer": "Begin by scheduling a meeting with the teacher to share your child's home transition warnings, understand the school's current methods, and then collaboratively design a unified, consistent sequence that can be applied in both settings.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Coordinating transition warning sequences with school teachers ensures a consistent approach for children with ADHD across home and school environments.",
+    "source_doc_id": "transition_warnings_scripts",
+    "source_doc_name": "Transition Warnings and Transition Scripts",
+    "expected_doc_ids": [
+      "transition_warnings_scripts"
+    ]
+  },
+  {
+    "question": "How far into the future should we ideally set goals for my school-age child with ADHD to keep them motivated and engaged?",
+    "question_type": "fact_single",
+    "reference_answer": "For school-age children with ADHD, goals should be set with a maximum 1-2 week horizon because the ADHD brain cannot reliably sustain motivation toward distant future rewards.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "For school-age children with ADHD, goals should be set with a maximum 1-2 week horizon because the ADHD brain cannot reliably sustain motivation toward distant future rewards.",
+    "source_doc_id": "goal_setting_adhd_kids",
+    "source_doc_name": "Goal-Setting Adapted for ADHD Children",
+    "expected_doc_ids": [
+      "goal_setting_adhd_kids"
+    ]
+  },
+  {
+    "question": "My child with ADHD struggles to stay motivated for long-term goals; how far out should we typically plan when setting new objectives?",
+    "question_type": "fact_single",
+    "reference_answer": "For school-age children with ADHD, goals should be set with a maximum 1-2 week horizon because the ADHD brain cannot reliably sustain motivation toward distant future rewards.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "For school-age children with ADHD, goals should be set with a maximum 1-2 week horizon because the ADHD brain cannot reliably sustain motivation toward distant future rewards.",
+    "source_doc_id": "goal_setting_adhd_kids",
+    "source_doc_name": "Goal-Setting Adapted for ADHD Children",
+    "expected_doc_ids": [
+      "goal_setting_adhd_kids"
+    ]
+  },
+  {
+    "question": "When managing my child's ADHD, should I focus strictly on setting very specific, controllable behavioral goals like 'complete homework before dinner 4 out of 5 nights,' or is it more beneficial to prioritize a broader approach that emphasizes their overall emotional well-being and general progress, even if it's harder to quantify?",
+    "question_type": "comparative",
+    "reference_answer": "Setting specific, controllable behavioral goals, such as 'complete homework before dinner 4 out of 5 nights,' is generally more effective for children with ADHD as it provides clear targets that the child can understand and act upon, making progress measurable and achievable, unlike broader, less defined outcomes.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Goals for children with ADHD should be framed as specific behaviors the child controls, such as 'Complete homework before dinner 4 out of 5 nights,' rather than general outcomes like 'Improve grades.'",
+    "source_doc_id": "goal_setting_adhd_kids",
+    "source_doc_name": "Goal-Setting Adapted for ADHD Children",
+    "expected_doc_ids": [
+      "goal_setting_adhd_kids"
+    ]
+  },
+  {
+    "question": "What steps should I take to transform my ADHD child's broad goals, like 'improve grades,' into concrete, controllable behavioral targets they can actively work towards?",
+    "question_type": "procedure",
+    "reference_answer": "To effectively set goals for your ADHD child, focus on breaking down general outcomes into specific, measurable behaviors the child directly controls. For instance, instead of aiming for 'improved grades,' set a goal like 'complete homework before dinner 4 out of 5 nights.' This involves identifying the underlying behaviors contributing to the broad goal (e.g., homework completion for grades), making them quantifiable, and setting a realistic frequency or timeframe that the child can consistently achieve.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Goals for children with ADHD should be framed as specific behaviors the child controls, such as 'Complete homework before dinner 4 out of 5 nights,' rather than general outcomes like 'Improve grades.'",
+    "source_doc_id": "goal_setting_adhd_kids",
+    "source_doc_name": "Goal-Setting Adapted for ADHD Children",
+    "expected_doc_ids": [
+      "goal_setting_adhd_kids"
+    ]
+  },
+  {
+    "question": "My child with ADHD seems unable to complete tasks without a clear, external incentive; why isn't the satisfaction of a job well done enough for them?",
+    "question_type": "reasoning",
+    "reference_answer": "For children with ADHD, the brain's reward system often processes internal satisfaction differently, making it less effective as a consistent motivator for sustained effort compared to the more immediate and tangible reinforcement from external rewards.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Connecting short-term goals to extrinsic rewards that a child with ADHD genuinely cares about, like earning a game or an outing, is important because intrinsic motivation can be unreliable for them.",
+    "source_doc_id": "goal_setting_adhd_kids",
+    "source_doc_name": "Goal-Setting Adapted for ADHD Children",
+    "expected_doc_ids": [
+      "goal_setting_adhd_kids"
+    ]
+  },
+  {
+    "question": "Why does my child with ADHD seem to need a specific, immediate reward to complete tasks that other children just do because they're expected to?",
+    "question_type": "reasoning",
+    "reference_answer": "For children with ADHD, their brain's reward system and executive functions often make it challenging to sustain effort for abstract or delayed intrinsic satisfaction; immediate, tangible extrinsic rewards provide a more powerful and accessible motivator, helping them bridge the gap between knowing what needs to be done and actually doing it.",
+    "additional_context_needed": "",
+    "why_out_of_scope": "",
+    "source_statement": "Connecting short-term goals to extrinsic rewards that a child with ADHD genuinely cares about, like earning a game or an outing, is important because intrinsic motivation can be unreliable for them.",
+    "source_doc_id": "goal_setting_adhd_kids",
+    "source_doc_name": "Goal-Setting Adapted for ADHD Children",
+    "expected_doc_ids": [
+      "goal_setting_adhd_kids"
+    ]
+  }
+]
